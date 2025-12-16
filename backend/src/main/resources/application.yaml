@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: FreelanceExchange
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/freelance_exchange
+    username: postgres
+    password: pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    how-sql: true
+
+server:
+  servlet:
+    context-path: /api
+
+token:
+  refresh:
+    secret: cHNvVVRKT3BuRGJBTGxlczRXYXpxOEt4UE1sUlYxNEIKZjFiRFlHNTBsSm1KVFQ3WWU5UUxWRVlVZkN6dG12NnYKbGVLRllldFVlYVl4SzZmZFZPVU1LV2R2MEtYbVlNUnYKWGIxQ0Q1bVU3dEM3Tk9ubHQ3V2NSMmQwTzF4RmVnYVQKZTZOR1lyR1VNZElDU0toNTRFWTdiMFFaeHkyT0kyWlUKSWY5S01LTUdObmhCTzZOOUVWWHVXOGNZTGdKQjhaTHAKNmNBSm9WTlhoM3R5U1FQV3Z6cEFUanlwYzQxaVZrSXgKTVo2TEFXaWRFWUpHRGZiOGh4MkM2QlFjalVyVWZtMnQKOUdqVUtGZVo4emtaT25XbDFYelNTN01aSmYwMjdYazMKQ1JmUUV4SWYxUW9KWTZ3S2ZUTXRwT3FTZ0I3dkZIdGE=
+    exp-days: 30
+  access:
+    secret: QlVSOFRxYUZwcldZQnZRc0dOdndaWjNvZHQ0NzRDU0IKbnNlOHFrdnpCdUswUzdaUjBKeUpybkhmYjZvZU9qR2sKUm81N2ZXblBwNm15dE1XeUVLVTc0U1pMVlJva2RlMncKWUtuRGRMaVVwZmxHeXFxNjl0V3BPdTJUSmFjZDJjQloKZEpIQ1lDSUNJTGhEVGtBM2lGZVdnM0VxYUEwaDh0bFQKOWRVT1lJbEdocjhSWjdoYWZkajdZbFNkcVMxdWRGNkMKUG1HcXk3ZzBFcHdyckhPbUNhTzRTdFpVaExWdk1VaGQKazluRElVQzZtRjk3N1l3UW9YelAyb004amhZcHhYb1EKY2Y1RzBETFhQZ0o1YnNrVldZQzIzOWljVXAwRXVaNUUKcVg0VU1IMkFqZXIzYngxYjJIRnpuN0FlaDl4bnFhUW0=
+    exp-mins: 15

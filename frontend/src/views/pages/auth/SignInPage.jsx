@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import { signIn } from "../../../logic/requests/authRequest";
+import Input from "../../components/elements/Input";
 
 export default function SignInPage() {
   useEffect(() => {
@@ -44,12 +45,7 @@ export default function SignInPage() {
               <label htmlFor="email" className="block text-sm/6 font-medium text-white">Email</label>
               <div className="mt-2">
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
-                  <input id="email"
-                    type="text"
-                    name="email"
-                    value={ email }
-                    onChange={ (e) => setEmail(e.target.value) }
-                    className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6" />
+                  <Input name={ 'email' } type={ 'email' } value={ email } setValueFunc={ setEmail } />
                 </div>
               </div>
             </div>
@@ -58,25 +54,20 @@ export default function SignInPage() {
               <label htmlFor="password" className="block text-sm/6 font-medium text-white">Password</label>
               <div className="mt-2">
                 <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
-                  <input id="password"
-                    type="password"
-                    name="password"
-                    value={ password }
-                    onChange={ (e) => setPassword(e.target.value) }
-                    className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6" />
+                  <Input name={ 'password' } type={ 'password' } value={ password } setValueFunc={ setPassword }  />
                 </div>
               </div>
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-              <button type="button" className="text-sm/6 font-semibold text-white">
+              <a type="button" className="text-sm/6 font-semibold text-white" onClick={ () => navigate('/sign-up') } href="">
                 Sign up
-              </button>
+              </a>
               <button
                 type="submit"
                 className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
-                Save
+                Login
               </button>
             </div>
           </form>

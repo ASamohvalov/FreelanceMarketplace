@@ -1,7 +1,27 @@
 import { useNavigate } from "react-router-dom";
+import { getUserData, isAuth } from "../../logic/jwt";
 
 export default function HeaderComponent() {
   var navigate = useNavigate();
+
+  function authLinks() {
+    if (isAuth()) {
+      var user = getUserData();
+      return (
+        <a onClick={ () => navigate('/sign-in') }
+          href=""
+          className="text-sm/6 font-semibold text-white">{ user.sub }<span aria-hidden="true">&rarr;</span>
+        </a>
+      );
+    }
+
+    return (
+      <a onClick={ () => navigate('/sign-in') }
+        href=""
+        className="text-sm/6 font-semibold text-white">Log in<span aria-hidden="true">&rarr;</span>
+      </a>
+    )
+  }
 
   return (
     <header className="bg-gray-900">
@@ -28,10 +48,7 @@ export default function HeaderComponent() {
           <a href="#" className="text-sm/6 font-semibold text-white">Company</a>
         </el-popover-group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a onClick={ () => navigate('/sign-in') }
-            href=""
-            className="text-sm/6 font-semibold text-white">Log in<span aria-hidden="true">&rarr;</span>
-          </a>
+          { authLinks() }
         </div>
       </nav>
       <el-dialog>

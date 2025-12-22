@@ -3,21 +3,24 @@ import { sendPost } from "./requestSender";
 /**
  * @param {string} email
  * @param {string} password
- * @returns {map<bool, string>} - ok, response
+ * @returns {map<int, string>} - status, response
  */
 export async function signIn(email, password) {
   var response = null;
-  var ok = false;
-  await sendPost('sign_in', {
-    username: email,
+  var status = 403;
+
+  await sendPost('auth/sign_in', {
+    email: email,
     password: password,
-  }).then(() => {
-    ok = true;
+  }).then((res) => {
+    status = res.status;
+    response = res.data;
   }).catch((error) => {
-    console.log('Send request error', error.toJSON);
-    response = error.data;
+    console.log('Send request error', error.response);
+    response = error.response.data;
+    status = error.response.status;
   });
-  return { ok: ok, data: response };
+  return { status: status, data: response };
 }
 
 /**

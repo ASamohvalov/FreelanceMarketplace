@@ -19,20 +19,19 @@ import java.util.Map;
 @Slf4j
 public class JwtServiceImpl implements JwtService {
     private final SecretKey refreshSecret;
-    private final int refreshExpDays;
     private final SecretKey accessSecret;
-    private final int accessExpMins;
+
+    @Value("${token.refresh.exp-days}")
+    private int refreshExpDays;
+    @Value("${token.access.exp-mins}")
+    private int accessExpMins;
 
     public JwtServiceImpl(
-        @Value("token.refresh.secret") String refreshSecret,
-        @Value("token.refresh.exp-days") int refreshExpDays,
-        @Value("token.access.secret") String accessSecret,
-        @Value("token.access.exp-mins") int accessExpMins
+        @Value("${token.refresh.secret}") String refreshSecret,
+        @Value("${token.access.secret}") String accessSecret
     ) {
         this.refreshSecret = stringToSecret(refreshSecret);
-        this.refreshExpDays = refreshExpDays;
         this.accessSecret = stringToSecret(accessSecret);
-        this.accessExpMins = accessExpMins;
     }
 
     @Override

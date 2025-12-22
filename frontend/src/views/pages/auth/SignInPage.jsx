@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import { signIn } from "../../../logic/requests/authRequest";
 import Input from "../../components/elements/Input";
+import { login } from "../../../logic/jwt";
 
 export default function SignInPage() {
   useEffect(() => {
@@ -19,16 +20,19 @@ export default function SignInPage() {
     event.preventDefault();
 
     if (!email || !password) {
-      setError('All fields are requerd');
+      setError("All fields are requerd");
       return;
     }
 
     var response = await signIn(email, password);
-    if (response.ok) {
+    if (response.status == 200) {
+      console.log(response);
+      login(response.data.accessToken, response.data.refreshToken);
       navigate('/');
       return;
+    } else if (response.status == 400) {
+      setError("invalid email or password");
     }
-    setError(response.data);
   }
 
   return (

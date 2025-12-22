@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     public JwtResponse signIn(SignInRequest request) {
         UserEntity user = userService.findByEmail(request.getEmail())
                 .orElseThrow(() -> new GlobalBadRequestException("incorrect email or password"));
-        if (!passwordEncoder.matches(user.getPassword(), request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new GlobalBadRequestException("incorrect email or password");
         }
         String accessToken = jwtService.generateAccessToken(user);

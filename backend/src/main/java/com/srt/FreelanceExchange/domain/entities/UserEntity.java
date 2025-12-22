@@ -3,6 +3,7 @@ package com.srt.FreelanceExchange.domain.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class UserEntity {
     @Id

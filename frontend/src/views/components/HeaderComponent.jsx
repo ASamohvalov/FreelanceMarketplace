@@ -10,7 +10,7 @@ export default function HeaderComponent() {
       return (
         <a onClick={ () => navigate('/sign-in') }
           href=""
-          className="text-sm/6 font-semibold text-white">{ user.sub }<span aria-hidden="true">&rarr;</span>
+          className="text-sm/6 font-semibold text-white">{ user.sub }
         </a>
       );
     }

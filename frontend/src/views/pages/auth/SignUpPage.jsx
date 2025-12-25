@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "../../../logic/requests/authRequest";
+import { signIn, signUp } from "../../../logic/requests/authRequest";
 import HeaderComponent from "../../components/HeaderComponent";
 import Input from "../../components/elements/Input";
+import { login } from "../../../logic/jwt";
 
 export default function SignUpPage() {
   useEffect(() => {
@@ -19,16 +20,22 @@ export default function SignUpPage() {
     event.preventDefault();
 
     if (!email || !password) {
-      setError('All fields are requerd');
+      setError("All fields are requerd");
       return;
     }
 
-    var response = await signUp(email, password);
-    if (response.ok) {
+    var regResponse = await signUp(email, password);
+    if (regResponse.status == 200) {
+      var loginResponse = await signIn(email, password);
+      if (loginResponse.status != 200) {
+        console.log("[ERROR] logic error");
+        return;
+      }
+      login(loginResponse.data.accessToken, loginResponse.data.refreshToken);
       navigate('/');
       return;
     }
-    setError(response.data);
+    setError("incorrect email or password");
   }
 
   return (

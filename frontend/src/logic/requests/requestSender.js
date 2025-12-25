@@ -2,25 +2,50 @@ import { BACKEND_URL } from "../../env";
 import axios from "axios";
 
 /**
- * @param {string} path
+ * @param {string} path, required without / in begin
  * @param {map} params
  *
- * @return {Promise}
+ * @return {int} status
  *
  * @example sendGet('/hello', { message: 'hello world' })
  */
 export async function sendGet(path, data, config = []) {
-  return await axios.get(BACKEND_URL + path, data, config);
+  var status;
+  var resData;
+  await axios.get(BACKEND_URL + path, data, config)
+    .then((response) => {
+      console.log("API response data ->", response);
+      status = response.status;
+      resData = response.data;
+    }).catch((error) => {
+      console.log("API response error ->", error);
+      status = error.response.status;
+      resData = error.response.data;
+    })
+  return { status: status, data: resData };
 }
 
 /**
- * @param {string} path
- * @param {map} data
+ * @param {string} path required without / in begin
+ * @param {map} params
+ * @param {map} params
  *
- * @return {Promise}
+ * @return {map} { status: '', data: '' }
  *
- * @example sendPost('/create', { name: 'alex', age: 21 })
+ * @example sendGet('/hello', { message: 'hello world' })
  */
 export async function sendPost(path, data, config = []) {
-  return await axios.post(BACKEND_URL + path, data, config);
+  var status;
+  var resData;
+  await axios.post(BACKEND_URL + path, data, config)
+    .then((response) => {
+      console.log("API response data ->", response);
+      status = response.status;
+      resData = response.data;
+    }).catch((error) => {
+      console.log("API response error ->", error);
+      status = error.response.status;
+      resData = error.response.data;
+    })
+  return { status: status, data: resData };
 }

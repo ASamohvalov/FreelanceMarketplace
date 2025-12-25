@@ -11,6 +11,10 @@ export function login(accessToken, refreshToken) {
   localStorage.setItem("refreshToken", refreshToken);
 }
 
+export function logout() {
+  // todo
+}
+
 /**
  * @returns {bool}
  */

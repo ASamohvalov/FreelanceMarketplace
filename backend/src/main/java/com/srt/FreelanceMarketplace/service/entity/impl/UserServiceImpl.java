@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(JwtRequest request) {
-        UserEntity user = authHelperService.getUser();
-        tokenService.deleteByUserAndToken(user, request.getRefreshToken());
+        tokenService.deleteByToken(request.getRefreshToken());
     }
 }

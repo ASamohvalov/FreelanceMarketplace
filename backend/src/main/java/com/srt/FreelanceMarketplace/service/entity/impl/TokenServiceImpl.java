@@ -1,9 +1,9 @@
 package com.srt.FreelanceMarketplace.service.entity.impl;
 
 import com.srt.FreelanceMarketplace.domain.entities.TokenEntity;
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
 import com.srt.FreelanceMarketplace.repository.TokenRepository;
 import com.srt.FreelanceMarketplace.service.entity.TokenService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,8 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void deleteByUserAndToken(UserEntity user, String token) {
-        tokenRepository.deleteByUserAndToken(user, token);
+    @Transactional
+    public void deleteByToken(String token) {
+        tokenRepository.deleteByToken(token);
     }
 }

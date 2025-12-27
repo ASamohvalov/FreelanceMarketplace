@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.user;
 
+import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.user.JwtResponse;
 import com.srt.FreelanceMarketplace.domain.dto.user.SignInRequest;
 import com.srt.FreelanceMarketplace.domain.dto.user.SignUpRequest;
@@ -22,5 +23,10 @@ public class AuthController {
     @PostMapping("/sign_up")
     public void signUp(@RequestBody @Valid SignUpRequest request) {
         authService.signUp(request);
+    }
+
+    @PostMapping("update_tokens")
+    public JwtResponse updateTokens(@RequestBody @Valid JwtRequest request) {
+        return authService.updateTokens(request);
     }
 }

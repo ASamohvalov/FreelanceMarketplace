@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
@@ -21,5 +23,10 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     public void deleteByToken(String token) {
         tokenRepository.deleteByToken(token);
+    }
+
+    @Override
+    public Optional<TokenEntity> findByToken(String token) {
+        return tokenRepository.findByToken(token);
     }
 }

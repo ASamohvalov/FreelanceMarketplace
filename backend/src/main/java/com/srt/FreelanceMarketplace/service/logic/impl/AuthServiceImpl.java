@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
+import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.user.JwtResponse;
 import com.srt.FreelanceMarketplace.domain.dto.user.SignInRequest;
 import com.srt.FreelanceMarketplace.domain.dto.user.SignUpRequest;
@@ -13,6 +14,7 @@ import com.srt.FreelanceMarketplace.service.entity.TokenService;
 import com.srt.FreelanceMarketplace.service.entity.UserService;
 import com.srt.FreelanceMarketplace.service.logic.AuthService;
 import com.srt.FreelanceMarketplace.service.logic.JwtService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,5 +62,20 @@ public class AuthServiceImpl implements AuthService {
         entity.setRoles(List.of(role));
 
         userService.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public JwtResponse updateTokens(JwtRequest request) {
+        TokenEntity token = tokenService.findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new GlobalBadRequestException("such token not found"));
+        UserEntity user = token.getUser();
+
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        token.setToken(refreshToken);
+
+        return new JwtResponse(accessToken, refreshToken);
     }
 }

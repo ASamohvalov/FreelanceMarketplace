@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { getUserData, isAuth } from "../../logic/jwt";
+import { getUserData, isAuth, logout } from "../../logic/jwt";
 
 export default function HeaderComponent() {
   var navigate = useNavigate();
@@ -8,10 +8,17 @@ export default function HeaderComponent() {
     if (isAuth()) {
       var user = getUserData();
       return (
-        <a onClick={ () => navigate('/sign-in') }
-          href=""
-          className="text-sm/6 font-semibold text-white">{ user.sub }
-        </a>
+        <>
+          <a onClick={ () => navigate('/sign-in') }
+            href=""
+            className="text-sm/6 font-semibold text-white mx-3">{ user.sub }
+          </a>
+
+          <a onClick={ logout }
+            href=""
+            className="text-sm/6 font-semibold text-white">logout
+          </a>
+        </>
       );
     }
 

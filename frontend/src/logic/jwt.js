@@ -24,9 +24,23 @@ export function isAuth() {
 
 /**
  * get data from localStorage
- * @returns {obj} decoded jwt
+ * @returns {obj?} decoded jwt
  */
 export function getUserData() {
   var token = localStorage.getItem("accessToken");
-  return jwtDecode(token);
+  try {
+    return jwtDecode(token);
+  } catch {
+    return null;
+  }
+}
+
+export function isTokenExpired() {
+  var token = localStorage.getItem("accessToken");
+  try {
+    var claims = jwtDecode(token)
+    return Date.now() >= claims.exp * 1000;
+  } catch {
+    return false;
+  }
 }

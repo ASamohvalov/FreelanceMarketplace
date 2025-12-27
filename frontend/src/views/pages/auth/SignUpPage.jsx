@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { signIn, signUp } from "../../../logic/requests/authRequest";
+import { signInRequest, signUpRequest } from "../../../logic/requests/user/authRequest";
 import HeaderComponent from "../../components/HeaderComponent";
 import Input from "../../components/elements/Input";
 import { login } from "../../../logic/jwt";
@@ -24,9 +24,9 @@ export default function SignUpPage() {
       return;
     }
 
-    var regResponse = await signUp(email, password);
+    var regResponse = await signUpRequest(email, password);
     if (regResponse.status == 200) {
-      var loginResponse = await signIn(email, password);
+      var loginResponse = await signInRequest(email, password);
       if (loginResponse.status != 200) {
         console.log("[ERROR] logic error");
         return;

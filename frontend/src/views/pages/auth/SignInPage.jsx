@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
-import { signIn } from "../../../logic/requests/authRequest";
+import { signInRequest } from "../../../logic/requests/user/authRequest";
 import Input from "../../components/elements/Input";
 import { login } from "../../../logic/jwt";
 
@@ -24,7 +24,7 @@ export default function SignInPage() {
       return;
     }
 
-    var response = await signIn(email, password);
+    var response = await signInRequest(email, password);
     if (response.status == 200) {
       console.log(response);
       login(response.data.accessToken, response.data.refreshToken);

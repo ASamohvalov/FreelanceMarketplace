@@ -1,5 +1,5 @@
-import { sendPost } from "../requestSender";
+import { sendAuthPost } from "../requestSender";
 
 export async function logoutRequest() {
-  await sendPost();
+  return await sendAuthPost("/user/logout");
 }

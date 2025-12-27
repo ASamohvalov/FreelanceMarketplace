@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+import { logoutRequest } from "./requests/user/userRequest";
 
 /**
  * @param {string} accessToken
@@ -11,8 +12,15 @@ export function login(accessToken, refreshToken) {
   localStorage.setItem("refreshToken", refreshToken);
 }
 
-export function logout() {
-  // todo
+/**
+ * @returns {void}
+ */
+export async function logout() {
+  var response = await logoutRequest();
+  if (response.status != 200) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+  }
 }
 
 /**
@@ -35,6 +43,9 @@ export function getUserData() {
   }
 }
 
+/**
+ * @returns {bool}
+ */
 export function isTokenExpired() {
   var token = localStorage.getItem("accessToken");
   try {

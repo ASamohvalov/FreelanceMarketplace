@@ -10,7 +10,7 @@ import { isTokenExpired } from "../jwt";
  *
  * @example sendGet('/hello', { message: 'hello world' })
  */
-export async function sendGet(path, data, config = []) {
+export async function sendGet(path, data = {}, config = []) {
   var status;
   var resData;
   await axios
@@ -37,7 +37,7 @@ export async function sendGet(path, data, config = []) {
  *
  * @example sendGet('/hello', { message: 'hello world' })
  */
-export async function sendPost(path, data, config = []) {
+export async function sendPost(path, data = {}, config = []) {
   var status;
   var resData;
   await axios
@@ -65,20 +65,26 @@ export async function sendPost(path, data, config = []) {
  *
  * @example sendGet('/hello', { message: 'hello world' })
  */
-export async function sendAuthPost(path, data, config = []) {
+export async function sendAuthPost(path, data = {}, config = []) {
   var accessToken, refreshToken;
   if (isTokenExpired()) {
+    refreshToken = localStorage.getItem("refreshToken");
     // call update token
     console.log("token is expired - call update");
     try {
       await axios
-        .post(BACKEND_URL + "auth/update_tokens", data, config)
+        .post(
+          BACKEND_URL + "auth/update_tokens",
+          { refreshToken: refreshToken },
+          ...config
+        )
         .then((response) => {
           console.log("API response data ->", response);
           accessToken = response.data.accessToken;
           refreshToken = response.data.refreshToken;
         })
     } catch (error) {
+      console.log("API response error ->", error);
       return { status: error.response.status, data: error.response.data };
     }
     localStorage.setItem("accessToken", accessToken);

@@ -1,5 +1,6 @@
 import { sendAuthPost } from "../requestSender";
 
 export async function logoutRequest() {
-  return await sendAuthPost("/user/logout");
+  var refreshToken = localStorage.getItem("refreshToken");
+  return await sendAuthPost("user/logout", { refreshToken: refreshToken });
 }

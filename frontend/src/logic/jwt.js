@@ -13,21 +13,20 @@ export function login(accessToken, refreshToken) {
 }
 
 /**
- * @returns {void}
+ * @returns {Promise} void
  */
 export async function logout() {
-  var response = await logoutRequest();
-  if (response.status != 200) {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-  }
+  await logoutRequest();
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
 }
 
 /**
  * @returns {bool}
  */
 export function isAuth() {
-  return localStorage.getItem("accessToken") != undefined;
+  return localStorage.getItem("accessToken") != undefined &&
+    localStorage.getItem("refreshToken") != undefined;
 }
 
 /**

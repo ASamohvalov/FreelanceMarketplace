@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.service.logic.JwtService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

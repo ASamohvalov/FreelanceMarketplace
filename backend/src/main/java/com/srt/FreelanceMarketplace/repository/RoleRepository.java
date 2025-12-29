@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.repository;
 
-import com.srt.FreelanceMarketplace.domain.entities.RoleEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

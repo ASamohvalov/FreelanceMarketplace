@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.entities;
+package com.srt.FreelanceMarketplace.domain.entities.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

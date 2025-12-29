@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.entities;
+package com.srt.FreelanceMarketplace.domain.entities.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,4 +32,7 @@ public class UserEntity {
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private List<RoleEntity> roles;
+
+    @OneToMany
+    private List<TokenEntity> tokens;
 }

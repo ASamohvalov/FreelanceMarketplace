@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.entity.impl;
 
-import com.srt.FreelanceMarketplace.domain.entities.RoleEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.repository.RoleRepository;
 import com.srt.FreelanceMarketplace.service.entity.RoleService;
 import lombok.RequiredArgsConstructor;

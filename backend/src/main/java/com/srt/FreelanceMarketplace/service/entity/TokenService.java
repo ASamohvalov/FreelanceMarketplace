@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.entity;
 
-import com.srt.FreelanceMarketplace.domain.entities.TokenEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.TokenEntity;
 
 import java.util.Optional;
 

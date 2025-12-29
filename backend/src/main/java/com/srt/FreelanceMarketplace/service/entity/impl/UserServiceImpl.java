@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity.impl;
 
 import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.entity.TokenService;

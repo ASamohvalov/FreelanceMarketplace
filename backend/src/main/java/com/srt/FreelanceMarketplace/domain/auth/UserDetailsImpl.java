@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.auth;
 
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

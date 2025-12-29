@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.entity.impl;
 
-import com.srt.FreelanceMarketplace.domain.entities.TokenEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.TokenEntity;
 import com.srt.FreelanceMarketplace.repository.TokenRepository;
 import com.srt.FreelanceMarketplace.service.entity.TokenService;
 import jakarta.transaction.Transactional;

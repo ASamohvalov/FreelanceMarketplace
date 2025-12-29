@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.logic;
 
 import com.srt.FreelanceMarketplace.domain.auth.UserDetailsImpl;
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

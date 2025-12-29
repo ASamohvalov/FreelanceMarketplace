@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.logic;
 
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 
 public interface JwtService {
     String generateAccessToken(UserEntity user);

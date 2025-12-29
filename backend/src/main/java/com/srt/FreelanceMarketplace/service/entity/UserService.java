@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity;
 
 import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
-import com.srt.FreelanceMarketplace.domain.entities.UserEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 
 import java.util.Optional;
 

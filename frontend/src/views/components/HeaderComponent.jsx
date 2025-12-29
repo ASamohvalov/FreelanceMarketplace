@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { getUserData, isAuth, logout } from "../../logic/jwt";
+import { logoutRequest } from "../../logic/requests/user/userRequest";
 
 export default function HeaderComponent() {
   var navigate = useNavigate();
 
   async function onLogoutClick(event) {
     event.preventDefault();
-    await logout();
+    await logoutRequest();
+    logout();
     window.location.reload();
   }
 

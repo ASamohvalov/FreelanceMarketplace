@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-import { logoutRequest } from "./requests/user/userRequest";
 
 /**
  * @param {string} accessToken
@@ -13,10 +12,9 @@ export function login(accessToken, refreshToken) {
 }
 
 /**
- * @returns {Promise} void
+ * @returns {void}
  */
-export async function logout() {
-  await logoutRequest();
+export function logout() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
 }
@@ -31,7 +29,7 @@ export function isAuth() {
 
 /**
  * get data from localStorage
- * @returns {obj?} decoded jwt
+ * @returns {map?} decoded jwt
  */
 export function getUserData() {
   var token = localStorage.getItem("accessToken");

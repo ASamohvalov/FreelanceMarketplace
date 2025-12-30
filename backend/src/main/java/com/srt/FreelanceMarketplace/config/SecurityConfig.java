@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/service/**").permitAll()
+                        .requestMatchers("/freelancer/**").hasRole("FREELANCER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager

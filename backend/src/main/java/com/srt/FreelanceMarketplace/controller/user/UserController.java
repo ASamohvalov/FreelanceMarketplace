@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.user;
 
-import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.service.entity.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

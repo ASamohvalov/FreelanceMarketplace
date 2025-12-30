@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.dto.user;
+package com.srt.FreelanceMarketplace.domain.dto.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,10 +7,14 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SignInRequest {
-    @NotBlank
+public class SignUpRequest {
     @Email
+    @NotBlank
     private String email;
     @NotBlank
     private String password;
+    @NotBlank
+    private String firstName;
+    @NotBlank
+    private String lastName;
 }

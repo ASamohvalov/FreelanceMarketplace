@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.entities.user;
 
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

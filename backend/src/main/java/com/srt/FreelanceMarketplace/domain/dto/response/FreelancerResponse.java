@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.dto;
+package com.srt.FreelanceMarketplace.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

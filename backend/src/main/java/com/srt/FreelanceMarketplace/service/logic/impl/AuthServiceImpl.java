@@ -1,9 +1,9 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
-import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
-import com.srt.FreelanceMarketplace.domain.dto.user.JwtResponse;
-import com.srt.FreelanceMarketplace.domain.dto.user.SignInRequest;
-import com.srt.FreelanceMarketplace.domain.dto.user.SignUpRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.JwtResponse;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.SignInRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.SignUpRequest;
 import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.TokenEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;

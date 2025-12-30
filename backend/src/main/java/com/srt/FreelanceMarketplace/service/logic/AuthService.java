@@ -1,9 +1,9 @@
 package com.srt.FreelanceMarketplace.service.logic;
 
-import com.srt.FreelanceMarketplace.domain.dto.user.JwtRequest;
-import com.srt.FreelanceMarketplace.domain.dto.user.JwtResponse;
-import com.srt.FreelanceMarketplace.domain.dto.user.SignInRequest;
-import com.srt.FreelanceMarketplace.domain.dto.user.SignUpRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.JwtResponse;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.SignInRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.SignUpRequest;
 
 public interface AuthService {
     JwtResponse signIn(SignInRequest request);

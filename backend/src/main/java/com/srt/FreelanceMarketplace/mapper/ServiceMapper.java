@@ -1,7 +1,8 @@
 package com.srt.FreelanceMarketplace.mapper;
 
-import com.srt.FreelanceMarketplace.domain.dto.FreelancerResponse;
-import com.srt.FreelanceMarketplace.domain.dto.ServiceResponse;
+import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
 import org.mapstruct.Mapper;
@@ -17,4 +18,6 @@ public interface ServiceMapper {
     @Mapping(target = "firstName", expression = "java(freelancer.getUser().getFirstName())")
     @Mapping(target = "lastName", expression = "java(freelancer.getUser().getLastName())")
     FreelancerResponse freelancerEntityToResponse(FreelancerEntity freelancer);
+
+    ServiceEntity serviceRequestToEntity(ServiceRequest response);
 }

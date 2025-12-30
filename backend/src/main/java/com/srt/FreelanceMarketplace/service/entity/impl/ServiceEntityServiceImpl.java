@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity.impl;
 
-import com.srt.FreelanceMarketplace.domain.dto.ServiceResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
+import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
 import com.srt.FreelanceMarketplace.mapper.ServiceMapper;
 import com.srt.FreelanceMarketplace.repository.ServiceRepository;
 import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
@@ -12,8 +13,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ServiceEntityServiceImpl implements ServiceEntityService {
-    private final ServiceRepository serviceRepository;
+    private final ServiceRepository repository;
     private final ServiceMapper serviceMapper;
+
+    @Override
+    public void save(ServiceEntity service) {
+        repository.save(service);
+    }
 
     @Override
     public List<ServiceResponse> getAll() {

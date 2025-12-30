@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.dto.user;
+package com.srt.FreelanceMarketplace.domain.dto.request.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -29,7 +29,4 @@ public class FreelancerEntity {
     private JobTitleEntity jobTitle;
 
     private String phoneNumber;
-
-    @OneToMany
-    private List<ServiceEntity> services;
 }

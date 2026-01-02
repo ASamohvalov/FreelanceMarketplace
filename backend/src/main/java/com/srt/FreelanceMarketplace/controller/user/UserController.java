@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.user;
 
+import com.srt.FreelanceMarketplace.domain.dto.request.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.service.entity.UserService;
 import jakarta.validation.Valid;
@@ -15,6 +16,11 @@ public class UserController {
     @PostMapping("/logout")
     public void logout(@RequestBody @Valid JwtRequest request) {
         userService.logout(request);
+    }
+
+    @PostMapping("/become_freelancer")
+    public void becomeFreelancer(@RequestBody @Valid FreelancerRequest request) {
+        userService.becomeFreelancer(request);
     }
 
     @GetMapping("/get_info")

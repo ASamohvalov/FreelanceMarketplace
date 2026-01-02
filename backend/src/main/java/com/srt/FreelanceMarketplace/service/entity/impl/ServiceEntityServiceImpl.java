@@ -2,7 +2,7 @@ package com.srt.FreelanceMarketplace.service.entity.impl;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
-import com.srt.FreelanceMarketplace.mapper.ServiceMapper;
+import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.ServiceRepository;
 import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServiceEntityServiceImpl implements ServiceEntityService {
     private final ServiceRepository repository;
-    private final ServiceMapper serviceMapper;
+    private final FreelanceMapper freelanceMapper;
 
     @Override
     public void save(ServiceEntity service) {
@@ -23,8 +23,8 @@ public class ServiceEntityServiceImpl implements ServiceEntityService {
 
     @Override
     public List<ServiceResponse> getAll() {
-        return serviceRepository.findAllWithFreelancer().stream()
-                .map(serviceMapper::serviceEntityToResponse)
+        return repository.findAllWithFreelancer().stream()
+                .map(freelanceMapper::serviceEntityToResponse)
                 .toList();
     }
 }

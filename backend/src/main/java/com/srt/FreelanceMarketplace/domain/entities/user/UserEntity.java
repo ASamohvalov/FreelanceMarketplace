@@ -33,7 +33,4 @@ public class UserEntity {
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private List<RoleEntity> roles;
-
-    @OneToMany
-    private List<TokenEntity> tokens;
 }

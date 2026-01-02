@@ -20,8 +20,6 @@ public class JobTitleEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique = true)
     private String name;
-
-    @OneToMany
-    private List<FreelancerEntity> freelancers;
 }

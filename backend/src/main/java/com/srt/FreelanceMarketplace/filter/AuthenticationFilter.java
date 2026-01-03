@@ -9,10 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,11 +36,20 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             try {
                 subject = jwtService.getSubject(token);
             } catch (JwtException e) {
+                log.warn("token format error");
+                filterChain.doFilter(request, response);
                 return;
             }
-            UserDetails userDetails = userDetailsService.loadUserByUsername(subject);
 
-            // username not found exception
+            UserDetails userDetails;
+            try {
+                userDetails = userDetailsService.loadUserByUsername(subject);
+            } catch (UsernameNotFoundException e) {
+                log.warn("such email - {} not found in db", subject);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,

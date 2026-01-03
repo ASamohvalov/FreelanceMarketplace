@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void becomeFreelancer(FreelancerRequest request) {
-        JobTitleEntity jobTitle = jobTitleService.findByName(request.getJobTitle())
+        JobTitleEntity jobTitle = jobTitleService.findById(request.getJobTitleId())
                 .orElseThrow(() -> new GlobalBadRequestException("such job title not found"));
         FreelancerEntity freelancer = FreelancerEntity.builder()
                 .phoneNumber(request.getPhoneNumber())

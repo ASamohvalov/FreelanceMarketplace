@@ -1,17 +1,12 @@
 package com.srt.FreelanceMarketplace.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
-public class FreelancerRequest {
-    @NotNull
-    private UUID jobTitleId;
+public class JobTitleRequest {
     @NotBlank
-    private String phoneNumber;
+    private String name;
 }

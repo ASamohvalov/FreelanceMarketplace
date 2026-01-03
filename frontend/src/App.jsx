@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./views/pages/HomePage.jsx";
 import SignInPage from "./views/pages/auth/SignInPage.jsx";
 import SignUpPage from "./views/pages/auth/SignUpPage.jsx";
+import ServicesPage from "./views/pages/services/ServicesPage.jsx";
 
 // base routing
 export default function App() {
@@ -10,6 +11,8 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/sign-in" element={<SignInPage />} />
       <Route path="/sign-up" element={<SignUpPage />} />
+
+      <Route path="/services" element={<ServicesPage />} />
     </Routes>
   );
 }

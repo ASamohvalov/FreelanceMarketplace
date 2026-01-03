@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getUserData, isAuth, logout } from "../../logic/jwt";
 import { logoutRequest } from "../../logic/requests/user/userRequest";
 
 export default function HeaderComponent() {
-  var navigate = useNavigate();
-
   async function onLogoutClick(event) {
     event.preventDefault();
     await logoutRequest();
@@ -17,10 +15,10 @@ export default function HeaderComponent() {
       var user = getUserData();
       return (
         <>
-          <a onClick={ () => navigate('/sign-in') }
-            href=""
+          <Link
+            to="/sign-in"
             className="text-sm/6 font-semibold text-white mx-3">{ user.sub }
-          </a>
+          </Link>
 
           <a onClick={ onLogoutClick }
             href=""
@@ -31,10 +29,10 @@ export default function HeaderComponent() {
     }
 
     return (
-      <a onClick={ () => navigate('/sign-in') }
-        href=""
+      <Link
+        to="/sign-in"
         className="text-sm/6 font-semibold text-white">Log in<span aria-hidden="true">&rarr;</span>
-      </a>
+      </Link>
     )
   }
 
@@ -56,11 +54,12 @@ export default function HeaderComponent() {
           </button>
         </div>
         <el-popover-group className="hidden lg:flex lg:gap-x-12">
-          <a onClick={ () => navigate('/') }
-            href=""
-            className="text-sm/6 font-semibold text-white">Home</a>
-          <a href="#" className="text-sm/6 font-semibold text-white">Marketplace</a>
-          <a href="#" className="text-sm/6 font-semibold text-white">Company</a>
+          <Link
+            to="/"
+            className="text-sm/6 font-semibold text-white">Home</Link>
+          <Link
+            to="/services"
+            className="text-sm/6 font-semibold text-white">Services</Link>
         </el-popover-group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           { authLinks() }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import { signInRequest } from "../../../logic/requests/user/authRequest";
 import Input from "../../components/elements/Input";
@@ -64,9 +64,9 @@ export default function SignInPage() {
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-              <a type="button" className="text-sm/6 font-semibold text-white" onClick={ () => navigate('/sign-up') } href="">
+              <Link type="button" className="text-sm/6 font-semibold text-white" to="/sign-up">
                 Sign up
-              </a>
+              </Link>
               <button
                 type="submit"
                 className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"

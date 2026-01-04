@@ -3,7 +3,7 @@ import { sendPost } from "../requestSender";
 /**
  * @param {string} email
  * @param {string} password
- * @return {map} { status: '', data: '' }
+ * @returns {map} { status: int, data: string }
  */
 export async function signInRequest(email, password) {
   return await sendPost('auth/sign_in', {
@@ -15,11 +15,13 @@ export async function signInRequest(email, password) {
 /**
  * @param {string} email
  * @param {string} password
- * @return {int} - ok, response
+ * @returns {map} { status: int, data: string }
  */
-export async function signUpRequest(email, password) {
+export async function signUpRequest(email, password, firstName, lastName) {
   return await sendPost('auth/sign_up', {
     email: email,
     password: password,
+    firstName: firstName,
+    lastName: lastName,
   });
 }

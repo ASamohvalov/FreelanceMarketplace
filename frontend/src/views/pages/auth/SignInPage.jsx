@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import { signInRequest } from "../../../logic/requests/user/authRequest";
-import Input from "../../components/elements/Input";
 import { login } from "../../../logic/jwt";
 
 export default function SignInPage() {
@@ -38,43 +37,20 @@ export default function SignInPage() {
   return (
     <>
       <HeaderComponent />
-      <div className="flex flex-col items-center m-45">
-        <div className={`bg-red-100 w-120 rounded shadow-lg p-6 mb-2 ${ error ? 'visible' : 'invisible' }`} >
+      <div className="mx-auto" style={{ width: "500px", marginTop: "200px" }}>
+        <div className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${ error ? 'visible' : 'invisible' }`}>
           { error }
         </div>
-        <div className="p-6 bg-gray-900 text-white rounded shadow-lg w-120">
-          <div className="text-center text-xl">Sign in</div>
-          <form onSubmit={ handleSubmit }>
-            <div className="mb-2">
-              <label htmlFor="email" className="block text-sm/6 font-medium text-white">Email</label>
-              <div className="mt-2">
-                <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
-                  <Input name={ 'email' } type={ 'email' } value={ email } setValueFunc={ setEmail } />
-                </div>
-              </div>
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="password" className="block text-sm/6 font-medium text-white">Password</label>
-              <div className="mt-2">
-                <div className="flex items-center rounded-md bg-white/5 pl-3 outline-1 -outline-offset-1 outline-white/10 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-500">
-                  <Input name={ 'password' } type={ 'password' } value={ password } setValueFunc={ setPassword }  />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-              <Link type="button" className="text-sm/6 font-semibold text-white" to="/sign-up">
-                Sign up
-              </Link>
-              <button
-                type="submit"
-                className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
-                Login
-              </button>
-            </div>
+        <div className="shadow w-100 bg-dark rounded p-4 text-light">
+          <div className="text-center mb-3 h4">Sign in</div>
+          <form onSubmit={ handleSubmit } className="mb-4">
+            <label htmlFor="email">Email</label>
+            <input className="form-control mb-3" id="email" type="email" value={ email } onChange={ (e) => setEmail(e.target.value) } />
+            <label htmlFor="password">Password</label>
+            <input className="form-control mb-3" id="password" type="password" value={ password } onChange={ (e) => setPassword(e.target.value) } />
+            <button className="btn btn-primary" type="submit">Submit</button>
           </form>
+          <span>Don't have an account - <Link to="/sign-up">Register</Link></span>
         </div>
       </div>
     </>

@@ -15,54 +15,56 @@ export default function HeaderComponent() {
       var user = getUserData();
       return (
         <>
+        <li className="nav-item">
           <Link
             to="/sign-in"
-            className="text-sm/6 font-semibold text-white mx-3">{ user.sub }
+            className="nav-link active">{ user.sub }
           </Link>
+        </li>
 
+        <li className="nav-item">
           <a onClick={ onLogoutClick }
             href=""
-            className="text-sm/6 font-semibold text-white">logout
+            className="nav-link active">logout
           </a>
+        </li>
         </>
       );
     }
 
     return (
-      <Link
-        to="/sign-in"
-        className="text-sm/6 font-semibold text-white">Log in<span aria-hidden="true">&rarr;</span>
-      </Link>
+      <>
+        <li className="nav-item">
+          <Link className="nav-link active" to="/sign-in">Sign in</Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link active" to="/sign-up">Sign up</Link>
+        </li>
+      </>
     )
   }
 
   return (
-    <header className="bg-gray-900">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-        <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="" className="h-8 w-auto" />
-          </a>
-        </div>
-        <div className="flex lg:hidden">
-          <button type="button" command="show-modal" commandfor="mobile-menu" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400">
-            <span className="sr-only">Open main menu</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" data-slot="icon" aria-hidden="true" className="size-6">
-              <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+    <header>
+      <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">FreelanceMarketplace</a>
+          <button className="navbar-toggler" type="button">
+            <span className="navbar-toggler-icon"></span>
           </button>
-        </div>
-        <el-popover-group className="hidden lg:flex lg:gap-x-12">
-          <Link
-            to="/"
-            className="text-sm/6 font-semibold text-white">Home</Link>
-          <Link
-            to="/services"
-            className="text-sm/6 font-semibold text-white">Services</Link>
-        </el-popover-group>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          { authLinks() }
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link className="nav-link active" to="/">Home</Link>
+              </li>
+            </ul>
+
+            <div className="ms-auto">
+              <ul className="navbar-nav">
+                { authLinks() }
+              </ul>
+            </div>
+          </div>
         </div>
       </nav>
     </header>

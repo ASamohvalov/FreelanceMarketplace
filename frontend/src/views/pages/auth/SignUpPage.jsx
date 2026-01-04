@@ -15,6 +15,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+
   const [error, setError] = useState(null);
 
   async function handleSubmit(event) {
@@ -60,6 +61,14 @@ export default function SignUpPage() {
 
             <label htmlFor="firstName">Last name</label>
             <input className="form-control mb-3" id="lastName" type="text" value={ lastName } onChange={ (e) => setLastName(e.target.value) } />
+
+            <div className="mb-3">
+              <input type="radio" className="btn-check" name="options-base" id="buyer-input" checked={ true } onChange={ () => null } />
+              <label className="btn text-light" htmlFor="buyer-input">Buyer</label>
+
+              <input type="radio" className="btn-check" name="options-base" id="freelancer-input" />
+              <label className="btn text-light" htmlFor="freelancer-input">Freelancer</label>
+            </div>
 
             <button className="btn btn-primary" type="submit">Submit</button>
           </form>

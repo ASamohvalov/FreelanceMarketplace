@@ -1,12 +1,12 @@
 import { BACKEND_URL } from "../../env";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { isTokenExpired } from "../jwt";
 
 /**
  * @param {string} path, required without / in begin
  * @param {map} params
  *
- * @return {map} { status: int, data: map }
+ * @returns {map} { status: int?, data: map? }
  *
  * @example sendGet('/hello', { message: 'hello world' })
  */
@@ -22,8 +22,9 @@ export async function sendGet(path, data = {}, config = []) {
     })
     .catch((error) => {
       console.log("API response error ->", error);
-      status = error.response.status;
-      resData = error.response.data;
+      const result = proccessErrors(error);
+      status = result.status;
+      resData = result.data;
     });
   return { status: status, data: resData };
 }
@@ -33,7 +34,7 @@ export async function sendGet(path, data = {}, config = []) {
  * @param {map} params
  * @param {map} params
  *
- * @return {map} { status: int, data: map }
+ * @returns {map} { status: int?, data: map? }
  *
  * @example sendGet('/hello', { message: 'hello world' })
  */
@@ -49,8 +50,9 @@ export async function sendPost(path, data = {}, config = []) {
     })
     .catch((error) => {
       console.log("API response error ->", error);
-      status = error.response.status;
-      resData = error.response.data;
+      const result = proccessErrors(error);
+      status = result.status;
+      resData = result.data;
     });
   return { status: status, data: resData };
 }
@@ -60,7 +62,7 @@ export async function sendPost(path, data = {}, config = []) {
  * @param {map} params
  * @param {map} params
  *
- * @return {map} { status: int, data: map }
+ * @returns {map} { status: int?, data: map? }
  * can return data from url "auth/update_tokens"
  *
  * @example sendGet('/hello', { message: 'hello world' })
@@ -69,7 +71,7 @@ export async function sendAuthPost(path, data = {}, config = []) {
   if (isTokenExpired()) {
     // call update token
     console.log("token is expired - call update");
-    var response = await sendUpdateTokensRequest();
+    const response = await sendUpdateTokensRequest();
     if (response.status >= 400) {
       return response;
     }
@@ -95,8 +97,9 @@ export async function sendAuthPost(path, data = {}, config = []) {
     })
     .catch((error) => {
       console.log("API response error ->", error);
-      status = error.response.status;
-      resData = error.response.data;
+      const result = proccessErrors(error);
+      status = result.status;
+      resData = result.data;
     });
 
   return { status: status, data: resData };
@@ -104,7 +107,7 @@ export async function sendAuthPost(path, data = {}, config = []) {
 
 /**
  * @returns {map} { status: int, data: { accessToken: string, refreshToken: string } }
- *          {map} { status: int, data: string } - if error
+ *          {map} { status: int?, data?: string } - if error
  */
 export async function sendUpdateTokensRequest() {
   var refreshToken = localStorage.getItem("refreshToken");
@@ -119,14 +122,32 @@ export async function sendUpdateTokensRequest() {
         data: {
           accessToken: response.data.accessToken,
           refreshToken: response.data.refreshToken,
-        }
+        },
       };
     })
     .catch((error) => {
       console.log("API response error ->", error);
-      return {
-        status: error.response.status,
-        data: error.response.data,
-      };
+      return proccessErrors(error);
     });
+}
+
+// local functions
+
+/**
+ * @returns {map} { status: int?, data: map? }
+ *
+ * @param {AxiosError} error
+ */
+function proccessErrors(error) {
+  if (error.response) {
+    return {
+      status: error.response.status,
+      data: error.response.data,
+    };
+  }
+  // maybe connection error
+  return {
+    status: null,
+    data: null,
+  };
 }

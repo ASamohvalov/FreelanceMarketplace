@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInRequest, signUpRequest } from "../../../logic/requests/user/authRequest";
@@ -11,68 +11,124 @@ export default function SignUpPage() {
   });
   var navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const email = useRef(null);
+  const password = useRef(null);
+  const firstName = useRef(null);
+  const lastName = useRef(null);
 
   const [error, setError] = useState(null);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!email || !password) {
+    if (
+      !email.current.value ||
+      !password.current.value ||
+      !firstName.current.value ||
+      !lastName.current.value
+    ) {
       setError("All fields are requerd");
       return;
     }
 
-    var regResponse = await signUpRequest(email, password, firstName, lastName);
+    const regResponse = await signUpRequest(
+      email.current.value,
+      password.current.value,
+      firstName.current.value,
+      lastName.current.value,
+    );
+
     if (regResponse.status == 200) {
-      var loginResponse = await signInRequest(email, password);
+      const loginResponse = await signInRequest(
+        email.current.value,
+        password.current.value,
+      );
       if (loginResponse.status != 200) {
         console.log("[ERROR] logic error");
         return;
       }
       login(loginResponse.data.accessToken, loginResponse.data.refreshToken);
-      navigate('/');
+      navigate("/");
       return;
     }
-    setError("incorrect email or password");
+    setError("this email already taken");
   }
 
   return (
     <>
       <HeaderComponent />
       <div className="mx-auto" style={{ width: "500px", marginTop: "200px" }}>
-        <div className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${ error ? 'visible' : 'invisible' }`}>
-          { error }
+        <div
+          className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
+        >
+          {error}
         </div>
         <div className="shadow w-100 bg-dark rounded p-4 text-light">
           <div className="text-center mb-3 h4">Sign up</div>
-          <form onSubmit={ handleSubmit } className="mb-4">
+          <form onSubmit={handleSubmit} className="mb-4">
             <label htmlFor="email">Email</label>
-            <input className="form-control mb-3" id="email" type="email" value={ email } onChange={ (e) => setEmail(e.target.value) } />
+            <input
+              className="form-control mb-3"
+              id="email"
+              type="email"
+              ref={email}
+            />
 
             <label htmlFor="password">Password</label>
-            <input className="form-control mb-3" id="password" type="password" value={ password } onChange={ (e) => setPassword(e.target.value) } />
+            <input
+              className="form-control mb-3"
+              id="password"
+              type="password"
+              ref={password}
+            />
 
             <label htmlFor="firstName">First name</label>
-            <input className="form-control mb-3" id="firstName" type="text" value={ firstName } onChange={ (e) => setFirstName(e.target.value) } />
+            <input
+              className="form-control mb-3"
+              id="firstName"
+              type="text"
+              ref={firstName}
+            />
 
             <label htmlFor="firstName">Last name</label>
-            <input className="form-control mb-3" id="lastName" type="text" value={ lastName } onChange={ (e) => setLastName(e.target.value) } />
+            <input
+              className="form-control mb-3"
+              id="lastName"
+              type="text"
+              ref={lastName}
+            />
 
             <div className="mb-3">
-              <input type="radio" className="btn-check" name="options-base" id="buyer-input" checked={ true } onChange={ () => null } />
-              <label className="btn text-light" htmlFor="buyer-input">Buyer</label>
+              <input
+                type="radio"
+                className="btn-check"
+                name="options-base"
+                id="buyer-input"
+                checked={true}
+                onChange={() => null}
+              />
+              <label className="btn text-light" htmlFor="buyer-input">
+                Buyer
+              </label>
 
-              <input type="radio" className="btn-check" name="options-base" id="freelancer-input" />
-              <label className="btn text-light" htmlFor="freelancer-input">Freelancer</label>
+              <input
+                type="radio"
+                className="btn-check"
+                name="options-base"
+                id="freelancer-input"
+              />
+              <label className="btn text-light" htmlFor="freelancer-input">
+                Freelancer
+              </label>
             </div>
 
-            <button className="btn btn-primary" type="submit">Submit</button>
+            <button className="btn btn-primary" type="submit">
+              Submit
+            </button>
           </form>
-          <span>Already have an account - <Link to="/sign-in">Login</Link></span>
+          <span>
+            Already have an account - <Link to="/sign-in">Login</Link>
+          </span>
         </div>
       </div>
     </>

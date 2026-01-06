@@ -54,6 +54,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void becomeFreelancer(FreelancerRequest request) {
+        if (freelancerService.existsByUser(authHelperService.getUser())) {
+            throw new GlobalBadRequestException("user already freelancer");
+        }
         JobTitleEntity jobTitle = jobTitleService.findById(request.getJobTitleId())
                 .orElseThrow(() -> new GlobalBadRequestException("such job title not found"));
         FreelancerEntity freelancer = FreelancerEntity.builder()

@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface FreelancerRepository extends JpaRepository<FreelancerEntity, UUID> {
     Optional<FreelancerEntity> findByUser(UserEntity user);
+    boolean existsByUser(UserEntity user);
 }

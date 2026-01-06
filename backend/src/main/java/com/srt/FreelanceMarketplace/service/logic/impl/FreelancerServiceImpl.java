@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.service.logic.impl;
 import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.FreelancerRepository;
 import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
@@ -31,5 +32,10 @@ public class FreelancerServiceImpl implements FreelancerService {
                         .orElseThrow(() -> new IllegalStateException("User has FREELANCER_ROLE but hasn't freelancer entity"));
         serviceEntity.setFreelancer(freelancer);
         serviceEntityService.save(serviceEntity);
+    }
+
+    @Override
+    public boolean existsByUser(UserEntity user) {
+        return repository.existsByUser(user);
     }
 }

@@ -36,7 +36,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             try {
                 subject = jwtService.getSubject(token);
             } catch (JwtException e) {
-                log.warn("token format error");
+                log.warn("token format error, token - {}", token);
                 filterChain.doFilter(request, response);
                 return;
             }

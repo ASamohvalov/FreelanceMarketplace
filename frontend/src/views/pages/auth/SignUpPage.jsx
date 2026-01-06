@@ -8,14 +8,15 @@ import { login } from "../../../logic/jwt";
 export default function SignUpPage() {
   useEffect(() => {
     document.title = "Sign up";
-  });
-  var navigate = useNavigate();
+  }, []);
+  const navigate = useNavigate();
 
   const email = useRef(null);
   const password = useRef(null);
   const firstName = useRef(null);
   const lastName = useRef(null);
 
+  const [isFreelancer, setIsFreelancer] = useState(false);
   const [error, setError] = useState(null);
 
   async function handleSubmit(event) {
@@ -48,6 +49,12 @@ export default function SignUpPage() {
         return;
       }
       login(loginResponse.data.accessToken, loginResponse.data.refreshToken);
+
+      if (isFreelancer) {
+        navigate("/become-freelancer");
+        return;
+      }
+
       navigate("/");
       return;
     }
@@ -57,7 +64,7 @@ export default function SignUpPage() {
   return (
     <>
       <HeaderComponent />
-      <div className="mx-auto" style={{ width: "500px", marginTop: "200px" }}>
+      <div className="mx-auto" style={{ width: "500px", marginTop: "130px" }}>
         <div
           className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
         >
@@ -71,7 +78,7 @@ export default function SignUpPage() {
               className="form-control mb-3"
               id="email"
               type="email"
-              ref={email}
+              ref={ email }
             />
 
             <label htmlFor="password">Password</label>
@@ -79,7 +86,7 @@ export default function SignUpPage() {
               className="form-control mb-3"
               id="password"
               type="password"
-              ref={password}
+              ref={ password }
             />
 
             <label htmlFor="firstName">First name</label>
@@ -87,7 +94,7 @@ export default function SignUpPage() {
               className="form-control mb-3"
               id="firstName"
               type="text"
-              ref={firstName}
+              ref={ firstName }
             />
 
             <label htmlFor="firstName">Last name</label>
@@ -95,7 +102,7 @@ export default function SignUpPage() {
               className="form-control mb-3"
               id="lastName"
               type="text"
-              ref={lastName}
+              ref={ lastName }
             />
 
             <div className="mb-3">
@@ -104,8 +111,8 @@ export default function SignUpPage() {
                 className="btn-check"
                 name="options-base"
                 id="buyer-input"
-                checked={true}
-                onChange={() => null}
+                checked={ !isFreelancer }
+                onChange={ () => setIsFreelancer(false) }
               />
               <label className="btn text-light" htmlFor="buyer-input">
                 Buyer
@@ -116,6 +123,8 @@ export default function SignUpPage() {
                 className="btn-check"
                 name="options-base"
                 id="freelancer-input"
+                checked={ isFreelancer }
+                onChange={ () => setIsFreelancer(true) }
               />
               <label className="btn text-light" htmlFor="freelancer-input">
                 Freelancer

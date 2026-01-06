@@ -15,19 +15,19 @@ export default function HeaderComponent() {
       var user = getUserData();
       return (
         <>
-        <li className="nav-item">
-          <Link
-            to="/sign-in"
-            className="nav-link active">{ user.sub }
-          </Link>
-        </li>
+          <li className="nav-item">
+            <Link
+              to="/sign-in"
+              className="nav-link active">{ user.sub }
+            </Link>
+          </li>
 
-        <li className="nav-item">
-          <a onClick={ onLogoutClick }
-            href=""
-            className="nav-link active">logout
-          </a>
-        </li>
+          <li className="nav-item">
+            <a onClick={ onLogoutClick }
+              href=""
+              className="nav-link active">logout
+            </a>
+          </li>
         </>
       );
     }
@@ -56,6 +56,9 @@ export default function HeaderComponent() {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link active" to="/">Home</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link active" to="/become-freelancer">Become Freelancer</Link>
               </li>
             </ul>
 

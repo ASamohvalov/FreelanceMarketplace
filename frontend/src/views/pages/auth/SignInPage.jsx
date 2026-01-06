@@ -10,7 +10,7 @@ export default function SignInPage() {
   useEffect(() => {
     document.title = "Sign in";
   });
-  var navigate = useNavigate();
+  const navigate = useNavigate();
 
   const email = useRef(null);
   const password = useRef(null);

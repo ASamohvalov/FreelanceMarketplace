@@ -3,8 +3,9 @@ import HeaderComponent from "../../components/HeaderComponent";
 import { getAllJobTitlesRequest } from "../../../logic/requests/jobTitle";
 import { becomeFreelancerRequest } from "../../../logic/requests/user/freelancerRequest";
 import { useNavigate } from "react-router-dom";
+import LoadingComponent from "../../components/LoadingComponent";
 
-export function BecomeFreelancer() {
+export function BecomeFreelancerPage() {
   useEffect(() => {
     document.title = "Become Freelancer";
   }, []);
@@ -36,11 +37,7 @@ export function BecomeFreelancer() {
     return (
       <>
         <HeaderComponent />
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div className="spinner-border" role="status" style={{ height: "50px", width: "50px" }}>
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
+        <LoadingComponent />
       </>
     )
   }

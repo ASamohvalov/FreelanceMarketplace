@@ -17,7 +17,7 @@ export default function HeaderComponent() {
         <>
           <li className="nav-item">
             <Link
-              to="/sign-in"
+              to="/personal-account"
               className="nav-link active">{ user.sub }
             </Link>
           </li>

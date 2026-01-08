@@ -1,10 +1,14 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.service.logic.JwtService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,19 +25,21 @@ import java.util.Map;
 public class JwtServiceImpl implements JwtService {
     private final SecretKey refreshSecret;
     private final SecretKey accessSecret;
-
-    @Value("${token.refresh.exp-days}")
-    private int refreshExpDays;
-    @Value("${token.access.exp-mins}")
-    private int accessExpMins;
+    private final int refreshExpDays;
+    private final int accessExpMins;
 
     public JwtServiceImpl(
-        @Value("${token.refresh.secret}") String refreshSecret,
-        @Value("${token.access.secret}") String accessSecret
+            @Value("${token.refresh.secret}") String refreshSecret,
+            @Value("${token.access.secret}") String accessSecret,
+            @Value("${token.refresh.exp-days}") int refreshExpDays,
+            @Value("${token.access.exp-mins}") int accessExpMins
     ) {
         this.refreshSecret = stringToSecret(refreshSecret);
         this.accessSecret = stringToSecret(accessSecret);
+        this.refreshExpDays = refreshExpDays;
+        this.accessExpMins = accessExpMins;
     }
+
 
     @Override
     public String generateAccessToken(UserEntity user) {
@@ -75,12 +82,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private String generateToken(UserEntity user, SecretKey key, Date exp) {
-        Map<String, String> claims = Map.of(
-                "id", user.getId().toString()
-                // todo: add roles
-        );
+        List<String> roles = user.getRoles().stream()
+                .map(RoleEntity::getName)
+                .toList();
         return Jwts.builder()
-                .claims(claims)
+                .claim("id", user.getId().toString())
+                .claim("roles", roles)
                 .subject(user.getEmail())
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(exp)

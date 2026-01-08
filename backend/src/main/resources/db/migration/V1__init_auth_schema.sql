@@ -22,5 +22,5 @@ create table user_roles (
 create table tokens (
     id UUID primary key default uuid_generate_v4(),
     user_id UUID not null references users(id),
-    token varchar(255) not null
+    token text not null
 );

@@ -1,5 +1,7 @@
 package com.srt.FreelanceMarketplace.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.srt.FreelanceMarketplace.filter.AuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;

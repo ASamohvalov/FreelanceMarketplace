@@ -19,6 +19,7 @@ public class TokenEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(columnDefinition = "TEXT")
     private String token;
 
     @ManyToOne

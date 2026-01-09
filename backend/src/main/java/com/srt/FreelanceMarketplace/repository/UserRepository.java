@@ -20,5 +20,12 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
             """)
     Optional<UserEntity> findByEmailWithRoles(String email);
 
+    @Query("""
+            select u from UserEntity u
+            join fetch u.roles
+            where u.id = :id
+            """)
+    Optional<UserEntity> findByIdWithRoles(UUID id);
+
     boolean existsByEmail(String email);
 }

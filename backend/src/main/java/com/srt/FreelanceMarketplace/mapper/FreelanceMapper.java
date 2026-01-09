@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.mapper;
 import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
 import org.mapstruct.Mapper;
@@ -20,4 +21,6 @@ public interface FreelanceMapper {
     FreelancerResponse freelancerEntityToResponse(FreelancerEntity freelancer);
 
     ServiceEntity serviceRequestToEntity(ServiceRequest response);
+
+    UserServiceResponse entityToUserServiceResponse(ServiceEntity entity);
 }

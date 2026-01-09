@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.service.entity;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 
 import java.util.Optional;
@@ -13,4 +14,5 @@ public interface UserService {
     boolean existsByEmail(String email);
     void logout(JwtRequest request);
     void becomeFreelancer(FreelancerRequest request);
+    UserInfoResponse getInfo();
 }

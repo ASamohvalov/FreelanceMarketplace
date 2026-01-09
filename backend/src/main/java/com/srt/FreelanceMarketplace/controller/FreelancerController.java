@@ -1,11 +1,13 @@
 package com.srt.FreelanceMarketplace.controller;
 
-import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
 import com.srt.FreelanceMarketplace.service.logic.FreelancerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/freelancer")
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class FreelancerController {
     private final FreelancerService freelancerService;
 
-    @PostMapping("/service/add")
-    public void addService(ServiceRequest request) {
-        freelancerService.addService(request);
+    @GetMapping("/get_all")
+    public List<FreelancerResponse> getAll() {
+        return freelancerService.getAll();
     }
 }

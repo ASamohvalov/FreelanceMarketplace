@@ -1,24 +1,22 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
-import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
-import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.FreelancerRepository;
-import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
-import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.logic.FreelancerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FreelancerServiceImpl implements FreelancerService {
     private final FreelancerRepository repository;
-    private final ServiceEntityService serviceEntityService;
     private final FreelanceMapper freelanceMapper;
-    private final AuthHelperService authHelperService;
 
     @Override
     public void save(FreelancerEntity freelancer) {
@@ -26,16 +24,24 @@ public class FreelancerServiceImpl implements FreelancerService {
     }
 
     @Override
-    public void addService(ServiceRequest request) {
-        ServiceEntity serviceEntity = freelanceMapper.serviceRequestToEntity(request);
-        FreelancerEntity freelancer = repository.findByUser(authHelperService.getUser())
-                        .orElseThrow(() -> new IllegalStateException("User has FREELANCER_ROLE but hasn't freelancer entity"));
-        serviceEntity.setFreelancer(freelancer);
-        serviceEntityService.save(serviceEntity);
+    public boolean existsByUser(UserEntity user) {
+        return repository.existsByUser(user);
     }
 
     @Override
-    public boolean existsByUser(UserEntity user) {
-        return repository.existsByUser(user);
+    public Optional<FreelancerEntity> findByUser(UserEntity user) {
+        return repository.findByUser(user);
+    }
+
+    @Override
+    public List<FreelancerResponse> getAll() {
+        return repository.findAll().stream()
+                .map(freelanceMapper::freelancerEntityToResponse)
+                .toList();
+    }
+
+    @Override
+    public FreelancerEntity getByUser(UserEntity user) {
+        return repository.findByUser(user).orElseThrow(() -> new IllegalStateException("user not found"));
     }
 }

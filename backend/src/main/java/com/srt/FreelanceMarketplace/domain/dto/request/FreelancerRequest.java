@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.request;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,5 +14,6 @@ public class FreelancerRequest {
     @NotNull
     private UUID jobTitleId;
     @NotBlank
+    @Max(11)
     private String phoneNumber;
 }

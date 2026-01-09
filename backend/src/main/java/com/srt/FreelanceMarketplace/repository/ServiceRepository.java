@@ -1,5 +1,7 @@
 package com.srt.FreelanceMarketplace.repository;
 
+import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +17,6 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
             join fetch s.freelancer
             """)
     List<ServiceEntity> findAllWithFreelancer();
+
+    List<ServiceEntity> getAllByFreelancer(FreelancerEntity freelancer);
 }

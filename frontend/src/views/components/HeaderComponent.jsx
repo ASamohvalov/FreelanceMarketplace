@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { getUserData, isAuth, logout } from "../../logic/jwt";
+import { getUserData, hasRole, isAuth, logout } from "../../logic/jwt";
 import { logoutRequest } from "../../logic/requests/user/userRequest";
 
 export default function HeaderComponent() {
@@ -57,9 +57,17 @@ export default function HeaderComponent() {
               <li className="nav-item">
                 <Link className="nav-link active" to="/">Home</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link active" to="/become-freelancer">Become Freelancer</Link>
-              </li>
+              {
+                (() => {
+                  if (isAuth() && !hasRole("ROLE_FREELANCER")) {
+                    return (
+                      <li className="nav-item">
+                        <Link className="nav-link active" to="/become-freelancer">Become Freelancer</Link>
+                      </li>
+                    );
+                  }
+                })()
+              }
             </ul>
 
             <div className="ms-auto">

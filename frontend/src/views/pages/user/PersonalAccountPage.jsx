@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import HeaderComponent from "../../components/HeaderComponent";
 import ServiceCardComponent from "../../components/ServiceCardComponent";
-import { isAuth } from "../../../logic/jwt";
+import { getUserData, isAuth } from "../../../logic/jwt";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { getInfoRequest } from "../../../logic/requests/user/userRequest";
+import LoadingComponent from "../../components/LoadingComponent";
 
 export default function PersonalAccountPage() {
   useEffect(() => {
@@ -10,12 +13,38 @@ export default function PersonalAccountPage() {
   }, [])
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState({});
 
-  // if user dont have tokens in localstorage
-  if (!isAuth()) {
-    navigate("/");
-    return;
+  useEffect(() => {
+    // if user dont have tokens in localstorage
+    if (!isAuth()) {
+      navigate(-1); // go back
+      return;
+    }
+
+    (async () => {
+      const response = await getInfoRequest();
+      if (response.status !== 200) {
+        console.log("logic error");
+        navigate(-1);
+        return;
+      }
+      setUserData(response.data);
+      setLoading(false);
+    })();
+  }, [navigate])
+
+
+  if (loading) {
+    return (
+      <>
+        <HeaderComponent />
+      </>
+    )
   }
+
+  const localUserData = getUserData();
 
   return (
     <>
@@ -28,8 +57,15 @@ export default function PersonalAccountPage() {
               <div className="col-4">
                 <div className="text-center">
                   <img className="rounded border border-subtle mb-3" style={{ height: "150px", width: "150px" }} />
-                  <div className="h4 mx-2">Ivan James</div>
-                  <span className="h6">Programmer</span>
+                  <div className="h4 mx-2">
+                    {
+                      (() => {
+                        const usdata = loading ? localUserData : userData;
+                        return usdata.firstName + " " + usdata.lastName;
+                      })()
+                    }
+                  </div>
+                  <span className="h6">{ loading ? "..." : "Programmer" }</span>
                 </div>
               </div>
 
@@ -42,7 +78,7 @@ export default function PersonalAccountPage() {
           <div className="m-4">
             <div className="h5">User services</div>
             <div className="row row-cols-1 row-cols-md-3 g-4">
-              <ServiceCardComponent name={ 123 } price={ 1000 } />
+              <ServiceCardComponent name={123} price={1000} />
               <ServiceCardComponent name={ 123 } price={ 1000 } />
               <ServiceCardComponent name={ 123 } price={ 1000 } />
               <ServiceCardComponent name={ 123 } price={ 1000 } />

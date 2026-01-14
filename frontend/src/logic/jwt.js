@@ -1,6 +1,20 @@
 import { jwtDecode } from "jwt-decode";
 
 /**
+ * @returns {string?}
+ */
+export function getAccessToken() {
+  return localStorage.getItem("accessToken");
+}
+
+/**
+ * @returns {string?}
+ */
+export function getRefreshToken() {
+  return localStorage.getItem("refreshToken");
+}
+
+/**
  * @param {string} accessToken
  * @param {string} refreshToken
  *
@@ -23,8 +37,7 @@ export function logout() {
  * @returns {bool}
  */
 export function isAuth() {
-  return localStorage.getItem("accessToken") != undefined &&
-    localStorage.getItem("refreshToken") != undefined;
+  return getAccessToken() != null && getRefreshToken() != null;
 }
 
 /**
@@ -32,9 +45,8 @@ export function isAuth() {
  * @returns {map?} decoded jwt
  */
 export function getUserData() {
-  var token = localStorage.getItem("accessToken");
   try {
-    return jwtDecode(token);
+    return jwtDecode(getAccessToken());
   } catch {
     return null;
   }
@@ -44,11 +56,20 @@ export function getUserData() {
  * @returns {bool}
  */
 export function isTokenExpired() {
-  var token = localStorage.getItem("accessToken");
   try {
-    var claims = jwtDecode(token)
-    return Date.now() >= claims.exp * 1000;
+    var claims = jwtDecode(getAccessToken())
+    return Date.now() + 5000 >= claims.exp * 1000;
   } catch {
     return false;
   }
+}
+
+/**
+ * @param {string} role - { ROLE_USER, ROLE_ADMIN, ROLE_FREELANCER }
+ *
+ * @returns {bool}
+ */
+export function hasRole(role) {
+  const data = getUserData();
+  return data?.roles.includes(role) ?? false;
 }

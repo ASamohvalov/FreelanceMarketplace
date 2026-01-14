@@ -43,24 +43,24 @@ export default function SignInPage() {
         <div
           className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
         >
-          {error}
+          { error }
         </div>
         <div className="shadow w-100 bg-dark rounded p-4 text-light">
           <div className="text-center mb-3 h4">Sign in</div>
-          <form onSubmit={handleSubmit} className="mb-4">
+          <form onSubmit={ handleSubmit } className="mb-4">
             <label htmlFor="email">Email</label>
             <input
               className="form-control mb-3"
               id="email"
               type="email"
-              ref={email}
+              ref={ email }
             />
             <label htmlFor="password">Password</label>
             <input
               className="form-control mb-3"
               id="password"
               type="password"
-              ref={password}
+              ref={ password }
             />
             <button className="btn btn-primary" type="submit">
               Submit

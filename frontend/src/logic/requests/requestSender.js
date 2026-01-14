@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "../../env";
 import axios, { AxiosError } from "axios";
-import { isTokenExpired } from "../jwt";
+import { getAccessToken, getRefreshToken, isTokenExpired } from "../jwt";
 
 /**
  * @param {string} path, required without / in begin
@@ -59,62 +59,37 @@ export async function sendPost(path, data = {}, config = []) {
 
 /**
  * @param {string} path required without / in begin
- * @param {map} params
+ * @param {map} data
+ *
+ * @returns {map} { status: int?, data: map? }
+ * can return data from url "auth/update_tokens"
+ *
+ * @example sendAuthPost('/hello', { message: 'hello world' })
+ */
+export async function sendAuthPost(path, data = {}) {
+  return sendAuth(path, true, data);
+}
+
+/**
+ * @param {string} path required without / in begin
  * @param {map} params
  *
  * @returns {map} { status: int?, data: map? }
  * can return data from url "auth/update_tokens"
  *
- * @example sendGet('/hello', { message: 'hello world' })
+ * @example sendAuthGet('/hello', { message: 'hello world' })
  */
-export async function sendAuthPost(path, data = {}, config = []) {
-  if (isTokenExpired()) {
-    // call update token
-    console.log("token is expired - call update");
-    const response = await sendUpdateTokensRequest();
-    if (response.status >= 400) {
-      return response;
-    }
-  }
-
-  var token = localStorage.getItem("accessToken");
-  var status;
-  var resData;
-
-  await axios
-    .post(
-      BACKEND_URL + path,
-      data,
-      {
-        headers: { Authorization: "Bearer " + token },
-      },
-      ...config,
-    )
-    .then((response) => {
-      console.log("API response data ->", response);
-      status = response.status;
-      resData = response.data;
-    })
-    .catch((error) => {
-      console.log("API response error ->", error);
-      const result = proccessErrors(error);
-      status = result.status;
-      resData = result.data;
-    });
-
-  return { status: status, data: resData };
+export async function sendAuthGet(path, params = {}) {
+  return sendAuth(path, false, params);
 }
 
 /**
  * @returns {map} { status: int, data: { accessToken: string, refreshToken: string } }
  *          {map} { status: int?, data?: string } - if error
  */
-export async function sendUpdateTokensRequest() {
-  var refreshToken = localStorage.getItem("refreshToken");
-  // call update token
-  console.log("token is expired - call update");
-  return await axios
-    .post(BACKEND_URL + "auth/update_tokens", { refreshToken: refreshToken })
+export function sendUpdateTokensRequest() {
+  return axios
+    .post(BACKEND_URL + "auth/update_tokens", { refreshToken: getRefreshToken() })
     .then((response) => {
       console.log("API response data ->", response);
       return {
@@ -132,6 +107,46 @@ export async function sendUpdateTokensRequest() {
 }
 
 // local functions
+
+/**
+ * @param {string} path required without / in begin
+ * @param {bool} isPost
+ * @param {map} data
+ *
+ * @returns {map} { status: int?, data: map? }
+ * can return data from url "auth/update_tokens"
+ *
+ * @example sendAuth('/hello', true, { message: 'hello world' })
+ */
+async function sendAuth(path, isPost, data = {}) {
+  if (isTokenExpired()) {
+    // call update token
+    console.log("token is expired - call update");
+    const response = await sendUpdateTokensRequest();
+    if (response.status >= 400) {
+      return response;
+    }
+  }
+
+  var token = getAccessToken();
+  try {
+    const response = isPost
+      ? await axios.post(BACKEND_URL + path, data, {
+          headers: { Authorization: "Bearer " + token },
+        })
+      : await axios.get(BACKEND_URL + path, {
+          headers: { Authorization: "Bearer " + token },
+          params: data,
+        });
+
+    console.log("API response data ->", response);
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.log("API response error ->", error);
+    const result = proccessErrors(error);
+    return { status: result.status, data: result.data };
+  }
+}
 
 /**
  * @returns {map} { status: int?, data: map? }

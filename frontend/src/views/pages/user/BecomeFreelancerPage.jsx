@@ -4,12 +4,9 @@ import { getAllJobTitlesRequest } from "../../../logic/requests/jobTitle";
 import { becomeFreelancerRequest } from "../../../logic/requests/user/freelancerRequest";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../../components/LoadingComponent";
+import { hasRole, isAuth } from "../../../logic/jwt";
 
 export function BecomeFreelancerPage() {
-  useEffect(() => {
-    document.title = "Become Freelancer";
-  }, []);
-
   const navigate = useNavigate();
 
   const phoneNumber = useRef(null);
@@ -17,12 +14,18 @@ export function BecomeFreelancerPage() {
   const [error, setError] = useState(null);
   const [jobTitles, setJobTitles] = useState([]);
   const [selectedJobTitleId, setSelectedJobTitleId] = useState("");
-  const [loaging, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
+      navigate(-1);
+      return;
+    }
+    document.title = "Become Freelancer";
+
     (async () => {
       setJobTitles(
-        await getAllJobTitlesRequest()
+        getAllJobTitlesRequest()
           .then((res) => {
             setLoading(false);
             setSelectedJobTitleId(res.data?.at(0).id);
@@ -30,10 +33,10 @@ export function BecomeFreelancerPage() {
           })
       );
     })();
-  }, []);
+  }, [navigate]);
 
 
-  if (loaging) {
+  if (loading) {
     return (
       <>
         <HeaderComponent />
@@ -41,6 +44,8 @@ export function BecomeFreelancerPage() {
       </>
     )
   }
+
+  if (!jobTitles) return null;
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -55,10 +60,7 @@ export function BecomeFreelancerPage() {
 
     if (selectedJobTitleId == "") {
       setSelectedJobTitleId(jobTitles[0].id)
-      console.log(selectedJobTitleId);
-      console.log(jobTitles);
     }
-    console.log(selectedJobTitleId);
 
     const response = await becomeFreelancerRequest(phoneNumber.current.value, selectedJobTitleId);
     if (response.status == 200) {

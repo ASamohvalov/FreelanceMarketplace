@@ -1,4 +1,5 @@
-import { sendAuthPost } from "../requestSender";
+import { login } from "../../jwt";
+import { sendAuthPost, sendUpdateTokensRequest } from "../requestSender";
 
 /**
  * @param {string} phoneNumber
@@ -7,8 +8,11 @@ import { sendAuthPost } from "../requestSender";
  * @returns {map} { status: int, data: map }
  */
 export async function becomeFreelancerRequest(phoneNumber, jobTitleId) {
-  return await sendAuthPost("user/become_freelancer", {
+  const response = await sendAuthPost("user/become_freelancer", {
     phoneNumber: phoneNumber,
     jobTitleId: jobTitleId,
   });
+  const { accessToken, refreshToken } = (await sendUpdateTokensRequest()).data;
+  login(accessToken, refreshToken);
+  return response;
 }

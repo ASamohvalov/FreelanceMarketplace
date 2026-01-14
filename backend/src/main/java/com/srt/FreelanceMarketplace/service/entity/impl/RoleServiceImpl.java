@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.entity.impl;
 
+import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.repository.RoleRepository;
 import com.srt.FreelanceMarketplace.service.entity.RoleService;
@@ -17,7 +18,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleEntity getByName(String name) {
-        return roleRepository.getByName(name);
+    public RoleEntity getByName(RoleEnum name) {
+        return roleRepository.getByName(name.name());
     }
 }

@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
+import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.JwtResponse;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.SignInRequest;
@@ -58,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         UserEntity entity = userMapper.signUpRequestToEntity(request);
         entity.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        RoleEntity role = roleService.getByName("ROLE_USER");
+        RoleEntity role = roleService.getByName(RoleEnum.ROLE_USER);
         entity.setRoles(List.of(role));
 
         userService.save(entity);

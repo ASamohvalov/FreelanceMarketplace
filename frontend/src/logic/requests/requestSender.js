@@ -13,7 +13,7 @@ import { getAccessToken, getRefreshToken, isTokenExpired } from "../jwt";
 export async function sendGet(path, data = {}, config = []) {
   var status;
   var resData;
-  await axios
+  axios
     .get(BACKEND_URL + path, data, config)
     .then((response) => {
       console.log("API response data ->", response);
@@ -41,7 +41,7 @@ export async function sendGet(path, data = {}, config = []) {
 export async function sendPost(path, data = {}, config = []) {
   var status;
   var resData;
-  await axios
+  axios
     .post(BACKEND_URL + path, data, config)
     .then((response) => {
       console.log("API response data ->", response);
@@ -67,7 +67,7 @@ export async function sendPost(path, data = {}, config = []) {
  * @example sendAuthPost('/hello', { message: 'hello world' })
  */
 export async function sendAuthPost(path, data = {}) {
-  return sendAuth(path, true, data);
+  return await sendAuth(path, true, data);
 }
 
 /**
@@ -80,14 +80,14 @@ export async function sendAuthPost(path, data = {}) {
  * @example sendAuthGet('/hello', { message: 'hello world' })
  */
 export async function sendAuthGet(path, params = {}) {
-  return sendAuth(path, false, params);
+  return await sendAuth(path, false, params);
 }
 
 /**
  * @returns {map} { status: int, data: { accessToken: string, refreshToken: string } }
  *          {map} { status: int?, data?: string } - if error
  */
-export function sendUpdateTokensRequest() {
+export async function sendUpdateTokensRequest() {
   return axios
     .post(BACKEND_URL + "auth/update_tokens", { refreshToken: getRefreshToken() })
     .then((response) => {

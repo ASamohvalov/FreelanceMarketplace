@@ -6,21 +6,23 @@ import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
-import com.srt.FreelanceMarketplace.service.entity.JobTitleService;
-import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
+import com.srt.FreelanceMarketplace.service.entity.*;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
-import com.srt.FreelanceMarketplace.service.entity.TokenService;
-import com.srt.FreelanceMarketplace.service.entity.UserService;
 import com.srt.FreelanceMarketplace.service.logic.FreelancerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final FreelancerService freelancerService;
     private final UserMapper userMapper;
     private final ServiceEntityService serviceEntityService;
+    private final RoleService roleService;
 
     @Override
     public void save(UserEntity entity) {
@@ -58,8 +61,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void becomeFreelancer(FreelancerRequest request) {
-        if (freelancerService.existsByUser(authHelperService.getUser())) {
+        UserEntity user = authHelperService.getUser();
+        if (freelancerService.existsByUser(user)) {
             throw new GlobalBadRequestException("user already freelancer");
         }
         JobTitleEntity jobTitle = jobTitleService.findById(request.getJobTitleId())
@@ -70,6 +75,10 @@ public class UserServiceImpl implements UserService {
                 .user(authHelperService.getUser())
                 .build();
         freelancerService.save(freelancer);
+        List<RoleEntity> roles = user.getRoles();
+        roles.add(roleService.getByName(RoleEnum.ROLE_FREELANCER));
+        log.warn(roles.toString());
+        repository.save(user);
     }
 
     @Override

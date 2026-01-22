@@ -17,7 +17,7 @@ export function BecomeFreelancerPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
+    if (!isAuth() || hasRole("ROLE_FREELANCER")) {
       navigate(-1);
       return;
     }
@@ -25,7 +25,7 @@ export function BecomeFreelancerPage() {
 
     (async () => {
       setJobTitles(
-        getAllJobTitlesRequest()
+        await getAllJobTitlesRequest()
           .then((res) => {
             setLoading(false);
             setSelectedJobTitleId(res.data?.at(0).id);

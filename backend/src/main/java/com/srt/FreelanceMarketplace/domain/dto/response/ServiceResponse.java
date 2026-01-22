@@ -3,11 +3,14 @@ package com.srt.FreelanceMarketplace.domain.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 public class ServiceResponse {
-    private FreelancerResponse freelancer;
+    private UUID id;
     private String title;
     private String description;
     private int price;
+    private FreelancerResponse freelancer;
 }

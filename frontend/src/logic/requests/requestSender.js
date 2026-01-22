@@ -13,7 +13,7 @@ import { getAccessToken, getRefreshToken, isTokenExpired } from "../jwt";
 export async function sendGet(path, data = {}, config = []) {
   var status;
   var resData;
-  axios
+  await axios
     .get(BACKEND_URL + path, data, config)
     .then((response) => {
       console.log("API response data ->", response);
@@ -41,7 +41,7 @@ export async function sendGet(path, data = {}, config = []) {
 export async function sendPost(path, data = {}, config = []) {
   var status;
   var resData;
-  axios
+  await axios
     .post(BACKEND_URL + path, data, config)
     .then((response) => {
       console.log("API response data ->", response);
@@ -84,8 +84,21 @@ export async function sendAuthGet(path, params = {}) {
 }
 
 /**
+ * @param {string} path required without / in begin
+ * @param {map} data
+ *
+ * @returns {map} { status: int?, data: map? }
+ * can return data from url "auth/update_tokens"
+ *
+ * @example sendAuthPost('/hello', { message: 'hello world' })
+ */
+export async function sendAuthPostFormData(path, data = {}) {
+  return await sendAuth(path, true, data, "multipart/form-data");
+}
+
+/**
  * @returns {map} { status: int, data: { accessToken: string, refreshToken: string } }
- *          {map} { status: int?, data?: string } - if error
+ *          {map} { status: int?, data: string? } - if error
  */
 export async function sendUpdateTokensRequest() {
   return axios
@@ -118,7 +131,7 @@ export async function sendUpdateTokensRequest() {
  *
  * @example sendAuth('/hello', true, { message: 'hello world' })
  */
-async function sendAuth(path, isPost, data = {}) {
+async function sendAuth(path, isPost, data = {}, contentType = "application/json") {
   if (isTokenExpired()) {
     // call update token
     console.log("token is expired - call update");
@@ -132,7 +145,10 @@ async function sendAuth(path, isPost, data = {}) {
   try {
     const response = isPost
       ? await axios.post(BACKEND_URL + path, data, {
-          headers: { Authorization: "Bearer " + token },
+        headers: {
+          "Content-Type": contentType,
+          Authorization: "Bearer " + token
+        },
         })
       : await axios.get(BACKEND_URL + path, {
           headers: { Authorization: "Bearer " + token },

@@ -1,11 +1,11 @@
-package com.srt.FreelanceMarketplace.service.logic.impl;
+package com.srt.FreelanceMarketplace.service.entity.impl;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.FreelancerRepository;
-import com.srt.FreelanceMarketplace.service.logic.FreelancerService;
+import com.srt.FreelanceMarketplace.service.entity.FreelancerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

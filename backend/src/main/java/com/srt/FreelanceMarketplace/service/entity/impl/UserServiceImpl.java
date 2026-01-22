@@ -13,7 +13,7 @@ import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
 import com.srt.FreelanceMarketplace.service.entity.*;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
-import com.srt.FreelanceMarketplace.service.logic.FreelancerService;
+import com.srt.FreelanceMarketplace.service.entity.FreelancerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -77,7 +77,6 @@ public class UserServiceImpl implements UserService {
         freelancerService.save(freelancer);
         List<RoleEntity> roles = user.getRoles();
         roles.add(roleService.getByName(RoleEnum.ROLE_FREELANCER));
-        log.warn(roles.toString());
         repository.save(user);
     }
 

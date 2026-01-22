@@ -34,9 +34,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             String subject;
             try {
-                subject = jwtService.getSubject(token);
+                subject = jwtService.getSubjectFromAccessToken(token);
             } catch (JwtException e) {
-                log.warn("token format error, token - {}", token);
+                log.warn("token format error or token expired, token - {}", token);
                 filterChain.doFilter(request, response);
                 return;
             }

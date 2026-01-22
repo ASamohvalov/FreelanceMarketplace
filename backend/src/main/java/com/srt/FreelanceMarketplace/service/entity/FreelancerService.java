@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.service.logic;
+package com.srt.FreelanceMarketplace.service.entity;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;

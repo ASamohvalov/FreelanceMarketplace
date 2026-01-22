@@ -1,14 +1,12 @@
 package com.srt.FreelanceMarketplace.service.logic.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.service.logic.JwtService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -59,16 +56,30 @@ public class JwtServiceImpl implements JwtService {
             Jwts.parser()
                     .verifyWith(accessSecret)
                     .build()
-                    .parse(token);
+                    .parseSignedClaims(token);
             return true;
         } catch (JwtException e) {
-            log.warn("JwtServiceImpl: token not valid");
+            log.warn("access token not valid");
             return false;
         }
     }
 
     @Override
-    public String getSubject(String token) {
+    public boolean validateRefreshToken(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(accessSecret)
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (JwtException e) {
+            log.warn("refresh token not valid");
+            return false;
+        }
+    }
+
+    @Override
+    public String getSubjectFromAccessToken(String token) {
         return Jwts.parser()
                 .verifyWith(accessSecret)
                 .build()
@@ -77,8 +88,9 @@ public class JwtServiceImpl implements JwtService {
                 .getSubject();
     }
 
-    private SecretKey stringToSecret(String str) {
-        return Keys.hmacShaKeyFor(str.getBytes());
+    private SecretKey stringToSecret(String base64Str) {
+        byte[] keyBytes = Decoders.BASE64.decode(base64Str);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private String generateToken(UserEntity user, SecretKey key, Date exp) {

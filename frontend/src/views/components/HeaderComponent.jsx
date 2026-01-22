@@ -57,6 +57,9 @@ export default function HeaderComponent() {
               <li className="nav-item">
                 <Link className="nav-link active" to="/">Home</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link active" to="/services">Services</Link>
+              </li>
               {
                 (() => {
                   if (isAuth() && !hasRole("ROLE_FREELANCER")) {

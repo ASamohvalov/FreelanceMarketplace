@@ -3,14 +3,14 @@ package com.srt.FreelanceMarketplace.controller;
 import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
 import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/service")
@@ -23,9 +23,14 @@ public class ServiceController {
         return service.getAll();
     }
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
-    public void addService(ServiceRequest request) {
+    public void addService(@ModelAttribute @Valid ServiceRequest request) {
         service.create(request);
+    }
+
+    @GetMapping("/image/{serviceId}")
+    public byte[] getImage(@PathVariable String serviceId) {
+        return service.getImage(UUID.fromString(serviceId));
     }
 }

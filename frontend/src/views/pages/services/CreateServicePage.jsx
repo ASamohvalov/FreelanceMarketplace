@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { hasRole, isAuth } from "../../../logic/jwt";
 import { useNavigate } from "react-router-dom";
+import { createServiceRequest } from "../../../logic/requests/service/serviceRequest";
 
 export default function CreateServicePage() {
   const navigate = useNavigate();
@@ -31,8 +32,15 @@ export default function CreateServicePage() {
       setError("all fields are required");
       return;
     }
-
-
+    const response = await createServiceRequest(
+      title.current.value,
+      image.current.files[0],
+      description.current.value,
+      price.current.value
+    );
+    if (response.status !== 200) {
+      setError("some error with saving");
+    }
   }
 
   return (

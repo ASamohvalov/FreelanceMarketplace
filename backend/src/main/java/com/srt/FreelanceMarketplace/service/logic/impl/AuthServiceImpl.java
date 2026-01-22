@@ -17,11 +17,13 @@ import com.srt.FreelanceMarketplace.service.logic.AuthService;
 import com.srt.FreelanceMarketplace.service.logic.JwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -68,6 +70,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public JwtResponse updateTokens(JwtRequest request) {
+        if (!jwtService.validateRefreshToken(request.getRefreshToken())) {
+            throw new GlobalBadRequestException("this token not valid");
+        }
         TokenEntity token = tokenService.findByToken(request.getRefreshToken())
                 .orElseThrow(() -> new GlobalBadRequestException("such token not found"));
         UserEntity user = token.getUser();
@@ -75,7 +80,8 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        token.setToken(refreshToken);
+        token.setToken(refreshToken); // todo
+        tokenService.save(token); // по сути без этого должен работать
 
         return new JwtResponse(accessToken, refreshToken);
     }

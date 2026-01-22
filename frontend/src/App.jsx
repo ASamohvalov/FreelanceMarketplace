@@ -6,12 +6,14 @@ import ServicesPage from "./views/pages/services/ServicesPage.jsx";
 import { BecomeFreelancerPage } from "./views/pages/user/BecomeFreelancerPage.jsx";
 import PersonalAccountPage from "./views/pages/user/PersonalAccountPage.jsx";
 import CreateServicePage from "./views/pages/services/CreateServicePage.jsx";
+import ErrorPage from "./views/pages/error/ErrorPage.jsx";
 
 // base routing
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/error" element={<ErrorPage />} />
       <Route path="/sign-in" element={<SignInPage />} />
       <Route path="/sign-up" element={<SignUpPage />} />
 

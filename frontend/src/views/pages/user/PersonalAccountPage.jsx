@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import HeaderComponent from "../../components/HeaderComponent";
-import ServiceCardComponent from "../../components/ServiceCardComponent";
+import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import { getUserData, isAuth } from "../../../logic/jwt";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getInfoRequest } from "../../../logic/requests/user/userRequest";
-import LoadingComponent from "../../components/LoadingComponent";
 
 export default function PersonalAccountPage() {
   useEffect(() => {

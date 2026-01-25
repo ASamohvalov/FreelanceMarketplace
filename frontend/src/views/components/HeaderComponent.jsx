@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { getUserData, hasRole, isAuth, logout } from "../../logic/jwt";
 import { logoutRequest } from "../../logic/requests/user/userRequest";
+import "./header_component.css";
 
 export default function HeaderComponent() {
   async function onLogoutClick(event) {
@@ -46,39 +47,34 @@ export default function HeaderComponent() {
 
   return (
     <header>
-      <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">FreelanceMarketplace</a>
-          <button className="navbar-toggler" type="button">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link className="nav-link active" to="/">Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link active" to="/services">Services</Link>
-              </li>
-              {
-                (() => {
-                  if (isAuth() && !hasRole("ROLE_FREELANCER")) {
-                    return (
-                      <li className="nav-item">
-                        <Link className="nav-link active" to="/become-freelancer">Become Freelancer</Link>
-                      </li>
-                    );
-                  }
-                })()
-              }
-            </ul>
+      <nav className="navbar navbar-custom navbar-expand-lg bg-main-color navbar-dark rounded-bottom-4 fixed-top">
+        <div className="container-fluid d-flex justify-content-between align-items-center">
 
-            <div className="ms-auto">
-              <ul className="navbar-nav">
-                { authLinks() }
-              </ul>
-            </div>
-          </div>
+          <ul className="navbar-nav flex-row me-3">
+            <li className="nav-item">
+              <Link className="nav-link active" to="/">Home</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link active" to="/services">Services</Link>
+            </li>
+            {
+              (() => {
+                if (isAuth() && !hasRole("ROLE_FREELANCER")) {
+                  return (
+                    <li className="nav-item">
+                      <Link className="nav-link active" to="/become-freelancer">Become Freelancer</Link>
+                    </li>
+                  );
+                }
+              })()
+            }
+          </ul>
+
+          <img src="/images/logo.png" alt="Logo" height="40" />
+
+          <ul className="navbar-nav flex-row ms-3">
+            { authLinks() }
+          </ul>
         </div>
       </nav>
     </header>

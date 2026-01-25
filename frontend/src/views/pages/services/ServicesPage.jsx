@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import HeaderComponent from "../../components/HeaderComponent";
 import { useState } from "react";
 import LoadingComponent from "../../components/LoadingComponent";
-import { getAllServicesRequest, getImageByServiceId } from "../../../logic/requests/service/serviceRequest";
+import { getAllServicesRequest } from "../../../logic/requests/service/serviceRequest";
 import { useNavigate } from "react-router-dom";
-import ServiceCardComponent from "../../components/ServiceCardComponent";
+import ServicesListComponent from "../../components/service/ServicesListComponent";
 
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -26,45 +26,21 @@ export default function ServicesPage() {
     })();
   }, [navigate]);
 
-  /*
-  useEffect(() => {
-    if (!loading) {
-      services.map(async (service) => {
-        const imgResult = await getImageByServiceId(service.id);
-        if (imgResult.status !== 200) {
-          navigate("/error");
-          return;
-        }
-        // setImages(prev => [...prev, imgResult.data]); // todo
-      });
-    }
-  }, [services, loading, navigate]);
-  */
-
   return (
     <>
       <HeaderComponent />
-      <main>
-        {loading ? (
-          <LoadingComponent />
-        ) : (
-          <div className="p-1">
-            <div className="row row-cols-1 row-cols-md-3 g-4">
-              {
-                services.map((service, item) => {
-                  return (
-                    <ServiceCardComponent
-                      key={ item }
-                      id={ service.id }
-                      title={ service.title }
-                      price={ service.price }
-                    />
-                  );
-                })
-              }
+      <main className="p-5 row">
+        <div className="col-3 bg-secondary-custom rounded-4">
+        </div>
+        <div className="col-7">
+          {loading ? (
+            <LoadingComponent />
+          ) : (
+            <div className="px-5">
+              <ServicesListComponent services={ services } />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
     </>
   );

@@ -1,0 +1,40 @@
+.service-card {
+  min-width: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,.15);
+  cursor: pointer;
+  transition: transform .2s;
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+}
+
+.card-image {
+  height: 160px;
+  background: #c6c2c2;
+}
+
+.card-body-custom {
+  padding: 16px;
+  color: #fff;
+  background: linear-gradient(180deg, #3B1D6D, #4b1f78);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  opacity: .8;
+}
+
+.card-price {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 700;
+}

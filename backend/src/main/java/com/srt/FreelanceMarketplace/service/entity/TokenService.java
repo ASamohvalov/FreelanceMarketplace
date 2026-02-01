@@ -1,11 +1,28 @@
 package com.srt.FreelanceMarketplace.service.entity;
 
 import com.srt.FreelanceMarketplace.domain.entities.user.TokenEntity;
+import com.srt.FreelanceMarketplace.repository.TokenRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-public interface TokenService {
-    void save(TokenEntity entity);
-    void deleteByToken(String token);
-    Optional<TokenEntity> findByToken(String token);
+@Service
+@RequiredArgsConstructor
+public class TokenService {
+    private final TokenRepository tokenRepository;
+
+    public void save(TokenEntity entity) {
+        tokenRepository.save(entity);
+    }
+
+    @Transactional
+    public void deleteByToken(String token) {
+        tokenRepository.deleteByToken(token);
+    }
+
+    public Optional<TokenEntity> findByToken(String token) {
+        return tokenRepository.findByToken(token);
+    }
 }

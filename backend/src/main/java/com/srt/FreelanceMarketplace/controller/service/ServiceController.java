@@ -1,8 +1,8 @@
-package com.srt.FreelanceMarketplace.controller;
+package com.srt.FreelanceMarketplace.controller.service;
 
-import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
-import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
-import com.srt.FreelanceMarketplace.service.entity.ServiceEntityService;
+import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
+import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -29,7 +29,7 @@ public class ServiceController {
         service.create(request);
     }
 
-    @GetMapping("/image/{serviceId}")
+    @GetMapping("/title_image/{serviceId}")
     public byte[] getImage(@PathVariable String serviceId) {
         return service.getImage(UUID.fromString(serviceId));
     }

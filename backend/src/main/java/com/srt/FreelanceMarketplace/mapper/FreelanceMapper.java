@@ -1,11 +1,11 @@
 package com.srt.FreelanceMarketplace.mapper;
 
-import com.srt.FreelanceMarketplace.domain.dto.request.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.ServiceResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
-import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

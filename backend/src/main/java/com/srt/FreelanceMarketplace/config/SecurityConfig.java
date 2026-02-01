@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/service/**").permitAll()
                         .requestMatchers("/job_title/**").permitAll()
                         .requestMatchers("/freelancer/**").permitAll()
+                        .requestMatchers("/category/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager

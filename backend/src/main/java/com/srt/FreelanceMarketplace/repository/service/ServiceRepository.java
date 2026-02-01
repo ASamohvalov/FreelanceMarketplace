@@ -1,8 +1,7 @@
-package com.srt.FreelanceMarketplace.repository;
+package com.srt.FreelanceMarketplace.repository.service;
 
-import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
-import com.srt.FreelanceMarketplace.domain.entities.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

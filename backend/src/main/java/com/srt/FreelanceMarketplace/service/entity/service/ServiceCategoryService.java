@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.service.entity.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.CategoryRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryWithSubcategoryResponse;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceCategoryEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.service.ServiceCategoryRepository;
@@ -35,5 +36,16 @@ public class ServiceCategoryService {
         return repository.findAll().stream()
                 .map(c -> new CategoryResponse(c.getId(), c.getName()))
                 .toList();
+    }
+
+    public List<CategoryWithSubcategoryResponse> getAllWithSubcategory() {
+        return repository.findAll().stream()
+                .map(c -> new CategoryWithSubcategoryResponse(
+                        c.getId(),
+                        c.getName(),
+                        c.getSubcategories().stream()
+                                .map(sc -> new CategoryResponse(sc.getId(), sc.getName()))
+                                .toList()
+                )).toList();
     }
 }

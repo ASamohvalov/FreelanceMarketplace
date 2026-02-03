@@ -23,6 +23,7 @@ public class ServiceRequest {
     private String title;
 
     @NotBlank
+    @Size(min = 100)
     private String description;
 
     @NotNull

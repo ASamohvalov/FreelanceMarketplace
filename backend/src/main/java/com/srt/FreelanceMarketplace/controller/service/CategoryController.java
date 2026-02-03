@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.controller.service;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.CategoryRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.SubcategoryRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryWithSubcategoryResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.SubcategoryResponse;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceCategoryService;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceSubcategoryService;
@@ -40,5 +41,10 @@ public class CategoryController {
     @GetMapping("/subcategory/get_all")
     public List<SubcategoryResponse> getAllSubcategories() {
         return serviceSubcategoryService.getAll();
+    }
+
+    @GetMapping("/get_all_info")
+    public List<CategoryWithSubcategoryResponse> getAllSubcategoriesInfo() {
+        return serviceCategoryService.getAllWithSubcategory();
     }
 }

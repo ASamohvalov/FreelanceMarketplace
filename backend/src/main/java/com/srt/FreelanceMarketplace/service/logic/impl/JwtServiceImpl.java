@@ -100,6 +100,8 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .claim("id", user.getId().toString())
                 .claim("roles", roles)
+                .claim("firstName", user.getFirstName())
+                .claim("lastName", user.getLastName())
                 .subject(user.getEmail())
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(exp)

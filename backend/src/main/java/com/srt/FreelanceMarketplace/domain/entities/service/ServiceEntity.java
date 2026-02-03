@@ -32,6 +32,7 @@ public class ServiceEntity {
     private String title;
 
     @Column(columnDefinition = "TEXT")
+    @Size(min = 100)
     private String description;
 
     private int price;

@@ -1,0 +1,52 @@
+#error-page-main {
+    padding-top: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.error-card {
+  background: #fff;
+  color: #333;
+  border-radius: 16px;
+  padding: 48px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.error-code {
+  font-size: 96px;
+  font-weight: 800;
+  color: #4b1f73;
+  line-height: 1;
+}
+
+.error-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.error-text {
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.btn-purple {
+  background-color: #4b1f73;
+  border: none;
+  color: white;
+}
+
+.btn-purple:hover {
+  color: white;
+  background-color: #3a175a;
+}
+
+.error-emoji {
+  font-size: 32px;
+  margin-bottom: 16px;
+}

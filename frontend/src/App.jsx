@@ -1,29 +1,34 @@
-import { Route, Routes } from "react-router-dom";
-import HomePage from "./views/pages/HomePage.jsx";
-import SignInPage from "./views/pages/user/SignInPage.jsx";
-import SignUpPage from "./views/pages/user/SignUpPage.jsx";
-import ServicesPage from "./views/pages/services/ServicesPage.jsx";
-import { BecomeFreelancerPage } from "./views/pages/user/BecomeFreelancerPage.jsx";
-import PersonalAccountPage from "./views/pages/user/PersonalAccountPage.jsx";
-import CreateServicePage from "./views/pages/services/CreateServicePage.jsx";
-import ErrorPage from "./views/pages/error/ErrorPage.jsx";
-import ServicePage from "./views/pages/services/ServicePage.jsx";
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
 
-// base routing
-export default function App() {
+function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/error" element={<ErrorPage />} />
-      <Route path="/sign-in" element={<SignInPage />} />
-      <Route path="/sign-up" element={<SignUpPage />} />
-
-      <Route path="/become-freelancer" element={<BecomeFreelancerPage />} />
-      <Route path="/personal-account" element={<PersonalAccountPage />} />
-
-      <Route path="/services" element={<ServicesPage />} />
-      <Route path="/create_service" element={<CreateServicePage />} />
-      <Route path="/service/:id" element={<ServicePage />} />
-    </Routes>
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
   );
 }
+
+export default App;

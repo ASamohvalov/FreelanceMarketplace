@@ -106,7 +106,7 @@ export default function SignUpPage() {
                         ref={lastName}
                     />
 
-                    <div className="mb-3">
+                    <div className="mb-3 w-100 px-3 flex gap-3">
                         <input
                             type="radio"
                             className="btn-check"
@@ -115,7 +115,7 @@ export default function SignUpPage() {
                             checked={!isFreelancer}
                             onChange={() => setIsFreelancer(false)}
                         />
-                        <label className="btn text-light" htmlFor="buyer-input">
+                        <label className="btn text-dark w-100" htmlFor="buyer-input">
                             Buyer
                         </label>
 
@@ -128,7 +128,7 @@ export default function SignUpPage() {
                             onChange={() => setIsFreelancer(true)}
                         />
                         <label
-                            className="btn text-light"
+                            className="btn text-dark w-100"
                             htmlFor="freelancer-input"
                         >
                             Freelancer

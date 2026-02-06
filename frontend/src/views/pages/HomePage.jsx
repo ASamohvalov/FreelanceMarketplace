@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <>
       <HeaderComponent />
-      <Link to="/service/create">create service</Link>
+      <Link to="/create_service">create service</Link>
     </>
-  )
+  );
 }

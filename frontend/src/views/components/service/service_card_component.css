@@ -1,8 +1,10 @@
 .service-card {
-  min-width: 260px;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,.15);
+  background: linear-gradient(180deg, #3B1D6D, #4b1f78);
+  overflow: hidden;
+  box-shadow: 0px 3px 5px gray;
+  height: 100%;
   cursor: pointer;
   transition: transform .2s;
 }
@@ -11,30 +13,29 @@
   transform: translateY(-3px);
 }
 
-.card-image {
-  height: 160px;
+.service-img {
   background: #c6c2c2;
+  height: 140px;
 }
 
-.card-body-custom {
-  padding: 16px;
-  color: #fff;
+.service-info {
   background: linear-gradient(180deg, #3B1D6D, #4b1f78);
+  color: #fff;
+  padding: 12px;
 }
 
-.card-title {
-  font-size: 16px;
-  font-weight: 600;
+.service-info h6 {
+  font-size: 14px;
   margin-bottom: 4px;
 }
 
-.card-subtitle {
-  font-size: 13px;
-  opacity: .8;
+.service-info small {
+  font-size: 12px;
+  opacity: 0.8;
 }
 
-.card-price {
-  margin-top: 12px;
-  font-size: 18px;
-  font-weight: 700;
+.price {
+  text-align: right;
+  font-weight: bold;
+  margin-top: 6px;
 }

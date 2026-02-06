@@ -7,6 +7,7 @@ import { BecomeFreelancerPage } from "./views/pages/user/BecomeFreelancerPage.js
 import PersonalAccountPage from "./views/pages/user/PersonalAccountPage.jsx";
 import CreateServicePage from "./views/pages/services/CreateServicePage.jsx";
 import ErrorPage from "./views/pages/error/ErrorPage.jsx";
+import ServicePage from "./views/pages/services/ServicePage.jsx";
 
 // base routing
 export default function App() {
@@ -21,7 +22,8 @@ export default function App() {
       <Route path="/personal-account" element={<PersonalAccountPage />} />
 
       <Route path="/services" element={<ServicesPage />} />
-      <Route path="/service/create" element={<CreateServicePage />} />
+      <Route path="/create_service" element={<CreateServicePage />} />
+      <Route path="/service/:id" element={<ServicePage />} />
     </Routes>
   );
 }

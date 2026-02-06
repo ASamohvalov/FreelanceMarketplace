@@ -37,7 +37,7 @@ export function logout() {
  * @returns {bool}
  */
 export function isAuth() {
-  return getAccessToken() != null && getRefreshToken() != null;
+  return getAccessToken() && getRefreshToken();
 }
 
 /**

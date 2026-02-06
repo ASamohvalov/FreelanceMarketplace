@@ -77,7 +77,7 @@ export default function PersonalAccountPage() {
           <div className="m-4">
             <div className="h5">User services</div>
             <div className="row row-cols-1 row-cols-md-3 g-4">
-              <ServiceCardComponent name={123} price={1000} />
+              <ServiceCardComponent name={ 123 } price={ 1000 } />
               <ServiceCardComponent name={ 123 } price={ 1000 } />
               <ServiceCardComponent name={ 123 } price={ 1000 } />
               <ServiceCardComponent name={ 123 } price={ 1000 } />

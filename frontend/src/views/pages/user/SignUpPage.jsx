@@ -1,9 +1,14 @@
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { signInRequest, signUpRequest } from "../../../logic/requests/user/authRequest";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  signInRequest,
+  signUpRequest,
+} from "../../../logic/requests/user/authRequest";
 import HeaderComponent from "../../components/HeaderComponent";
 import { login } from "../../../logic/jwt";
+import "./css/sign_page.css";
+import { FormWrapper } from "../../components/elements/FormWrapper";
 
 export default function SignUpPage() {
   useEffect(() => {
@@ -64,82 +69,76 @@ export default function SignUpPage() {
   return (
     <>
       <HeaderComponent />
-      <div className="mx-auto" style={{ width: "500px", marginTop: "130px" }}>
-        <div
-          className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
-        >
-          {error}
-        </div>
-        <div className="shadow w-100 bg-dark rounded p-4 text-light">
-          <div className="text-center mb-3 h4">Sign up</div>
-          <form onSubmit={handleSubmit} className="mb-4">
-            <label htmlFor="email">Email</label>
+      <FormWrapper Title="Sign up" error={error}>
+        <form onSubmit={handleSubmit} className="mb-4 sign-form">
+          <label htmlFor="email">Email</label>
+          <input
+            className="form-control mb-3"
+            id="email"
+            type="email"
+            ref={email}
+          />
+
+          <label htmlFor="password">Password</label>
+          <input
+            className="form-control mb-3"
+            id="password"
+            type="password"
+            ref={password}
+          />
+
+          <label htmlFor="firstName">First name</label>
+          <input
+            className="form-control mb-3"
+            id="firstName"
+            type="text"
+            ref={firstName}
+          />
+
+          <label htmlFor="firstName ">Last name</label>
+          <input
+            className="form-control mb-3"
+            id="lastName"
+            type="text"
+            ref={lastName}
+          />
+
+          <div className="mb-3 w-100 px-3 flex gap-3">
             <input
-              className="form-control mb-3"
-              id="email"
-              type="email"
-              ref={ email }
+              type="radio"
+              className="btn-check"
+              name="options-base"
+              id="buyer-input"
+              checked={!isFreelancer}
+              onChange={() => setIsFreelancer(false)}
             />
+            <label className="btn text-dark w-100" htmlFor="buyer-input">
+              Buyer
+            </label>
 
-            <label htmlFor="password">Password</label>
             <input
-              className="form-control mb-3"
-              id="password"
-              type="password"
-              ref={ password }
+              type="radio"
+              className="btn-check"
+              name="options-base"
+              id="freelancer-input"
+              checked={isFreelancer}
+              onChange={() => setIsFreelancer(true)}
             />
+            <label className="btn text-dark w-100" htmlFor="freelancer-input">
+              Freelancer
+            </label>
+          </div>
 
-            <label htmlFor="firstName">First name</label>
-            <input
-              className="form-control mb-3"
-              id="firstName"
-              type="text"
-              ref={ firstName }
-            />
-
-            <label htmlFor="firstName">Last name</label>
-            <input
-              className="form-control mb-3"
-              id="lastName"
-              type="text"
-              ref={ lastName }
-            />
-
-            <div className="mb-3">
-              <input
-                type="radio"
-                className="btn-check"
-                name="options-base"
-                id="buyer-input"
-                checked={ !isFreelancer }
-                onChange={ () => setIsFreelancer(false) }
-              />
-              <label className="btn text-light" htmlFor="buyer-input">
-                Buyer
-              </label>
-
-              <input
-                type="radio"
-                className="btn-check"
-                name="options-base"
-                id="freelancer-input"
-                checked={ isFreelancer }
-                onChange={ () => setIsFreelancer(true) }
-              />
-              <label className="btn text-light" htmlFor="freelancer-input">
-                Freelancer
-              </label>
-            </div>
-
-            <button className="btn btn-primary" type="submit">
+          <div className="d-flex gap-3 justify-content-center">
+            <button className="btn btn-primary sign-form_submit" type="submit">
               Submit
             </button>
-          </form>
-          <span>
-            Already have an account - <Link to="/sign-in">Login</Link>
-          </span>
-        </div>
-      </div>
+            <NavLink to="/sign-in" className="btn btn-outline-secondary">
+              Login
+            </NavLink>
+          </div>
+        </form>
+      </FormWrapper>
     </>
   );
 }

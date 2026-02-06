@@ -30,22 +30,22 @@ export default function CreateServicePage() {
   const revistionsCount = useRef(null);
 
   useEffect(() => {
-    if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
-      navigate(-1);
-      return;
-    }
+    // if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
+    //   navigate(-1);
+    //   return;
+    // }
     document.title = "Create service";
 
-    (async () => {
-      const response = await getAllCategoryInfo();
-      if (response.status !== 200) {
-        console.log("logic error");
-        navigate("/error");
-        return;
-      }
-      setCategories(response.data);
-      setSelectedCategory(response.data[0].id);
-    })();
+    // // (async () => {
+    // //   const response = await getAllCategoryInfo();
+    // //   if (response.status !== 200) {
+    // //     console.log("logic error");
+    // //     navigate("/error");
+    // //     return;
+    // //   }
+    //   setCategories(response.data);
+    //   setSelectedCategory(response.data[0].id);
+    // })();
   }, [navigate]);
 
   async function handleSubmit(event) {

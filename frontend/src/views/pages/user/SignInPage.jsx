@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import { signInRequest } from "../../../logic/requests/user/authRequest";
 import { login } from "../../../logic/jwt";
 import { useRef } from "react";
+import "./css/sign_page.css";
+import { FormWrapper } from "../../components/elements/FormWrapper";
 
 export default function SignInPage() {
   useEffect(() => {
@@ -25,7 +27,10 @@ export default function SignInPage() {
       return;
     }
 
-    var response = await signInRequest(email.current.value, password.current.value);
+    var response = await signInRequest(
+      email.current.value,
+      password.current.value,
+    );
     if (response.status == 200) {
       console.log(response);
       login(response.data.accessToken, response.data.refreshToken);
@@ -39,38 +44,32 @@ export default function SignInPage() {
   return (
     <>
       <HeaderComponent />
-      <div className="mx-auto" style={{ width: "500px", marginTop: "200px" }}>
-        <div
-          className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
-        >
-          { error }
-        </div>
-        <div className="shadow w-100 bg-dark rounded p-4 text-light">
-          <div className="text-center mb-3 h4">Sign in</div>
-          <form onSubmit={ handleSubmit } className="mb-4">
-            <label htmlFor="email">Email</label>
-            <input
-              className="form-control mb-3"
-              id="email"
-              type="email"
-              ref={ email }
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              className="form-control mb-3"
-              id="password"
-              type="password"
-              ref={ password }
-            />
-            <button className="btn btn-primary" type="submit">
+      <FormWrapper Title="Sign in" error={error}>
+        <form onSubmit={handleSubmit} className="mb-4 sign-form">
+          <label htmlFor="email sign-form_input-label">Email</label>
+          <input
+            className="form-control mb-3 sign-form_input"
+            id="email"
+            type="email"
+            ref={email}
+          />
+          <label htmlFor="password sign-form_input-label">Password</label>
+          <input
+            className="form-control mb-3 sign-form_input"
+            id="password"
+            type="password"
+            ref={password}
+          />
+          <div className="d-flex gap-3 justify-content-center">
+            <button className="btn btn-primary sign-form_submit" type="submit">
               Submit
             </button>
-          </form>
-          <span>
-            Don't have an account - <Link to="/sign-up">Register</Link>
-          </span>
-        </div>
-      </div>
+            <NavLink to="/sign-up" className="btn btn-outline-secondary">
+              Register
+            </NavLink>
+          </div>
+        </form>
+      </FormWrapper>
     </>
   );
 }

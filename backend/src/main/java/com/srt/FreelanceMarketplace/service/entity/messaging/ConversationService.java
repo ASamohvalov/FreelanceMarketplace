@@ -16,5 +16,6 @@ public class ConversationService {
     public ConversationEntity getById(UUID id) {
         repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such conversation not found"));
+        
     }
 }

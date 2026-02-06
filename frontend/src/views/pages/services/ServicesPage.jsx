@@ -15,15 +15,15 @@ export default function ServicesPage() {
   useEffect(() => {
     document.title = "Services";
 
-    (async () => {
-      const result = await getAllServicesRequest();
-      if (result.status !== 200) {
-        navigate("/error");
-        return;
-      }
-      setServices(result.data);
-      setLoading(false);
-    })();
+    // (async () => {
+    //   const result = await getAllServicesRequest();
+    //   if (result.status !== 200) {
+    //     navigate("/error");
+    //     return;
+    //   }
+    //   setServices(result.data);
+    //   setLoading(false);
+    // })();
   }, [navigate]);
 
   return (

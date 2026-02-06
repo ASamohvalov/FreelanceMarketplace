@@ -3,9 +3,9 @@ create extension if not exists "uuid-ossp";
 create table proposals (
     id UUID primary key default uuid_generate_v4(),
     author_id UUID references users(id),
-    freelancer_id UUID references freelancers(id),
+    service_id UUID references services(id),
     description varchar(155),
-    is_accepted boolean
+    is_accepted boolean default false
 );
 
 create table conversations (
@@ -22,6 +22,7 @@ create table messages (
     id UUID primary key default uuid_generate_v4(),
     author_id UUID references users(id),
     conversation_id UUID references conversations(id),
+    date_of_writing date,
     message text
 );
 

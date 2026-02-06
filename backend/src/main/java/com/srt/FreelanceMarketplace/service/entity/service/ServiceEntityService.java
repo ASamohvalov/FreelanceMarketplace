@@ -36,6 +36,11 @@ public class ServiceEntityService {
                 .toList();
     }
 
+    public ServiceEntity getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such id not found"));
+    }
+
     @Transactional
     public void create(ServiceRequest request) {
         ServiceEntity serviceEntity = freelanceMapper.serviceRequestToEntity(request);
@@ -64,7 +69,7 @@ public class ServiceEntityService {
         repository.save(serviceEntity);
     }
 
-    public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
+    public List<UserServiceResponse> dtoGetAllByFreelancer(FreelancerEntity entity) {
         return repository.getAllByFreelancer(entity).stream()
                 .map(freelanceMapper::entityToUserServiceResponse)
                 .toList();

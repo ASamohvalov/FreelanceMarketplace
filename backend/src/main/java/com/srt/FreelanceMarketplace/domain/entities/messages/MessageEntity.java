@@ -3,9 +3,11 @@ package com.srt.FreelanceMarketplace.domain.entities.messages;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,4 +31,6 @@ public class MessageEntity {
 
     @Column(columnDefinition = "TEXT")
     private String message;
+
+    private Date dateOfWriting;
 }

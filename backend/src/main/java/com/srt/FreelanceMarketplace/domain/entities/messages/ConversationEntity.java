@@ -16,4 +16,6 @@ public class ConversationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    // todo add service
 }

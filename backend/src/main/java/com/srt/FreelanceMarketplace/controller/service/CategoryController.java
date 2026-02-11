@@ -6,7 +6,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryResponse
 import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryWithSubcategoryResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.SubcategoryResponse;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceCategoryService;
-import com.srt.FreelanceMarketplace.service.entity.service.ServiceSubcategoryService;
+import com.srt.FreelanceMarketplace.service.entity.service.SubcategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
     private final ServiceCategoryService serviceCategoryService;
-    private final ServiceSubcategoryService serviceSubcategoryService;
+    private final SubcategoryService subcategoryService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
@@ -30,7 +30,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/subcategory/create")
     public void createSubcategory(@Valid @RequestBody SubcategoryRequest request) {
-        serviceSubcategoryService.create(request);
+        subcategoryService.create(request);
     }
 
     @GetMapping("/get_all")
@@ -40,7 +40,7 @@ public class CategoryController {
 
     @GetMapping("/subcategory/get_all")
     public List<SubcategoryResponse> getAllSubcategories() {
-        return serviceSubcategoryService.getAll();
+        return subcategoryService.getAll();
     }
 
     @GetMapping("/get_all_info")

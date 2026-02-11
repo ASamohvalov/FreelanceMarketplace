@@ -22,7 +22,7 @@ create table messages (
     id UUID primary key default uuid_generate_v4(),
     author_id UUID references users(id),
     conversation_id UUID references conversations(id),
-    date_of_writing date,
+    date_of_writing timestamp,
     message text
 );
 

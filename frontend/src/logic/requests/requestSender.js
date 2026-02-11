@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "../../env";
 import axios, { AxiosError } from "axios";
-import { getAccessToken, getRefreshToken, isTokenExpired } from "../jwt";
+import { getAccessToken, getRefreshToken, isTokenExpired, login } from "../jwt";
 
 /**
  * @param {string} path, required without / in begin
@@ -139,6 +139,7 @@ async function sendAuth(path, isPost, data = {}, contentType = "application/json
     if (response.status >= 400) {
       return response;
     }
+    login(response.data.accessToken, response.data.refreshToken);
   }
 
   var token = getAccessToken();

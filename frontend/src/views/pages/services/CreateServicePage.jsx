@@ -8,6 +8,7 @@ import { getAllCategoryInfo } from "../../../logic/requests/service/categoryRequ
 import "./css/create_service_page.css";
 import LoadingInput from "../../components/elements/LoadingInput";
 import { IMAGE_UPLOADING_TYPE } from "../../../env";
+import { createServiceRequest } from "../../../logic/requests/service/serviceRequest";
 
 export default function CreateServicePage() {
   const navigate = useNavigate();
@@ -26,34 +27,61 @@ export default function CreateServicePage() {
 
   // field references
   const description = useRef(null);
-  const deliveryDays = useRef(null);
-  const revistionsCount = useRef(null);
+  const deadlineDays = useRef(null);
+  const revisionsCount = useRef(null);
 
   useEffect(() => {
-    // if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
-    //   navigate(-1);
-    //   return;
-    // }
+    if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
+      navigate(-1);
+      return;
+    }
     document.title = "Create service";
 
-    // // (async () => {
-    // //   const response = await getAllCategoryInfo();
-    // //   if (response.status !== 200) {
-    // //     console.log("logic error");
-    // //     navigate("/error");
-    // //     return;
-    // //   }
-    //   setCategories(response.data);
-    //   setSelectedCategory(response.data[0].id);
-    // })();
+    (async () => {
+      const response = await getAllCategoryInfo();
+      if (response.status !== 200) {
+        console.log("logic error");
+        navigate("/error");
+        return;
+      }
+      setCategories(response.data);
+      setSelectedCategory(response.data[0].id);
+    })();
   }, [navigate]);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
+    var err = false;
+    if (title.length < 10) {
+      setError({ title: "Error: min title length is 10 symbols" });
+      err = true;
+    }
     if (price < 20) {
       setError({ price: "Error: price min is 20 rubles" });
+      err = true;
     }
+    if (description.current.value.length < 100) {
+      setError({ description: "Error: min description length is 100 symbols" });
+      err = true;
+    }
+    if (err) return;
+
+    const response = await createServiceRequest({
+      title: title,
+      titleImage: titleImage,
+      description: description.current.value,
+      price: price,
+      deadlineDays: Number(deadlineDays.current.value),
+      revisionsCount: Number(revisionsCount.current.value),
+      subcategoryId: selectedSubcategory,
+      images: images,
+    });
+    if (response.status !== 200) {
+      navigate("/error");
+      return;
+    }
+
   }
 
   return (
@@ -85,7 +113,9 @@ export default function CreateServicePage() {
                     placeholder="I will create a WordPress website for your business"
                   />
                   <div className="form-text">
-                    Clear and specific titles perform better.
+                    <span className="text-danger">
+                      {error?.title}
+                    </span>
                   </div>
                 </div>
 
@@ -151,8 +181,9 @@ export default function CreateServicePage() {
                 </div>
 
                 <div className="form-text">
-                  Tip: Explain your service as if the client knows nothing about
-                  it. Minimum size is 100 words
+                  <span className="text-danger">
+                    {error?.description}
+                  </span>
                 </div>
               </div>
 
@@ -179,7 +210,7 @@ export default function CreateServicePage() {
                       className="form-control"
                       placeholder="3"
                       min="1"
-                      ref={deliveryDays}
+                      ref={deadlineDays}
                     />
                   </div>
 
@@ -190,7 +221,7 @@ export default function CreateServicePage() {
                       className="form-control"
                       placeholder="2"
                       min="1"
-                      ref={revistionsCount}
+                      ref={revisionsCount}
                     />
                   </div>
                 </div>
@@ -228,13 +259,17 @@ export default function CreateServicePage() {
                 <h5>Gallery</h5>
 
                 <div className="mb-3">
+                  { /* TODO, file delete in input */ }
                   <input
                     type="file"
                     className="form-control"
-                    multiple
                     onChange={(e) => {
-                      console.log(e.target.files);
-                      setImages(Array.from(e.target.files));
+                      if (images.length === 4) {
+                        return;
+                      }
+                      const array = [...images];
+                      array.push(e.target.files[0]);
+                      setImages(array);
                     }}
                   />
                 </div>
@@ -245,8 +280,14 @@ export default function CreateServicePage() {
                       images.map((image, idx) =>
                         <div className="file-row" key={idx}>
                           <span className="file-name">{image.name}</span>
-                          <span className="icon success">✓</span>
-                          <span className="icon remove">✕</span>
+                          <span
+                            className="icon remove"
+                            onClick={() => {
+                              const array = [...images];
+                              array.splice(idx, 1);
+                              setImages(array);
+                            }}
+                          >✕</span>
                         </div>
                       )
                     }

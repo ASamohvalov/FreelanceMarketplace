@@ -6,6 +6,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
@@ -14,6 +15,7 @@ import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,7 @@ public class ServiceEntityService {
     private final FreelancerService freelancerService;
     private final AuthHelperService authHelperService;
     private final FileStorageUtil fileStorageUtil;
+    private final SubcategoryService subcategoryService;
 
     public List<ServiceResponse> getAll() {
         return repository.findAllWithFreelancer().stream()
@@ -43,33 +46,11 @@ public class ServiceEntityService {
 
     @Transactional
     public void create(ServiceRequest request) {
-        ServiceEntity serviceEntity = freelanceMapper.serviceRequestToEntity(request);
-        FreelancerEntity freelancer = freelancerService.findByUser(authHelperService.getUser())
-                .orElseThrow(() -> new IllegalStateException("user has FREELANCER_ROLE but hasn't freelancer entity"));
-        serviceEntity.setFreelancer(freelancer);
-
-        if (!fileStorageUtil.isValidFile(request.getTitleImage())) {
-            throw new GlobalBadRequestException("invalid file format");
-        }
-        request.getImages().forEach((file) -> {
-            if (!fileStorageUtil.isValidFile(file)) {
-                throw new GlobalBadRequestException("invalid file format");
-            }
-        });
-
-        // image saving
-        serviceEntity.getImages().add(
-                uploadFile(request.getTitleImage(), serviceEntity, true)
-        );
-        request.getImages().forEach((file) -> {
-            serviceEntity.getImages().add(
-                    uploadFile(file, serviceEntity, false)
-            );
-        });
-        repository.save(serviceEntity);
+        validateFiles(request);
+        createServiceTransactional(request);
     }
 
-    public List<UserServiceResponse> dtoGetAllByFreelancer(FreelancerEntity entity) {
+    public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
         return repository.getAllByFreelancer(entity).stream()
                 .map(freelanceMapper::entityToUserServiceResponse)
                 .toList();
@@ -87,6 +68,48 @@ public class ServiceEntityService {
         } catch (IOException e) {
             throw new IllegalStateException("some error with downloading file from disk - " + e);
         }
+    }
+
+    // for create service
+
+    private void createServiceTransactional(ServiceRequest request) {
+        FreelancerEntity freelancer = freelancerService.findByUser(authHelperService.getUser())
+                .orElseThrow(() -> new IllegalStateException("user has FREELANCER_ROLE but hasn't freelancer entity"));
+        ServiceSubcategoryEntity subcategory = subcategoryService.getById(request.getSubcategoryId());
+
+        ServiceEntity serviceEntity = ServiceEntity.builder()
+                .freelancer(freelancer)
+                .subcategory(subcategory)
+                .deadlineDays(request.getDeadlineDays())
+                .revisionsCount(request.getRevisionsCount())
+                .build();
+
+        processFiles(request, serviceEntity);
+        repository.save(serviceEntity);
+    }
+
+    private void validateFiles(ServiceRequest request) {
+        // todo file format
+        if (!fileStorageUtil.isValidFile(request.getTitleImage())) {
+            throw new GlobalBadRequestException("invalid file format");
+        }
+        request.getImages().forEach((file) -> {
+            if (!fileStorageUtil.isValidFile(file)) {
+                throw new GlobalBadRequestException("invalid file format");
+            }
+        });
+    }
+
+    private void processFiles(ServiceRequest request, ServiceEntity service) {
+        // image saving
+        service.getImages().add(
+                uploadFile(request.getTitleImage(), service, true)
+        );
+        request.getImages().forEach((file) -> {
+            service.getImages().add(
+                    uploadFile(file, service, false)
+            );
+        });
     }
 
     private ServiceImageEntity uploadFile(MultipartFile file, ServiceEntity service, boolean isTitle) {

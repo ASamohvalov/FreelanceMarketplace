@@ -1,18 +1,10 @@
 import { sendAuthPostFormData, sendGet } from "../requestSender";
 
 /**
- * @param {File} image
- * @param {string} description
- * @param {int} price
  * @returns {map} { status: int, data: null }
  */
-export async function createServiceRequest(title, image, description, price) {
-  return await sendAuthPostFormData("service/create", {
-    image: image,
-    title: title,
-    description: description,
-    price: price,
-  });
+export async function createServiceRequest(args) {
+  return await sendAuthPostFormData("service/create", args);
 }
 
 /**

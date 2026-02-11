@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import { signInRequest } from "../../../logic/requests/user/authRequest";
 import { login } from "../../../logic/jwt";
 import { useRef } from "react";
-import "./css/sign_page.css";
 import { FormWrapper } from "../../components/elements/FormWrapper";
+import "./css/sign_page.css";
 
 export default function SignInPage() {
   useEffect(() => {
@@ -46,16 +46,16 @@ export default function SignInPage() {
       <HeaderComponent />
       <FormWrapper Title="Sign in" error={error}>
         <form onSubmit={handleSubmit} className="mb-4 sign-form">
-          <label htmlFor="email sign-form_input-label">Email</label>
+          <label htmlFor="email">Email</label>
           <input
-            className="form-control mb-3 sign-form_input"
+            className="form-control mb-3"
             id="email"
             type="email"
             ref={email}
           />
-          <label htmlFor="password sign-form_input-label">Password</label>
+          <label htmlFor="password">Password</label>
           <input
-            className="form-control mb-3 sign-form_input"
+            className="form-control mb-3"
             id="password"
             type="password"
             ref={password}

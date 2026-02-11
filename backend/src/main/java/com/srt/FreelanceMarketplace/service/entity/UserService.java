@@ -79,7 +79,7 @@ public class UserService {
         UserInfoResponse response = userMapper.entityToInfoResponse(user);
         if (hasRole(user, RoleEnum.ROLE_FREELANCER)) {
             FreelancerEntity freelancer = freelancerService.getByUser(user);
-            response.setServices(serviceEntityService.dtoGetAllByFreelancer(freelancer));
+            response.setServices(serviceEntityService.getAllByFreelancer(freelancer));
         }
         return response;
     }

@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +17,7 @@ public class ServiceRequest {
     private MultipartFile titleImage;
 
     @NotNull
+    @Size(max = 4)
     private List<MultipartFile> images;
 
     @NotBlank
@@ -34,4 +36,7 @@ public class ServiceRequest {
 
     @NotNull
     private int revisionsCount;
+
+    @NotNull
+    private UUID subcategoryId;
 }

@@ -10,12 +10,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceSubcategoryService {
+public class SubcategoryService {
     private final ServiceSubcategoryRepository repository;
     private final ServiceCategoryService serviceCategoryService;
+
+    public ServiceSubcategoryEntity getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("service with this id not found"));
+    }
 
     public void create(SubcategoryRequest request) {
         if (repository.existsByName(request.getName())) {

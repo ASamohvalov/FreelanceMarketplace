@@ -20,8 +20,7 @@ body {
   white-space: nowrap;
 }
 
-.icon.success {
-  color: green;
+.icon {
 }
 
 .icon.remove {

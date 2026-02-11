@@ -15,7 +15,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 public class ImageStorageUtil implements FileStorageUtil {
-    String storageLocation;
+    private final String storageLocation;
 
     public ImageStorageUtil(
             @Value("${storage.location}") String storageLocation

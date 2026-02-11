@@ -1,23 +1,17 @@
-.sign-form{
-    color: #666;
+.sign-form {
+  color: #666;
 }
 
 .sign-form_wrapper {
-    border-radius: 16px;
+  border-radius: 16px;
 }
 
-.sign-form_input{
-    
-}
-.sign-form_input-label{
-    
-}
-.sign-form_title{
-   color: #3B1D6D;
+.sign-form_title {
+  color: #3b1d6d;
   font-size: 48px;
- font-weight: 800; 
+  font-weight: 800;
 }
 
-.sign-form_submit{
-   background-color: #3B1D6D; 
+.sign-form_submit {
+  background-color: #3b1d6d;
 }

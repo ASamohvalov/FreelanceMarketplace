@@ -97,9 +97,7 @@ export default function ServicePage() {
                 </p>
               </div>
             </div>
-
           </div>
-
           <div class="col-lg-4">
 
             <div class="card p-4 service-sidebar rounded-4">
@@ -109,6 +107,12 @@ export default function ServicePage() {
                 Order service
               </button>
 
+              <button
+                class="btn btn-primary w-100 mb-3"
+                onClick={() => alert("kadjkad")}
+              >
+                Оставить отклик на обсуждение
+              </button>
               <hr/>
 
               <div class="d-flex align-items-center gap-3">

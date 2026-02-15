@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.service.entity;
 import com.srt.FreelanceMarketplace.domain.dto.request.JobTitleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.JobTitleResponse;
 import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
+import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.JobTitleMapper;
 import com.srt.FreelanceMarketplace.repository.JobTitleRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,9 @@ public class JobTitleService {
     }
 
     public void create(JobTitleRequest request) {
+        if (repository.existsByName(request.getName())) {
+            throw new GlobalBadRequestException("this job title already exists");
+        }
         JobTitleEntity jobTitle = jobTitleMapper.toEntity(request);
         save(jobTitle);
     }

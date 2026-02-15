@@ -1,34 +1,32 @@
-create extension if not exists "uuid-ossp";
-
-create table proposals (
-    id UUID primary key default uuid_generate_v4(),
-    author_id UUID references users(id),
-    service_id UUID references services(id),
-    description varchar(155),
-    is_accepted boolean default false
+CREATE TABLE proposals (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    author_id UUID REFERENCES users(id),
+    service_id UUID REFERENCES services(id),
+    description VARCHAR(155),
+    is_accepted BOOLEAN DEFAULT false
 );
 
-create table conversations (
-    id UUID primary key default uuid_generate_v4()
+CREATE TABLE conversations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4()
 );
 
-create table conversation_members (
-    id UUID primary key default uuid_generate_v4(),
-    member_id UUID references users(id),
-    conversation_id UUID references conversations(id)
+CREATE TABLE conversation_members (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    member_id UUID REFERENCES users(id),
+    conversation_id UUID REFERENCES conversations(id)
 );
 
-create table messages (
-    id UUID primary key default uuid_generate_v4(),
-    author_id UUID references users(id),
-    conversation_id UUID references conversations(id),
-    date_of_writing timestamp,
-    message text
+CREATE TABLE messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    author_id UUID REFERENCES users(id),
+    conversation_id UUID REFERENCES conversations(id),
+    send_at TIMESTAMP,
+    message TEXT
 );
 
-create table service_reviews (
-    id UUID primary key default uuid_generate_v4(),
-    author_id UUID references users(id),
-    service_id UUID references services(id),
-    review text
+CREATE TABLE service_reviews (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    author_id UUID REFERENCES users(id),
+    service_id UUID REFERENCES services(id),
+    review TEXT
 );

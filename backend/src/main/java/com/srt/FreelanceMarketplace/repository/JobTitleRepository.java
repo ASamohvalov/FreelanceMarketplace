@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface JobTitleRepository extends JpaRepository<JobTitleEntity, UUID> {
     Optional<JobTitleEntity> findByName(String name);
+    boolean existsByName(String name);
 }

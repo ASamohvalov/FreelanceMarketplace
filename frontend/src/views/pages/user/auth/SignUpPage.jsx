@@ -4,11 +4,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   signInRequest,
   signUpRequest,
-} from "../../../logic/requests/user/authRequest";
-import HeaderComponent from "../../components/HeaderComponent";
-import { login } from "../../../logic/jwt";
+} from "../../../../logic/requests/user/authRequest";
+import HeaderComponent from "../../../components/HeaderComponent";
+import { login } from "../../../../logic/jwt";
+import { FormWrapper } from "../../../components/elements/FormWrapper";
 import "./css/sign_page.css";
-import { FormWrapper } from "../../components/elements/FormWrapper";
 
 export default function SignUpPage() {
   useEffect(() => {

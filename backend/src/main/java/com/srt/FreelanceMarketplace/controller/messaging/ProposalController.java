@@ -17,7 +17,6 @@ import java.util.UUID;
 public class ProposalController {
     private final ProposalService proposalService;
 
-    // todo TEST!!!!
     @PostMapping("/send")
     public void sendProposal(@RequestBody @Valid ProposalRequest request) {
         proposalService.sendProposal(request);
@@ -32,7 +31,7 @@ public class ProposalController {
 
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
     @GetMapping("/reply/{proposalId}")
-    public List<ProposalResponse> sendReply(@PathVariable UUID proposalId, @RequestParam boolean accept) {
-        return proposalService.getAllPersonal();
+    public void sendReply(@PathVariable UUID proposalId) {
+        proposalService.sendReply(proposalId);
     }
 }

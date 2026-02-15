@@ -1,23 +1,22 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import HeaderComponent from "../../components/HeaderComponent";
-import { signInRequest } from "../../../logic/requests/user/authRequest";
-import { login } from "../../../logic/jwt";
+import HeaderComponent from "../../../components/HeaderComponent";
+import { signInRequest } from "../../../../logic/requests/user/authRequest";
+import { login } from "../../../../logic/jwt";
 import { useRef } from "react";
-import { FormWrapper } from "../../components/elements/FormWrapper";
+import { FormWrapper } from "../../../components/elements/FormWrapper";
 import "./css/sign_page.css";
 
 export default function SignInPage() {
+  const navigate = useNavigate();
+  const email = useRef(null);
+  const password = useRef(null);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     document.title = "Sign in";
   });
-  const navigate = useNavigate();
-
-  const email = useRef(null);
-  const password = useRef(null);
-
-  const [error, setError] = useState(null);
 
   async function handleSubmit(event) {
     event.preventDefault();

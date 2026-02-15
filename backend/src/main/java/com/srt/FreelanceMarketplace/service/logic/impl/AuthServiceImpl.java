@@ -80,8 +80,7 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        token.setToken(refreshToken); // todo
-        tokenService.save(token); // по сути без этого должен работать
+        token.setToken(refreshToken);
 
         return new JwtResponse(accessToken, refreshToken);
     }

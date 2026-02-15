@@ -15,7 +15,6 @@ import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,10 +43,24 @@ public class ServiceEntityService {
                 .orElseThrow(() -> new GlobalBadRequestException("such id not found"));
     }
 
-    @Transactional
     public void create(ServiceRequest request) {
         validateFiles(request);
-        createServiceTransactional(request);
+
+        FreelancerEntity freelancer = freelancerService.findByUser(authHelperService.getUser())
+                .orElseThrow(() -> new IllegalStateException("user has FREELANCER_ROLE but hasn't freelancer entity"));
+        ServiceSubcategoryEntity subcategory = subcategoryService.getById(request.getSubcategoryId());
+
+        ServiceEntity serviceEntity = ServiceEntity.builder()
+                .freelancer(freelancer)
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .subcategory(subcategory)
+                .deadlineDays(request.getDeadlineDays())
+                .revisionsCount(request.getRevisionsCount())
+                .build();
+
+        processFiles(request, serviceEntity);
+        repository.save(serviceEntity);
     }
 
     public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
@@ -71,22 +84,6 @@ public class ServiceEntityService {
     }
 
     // for create service
-
-    private void createServiceTransactional(ServiceRequest request) {
-        FreelancerEntity freelancer = freelancerService.findByUser(authHelperService.getUser())
-                .orElseThrow(() -> new IllegalStateException("user has FREELANCER_ROLE but hasn't freelancer entity"));
-        ServiceSubcategoryEntity subcategory = subcategoryService.getById(request.getSubcategoryId());
-
-        ServiceEntity serviceEntity = ServiceEntity.builder()
-                .freelancer(freelancer)
-                .subcategory(subcategory)
-                .deadlineDays(request.getDeadlineDays())
-                .revisionsCount(request.getRevisionsCount())
-                .build();
-
-        processFiles(request, serviceEntity);
-        repository.save(serviceEntity);
-    }
 
     private void validateFiles(ServiceRequest request) {
         // todo file format

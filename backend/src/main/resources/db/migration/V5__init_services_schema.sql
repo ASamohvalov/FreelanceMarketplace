@@ -1,30 +1,28 @@
-create extension if not exists "uuid-ossp";
-
-create table service_categories (
-    id UUID primary key default uuid_generate_v4(),
-    name varchar(50) unique
+CREATE TABLE service_categories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE
 );
 
-create table service_subcategories (
-    id UUID primary key default uuid_generate_v4(),
-    name varchar(50) unique,
-    category_id UUID references service_categories(id)
+CREATE TABLE service_subcategories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE,
+    category_id UUID REFERENCES service_categories(id)
 );
 
-create table services (
-    id UUID primary key default uuid_generate_v4(),
-    freelancer_id UUID references freelancers(id),
-    subcategory_id UUID references service_subcategories(id),
-    title varchar(50),
-    description text,
-    price int,
-    deadline_days int,
-    revisions_count int
+CREATE TABLE services (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    freelancer_id UUID REFERENCES freelancers(id),
+    subcategory_id UUID REFERENCES service_subcategories(id),
+    title VARCHAR(50),
+    description TEXT,
+    price INT,
+    deadline_days INT,
+    revisions_count INT
 );
 
-create table service_images (
-    id UUID primary key default uuid_generate_v4(),
-    image_path varchar(255),
-    service_id UUID references services(id),
-    is_title_image boolean
+CREATE TABLE service_images (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    image_path VARCHAR(255),
+    service_id UUID REFERENCES services(id),
+    is_title_image BOOLEAN
 );

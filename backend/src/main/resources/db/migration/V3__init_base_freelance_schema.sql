@@ -1,5 +1,3 @@
-create extension if not exists "uuid-ossp";
-
 create table job_titles (
     id UUID primary key default uuid_generate_v4(),
     name varchar(255) unique

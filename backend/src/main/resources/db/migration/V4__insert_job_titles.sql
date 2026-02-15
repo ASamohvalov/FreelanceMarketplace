@@ -1,2 +1,2 @@
-insert into job_titles (name)
-values ('Programmer'), ('Designer'), ('AI Engineer'), ('Video Editor'), ('Data Scientist'), ('Performance Marketer')
+INSERT INTO job_titles (name)
+VALUES ('Programmer'), ('Designer'), ('AI Engineer'), ('Video Editor'), ('Data Scientist'), ('Performance Marketer')

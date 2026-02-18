@@ -1,0 +1,62 @@
+body {
+  background: #f5f5f5;
+}
+
+.navbar-custom {
+  background: #4b1f73;
+}
+
+.sidebar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  height: 100%;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.avatar-lg {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #4b1f73;
+  color: #fff;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.service-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.service-img {
+  height: 120px;
+  background: #ddd;
+}
+
+.badge-purple {
+  background: #4b1f73;
+}
+
+.progress {
+  height: 8px;
+}

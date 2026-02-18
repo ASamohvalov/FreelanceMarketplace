@@ -5,6 +5,7 @@ import { getUserData, isAuth } from "../../../logic/jwt";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getInfoRequest } from "../../../logic/requests/user/userRequest";
+import './css/personal_account_page.css';
 
 export default function PersonalAccountPage() {
   useEffect(() => {
@@ -51,43 +52,88 @@ export default function PersonalAccountPage() {
 
       <main>
         <div className="container">
-          <div className="rounded border border-secondary p-4 m-4">
-            <div className="row mb-3">
-              <div className="col-4">
-                <div className="text-center">
-                  <img className="rounded border border-subtle mb-3" style={{ height: "150px", width: "150px" }} />
-                  <div className="h4 mx-2">
-                    {
-                      (() => {
-                        const usdata = loading ? localUserData : userData;
-                        return usdata.firstName + " " + usdata.lastName;
-                      })()
-                    }
-                  </div>
-                  <span className="h6">{ loading ? "..." : "Programmer" }</span>
+          <div className="profile-card mb-4 mt-4">
+            <div className="d-flex align-items-center gap-4">
+              <div className="avatar-lg">CJ</div>
+              <div>
+                <h4 className="mb-1">
+                  {
+                    (() => {
+                      const usdata = userData ? userData : localUserData;
+                      return usdata.firstName + " " + usdata.lastName;
+                    })()
+                  }
+                </h4>
+                <div className="text-muted">Full-Stack Web Developer</div>
+                <div className="mt-2">
+                  <span className="badge badge-purple">Top Rated</span>
+                  <span className="ms-2 text-warning">★★★★★</span>
+                  <span className="ms-1">4.9 (128 reviews)</span>
                 </div>
               </div>
+            </div>
 
-              <div className="col-6">
-                User don't write about yourself
+            <hr />
+
+            <p>
+              {
+                userData?.aboutYourself
+              }
+            </p>
+
+            <div className="row text-center mt-3">
+              <div className="col-md-4">
+                <div className="fw-bold">Response Rate</div>
+                <div>98%</div>
+              </div>
+              <div className="col-md-4">
+                <div className="fw-bold">Completed Orders</div>
+                <div>156</div>
+              </div>
+              <div className="col-md-4">
+                <div className="fw-bold">Member Since</div>
+                <div>2022</div>
               </div>
             </div>
           </div>
 
-          <div className="m-4">
-            <div className="h5">User services</div>
-            <div className="row row-cols-1 row-cols-md-3 g-4">
-              <ServiceCardComponent name={ 123 } price={ 1000 } />
-              <ServiceCardComponent name={ 123 } price={ 1000 } />
-              <ServiceCardComponent name={ 123 } price={ 1000 } />
-              <ServiceCardComponent name={ 123 } price={ 1000 } />
+          <div className="row mb-4">
+            <div className="col-md-4">
+              <div className="stat-card">
+                <h5>$12,450</h5>
+                <div className="text-muted">Total Earnings</div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="stat-card">
+                <h5>8</h5>
+                <div className="text-muted">Active Orders</div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="stat-card">
+                <h5>3</h5>
+                <div className="text-muted">Pending Requests</div>
+              </div>
             </div>
           </div>
+          {
+            userData.services && userData.services.lenght > 0 && (
+              <>
+                <h5 className="mb-3">My Services</h5>
 
-          <div className="m-4">
-            <div className="h5">Reviews about user</div>
-            ...
-          </div>
+                <div className="row g-4">
+                  {
+                    userData.services.map((service) => {
+                      return (
+                        <ServiceCardComponent id={service.id} title={service.title} price={service.price} key={service.id} />
+                      );
+                    })
+                  }
+                </div>
+              </>
+            )
+          }
         </div>
       </main>
     </>

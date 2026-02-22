@@ -3,7 +3,7 @@ package com.srt.FreelanceMarketplace.controller.user;
 import com.srt.FreelanceMarketplace.domain.dto.request.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
-import com.srt.FreelanceMarketplace.service.entity.UserService;
+import com.srt.FreelanceMarketplace.service.entity.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

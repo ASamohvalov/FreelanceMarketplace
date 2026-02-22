@@ -44,13 +44,13 @@ VALUES (
     (SELECT id FROM roles WHERE name = 'ROLE_FREELANCER')
 );
 
-INSERT INTO freelancers (user_id, job_title_id, phone_number)
+INSERT INTO freelancers (user_id, job_title_id, about_yourself)
 VALUES (
     (SELECT id FROM users WHERE email = 'f1@f1'),
     (SELECT id FROM job_titles WHERE name = 'Programmer'),
-    89321248543
+    'Experienced web developer with 5+ years of building modern, high-performance websites and web applications. Specialized in WordPress, Laravel and React'
 ), (
     (SELECT id FROM users WHERE email = 'f@f'),
     (SELECT id FROM job_titles WHERE name = 'Programmer'),
-    89034132845
-)
+    'Experienced web developer with 5+ years of building modern, high-performance websites and web applications. Specialized in WordPress, Laravel and React'
+);

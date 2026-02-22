@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.service.entity;
+package com.srt.FreelanceMarketplace.service.entity.user;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.JobTitleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.JobTitleResponse;

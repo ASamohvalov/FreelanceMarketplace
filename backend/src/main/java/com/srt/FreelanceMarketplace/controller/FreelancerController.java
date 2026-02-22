@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.controller;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
-import com.srt.FreelanceMarketplace.service.entity.FreelancerService;
+import com.srt.FreelanceMarketplace.service.entity.user.FreelancerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

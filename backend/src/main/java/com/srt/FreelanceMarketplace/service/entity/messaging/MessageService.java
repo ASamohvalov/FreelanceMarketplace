@@ -1,8 +1,8 @@
 package com.srt.FreelanceMarketplace.service.entity.messaging;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
-import com.srt.FreelanceMarketplace.domain.entities.messages.ConversationEntity;
-import com.srt.FreelanceMarketplace.domain.entities.messages.MessageEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.domain.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
@@ -11,7 +11,6 @@ import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

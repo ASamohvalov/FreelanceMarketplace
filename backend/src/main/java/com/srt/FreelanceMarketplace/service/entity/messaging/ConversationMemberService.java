@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity.messaging;
 
-import com.srt.FreelanceMarketplace.domain.entities.messages.ConversationEntity;
-import com.srt.FreelanceMarketplace.domain.entities.messages.ConversationMemberEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationMemberEntity;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationMemberRepository;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import lombok.RequiredArgsConstructor;

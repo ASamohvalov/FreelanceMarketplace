@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity.messaging;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
-import com.srt.FreelanceMarketplace.domain.entities.messages.ConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;

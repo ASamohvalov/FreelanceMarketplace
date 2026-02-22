@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.logic;
 
 import com.srt.FreelanceMarketplace.domain.auth.UserDetailsImpl;
-import com.srt.FreelanceMarketplace.service.entity.UserService;
+import com.srt.FreelanceMarketplace.service.entity.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

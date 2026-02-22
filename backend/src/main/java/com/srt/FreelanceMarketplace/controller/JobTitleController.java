@@ -2,7 +2,7 @@ package com.srt.FreelanceMarketplace.controller;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.JobTitleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.JobTitleResponse;
-import com.srt.FreelanceMarketplace.service.entity.JobTitleService;
+import com.srt.FreelanceMarketplace.service.entity.user.JobTitleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

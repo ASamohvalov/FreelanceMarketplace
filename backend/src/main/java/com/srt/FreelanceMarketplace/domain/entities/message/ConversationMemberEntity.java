@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.entities.messages;
+package com.srt.FreelanceMarketplace.domain.entities.message;
 
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
@@ -7,31 +7,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "conversation_members")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class MessageEntity {
+public class ConversationMemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    private UserEntity author;
+    @JoinColumn(name = "member_id")
+    private UserEntity member;
 
     @ManyToOne
     @JoinColumn(name = "conversation_id")
     private ConversationEntity conversation;
 
-    @Column(columnDefinition = "TEXT")
-    private String message;
-
-    private Instant sendAt;
+    public ConversationMemberEntity(UserEntity member, ConversationEntity conversation) {
+        this.member = member;
+        this.conversation = conversation;
+    }
 }

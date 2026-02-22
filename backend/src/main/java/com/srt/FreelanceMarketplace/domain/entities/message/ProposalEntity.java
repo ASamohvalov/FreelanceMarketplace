@@ -1,20 +1,22 @@
-package com.srt.FreelanceMarketplace.domain.entities.messages;
+package com.srt.FreelanceMarketplace.domain.entities.message;
 
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "service_reviews")
+@Table(name = "proposals")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ServiceReviewEntity {
+@Builder
+public class ProposalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -27,6 +29,7 @@ public class ServiceReviewEntity {
     @JoinColumn(name = "service_id")
     private ServiceEntity service;
 
-    @Column(columnDefinition = "TEXT")
-    private String review;
+    private String description;
+
+    private boolean isAccepted = false;
 }

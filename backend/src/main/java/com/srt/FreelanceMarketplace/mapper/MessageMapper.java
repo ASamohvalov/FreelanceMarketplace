@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.mapper;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
-import com.srt.FreelanceMarketplace.domain.entities.messages.MessageEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

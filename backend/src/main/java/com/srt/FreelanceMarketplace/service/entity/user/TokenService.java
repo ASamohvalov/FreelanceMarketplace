@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.service.entity;
+package com.srt.FreelanceMarketplace.service.entity.user;
 
 import com.srt.FreelanceMarketplace.domain.entities.user.TokenEntity;
 import com.srt.FreelanceMarketplace.repository.TokenRepository;

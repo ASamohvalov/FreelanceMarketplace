@@ -10,7 +10,7 @@ import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEn
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
-import com.srt.FreelanceMarketplace.service.entity.FreelancerService;
+import com.srt.FreelanceMarketplace.service.entity.user.FreelancerService;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
 import jakarta.transaction.Transactional;
@@ -26,6 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ServiceEntityService {
     private final ServiceRepository repository;
+
     private final FreelanceMapper freelanceMapper;
     private final FreelancerService freelancerService;
     private final AuthHelperService authHelperService;
@@ -40,7 +41,14 @@ public class ServiceEntityService {
 
     public ServiceEntity getById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new GlobalBadRequestException("such id not found"));
+                .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
+    }
+
+    public ServiceEntity getReferenceIfExistsById(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new GlobalBadRequestException("such service id not found");
+        }
+        return repository.getReferenceById(id);
     }
 
     public void create(ServiceRequest request) {

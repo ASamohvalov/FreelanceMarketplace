@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.repository.messaging;
 
-import com.srt.FreelanceMarketplace.domain.entities.messages.ConversationEntity;
-import com.srt.FreelanceMarketplace.domain.entities.messages.MessageEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

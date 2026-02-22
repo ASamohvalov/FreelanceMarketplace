@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.service.entity;
+package com.srt.FreelanceMarketplace.service.entity.user;
 
 import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.FreelancerRequest;
@@ -63,9 +63,9 @@ public class UserService {
         JobTitleEntity jobTitle = jobTitleService.findById(request.getJobTitleId())
                 .orElseThrow(() -> new GlobalBadRequestException("such job title not found"));
         FreelancerEntity freelancer = FreelancerEntity.builder()
-                .phoneNumber(request.getPhoneNumber())
                 .jobTitle(jobTitle)
                 .user(authHelperService.getUser())
+                .aboutYourself(request.getAboutYourself())
                 .build();
         freelancerService.save(freelancer);
         List<RoleEntity> roles = user.getRoles();

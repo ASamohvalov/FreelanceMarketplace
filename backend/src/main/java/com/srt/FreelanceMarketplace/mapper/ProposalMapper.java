@@ -3,7 +3,7 @@ package com.srt.FreelanceMarketplace.mapper;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ProposalResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceTitleResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
-import com.srt.FreelanceMarketplace.domain.entities.messages.ProposalEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.mapstruct.Mapper;

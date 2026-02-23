@@ -81,7 +81,6 @@ export default function CreateServicePage() {
       navigate("/error");
       return;
     }
-
   }
 
   return (

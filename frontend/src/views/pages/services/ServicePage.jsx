@@ -1,10 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
-import "./css/service_page.css";
 import FooterComponent from "../../components/FooterComponent";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getServiceByIdRequest } from "../../../logic/requests/service/serviceRequest";
+import ProposalModalWindow from "../../components/modal_windows/ProposalModalWindow";
+import "./css/service_page.css";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -12,6 +13,7 @@ export default function ServicePage() {
   const navigate = useNavigate();
 
   const [serviceData, setServiceData] = useState([]);
+  const [isProposalVisible, setIsProposalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -27,6 +29,13 @@ export default function ServicePage() {
   return (
     <>
       <HeaderComponent />
+
+      <ProposalModalWindow
+        id={id}
+        isVisible={isProposalVisible}
+        onClose={() => setIsProposalVisible(false)}
+      />
+
       <div className="container my-4">
         <nav className="mb-3 text-muted small">
           Services / {serviceData.category} / {serviceData.subcategory}
@@ -37,8 +46,12 @@ export default function ServicePage() {
         <div className="d-flex align-items-center gap-3 mb-4">
           <span className="text-warning">★★★★★</span>
           <span>4.9 (128 reviews)</span>
-          <span className="badge bg-light text-dark">{serviceData.category}</span>
-          <span className="badge bg-light text-dark">{serviceData.subcategory}</span>
+          <span className="badge bg-light text-dark">
+            {serviceData.category}
+          </span>
+          <span className="badge bg-light text-dark">
+            {serviceData.subcategory}
+          </span>
         </div>
 
         <div className="row">
@@ -66,7 +79,8 @@ export default function ServicePage() {
                   <span className="text-warning">★★★★★</span>
                 </div>
                 <p className="mt-2">
-                  Amazing experience. The website looks clean and works perfectly.
+                  Amazing experience. The website looks clean and works
+                  perfectly.
                 </p>
               </div>
 
@@ -82,7 +96,6 @@ export default function ServicePage() {
             </div>
           </div>
           <div className="col-lg-4">
-
             <div className="card p-4 service-sidebar rounded-4">
               <div className="price mb-3">{serviceData.price} ₽</div>
 
@@ -92,16 +105,20 @@ export default function ServicePage() {
 
               <button
                 className="btn btn-primary w-100 mb-3"
-                onClick={() => alert("kadjkad")}
+                onClick={() => setIsProposalVisible(true)}
               >
                 Оставить отклик на обсуждение
               </button>
-              <hr/>
+              <hr />
 
               <div className="d-flex align-items-center gap-3">
                 <div className="avatar">CJ</div>
                 <div>
-                  <strong>{serviceData.freelancer?.firstName + " " + serviceData.freelancer?.lastName}</strong>
+                  <strong>
+                    {serviceData.freelancer?.firstName +
+                      " " +
+                      serviceData.freelancer?.lastName}
+                  </strong>
                   <div className="text-muted small">Web Developer</div>
                 </div>
               </div>
@@ -112,7 +129,6 @@ export default function ServicePage() {
                 <li>✔ Revisions: 2</li>
               </ul>
             </div>
-
           </div>
         </div>
 

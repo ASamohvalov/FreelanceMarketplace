@@ -18,6 +18,14 @@ export async function getAllServicesRequest() {
  * @param {string} id
  * @returns {map} { status: int, data: array<byte> }
  */
-export async function getImageByServiceId(id) {
+export async function getImageByServiceIdRequest(id) {
   return await sendGet("service/image/" + id);
+}
+
+/**
+ * @param {string} id
+ * @returns {map} { status: int, data: any }
+ */
+export async function getServiceByIdRequest(id) {
+  return await sendGet(`service/get_by_id/${id}`);
 }

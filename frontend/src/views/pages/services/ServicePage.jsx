@@ -1,130 +1,112 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import "./css/service_page.css";
 import FooterComponent from "../../components/FooterComponent";
+import { useEffect } from "react";
+import { useState } from "react";
+import { getServiceByIdRequest } from "../../../logic/requests/service/serviceRequest";
 
 export default function ServicePage() {
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
+  const [serviceData, setServiceData] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getServiceByIdRequest(id);
+      if (response.status !== 200) {
+        navigate("/error");
+        return;
+      }
+      setServiceData(response.data);
+    })();
+  }, [navigate, id]);
+
   return (
     <>
       <HeaderComponent />
-      <div class="container my-4">
-        <nav class="mb-3 text-muted small">
-          Services / Web / WordPress
+      <div className="container my-4">
+        <nav className="mb-3 text-muted small">
+          Services / {serviceData.category} / {serviceData.subcategory}
         </nav>
 
-        <h2 class="fw-bold mb-2">WordPress Website Development</h2>
+        <h2 className="fw-bold mb-2">{serviceData.title}</h2>
 
-        <div class="d-flex align-items-center gap-3 mb-4">
-          <span class="text-warning">★★★★★</span>
+        <div className="d-flex align-items-center gap-3 mb-4">
+          <span className="text-warning">★★★★★</span>
           <span>4.9 (128 reviews)</span>
-          <span class="badge bg-light text-dark">WordPress</span>
-          <span class="badge bg-light text-dark">Landing</span>
+          <span className="badge bg-light text-dark">{serviceData.category}</span>
+          <span className="badge bg-light text-dark">{serviceData.subcategory}</span>
         </div>
 
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="service-collage">
-              <div class="collage-main"></div>
-              <div class="collage-side">
-                <div class="collage-item"></div>
-                <div class="collage-item"></div>
-                <div class="collage-item"></div>
-                <div class="collage-item"></div>
+        <div className="row">
+          <div className="col-lg-8">
+            <div className="service-collage">
+              <div className="collage-main"></div>
+              <div className="collage-side">
+                <div className="collage-item"></div>
+                <div className="collage-item"></div>
+                <div className="collage-item"></div>
+                <div className="collage-item"></div>
               </div>
             </div>
 
-            <div class="card p-4 mb-4 rounded-4">
-              <h4 class="mb-3">About this service</h4>
-
-              <p>
-                I will create a modern, fast and fully responsive WordPress website
-                tailored specifically to your business goals. The website will be
-                optimized for performance, SEO and usability.
-              </p>
-
-              <p>
-                This service is perfect for entrepreneurs, startups, small businesses
-                and personal brands who want a professional online presence that
-                converts visitors into customers.
-              </p>
-
-              <h5 class="mt-4">What you will get</h5>
-              <ul>
-                <li>Custom WordPress theme (no templates)</li>
-                <li>Responsive design (mobile, tablet, desktop)</li>
-                <li>SEO optimization</li>
-                <li>Fast loading speed</li>
-                <li>Easy admin panel</li>
-              </ul>
-
-              <h5 class="mt-4">Why choose me</h5>
-              <ul>
-                <li>5+ years of experience</li>
-                <li>100+ completed projects</li>
-                <li>Clear communication</li>
-                <li>On-time delivery</li>
-              </ul>
-
-              <h5 class="mt-4">What I need from you</h5>
-              <ul>
-                <li>Website goals and references</li>
-                <li>Text content (or request copywriting)</li>
-                <li>Logo and brand colors</li>
-              </ul>
+            <div className="card p-4 mb-4 rounded-4">
+              {serviceData.description}
             </div>
 
-            <div class="card p-4 mb-4 rounded-4">
-              <h4 class="mb-3">Reviews</h4>
+            <div className="card p-4 mb-4 rounded-4">
+              <h4 className="mb-3">Reviews</h4>
 
-              <div class="review">
-                <div class="d-flex justify-content-between">
+              <div className="review">
+                <div className="d-flex justify-content-between">
                   <strong>Alex</strong>
-                  <span class="text-warning">★★★★★</span>
+                  <span className="text-warning">★★★★★</span>
                 </div>
-                <p class="mt-2">
+                <p className="mt-2">
                   Amazing experience. The website looks clean and works perfectly.
                 </p>
               </div>
 
-              <div class="review">
-                <div class="d-flex justify-content-between">
+              <div className="review">
+                <div className="d-flex justify-content-between">
                   <strong>Maria</strong>
-                  <span class="text-warning">★★★★☆</span>
+                  <span className="text-warning">★★★★☆</span>
                 </div>
-                <p class="mt-2">
+                <p className="mt-2">
                   Fast delivery and good communication. Would order again.
                 </p>
               </div>
             </div>
           </div>
-          <div class="col-lg-4">
+          <div className="col-lg-4">
 
-            <div class="card p-4 service-sidebar rounded-4">
-              <div class="price mb-3">1999 ₽</div>
+            <div className="card p-4 service-sidebar rounded-4">
+              <div className="price mb-3">{serviceData.price} ₽</div>
 
-              <button class="btn btn-primary w-100 mb-3">
-                Order service
+              <button className="btn btn-primary w-100 mb-3">
+                Оформить заказ
               </button>
 
               <button
-                class="btn btn-primary w-100 mb-3"
+                className="btn btn-primary w-100 mb-3"
                 onClick={() => alert("kadjkad")}
               >
                 Оставить отклик на обсуждение
               </button>
               <hr/>
 
-              <div class="d-flex align-items-center gap-3">
-                <div class="avatar">CJ</div>
+              <div className="d-flex align-items-center gap-3">
+                <div className="avatar">CJ</div>
                 <div>
-                  <strong>Cris James</strong>
-                  <div class="text-muted small">Web Developer</div>
+                  <strong>{serviceData.freelancer?.firstName + " " + serviceData.freelancer?.lastName}</strong>
+                  <div className="text-muted small">Web Developer</div>
                 </div>
               </div>
 
-              <ul class="list-unstyled mt-3 small">
+              <ul className="list-unstyled mt-3 small">
                 <li>✔ Response time: 1 hour</li>
                 <li>✔ Delivery: 3 days</li>
                 <li>✔ Revisions: 2</li>
@@ -134,25 +116,25 @@ export default function ServicePage() {
           </div>
         </div>
 
-        <h4 class="mt-5 mb-4">More services by this seller</h4>
+        <h4 className="mt-5 mb-4">More services by this seller</h4>
 
-        <div class="row g-4">
-          <div class="col-md-4 col-lg-3">
-            <div class="service-card">
-              <div class="service-card-img"></div>
-              <div class="service-card-body">
+        <div className="row g-4">
+          <div className="col-md-4 col-lg-3">
+            <div className="service-card">
+              <div className="service-card-img"></div>
+              <div className="service-card-body">
                 <strong>Landing page design</strong>
-                <div class="text-muted small">from 1499 ₽</div>
+                <div className="text-muted small">from 1499 ₽</div>
               </div>
             </div>
           </div>
 
-          <div class="col-md-4 col-lg-3">
-            <div class="service-card">
-              <div class="service-card-img"></div>
-              <div class="service-card-body">
+          <div className="col-md-4 col-lg-3">
+            <div className="service-card">
+              <div className="service-card-img"></div>
+              <div className="service-card-body">
                 <strong>WooCommerce setup</strong>
-                <div class="text-muted small">from 2499 ₽</div>
+                <div className="text-muted small">from 2499 ₽</div>
               </div>
             </div>
           </div>

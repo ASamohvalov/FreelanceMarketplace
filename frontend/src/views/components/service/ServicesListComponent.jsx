@@ -15,24 +15,6 @@ export default function ServicesListComponent({ services }) {
           );
         })
       }
-      {
-        services.map((service, item) => {
-          return (
-            <ServiceCardComponent
-              key={ item }
-              id={ service.id }
-              title={ service.title }
-              price={ service.price }
-            />
-          );
-        })
-      }
-
-      <ServiceCardComponent
-        id={ 198203 }
-        title={ "sfkjdlj " }
-        price={ 123 }
-      />
     </div>
   );
 }

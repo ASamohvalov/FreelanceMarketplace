@@ -31,7 +31,7 @@ export default function ServicesPage() {
     <>
       <HeaderComponent />
 
-      <div class="row p-4">
+      <div className="row p-4">
         <aside className="col-lg-3 mb-4">
           <div className="card mb-3 p-4 rounded-4">
             <div className="d-flex justify-content-between align-items-center mb-2">

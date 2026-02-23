@@ -1,0 +1,30 @@
+.chat-list {
+  background: #ffffff;
+  border-right: 1px solid #eaeaea;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.chat-item {
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.chat-item:hover,
+.chat-item.active {
+  background: #f3eaff;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #4b1f73;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}

@@ -8,6 +8,7 @@ import PersonalAccountPage from "./views/pages/user/PersonalAccountPage.jsx";
 import CreateServicePage from "./views/pages/services/CreateServicePage.jsx";
 import ErrorPage from "./views/pages/error/ErrorPage.jsx";
 import ServicePage from "./views/pages/services/ServicePage.jsx";
+import MessagesPage from "./views/pages/message/MessagesPage.jsx";
 
 // base routing
 export default function App() {
@@ -24,6 +25,8 @@ export default function App() {
       <Route path="/services" element={<ServicesPage />} />
       <Route path="/create_service" element={<CreateServicePage />} />
       <Route path="/service/:id" element={<ServicePage />} />
+
+      <Route path="/messages" element={<MessagesPage />} />
     </Routes>
   );
 }

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getInfoRequest } from "../../../logic/requests/user/userRequest";
 import './css/personal_account_page.css';
+import FooterComponent from "../../components/FooterComponent";
 
 export default function PersonalAccountPage() {
   useEffect(() => {

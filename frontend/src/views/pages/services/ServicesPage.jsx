@@ -5,6 +5,7 @@ import LoadingComponent from "../../components/LoadingComponent";
 import { getAllServicesRequest } from "../../../logic/requests/service/serviceRequest";
 import { useNavigate } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
+import FooterComponent from "../../components/FooterComponent";
 
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -72,6 +73,8 @@ export default function ServicesPage() {
           )}
         </main>
       </div>
+
+      <FooterComponent />
     </>
   );
 }

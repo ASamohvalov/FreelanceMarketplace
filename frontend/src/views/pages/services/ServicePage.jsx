@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import "./css/service_page.css";
+import FooterComponent from "../../components/FooterComponent";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -157,6 +158,8 @@ export default function ServicePage() {
           </div>
         </div>
       </div>
+
+      <FooterComponent />
     </>
   );
 }

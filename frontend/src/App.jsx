@@ -23,7 +23,7 @@ export default function App() {
       <Route path="/personal-account" element={<PersonalAccountPage />} />
 
       <Route path="/services" element={<ServicesPage />} />
-      <Route path="/create_service" element={<CreateServicePage />} />
+      <Route path="/create-service" element={<CreateServicePage />} />
       <Route path="/service/:id" element={<ServicePage />} />
 
       <Route path="/messages" element={<MessagesPage />} />

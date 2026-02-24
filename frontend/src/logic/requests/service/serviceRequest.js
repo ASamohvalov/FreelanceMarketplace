@@ -1,4 +1,5 @@
-import { sendAuthPostFormData, sendGet } from "../requestSender";
+import { isAuth } from "../../jwt";
+import { sendAuthGet, sendAuthPostFormData, sendGet } from "../requestSender";
 
 /**
  * @returns {map} { status: int, data: null }
@@ -27,5 +28,8 @@ export async function getImageByServiceIdRequest(id) {
  * @returns {map} { status: int, data: any }
  */
 export async function getServiceByIdRequest(id) {
+  if (isAuth()) {
+    return await sendAuthGet(`service/get_by_id/${id}`);
+  }
   return await sendGet(`service/get_by_id/${id}`);
 }

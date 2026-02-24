@@ -55,15 +55,6 @@ export default function ServicesPage() {
               <option>Design</option>
             </select>
           </div>
-
-          <div className="card p-4 rounded-4">
-            <h6>Navigation</h6>
-            <ul className="list-unstyled mt-2">
-              <li className="mb-2">👤 Personal Account</li>
-              <li className="mb-2">💬 Messages</li>
-              <li>📢 Feedback</li>
-            </ul>
-          </div>
         </aside>
         <main className="col-lg-9">
           {loading ? (

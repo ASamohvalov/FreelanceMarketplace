@@ -59,7 +59,13 @@ export default function HeaderComponent() {
             </li>
             {
               (() => {
-                if (isAuth() && !hasRole("ROLE_FREELANCER")) {
+                if (hasRole("ROLE_FREELANCER")) {
+                  return (
+                    <li className="nav-item">
+                      <Link className="nav-link active" to="/create-service">Create Service</Link>
+                    </li>
+                  );
+                } else if (isAuth()) {
                   return (
                     <li className="nav-item">
                       <Link className="nav-link active" to="/become-freelancer">Become Freelancer</Link>

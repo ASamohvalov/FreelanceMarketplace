@@ -14,6 +14,7 @@ export default function ServicePage() {
 
   const [serviceData, setServiceData] = useState([]);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
+  const [isProposalBeenSent, setIsProposalBeenSent] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -23,6 +24,7 @@ export default function ServicePage() {
         return;
       }
       setServiceData(response.data);
+      setIsProposalBeenSent(response.data.proposalBeenSent);
     })();
   }, [navigate, id]);
 
@@ -34,6 +36,7 @@ export default function ServicePage() {
         id={id}
         isVisible={isProposalVisible}
         onClose={() => setIsProposalVisible(false)}
+        onSubmit={() => setIsProposalBeenSent(true)}
       />
 
       <div className="container my-4">
@@ -104,7 +107,7 @@ export default function ServicePage() {
               </button>
 
               {/* todo*/}
-              {serviceData.proposalBeenSent ? (
+              {isProposalBeenSent ? (
                 <button className="btn btn-success w-100 mb-3" disabled>
                   Отклик успешно отправлен
                 </button>

@@ -3,7 +3,7 @@ import { sendProposalRequest } from "../../../logic/requests/message/proposalReq
 import { useNavigate } from "react-router-dom";
 import "./css/proposal_modal_window.css";
 
-export default function ProposalModalWindow({ id, isVisible, onClose }) {
+export default function ProposalModalWindow({ id, isVisible, onClose, onSubmit }) {
   const navigate = useNavigate();
 
   const [desctiption, setDescription] = useState("");
@@ -25,6 +25,7 @@ export default function ProposalModalWindow({ id, isVisible, onClose }) {
     }
 
     alert("Запрос успешно отправлен, ожидайте ответ от фрилансера");
+    onSubmit();
     onClose();
   }
 

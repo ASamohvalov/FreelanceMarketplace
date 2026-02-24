@@ -33,6 +33,9 @@ public class ProposalService {
 
     public void sendProposal(ProposalRequest request) {
         ServiceEntity service = serviceEntityService.getById(request.getServiceId()); // throw bad request if not found
+        if (repository.existsByServiceAndAuthor(service, authHelperService.getUser())) {
+            throw new GlobalBadRequestException("this proposal already been sent");
+        }
         ProposalEntity proposal = ProposalEntity.builder()
                 .author(authHelperService.getUser())
                 .description(request.getDescription())
@@ -60,6 +63,10 @@ public class ProposalService {
                 authHelperService.getUser()
         );
         messageService.sendMessageByAuthor(conversation, proposal.getDescription(), proposal.getAuthor());
+    }
+
+    public boolean proposalBeenSent(ServiceEntity service) {
+        return repository.existsByServiceAndAuthor(service, authHelperService.getUser());
     }
 
     private ProposalEntity getById(UUID id) {

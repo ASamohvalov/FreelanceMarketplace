@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.service.logic.impl;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationMemberEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.service.entity.messaging.ConversationMemberService;
 import com.srt.FreelanceMarketplace.service.entity.messaging.ConversationService;

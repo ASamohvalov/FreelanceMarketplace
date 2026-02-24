@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.mapper;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
@@ -14,6 +15,11 @@ import org.mapstruct.MappingConstants;
 public interface FreelanceMapper {
     @Mapping(target = "freelancer", expression = "java(freelancerEntityToResponse(service.getFreelancer()))")
     ServiceResponse serviceEntityToResponse(ServiceEntity service);
+
+    @Mapping(target = "category", expression = "java(service.getSubcategory().getCategory().getName())")
+    @Mapping(target = "subcategory", expression = "java(service.getSubcategory().getName())")
+    @Mapping(target = "freelancer", expression = "java(freelancerEntityToResponse(service.getFreelancer()))")
+    ServiceInfoResponse serviceEntityToInfoResponse(ServiceEntity service);
 
     @Mapping(target = "jobTitle", expression = "java(freelancer.getJobTitle().getName())")
     @Mapping(target = "firstName", expression = "java(freelancer.getUser().getFirstName())")

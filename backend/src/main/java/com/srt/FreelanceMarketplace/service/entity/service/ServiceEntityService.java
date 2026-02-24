@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
@@ -9,6 +10,7 @@ import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
+import com.srt.FreelanceMarketplace.repository.messaging.ProposalRepository;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
 import com.srt.FreelanceMarketplace.service.entity.user.FreelancerService;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
@@ -32,6 +34,7 @@ public class ServiceEntityService {
     private final AuthHelperService authHelperService;
     private final FileStorageUtil fileStorageUtil;
     private final SubcategoryService subcategoryService;
+    private final ProposalRepository proposalRepository; // crutch
 
     public List<ServiceResponse> getAll() {
         return repository.findAllWithFreelancer().stream()
@@ -49,6 +52,15 @@ public class ServiceEntityService {
             throw new GlobalBadRequestException("such service id not found");
         }
         return repository.getReferenceById(id);
+    }
+
+    public ServiceInfoResponse getResponseById(UUID id) {
+        ServiceEntity service = getById(id);
+        ServiceInfoResponse response = freelanceMapper.serviceEntityToInfoResponse(service);
+        if (authHelperService.isAuthenticated()) {
+            response.setProposalBeenSent(proposalRepository.existsByServiceAndAuthor(service, authHelperService.getUser()));
+        }
+        return response;
     }
 
     public void create(ServiceRequest request) {

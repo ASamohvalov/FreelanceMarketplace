@@ -103,12 +103,19 @@ export default function ServicePage() {
                 Оформить заказ
               </button>
 
-              <button
-                className="btn btn-primary w-100 mb-3"
-                onClick={() => setIsProposalVisible(true)}
-              >
-                Оставить отклик на обсуждение
-              </button>
+              {/* todo*/}
+              {serviceData.proposalBeenSent ? (
+                <button className="btn btn-success w-100 mb-3" disabled>
+                  Отклик успешно отправлен
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary w-100 mb-3"
+                  onClick={() => setIsProposalVisible(true)}
+                >
+                  Оставить отклик на обсуждение
+                </button>
+              )}
               <hr />
 
               <div className="d-flex align-items-center gap-3">

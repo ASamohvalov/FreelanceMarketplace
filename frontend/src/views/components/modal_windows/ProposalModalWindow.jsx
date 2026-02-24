@@ -21,6 +21,7 @@ export default function ProposalModalWindow({ id, isVisible, onClose }) {
     if (response.status !== 200) {
       console.log("logic error");
       navigate("/error");
+      return;
     }
 
     alert("Запрос успешно отправлен, ожидайте ответ от фрилансера");

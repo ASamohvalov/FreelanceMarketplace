@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.controller.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
 import jakarta.validation.Valid;
@@ -23,6 +24,11 @@ public class ServiceController {
         return service.getAll();
     }
 
+    @GetMapping("/get_by_id/{serviceId}")
+    public ServiceInfoResponse getById(@PathVariable UUID serviceId) {
+        return service.getResponseById(serviceId);
+    }
+
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
     public void addService(@ModelAttribute @Valid ServiceRequest request) {
@@ -30,7 +36,7 @@ public class ServiceController {
     }
 
     @GetMapping("/title_image/{serviceId}")
-    public byte[] getImage(@PathVariable String serviceId) {
-        return service.getImage(UUID.fromString(serviceId));
+    public byte[] getImage(@PathVariable UUID serviceId) {
+        return service.getImage(serviceId);
     }
 }

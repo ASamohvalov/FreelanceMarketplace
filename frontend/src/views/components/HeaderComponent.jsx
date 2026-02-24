@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { getUserData, hasRole, isAuth, logout } from "../../logic/jwt";
 import { logoutRequest } from "../../logic/requests/user/userRequest";
-import "./header_component.css";
+import "./css/header_component.css";
 
 export default function HeaderComponent() {
   async function onLogoutClick(event) {
@@ -47,7 +47,7 @@ export default function HeaderComponent() {
 
   return (
     <header>
-      <nav className="navbar navbar-custom navbar-expand-lg bg-main-color navbar-dark rounded-bottom-4 fixed-top">
+      <nav className="navbar navbar-custom bg-main-color navbar-expand-lg navbar-dark rounded-bottom-3 fixed-top">
         <div className="container-fluid d-flex justify-content-between align-items-center">
 
           <ul className="navbar-nav flex-row me-3">

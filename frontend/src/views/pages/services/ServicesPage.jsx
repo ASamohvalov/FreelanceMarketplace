@@ -6,6 +6,7 @@ import { getAllServicesRequest } from "../../../logic/requests/service/serviceRe
 import { useNavigate } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import FooterComponent from "../../components/FooterComponent";
+import "./css/services_page.css";
 
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -31,40 +32,52 @@ export default function ServicesPage() {
     <>
       <HeaderComponent />
 
-      <div className="row p-4">
-        <aside className="col-lg-3 mb-4">
-          <div className="card mb-3 p-4 rounded-4">
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <h6 className="mb-0">Filters</h6>
-              <button className="btn btn-sm btn-light">Reset All</button>
+      <main>
+        <div className="container mt-4 mb-4">
+          <div className="row align-items-start">
+            <div className="col-lg-3 mb-4">
+              <div
+                className="sidebar shadow-sm position-sticky"
+                style={{ top: "20px" }}
+              >
+                <h5 className="mb-3">Фильтры</h5>
+
+                <div className="mb-3">
+                  <label className="form-label">Название</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Поиск..."
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Цена до</label>
+                  <input type="range" className="form-range" />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Тип услуги</label>
+                  <select className="form-select">
+                    <option>Все</option>
+                    <option>Frontend</option>
+                    <option>Backend</option>
+                    <option>Design</option>
+                  </select>
+                </div>
+
+                <button className="btn btn-primary w-100">Применить</button>
+              </div>
             </div>
 
-            <label className="form-label mt-2">Name</label>
-            <div className="input-group mb-2">
-              <input type="text" className="form-control" />
-              <button className="btn btn-primary">Find</button>
-            </div>
-
-            <label className="form-label mt-2">Price</label>
-            <input type="range" className="form-range" />
-
-            <label className="form-label mt-2">Service type</label>
-            <select className="form-select">
-              <option selected>Choose...</option>
-              <option>WordPress</option>
-              <option>Design</option>
-            </select>
+            {loading ? (
+              <LoadingComponent />
+            ) : (
+              <ServicesListComponent services={services} />
+            )}
           </div>
-        </aside>
-        <main className="col-lg-9">
-          {loading ? (
-            <LoadingComponent />
-          ) : (
-            <ServicesListComponent services={services} />
-          )}
-        </main>
-      </div>
-
+        </div>
+      </main>
       <FooterComponent />
     </>
   );

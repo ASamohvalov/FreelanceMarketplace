@@ -2,7 +2,8 @@ import ServiceCardComponent from "./ServiceCardComponent";
 
 export default function ServicesListComponent({ services }) {
   return (
-    <div className="row g-4">
+    <div class="col-lg-9">
+        <div class="row g-4">
       {
         services.map((service, item) => {
           return (
@@ -15,6 +16,7 @@ export default function ServicesListComponent({ services }) {
           );
         })
       }
+    </div>
     </div>
   );
 }

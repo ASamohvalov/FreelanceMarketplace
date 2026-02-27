@@ -1,17 +1,18 @@
-.card {
+.service-card {
   border: none;
   border-radius: 20px;
   transition: 0.3s;
 }
 
-.card:hover {
+.service-card:hover {
   transform: scale(1.02);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.price {
+.service-price {
+  font-size: 24px;
   font-weight: 700;
-  color: #4c6ef5;
+  color: #764CF5;
 }
 
 .service-img {

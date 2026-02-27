@@ -9,6 +9,7 @@ import CreateServicePage from "./views/pages/services/CreateServicePage.jsx";
 import ErrorPage from "./views/pages/error/ErrorPage.jsx";
 import ServicePage from "./views/pages/services/ServicePage.jsx";
 import MessagesPage from "./views/pages/message/MessagesPage.jsx";
+import NotificationsPage from "./views/pages/message/NotificationsPage.jsx";
 
 // base routing
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
       <Route path="/service/:id" element={<ServicePage />} />
 
       <Route path="/messages" element={<MessagesPage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
     </Routes>
   );
 }

@@ -9,6 +9,8 @@ import "./css/create_service_page.css";
 import LoadingInput from "../../components/elements/LoadingInput";
 import { IMAGE_UPLOADING_TYPE } from "../../../env";
 import { createServiceRequest } from "../../../logic/requests/service/serviceRequest";
+import FooterComponent from "../../components/FooterComponent";
+import NavLocation from "../../components/elements/NavLocation";
 
 export default function CreateServicePage() {
   const navigate = useNavigate();
@@ -89,6 +91,9 @@ export default function CreateServicePage() {
 
       <main>
         <div className="container my-4">
+          <NavLocation>
+            Services / Create new
+          </NavLocation>
           <h2 className="fw-bold mb-2">Create a new service</h2>
           <p className="text-muted mb-4">
             Fill in the details below so clients can easily find and understand
@@ -329,13 +334,15 @@ export default function CreateServicePage() {
                   <p className="small text-muted mt-1">
                     {getUserData()?.firstName + " " + getUserData()?.lastName}
                   </p>
-                  <div className="price">{price} ₽</div>
+                  <div className="create-service-page-price">{price} ₽</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </main>
+
+      <FooterComponent />
     </>
   );
 }

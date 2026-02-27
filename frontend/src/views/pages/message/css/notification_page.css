@@ -1,0 +1,32 @@
+.notification-page-div {
+  min-height: 90vh;
+}
+
+.notification-page-card {
+  border: none;
+  border-radius: 18px;
+  padding: 20px;
+  transition: 0.3s;
+  background: white;
+}
+
+.notification-page-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.notification-page-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #e9ecff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.notification-page-time {
+  font-size: 0.8rem;
+  color: #6c757d;
+}

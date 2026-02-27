@@ -20,9 +20,6 @@ body {
   white-space: nowrap;
 }
 
-.icon {
-}
-
 .icon.remove {
   color: red;
   cursor: pointer;
@@ -56,7 +53,7 @@ body {
   width: 100%;
 }
 
-.price {
+.create-service-page-price {
   font-weight: bold;
   font-size: 20px;
 }

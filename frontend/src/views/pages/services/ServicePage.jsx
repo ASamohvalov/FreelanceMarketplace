@@ -1,10 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getServiceByIdRequest } from "../../../logic/requests/service/serviceRequest";
 import ProposalModalWindow from "../../components/modal_windows/ProposalModalWindow";
+import NavLocation from "../../components/elements/NavLocation";
 import "./css/service_page.css";
 
 export default function ServicePage() {
@@ -40,9 +41,9 @@ export default function ServicePage() {
       />
 
       <div className="container my-4">
-        <nav className="mb-3 text-muted small">
-          Services / {serviceData.category} / {serviceData.subcategory}
-        </nav>
+        <NavLocation>
+          <Link to="/services" className="text-decoration-none">Services </Link>/ {serviceData.category} / {serviceData.subcategory}
+        </NavLocation>
 
         <h2 className="fw-bold mb-2">{serviceData.title}</h2>
 

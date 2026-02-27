@@ -60,7 +60,7 @@ export default function SignInPage() {
             ref={password}
           />
           <div className="d-flex gap-3 justify-content-center">
-            <button className="btn btn-primary sign-form_submit" type="submit">
+            <button className="btn btn-main sign-form_submit" type="submit">
               Submit
             </button>
             <NavLink to="/sign-up" className="btn btn-outline-secondary">

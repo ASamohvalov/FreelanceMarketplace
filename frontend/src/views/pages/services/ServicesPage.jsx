@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import FooterComponent from "../../components/FooterComponent";
 import "./css/services_page.css";
+import NavLocation from "../../components/elements/NavLocation";
 
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -37,8 +38,7 @@ export default function ServicesPage() {
           <div className="row align-items-start">
             <div className="col-lg-3 mb-4">
               <div
-                className="sidebar shadow-sm position-sticky"
-                style={{ top: "20px" }}
+                className="service-page-sidebar shadow-sm"
               >
                 <h5 className="mb-3">Фильтры</h5>
 
@@ -66,7 +66,7 @@ export default function ServicesPage() {
                   </select>
                 </div>
 
-                <button className="btn btn-primary w-100">Применить</button>
+                <button className="btn btn-main w-100">Применить</button>
               </div>
             </div>
 

@@ -2,6 +2,17 @@ body {
   background: #f4f6ff;
 }
 
+/* elements */
+.btn-main {
+  background-color: #583294;
+  color: white;
+}
+
+.btn-main:hover {
+  background-color: #3B1D6D;
+  color: white;
+}
+
 /* colors */
 .bg-main-color {
   background-color: #3B1D6D;

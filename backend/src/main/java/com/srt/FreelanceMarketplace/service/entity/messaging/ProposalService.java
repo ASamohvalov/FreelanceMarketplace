@@ -13,6 +13,7 @@ import com.srt.FreelanceMarketplace.service.entity.user.FreelancerService;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.logic.MessagingService;
+import com.srt.FreelanceMarketplace.service.logic.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +31,10 @@ public class ProposalService {
     private final FreelancerService freelancerService;
     private final MessageService messageService;
     private final MessagingService messagingService;
+    private final NotificationSenderService notificationSenderService;
 
     public void sendProposal(ProposalRequest request) {
-        ServiceEntity service = serviceEntityService.getById(request.getServiceId()); // throw bad request if not found
+        ServiceEntity service = serviceEntityService.getByIdWithAuthor(request.getServiceId()); // throw bad request if not found
         if (repository.existsByServiceAndAuthor(service, authHelperService.getUser())) {
             throw new GlobalBadRequestException("this proposal already been sent");
         }
@@ -42,6 +44,8 @@ public class ProposalService {
                 .service(service)
                 .build();
         repository.save(proposal);
+
+        notificationSenderService.sendNewProposal(proposal, service.getFreelancer().getUser(), authHelperService.getUser());
     }
 
     public List<ProposalResponse> getAllPersonal() {

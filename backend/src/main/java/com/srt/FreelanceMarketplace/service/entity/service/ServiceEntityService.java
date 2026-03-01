@@ -47,6 +47,11 @@ public class ServiceEntityService {
                 .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
     }
 
+    public ServiceEntity getByIdWithAuthor(UUID id) {
+        return repository.findByIdWithFreelancer(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
+    }
+
     public ServiceEntity getReferenceIfExistsById(UUID id) {
         if (!repository.existsById(id)) {
             throw new GlobalBadRequestException("such service id not found");

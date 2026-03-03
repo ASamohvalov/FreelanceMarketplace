@@ -24,7 +24,7 @@ public class NotificationController {
         return notificationService.getAllPersonalWithHidden();
     }
 
-    @PostMapping("/hide/{notificationId}")
+    @PutMapping("/hide/{notificationId}")
     public void hideNotification(@PathVariable UUID notificationId) {
         notificationService.hide(notificationId);
     }

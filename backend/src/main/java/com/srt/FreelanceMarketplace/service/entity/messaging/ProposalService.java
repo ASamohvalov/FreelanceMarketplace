@@ -8,6 +8,7 @@ import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.ProposalMapper;
+import com.srt.FreelanceMarketplace.repository.messaging.NotificationRepository;
 import com.srt.FreelanceMarketplace.repository.messaging.ProposalRepository;
 import com.srt.FreelanceMarketplace.service.entity.user.FreelancerService;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
@@ -32,6 +33,7 @@ public class ProposalService {
     private final MessageService messageService;
     private final MessagingService messagingService;
     private final NotificationSenderService notificationSenderService;
+    private final NotificationRepository notificationRepository;
 
     public void sendProposal(ProposalRequest request) {
         ServiceEntity service = serviceEntityService.getByIdWithAuthor(request.getServiceId()); // throw bad request if not found
@@ -67,6 +69,8 @@ public class ProposalService {
                 authHelperService.getUser()
         );
         messageService.sendMessageByAuthor(conversation, proposal.getDescription(), proposal.getAuthor());
+
+
     }
 
     public boolean proposalBeenSent(ServiceEntity service) {

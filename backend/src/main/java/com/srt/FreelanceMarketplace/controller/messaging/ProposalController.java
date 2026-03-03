@@ -29,9 +29,8 @@ public class ProposalController {
         return proposalService.getAllPersonal();
     }
 
-    // todo change to put
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
-    @PostMapping("/reply/{proposalId}")
+    @PutMapping("/reply/{proposalId}")
     public void sendReply(@PathVariable UUID proposalId) {
         proposalService.sendReply(proposalId);
     }

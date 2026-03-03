@@ -1,4 +1,4 @@
-import { sendAuthGet, sendAuthPost } from "../requestSender";
+import { sendAuthGet, sendAuthPut } from "../requestSender";
 
 export async function getAllPersonalNotificationsRequest() {
   return await sendAuthGet("notification/get_all_personal");
@@ -9,5 +9,5 @@ export async function getAllPersonalNotificationsWithHiddenRequest() {
 }
 
 export async function hideNotificationRequest(id) {
-  return await sendAuthPost(`notification/hide/${id}`);
+  return await sendAuthPut(`notification/hide/${id}`);
 }

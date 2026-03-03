@@ -25,7 +25,7 @@ export function sendAtDateToRUString(sendAtDate) {
   } else if (distance < HOUR) {
     const minutes = Math.floor((distance % HOUR) / MINUTE);
     return [
-      minutes === 1 ? "минута назад" : (
+      minutes === 1 ? "1 минуту назад" : (
         isFirstOption(minutes) ? minutes + " минуты назад" : minutes + " минут назад"
       ),
       MINUTE

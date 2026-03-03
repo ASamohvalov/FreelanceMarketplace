@@ -178,8 +178,7 @@ async function sendAuth(
         params: data,
       });
     } else if (requestType === "PUT") {
-      console.log(token);
-      response = await axios.put(BACKEND_URL + path, {
+      response = await axios.put(BACKEND_URL + path, data, {
         headers: { Authorization: "Bearer " + token },
         params: data,
       });

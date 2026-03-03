@@ -1,30 +1,14 @@
-.chat-list {
-  background: #ffffff;
-  border-right: 1px solid #eaeaea;
-  height: 100%;
+.chat-sidebar {
+  border-right: 1px solid #eee;
   overflow-y: auto;
 }
 
-.chat-item {
-  padding: 15px;
+.chat-sidebar-item {
+  padding: 15px 20px;
   cursor: pointer;
   transition: 0.2s;
-  border-bottom: 1px solid #f1f1f1;
 }
 
-.chat-item:hover,
-.chat-item.active {
-  background: #f3eaff;
-}
-
-.avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: #4b1f73;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+.chat-sidebar-item:hover {
+  background: #f2f4ff;
 }

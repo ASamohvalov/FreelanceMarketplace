@@ -9,5 +9,6 @@ CREATE TABLE notifications (
     entity_type VARCHAR(55) NOT NULL,
     entity_id UUID NOT NULL,
     send_at TIMESTAMP DEFAULT NOW() NOT NULL,
-    read_at TIMESTAMP
+    read_at TIMESTAMP,
+    hide BOOLEAN DEFAULT FALSE NOT NULL
 );

@@ -3,11 +3,10 @@ package com.srt.FreelanceMarketplace.controller.messaging;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NotificationResponse;
 import com.srt.FreelanceMarketplace.service.entity.messaging.NotificationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/notification")
@@ -18,5 +17,15 @@ public class NotificationController {
     @GetMapping("/get_all_personal")
     public List<NotificationResponse> getAllPersonal() {
         return notificationService.getAllPersonal();
+    }
+
+    @GetMapping("/get_all_personal_with_hide")
+    public List<NotificationResponse> getAllPersonalWithHidden() {
+        return notificationService.getAllPersonalWithHidden();
+    }
+
+    @PostMapping("/hide/{notificationId}")
+    public void hideNotification(@PathVariable UUID notificationId) {
+        notificationService.hide(notificationId);
     }
 }

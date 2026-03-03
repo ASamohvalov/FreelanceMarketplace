@@ -1,5 +1,4 @@
 .notification-component-card {
-  border: none;
   border-radius: 18px;
   padding: 20px;
   transition: 0.3s;
@@ -20,6 +19,14 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
+}
+
+.notification-component-icon_right {
+  cursor: pointer;
+}
+
+.notification-component-message {
+  font-size: 12px;
 }
 
 .notification-component-time {

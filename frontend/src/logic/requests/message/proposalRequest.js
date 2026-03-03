@@ -11,3 +11,7 @@ export async function sendProposalRequest(serviceId, description) {
     description: description,
   });
 }
+
+export async function sendProposalReplyRequest(proposalId) {
+  return await sendAuthPost(`proposal/reply/${proposalId}`);
+}

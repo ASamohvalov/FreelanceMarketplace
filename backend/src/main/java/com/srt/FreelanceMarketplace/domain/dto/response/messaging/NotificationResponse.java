@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -16,4 +17,5 @@ public class NotificationResponse {
     private Instant sendAt;
     private NotificationTypeEnum type;
     private UUID entityId;
+    private Map<String, String> data;
 }

@@ -1,85 +1,57 @@
 import { useEffect, useState } from "react";
+import { sendProposalReplyRequest } from "../../../logic/requests/message/proposalRequest";
+import { hideNotificationRequest } from "../../../logic/requests/message/notificationRequest";
+import { sendAtDateToRUString } from "../../../logic/time";
 import "./css/notification_component.css";
 
-export default function NotificationCardComponent({ notification }) {
+export default function NotificationCardComponent({ notification, idx, onHide }) {
   const [time, setTime] = useState("");
-
 
   useEffect(() => {
     const sendAtDate = Date.parse(notification.sendAt);
-    var interval = -1;
-
-    function changeTime() {
-      const SECOND = 1000;
-      const MINUTE = 1000 * 60;
-      const HOUR = 1000 * 60 * 60;
-      const DAY = 1000 * 60 * 60 * 24;
-      const WEEK = 1000 * 60 * 60 * 24 * 7;
-      const MONTH = 1000 * 60 * 60 * 24 * 30;
-      const YEAR = 1000 * 60 * 60 * 24 * 365;
-
-      const currentTime = new Date().getTime();
-      const distance = currentTime - sendAtDate;
-
-      if (distance < SECOND * 30) {
-        setTime("сейчас");
-        interval = SECOND * 30;
-      } else if (distance < MINUTE) {
-        setTime("30 секунд назад");
-        interval = SECOND * 30;
-      } else if (distance < HOUR) {
-        const minutes = Math.floor((distance % HOUR) / MINUTE);
-        setTime(minutes + " минут назад");
-        interval = MINUTE;
-      } else if (distance < DAY) {
-        const hours = Math.floor((distance % DAY) / HOUR);
-        setTime(hours + " часов назад");
-        interval = HOUR;
-      } else if (distance < WEEK) {
-        const days = Math.floor(distance / DAY);
-        setTime(days + " дней назад");
-      } else if (distance < MONTH) {
-        const weeks = Math.floor(distance / WEEK);
-        setTime(weeks + " недель назад");
-      } else if (distance < YEAR) {
-        const months = Math.floor(distance / MONTH);
-        setTime(months + " месяцев назад");
-      } else {
-        const years = Math.floor(distance / YEAR);
-        setTime(years + " лет назад");
-      }
+    const res = sendAtDateToRUString(sendAtDate);
+    (() => setTime(res[0]))();
+    if (res[1] !== -1) {
+      setInterval(sendAtDateToRUString, res[1]);
     }
-
-    changeTime();
-    if (interval !== -1) {
-      setInterval(changeTime, interval)
-    }
-  })
+  });
 
   return (
-    <div className="notification-component-card mb-3 d-flex gap-3 align-items-start">
-      <div className="notification-component-icon">
-        {
-          (() => {
-            if (notification.type === "NEW_PROPOSAL") {
-              return (
-                <i className="bi bi-envelope-fill"></i>
-              );
-            } else if (notification.type === "NEW_ORDER") {
-              return (
-                <i className="bi bi-cart-fill"></i>
-              );
-            }
-          })()
-        }
+    <div className="notification-component-card mb-3 d-flex gap-3 align-items-start border">
+      <div className="notification-component-icon flex-shrink-0">
+        {notification.type === "NEW_PROPOSAL" && <i className="bi bi-envelope-fill" />}
+        {notification.type === "NEW_ORDER" && <i className="bi bi-cart-fill" />}
       </div>
-      <div>
+
+      <div className="flex-grow-1">
         <h6 className="mb-1">{notification.title}</h6>
-        <p className="mb-1">
-          {notification.message}
-        </p>
+        <p className="mb-1">{notification.message}</p>
+
+        {notification.type === "NEW_PROPOSAL" && (
+          <p className="mb-1 text-secondary notification-component-message">{notification.data.message}</p>
+        )}
         <div className="notification-component-time">{time}</div>
       </div>
+
+      {notification.type === "NEW_PROPOSAL" && (
+        <div className="d-flex gap-2 flex-shrink-0 align-items-center">
+          <i
+            className="bi bi-check-square notification-component-icon_right"
+            onClick={async () => {
+              window.confirm("Открыть чат?");
+              await sendProposalReplyRequest(notification.entityId);
+            }}
+          />
+          <i
+            className="bi bi-x-square notification-component-icon_right"
+            onClick={async () => {
+              window.confirm("Скрыть уведомление?");
+              await hideNotificationRequest(notification.id)
+                .then(() => onHide(idx));
+            }}
+          />
+        </div>
+      )}
     </div>
-  )
+  );
 }

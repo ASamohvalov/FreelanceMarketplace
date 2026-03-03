@@ -67,7 +67,7 @@ export async function sendPost(path, data = {}, config = []) {
  * @example sendAuthPost('/hello', { message: 'hello world' })
  */
 export async function sendAuthPost(path, data = {}) {
-  return await sendAuth(path, true, data);
+  return await sendAuth(path, "POST", data);
 }
 
 /**
@@ -80,7 +80,20 @@ export async function sendAuthPost(path, data = {}) {
  * @example sendAuthGet('/hello', { message: 'hello world' })
  */
 export async function sendAuthGet(path, params = {}) {
-  return await sendAuth(path, false, params);
+  return await sendAuth(path, "GET", params);
+}
+
+/**
+ * @param {string} path required without / in begin
+ * @param {map} params
+ *
+ * @returns {map} { status: int?, data: map? }
+ * can return data from url "auth/update_tokens"
+ *
+ * @example sendAuthPut('/hello', { message: 'hello world' })
+ */
+export async function sendAuthPut(path, params = {}) {
+  return await sendAuth(path, "PUT", params);
 }
 
 /**
@@ -93,7 +106,7 @@ export async function sendAuthGet(path, params = {}) {
  * @example sendAuthPost('/hello', { message: 'hello world' })
  */
 export async function sendAuthPostFormData(path, data = {}) {
-  return await sendAuth(path, true, data, "multipart/form-data");
+  return await sendAuth(path, "POST", data, "multipart/form-data");
 }
 
 /**
@@ -102,7 +115,9 @@ export async function sendAuthPostFormData(path, data = {}) {
  */
 export async function sendUpdateTokensRequest() {
   return axios
-    .post(BACKEND_URL + "auth/update_tokens", { refreshToken: getRefreshToken() })
+    .post(BACKEND_URL + "auth/update_tokens", {
+      refreshToken: getRefreshToken(),
+    })
     .then((response) => {
       console.log("API response data ->", response);
       return {
@@ -123,7 +138,7 @@ export async function sendUpdateTokensRequest() {
 
 /**
  * @param {string} path required without / in begin
- * @param {bool} isPost
+ * @param {string} requestType
  * @param {map} data
  *
  * @returns {map} { status: int?, data: map? }
@@ -131,7 +146,12 @@ export async function sendUpdateTokensRequest() {
  *
  * @example sendAuth('/hello', true, { message: 'hello world' })
  */
-async function sendAuth(path, isPost, data = {}, contentType = "application/json") {
+async function sendAuth(
+  path,
+  requestType,
+  data = {},
+  contentType = "application/json",
+) {
   if (isTokenExpired()) {
     // call update token
     console.log("token is expired - call update");
@@ -144,17 +164,29 @@ async function sendAuth(path, isPost, data = {}, contentType = "application/json
 
   var token = getAccessToken();
   try {
-    const response = isPost
-      ? await axios.post(BACKEND_URL + path, data, {
+    var response;
+    if (requestType === "POST") {
+      response = await axios.post(BACKEND_URL + path, data, {
         headers: {
           "Content-Type": contentType,
-          Authorization: "Bearer " + token
+          Authorization: "Bearer " + token,
         },
-        })
-      : await axios.get(BACKEND_URL + path, {
-          headers: { Authorization: "Bearer " + token },
-          params: data,
-        });
+      });
+    } else if (requestType === "GET") {
+      response = await axios.get(BACKEND_URL + path, {
+        headers: { Authorization: "Bearer " + token },
+        params: data,
+      });
+    } else if (requestType === "PUT") {
+      console.log(token);
+      response = await axios.put(BACKEND_URL + path, {
+        headers: { Authorization: "Bearer " + token },
+        params: data,
+      });
+    } else {
+      console.log("logic ERROR");
+      return;
+    }
 
     console.log("API response data ->", response);
     return { status: response.status, data: response.data };

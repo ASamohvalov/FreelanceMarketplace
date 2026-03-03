@@ -38,7 +38,7 @@ export default function ServicesPage() {
           <div className="row align-items-start">
             <div className="col-lg-3 mb-4">
               <div
-                className="service-page-sidebar shadow-sm"
+                className="service-page-sidebar shadow-sm border"
               >
                 <h5 className="mb-3">Фильтры</h5>
 

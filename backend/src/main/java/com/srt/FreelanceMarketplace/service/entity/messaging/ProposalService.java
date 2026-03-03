@@ -73,7 +73,7 @@ public class ProposalService {
         return repository.existsByServiceAndAuthor(service, authHelperService.getUser());
     }
 
-    private ProposalEntity getById(UUID id) {
+    public ProposalEntity getById(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("proposal with this id not found"));
     }

@@ -48,4 +48,6 @@ public class NotificationEntity {
     private Instant sendAt;
 
     private Instant readAt;
+
+    private boolean hide;
 }

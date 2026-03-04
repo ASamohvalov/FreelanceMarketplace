@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.repository.messaging;
 
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationMemberEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,8 @@ public interface ConversationMemberRepository extends JpaRepository<Conversation
     @EntityGraph(attributePaths = {"member"})
     @Query("select cm from ConversationMemberEntity cm")
     List<ConversationMemberEntity> findByConversationWithMember(ConversationEntity conversation);
+
+    @EntityGraph(attributePaths = {"member"})
+    @Query("select cm from ConversationMemberEntity cm where cm.member = :member")
+    List<ConversationMemberEntity> findAllByMember(UserEntity member);
 }

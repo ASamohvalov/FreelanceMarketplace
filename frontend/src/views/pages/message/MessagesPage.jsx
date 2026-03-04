@@ -3,9 +3,13 @@ import HeaderComponent from "../../components/HeaderComponent";
 import ChatListComponent from "../../components/messages/ChatListComponent";
 import MessagesComponent from "../../components/messages/MessagesComponent";
 import { useEffect } from "react";
-import { getAllConversationsRequest, getAllMessagesRequest } from "../../../logic/requests/message/messageRequest";
+import {
+  getAllConversationsRequest,
+  getAllMessagesRequest,
+} from "../../../logic/requests/message/messageRequest";
 import "./css/messages_page.css";
 import { useNavigate } from "react-router-dom";
+import { getUserData } from "../../../logic/jwt";
 
 export default function MessagesPage() {
   const navigate = useNavigate();
@@ -33,7 +37,7 @@ export default function MessagesPage() {
             <ChatListComponent
               conversations={conversations}
               onSelect={async (c) => {
-                setSelectedConversation(c)
+                setSelectedConversation(c);
                 const response = await getAllMessagesRequest(c.id);
                 if (response.status !== 200) {
                   navigate("/error");
@@ -46,7 +50,18 @@ export default function MessagesPage() {
               messages={messages}
               conversation={selectedConversation}
               errorHandle={() => {
-                navigate("/error")
+                navigate("/error");
+              }}
+              addNewMessageHandle={(message, conversationId) => {
+                var mes = [...messages];
+                mes.push({
+                  id: null,
+                  conversationId: conversationId,
+                  text: message,
+                  authorId: getUserData().id,
+                  sendAt: new Date().getTime(),
+                });
+                setMessages(mes);
               }}
             />
           </div>

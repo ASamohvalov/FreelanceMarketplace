@@ -29,7 +29,7 @@ public class MessageController {
         return messageService.getMessages(conversationId);
     }
 
-    @GetMapping("/conversation/get_all")
+    @GetMapping("/conversation/get_all_personal")
     public List<ConversationResponse> getAllConversations() {
         return conversationService.getAllConversations();
     }

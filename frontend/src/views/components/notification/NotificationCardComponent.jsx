@@ -9,12 +9,12 @@ export default function NotificationCardComponent({ notification, idx, onHide })
 
   useEffect(() => {
     const sendAtDate = Date.parse(notification.sendAt);
-    const res = sendAtDateToRUString(sendAtDate);
-    (() => setTime(res[0]))();
-    if (res[1] !== -1) {
-      setInterval(sendAtDateToRUString, res[1]);
+    const updateInterval = sendAtDateToRUString(sendAtDate, setTime);
+    if (updateInterval !== -1) {
+      console.log("update interval is " + updateInterval);
+      setInterval(sendAtDateToRUString, updateInterval, sendAtDate, setTime);
     }
-  });
+  }, [setTime, notification]);
 
   return (
     <div className="notification-component-card mb-3 d-flex gap-3 align-items-start border">

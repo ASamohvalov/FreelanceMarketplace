@@ -66,11 +66,10 @@ public class ProposalService {
 
         ConversationEntity conversation = messagingService.createConversation(
                 proposal.getService().getFreelancer(),
-                authHelperService.getUser()
+                proposal.getAuthor()
         );
+
         messageService.sendMessageByAuthor(conversation, proposal.getDescription(), proposal.getAuthor());
-
-
     }
 
     public boolean proposalBeenSent(ServiceEntity service) {

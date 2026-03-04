@@ -2,11 +2,13 @@ package com.srt.FreelanceMarketplace.service.entity.messaging;
 
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationMemberEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationMemberRepository;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,6 +20,10 @@ public class ConversationMemberService {
 
     public void save(ConversationMemberEntity conversationMember) {
         repository.save(conversationMember);
+    }
+    
+    public List<ConversationMemberEntity> getAllByMember(UserEntity member) {
+        return repository.findAllByMember(member);
     }
 
     public ConversationMemberEntity findMemberByConversation(ConversationEntity conversation) {

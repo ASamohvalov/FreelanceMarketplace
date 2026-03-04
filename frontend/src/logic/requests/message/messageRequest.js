@@ -1,7 +1,7 @@
 import { sendAuthGet, sendAuthPost } from "../requestSender";
 
 export async function getAllConversationsRequest() {
-  return await sendAuthGet("messaging/conversation/get_all");
+  return await sendAuthGet("messaging/conversation/get_all_personal");
 }
 
 export async function getAllMessagesRequest(conversationId) {

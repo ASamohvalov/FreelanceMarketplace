@@ -1,10 +1,11 @@
 /**
  * @param {Date} sendAtDate
- * @returns {array} [ str: string, updateInterval: int ]
+ * @returns {int} updateInterval
  */
-export function sendAtDateToRUString(sendAtDate) {
-  function isFirstOption(number) { // from 2 to 4 and from 11 to 14 => true
-    return number % 10 > 1 && number % 10 < 5 || number > 10 && number < 15;
+export function sendAtDateToRUString(sendAtDate, setTime) {
+  function isFirstOption(number) {
+    // from 2 to 4 and from 11 to 14 => true
+    return (number % 10 > 1 && number % 10 < 5) || (number > 10 && number < 15);
   }
 
   const SECOND = 1000;
@@ -19,56 +20,70 @@ export function sendAtDateToRUString(sendAtDate) {
   const distance = currentTime - sendAtDate;
 
   if (distance < SECOND * 30) {
-    return [ "сейчас", SECOND * 30 ];
+    setTime("сейчас");
+    return SECOND * 30;
   } else if (distance < MINUTE) {
-    return [ "30 секунд назад", SECOND * 30 ];
+    setTime("30 секунд назад");
+    return SECOND * 30;
   } else if (distance < HOUR) {
     const minutes = Math.floor((distance % HOUR) / MINUTE);
-    return [
-      minutes === 1 ? "1 минуту назад" : (
-        isFirstOption(minutes) ? minutes + " минуты назад" : minutes + " минут назад"
-      ),
-      MINUTE
-    ];
+    setTime(
+      minutes === 1
+        ? "1 минуту назад"
+        : isFirstOption(minutes)
+          ? minutes + " минуты назад"
+          : minutes + " минут назад",
+    );
+    return MINUTE;
   } else if (distance < DAY) {
     const hours = Math.floor((distance % DAY) / HOUR);
-    return [
-      hours === 1 ? "1 час назад" : (
-        isFirstOption(hours) ? hours + " часа назад" : hours + " часов назад"
-      ),
-      HOUR
-    ]
+    setTime(
+      hours === 1
+        ? "1 час назад"
+        : isFirstOption(hours)
+          ? hours + " часа назад"
+          : hours + " часов назад",
+    );
+    return HOUR;
   } else if (distance < WEEK) {
     const days = Math.floor(distance / DAY);
-    return [
-      days === 1 ? "1 день назад" : (
-        isFirstOption(days) ? days + " дня назад" : days + " дней назад"
-      ),
-      -1
-    ]
+    setTime(
+      days === 1
+        ? "1 день назад"
+        : isFirstOption(days)
+          ? days + " дня назад"
+          : days + " дней назад",
+    );
+    return -1;
   } else if (distance < MONTH) {
     const weeks = Math.floor(distance / WEEK);
-    return [
-      weeks === 1 ? "1 неделя назад" : (
-        isFirstOption(weeks) ? weeks + " недели назад" : weeks + " недель назад"
-      ),
-      -1
-    ]
+    setTime(
+      weeks === 1
+        ? "1 неделя назад"
+        : isFirstOption(weeks)
+          ? weeks + " недели назад"
+          : weeks + " недель назад",
+    );
+    return -1;
   } else if (distance < YEAR) {
     const months = Math.floor(distance / MONTH);
-    return [
-      months === 1 ? "1 месяц назад" : (
-        isFirstOption(months) ? months + " месяца назад" : months + " месяцев назад"
-      ),
-      -1
-    ]
+    setTime(
+      months === 1
+        ? "1 месяц назад"
+        : isFirstOption(months)
+          ? months + " месяца назад"
+          : months + " месяцев назад",
+    );
+    return -1;
   } else {
     const years = Math.floor(distance / YEAR);
-    return [
-      years === 1 ? "1 год назад" : (
-        isFirstOption(years) ? years + " года назад" : years + " лет назад"
-      ),
-      -1
-    ]
+    setTime(
+      years === 1
+        ? "1 год назад"
+        : isFirstOption(years)
+          ? years + " года назад"
+          : years + " лет назад",
+    );
+    return -1;
   }
 }

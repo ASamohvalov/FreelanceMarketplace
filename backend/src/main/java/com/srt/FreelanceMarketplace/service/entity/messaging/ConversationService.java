@@ -5,6 +5,7 @@ import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;
+import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class ConversationService {
 
     private final ConversationMemberService conversationMemberService;
     private final UserMapper userMapper;
+    private final AuthHelperService authHelperService;
 
     public void save(ConversationEntity conversation) {
         repository.save(conversation);
@@ -39,14 +41,13 @@ public class ConversationService {
     }
 
     public List<ConversationResponse> getAllConversations() {
-        return repository.findAll().stream()
-                .map(c ->
-                    new ConversationResponse(
-                            c.getId(),
-                            userMapper.entityToUserNameResponse(
-                                conversationMemberService.findMemberByConversation(c).getMember()
-                            )
-                    ))
+        return conversationMemberService.getAllByMember(authHelperService.getUser()).stream()
+                .map(conversationMemberEntity -> new ConversationResponse(
+                        conversationMemberEntity.getConversation().getId(),
+                        userMapper.entityToUserNameResponse(
+                                conversationMemberService.findMemberByConversation(conversationMemberEntity.getConversation()).getMember()
+                        )
+                ))
                 .toList();
     }
 }

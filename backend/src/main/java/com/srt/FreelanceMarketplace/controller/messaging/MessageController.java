@@ -24,13 +24,18 @@ public class MessageController {
         messageService.sendMessage(request);
     }
 
-    @GetMapping("/get_messages/{conversationId}")
+    @GetMapping("/message/get/{conversationId}")
     public List<MessageResponse> getMessages(@PathVariable UUID conversationId) {
         return messageService.getMessages(conversationId);
     }
 
-    @GetMapping("/conversation/get_all_personal")
+    @GetMapping("/conversation/personal/get_all")
     public List<ConversationResponse> getAllConversations() {
         return conversationService.getAllConversations();
+    }
+
+    @PutMapping("/message/read")
+    public void readMessages(@RequestBody List<UUID> messages) {
+        messageService.readMessages(messages);
     }
 }

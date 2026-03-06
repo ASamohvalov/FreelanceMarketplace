@@ -13,4 +13,5 @@ public class MessageResponse {
     private String text;
     private Instant sendAt;
     private UUID authorId;
+    private boolean isRead;
 }

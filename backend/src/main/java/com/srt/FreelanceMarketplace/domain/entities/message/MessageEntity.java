@@ -33,4 +33,6 @@ public class MessageEntity {
     private String message;
 
     private Instant sendAt;
+
+    private boolean isRead;
 }

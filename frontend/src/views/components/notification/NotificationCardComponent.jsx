@@ -11,10 +11,14 @@ export default function NotificationCardComponent({ notification, idx, onHide })
     const sendAtDate = Date.parse(notification.sendAt);
     const updateInterval = sendAtDateToRUString(sendAtDate, setTime);
     if (updateInterval !== -1) {
-      console.log("update interval is " + updateInterval);
       setInterval(sendAtDateToRUString, updateInterval, sendAtDate, setTime);
     }
   }, [setTime, notification]);
+
+  async function hideNotificaiton() {
+    await hideNotificationRequest(notification.id)
+      .then(() => onHide(idx));
+  }
 
   return (
     <div className="notification-component-card mb-3 d-flex gap-3 align-items-start border">
@@ -39,15 +43,15 @@ export default function NotificationCardComponent({ notification, idx, onHide })
             className="bi bi-check-square notification-component-icon_right"
             onClick={async () => {
               window.confirm("Открыть чат?");
-              await sendProposalReplyRequest(notification.entityId);
+              await sendProposalReplyRequest(notification.entityId)
+                .then(hideNotificaiton());
             }}
           />
           <i
             className="bi bi-x-square notification-component-icon_right"
             onClick={async () => {
               window.confirm("Скрыть уведомление?");
-              await hideNotificationRequest(notification.id)
-                .then(() => onHide(idx));
+              hideNotificaiton();
             }}
           />
         </div>

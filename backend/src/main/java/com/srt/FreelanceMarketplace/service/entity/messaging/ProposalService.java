@@ -33,7 +33,6 @@ public class ProposalService {
     private final MessageService messageService;
     private final MessagingService messagingService;
     private final NotificationSenderService notificationSenderService;
-    private final NotificationRepository notificationRepository;
 
     public void sendProposal(ProposalRequest request) {
         ServiceEntity service = serviceEntityService.getByIdWithAuthor(request.getServiceId()); // throw bad request if not found

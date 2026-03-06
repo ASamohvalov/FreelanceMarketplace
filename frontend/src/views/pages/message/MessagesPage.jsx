@@ -60,6 +60,7 @@ export default function MessagesPage() {
                   text: message,
                   authorId: getUserData().id,
                   sendAt: new Date().getTime(),
+                  read: false,
                 });
                 setMessages(mes);
               }}

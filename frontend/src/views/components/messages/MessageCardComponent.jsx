@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import { getUserData } from "../../../logic/jwt";
 import { sendAtDateToRUString } from "../../../logic/time";
 import { useState } from "react";
+import "./css/messages_component.css";
 
-export default function MessageComponent({ message }) {
+export default function MessageCardComponent({ message }) {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    const sendAtDate = message.sendAt instanceof Date
-        ? message.sendAt
-        : Date.parse(message.sendAt);
+    const sendAtDate =
+      message.sendAt instanceof Number
+        ? Date.parse(message.sendAt)
+        : new Date(message.sendAt);
     const updateInterval = sendAtDateToRUString(sendAtDate, setTime);
     if (updateInterval !== -1) {
       setInterval(sendAtDateToRUString, updateInterval, sendAtDate, setTime);
@@ -29,7 +31,12 @@ export default function MessageComponent({ message }) {
             message.authorId === id ? "text-secondary-main" : "text-secondary"
           }
         >
-          {time}
+          {message.authorId === id && (
+            <i
+              className={`bi ${message.read ? "bi-check2-all" : "bi-check2"}`}
+            />
+          )}
+          <span className="m-1">{time}</span>
         </small>
       </div>
     </div>

@@ -1,11 +1,11 @@
-import { sendAuthGet, sendAuthPost } from "../requestSender";
+import { sendAuthGet, sendAuthPost, sendAuthPut } from "../requestSender";
 
 export async function getAllConversationsRequest() {
-  return await sendAuthGet("messaging/conversation/get_all_personal");
+  return await sendAuthGet("messaging/conversation/personal/get_all");
 }
 
 export async function getAllMessagesRequest(conversationId) {
-  return await sendAuthGet(`messaging/get_messages/${conversationId}`);
+  return await sendAuthGet(`messaging/message/get/${conversationId}`);
 }
 
 export async function sendMessageRequest(conversationId, message) {
@@ -13,4 +13,8 @@ export async function sendMessageRequest(conversationId, message) {
     conversationId: conversationId,
     message: message,
   });
+}
+
+export async function sendReadMessageRequest(messageIds) {
+  return await sendAuthPut("messaging/message/read", messageIds);
 }

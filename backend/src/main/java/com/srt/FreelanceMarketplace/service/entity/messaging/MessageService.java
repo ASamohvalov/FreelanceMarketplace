@@ -5,9 +5,11 @@ import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.domain.messaging.NewMessageRequest;
+import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,7 @@ public class MessageService {
                 .author(author)
                 .message(messageText)
                 .sendAt(Instant.now())
+                .isRead(false)
                 .build();
         repository.save(message);
     }
@@ -53,8 +56,17 @@ public class MessageService {
 
         ConversationEntity conversation = conversationService.getReferenceById(conversationId);
 
-        return repository.findAllByConversation(conversation).stream()
+        return repository.findAllByConversationOrderBySendAtAsc(conversation).stream()
                 .map(mapper::fromEntity)
                 .toList();
+    }
+
+    public void readMessages(List<UUID> messages) {
+        messages.forEach(repository::updateReadById);
+    }
+
+    private MessageEntity getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such message not found"));
     }
 }

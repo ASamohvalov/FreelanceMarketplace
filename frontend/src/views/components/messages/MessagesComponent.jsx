@@ -1,8 +1,11 @@
-import { useState } from "react";
-import { getUserData } from "../../../logic/jwt";
+import { useEffect, useState } from "react";
 import "./css/messages_component.css";
-import { sendMessageRequest } from "../../../logic/requests/message/messageRequest";
-import { sendAtDateToRUString } from "../../../logic/time";
+import {
+  sendMessageRequest,
+  sendReadMessageRequest,
+} from "../../../logic/requests/message/messageRequest";
+import MessageCardComponent from "./MessageCardComponent";
+import { getUserData } from "../../../logic/jwt";
 
 export default function MessagesComponent({
   messages,
@@ -12,7 +15,20 @@ export default function MessagesComponent({
 }) {
   const [message, setMessage] = useState("");
 
-  const id = getUserData().id;
+  useEffect(() => {
+    (async () => {
+      const messageIds = messages
+        .filter((m) => m.authorId !== getUserData().id && !m.read)
+        .map((m) => m.id);
+      if (messageIds.length > 0) {
+        const response = await sendReadMessageRequest(messageIds);
+        if (response.status !== 200) {
+          console.log("failed to send read request");
+          return;
+        }
+      }
+    })();
+  }, [messages, errorHandle]);
 
   return (
     <div className="col-8 d-flex flex-column">
@@ -24,21 +40,7 @@ export default function MessagesComponent({
 
       <div className="chat-messages">
         {messages.map((m, idx) => (
-          <div
-            className={`message ${m.authorId === id ? "message-sent" : "message-received"}`}
-            key={idx}
-          >
-            <div>{m.text}</div>
-            <div className="text-end">
-              <small
-                className={
-                  m.authorId === id ? "text-secondary-main" : "text-secondary"
-                }
-              >
-                {sendAtDateToRUString(m.sendAt instanceof Date ? m.sendAt : new Date(m.sendAt))[0]}
-              </small>
-            </div>
-          </div>
+          <MessageCardComponent message={m} key={idx} />
         ))}
       </div>
 

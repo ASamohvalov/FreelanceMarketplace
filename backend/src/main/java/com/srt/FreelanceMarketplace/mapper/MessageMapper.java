@@ -10,5 +10,6 @@ import org.mapstruct.MappingConstants;
 public interface MessageMapper {
     @Mapping(target = "authorId", expression = "java(message.getAuthor().getId())")
     @Mapping(target = "text", expression = "java(message.getMessage())")
+    @Mapping(target = "isRead", expression = "java(message.isRead())")
     MessageResponse fromEntity(MessageEntity message);
 }

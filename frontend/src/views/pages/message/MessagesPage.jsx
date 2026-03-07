@@ -10,6 +10,7 @@ import {
 import "./css/messages_page.css";
 import { useNavigate } from "react-router-dom";
 import { getUserData } from "../../../logic/jwt";
+import getMessages from "../../../logic/message";
 
 export default function MessagesPage() {
   const navigate = useNavigate();
@@ -38,12 +39,9 @@ export default function MessagesPage() {
               conversations={conversations}
               onSelect={async (c) => {
                 setSelectedConversation(c);
-                const response = await getAllMessagesRequest(c.id);
-                if (response.status !== 200) {
+                await getMessages(setMessages, c.id, () => {
                   navigate("/error");
-                  return;
-                }
-                setMessages(response.data);
+                });
               }}
             />
             <MessagesComponent

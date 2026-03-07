@@ -4,7 +4,7 @@ import { hideNotificationRequest } from "../../../logic/requests/message/notific
 import { sendAtDateToRUString } from "../../../logic/time";
 import "./css/notification_component.css";
 
-export default function NotificationCardComponent({ notification, idx, onHide }) {
+export default function NotificationCardComponent({ notification, idx, onHide, hidden }) {
   const [time, setTime] = useState("");
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function NotificationCardComponent({ notification, idx, onHide })
         <div className="notification-component-time">{time}</div>
       </div>
 
-      {notification.type === "NEW_PROPOSAL" && (
+      {(notification.type === "NEW_PROPOSAL" && !hidden) && (
         <div className="d-flex gap-2 flex-shrink-0 align-items-center">
           <i
             className="bi bi-check-square notification-component-icon_right"

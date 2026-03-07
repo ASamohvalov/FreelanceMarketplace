@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,11 +52,15 @@ public class MessageService {
         repository.save(message);
     }
 
-    public List<MessageResponse> getMessages(UUID conversationId) {
+    public List<MessageResponse> getMessages(UUID conversationId, Instant after) {
         conversationService.throwIfNotExistsById(conversationId);
-
         ConversationEntity conversation = conversationService.getReferenceById(conversationId);
 
+        if (after != null) {
+            return repository.findAllByConversationWithSendAtBeforeOrderBySendAtAsc(conversation, after).stream()
+                    .map(mapper::fromEntity)
+                    .toList();
+        }
         return repository.findAllByConversationOrderBySendAtAsc(conversation).stream()
                 .map(mapper::fromEntity)
                 .toList();

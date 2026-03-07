@@ -8,6 +8,12 @@ export async function getAllMessagesRequest(conversationId) {
   return await sendAuthGet(`messaging/message/get/${conversationId}`);
 }
 
+export async function getAllMessagesAfterDateRequest(conversationId, date) {
+  return await sendAuthGet(`messaging/message/get/${conversationId}`, {
+    after: date
+  });
+}
+
 export async function sendMessageRequest(conversationId, message) {
   return await sendAuthPost("messaging/send", {
     conversationId: conversationId,

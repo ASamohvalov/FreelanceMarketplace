@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.service.entity.messaging;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
+import com.srt.FreelanceMarketplace.mapper.ConversationMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConversationService {
     private final ConversationRepository repository;
+    private final ConversationMapper mapper;
 
     private final ConversationMemberService conversationMemberService;
     private final UserMapper userMapper;
@@ -41,13 +43,8 @@ public class ConversationService {
     }
 
     public List<ConversationResponse> getAllConversations() {
-        return conversationMemberService.getAllByMember(authHelperService.getUser()).stream()
-                .map(conversationMemberEntity -> new ConversationResponse(
-                        conversationMemberEntity.getConversation().getId(),
-                        userMapper.entityToUserNameResponse(
-                                conversationMemberService.findMemberByConversation(conversationMemberEntity.getConversation()).getMember()
-                        )
-                ))
+        return conversationMemberService.findAllByMemberWithMember(authHelperService.getUser()).stream()
+                .map(mapper::fromConversationMemberToResponse)
                 .toList();
     }
 }

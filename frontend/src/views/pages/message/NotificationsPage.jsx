@@ -73,6 +73,7 @@ export default function NotificationsPage() {
                   notification={n}
                   key={idx}
                   onHide={deleteCardById}
+                  hidden={showHidden}
                   idx={idx}
                 />
               ));

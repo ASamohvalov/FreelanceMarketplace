@@ -7,8 +7,10 @@ import com.srt.FreelanceMarketplace.service.entity.messaging.ConversationService
 import com.srt.FreelanceMarketplace.service.entity.messaging.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,8 +27,11 @@ public class MessageController {
     }
 
     @GetMapping("/message/get/{conversationId}")
-    public List<MessageResponse> getMessages(@PathVariable UUID conversationId) {
-        return messageService.getMessages(conversationId);
+    public List<MessageResponse> getMessages(
+            @PathVariable UUID conversationId,
+            @RequestParam(value = "after", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant after
+    ) {
+        return messageService.getMessages(conversationId, after);
     }
 
     @GetMapping("/conversation/personal/get_all")

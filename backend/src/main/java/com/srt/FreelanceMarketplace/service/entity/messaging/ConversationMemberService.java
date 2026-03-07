@@ -1,6 +1,5 @@
 package com.srt.FreelanceMarketplace.service.entity.messaging;
 
-import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationMemberEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationMemberRepository;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,15 +20,7 @@ public class ConversationMemberService {
         repository.save(conversationMember);
     }
     
-    public List<ConversationMemberEntity> getAllByMember(UserEntity member) {
-        return repository.findAllByMember(member);
-    }
-
-    public ConversationMemberEntity findMemberByConversation(ConversationEntity conversation) {
-        UUID userId = authHelperService.getUser().getId();
-        return repository.findByConversationWithMember(conversation).stream()
-                .filter((cm) -> cm.getMember().getId() != userId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("no member found, server error"));
+    public List<ConversationMemberEntity> findAllByMemberWithMember(UserEntity member) {
+        return repository.findAllConversationsByMember(member);
     }
 }

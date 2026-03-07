@@ -11,6 +11,8 @@ import { IMAGE_UPLOADING_TYPE } from "../../../env";
 import { createServiceRequest } from "../../../logic/requests/service/serviceRequest";
 import FooterComponent from "../../components/FooterComponent";
 import NavLocation from "../../components/elements/NavLocation";
+import ReactMarkdown from "react-markdown";
+import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 
 export default function CreateServicePage() {
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ export default function CreateServicePage() {
 
   // fields
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [price, setPrice] = useState(599);
@@ -28,7 +31,6 @@ export default function CreateServicePage() {
   const [images, setImages] = useState([]);
 
   // field references
-  const description = useRef(null);
   const deadlineDays = useRef(null);
   const revisionsCount = useRef(null);
 
@@ -63,7 +65,7 @@ export default function CreateServicePage() {
       setError({ price: "Error: price min is 20 rubles" });
       err = true;
     }
-    if (description.current.value.length < 100) {
+    if (description.length < 100) {
       setError({ description: "Error: min description length is 100 symbols" });
       err = true;
     }
@@ -72,7 +74,7 @@ export default function CreateServicePage() {
     const response = await createServiceRequest({
       title: title,
       titleImage: titleImage,
-      description: description.current.value,
+      description: description,
       price: price,
       deadlineDays: Number(deadlineDays.current.value),
       revisionsCount: Number(revisionsCount.current.value),
@@ -91,22 +93,22 @@ export default function CreateServicePage() {
 
       <main>
         <div className="container my-4">
-          <NavLocation>
-            Services / Create new
-          </NavLocation>
-          <h2 className="fw-bold mb-2">Create a new service</h2>
+          <NavLocation>Services / Create new</NavLocation>
+          <h2 className="fw-bold mb-2">Создание новой услуги</h2>
           <p className="text-muted mb-4">
-            Fill in the details below so clients can easily find and understand
-            your service.
+            Заполните приведенную ниже информацию, чтобы клиенты могли легко
+            найти и понять суть вашего сервиса.
           </p>
 
           <div className="row">
             <div className="col-lg-8">
               <div className="card p-4 form-section rounded-4">
-                <h5>Basic information</h5>
+                <h5>Основная информация</h5>
 
                 <div className="mb-3">
-                  <label className="form-label">Service title</label>
+                  <label className="form-label text-secondary">
+                    Заголовок услуги
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -117,15 +119,15 @@ export default function CreateServicePage() {
                     placeholder="I will create a WordPress website for your business"
                   />
                   <div className="form-text">
-                    <span className="text-danger">
-                      {error?.title}
-                    </span>
+                    <span className="text-danger">{error?.title}</span>
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Category</label>
+                    <label className="form-label text-secondary">
+                      Категория
+                    </label>
                     {categories.length === 0 ? (
                       <LoadingInput />
                     ) : (
@@ -147,7 +149,9 @@ export default function CreateServicePage() {
                   </div>
 
                   <div className="col-md-6 mb-3">
-                    <label className="form-label">Subcategory</label>
+                    <label className="form-label text-secondary">
+                      Подкатегория
+                    </label>
                     {categories.length === 0 ? (
                       <LoadingInput />
                     ) : (
@@ -173,30 +177,40 @@ export default function CreateServicePage() {
               </div>
 
               <div className="card p-4 form-section rounded-4">
-                <h5>Description</h5>
+                <h5>
+                  Описание{" "}
+                  <a className="" href="https://www.markdownlang.com/ru/cheatsheet/">
+                    <small className="h6 text-decoration-none">(в формате MarkDown)</small>
+                  </a>
+                </h5>
 
                 <div className="mb-3">
                   <textarea
                     className="form-control"
                     rows="7"
-                    placeholder="Describe what you offer, who it is for and what the client will get..."
-                    ref={description}
+                    placeholder="Опишите, что вы предлагаете, для кого это предназначено и что получит клиент..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
                 </div>
 
+                <div className="border-top p-1 mt-1">
+                  <ReactMarkdown>
+                    {description}
+                  </ReactMarkdown>
+                </div>
+
                 <div className="form-text">
-                  <span className="text-danger">
-                    {error?.description}
-                  </span>
+                  <span className="text-danger">{error?.description}</span>
                 </div>
               </div>
 
               <div className="card p-4 form-section rounded-4">
-                <h5>Pricing</h5>
+                <h5>Оценивание</h5>
 
                 <div className="row">
                   <div className="col-md-4 mb-3">
-                    <label className="form-label">Price</label>
+                    <label className="form-label">Цена</label>
                     <input
                       type="number"
                       className="form-control"
@@ -208,7 +222,7 @@ export default function CreateServicePage() {
                   </div>
 
                   <div className="col-md-4 mb-3">
-                    <label className="form-label">Delivery time (days)</label>
+                    <label className="form-label">Время выполнения (дни)</label>
                     <input
                       type="number"
                       className="form-control"
@@ -219,7 +233,7 @@ export default function CreateServicePage() {
                   </div>
 
                   <div className="col-md-4 mb-3">
-                    <label className="form-label">Revisions</label>
+                    <label className="form-label">Правки (количество)</label>
                     <input
                       type="number"
                       className="form-control"
@@ -231,14 +245,12 @@ export default function CreateServicePage() {
                 </div>
 
                 <div className="form-text">
-                  <span className="text-danger">
-                    {error?.price}
-                  </span>
+                  <span className="text-danger">{error?.price}</span>
                 </div>
               </div>
 
               <div className="card p-4 form-section rounded-4">
-                <h5>Title image</h5>
+                <h5>Основное изображение</h5>
 
                 <div className="mb-3">
                   <input
@@ -255,15 +267,14 @@ export default function CreateServicePage() {
                   />
                 </div>
 
-                <div className="form-text">
-                </div>
+                <div className="form-text"></div>
               </div>
 
               <div className="card p-4 form-section rounded-4">
-                <h5>Gallery</h5>
+                <h5>Галерея</h5>
 
                 <div className="mb-3">
-                  { /* TODO, file delete in input */ }
+                  {/* TODO, file delete in input */}
                   <input
                     type="file"
                     className="form-control"
@@ -280,21 +291,21 @@ export default function CreateServicePage() {
 
                 <div className="mb-3">
                   <div id="file-list">
-                    {
-                      images.map((image, idx) =>
-                        <div className="file-row" key={idx}>
-                          <span className="file-name">{image.name}</span>
-                          <span
-                            className="icon remove"
-                            onClick={() => {
-                              const array = [...images];
-                              array.splice(idx, 1);
-                              setImages(array);
-                            }}
-                          >✕</span>
-                        </div>
-                      )
-                    }
+                    {images.map((image, idx) => (
+                      <div className="file-row" key={idx}>
+                        <span className="file-name">{image.name}</span>
+                        <span
+                          className="icon remove"
+                          onClick={() => {
+                            const array = [...images];
+                            array.splice(idx, 1);
+                            setImages(array);
+                          }}
+                        >
+                          ✕
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -304,7 +315,10 @@ export default function CreateServicePage() {
               </div>
 
               <div className="card p-4 rounded-4">
-                <button className="btn btn-primary btn-lg w-100" onClick={handleSubmit}>
+                <button
+                  className="btn btn-primary btn-lg w-100"
+                  onClick={handleSubmit}
+                >
                   Create service
                 </button>
               </div>
@@ -313,29 +327,41 @@ export default function CreateServicePage() {
             <div className="col-lg-4">
               <div className="hint-card">
                 <div className="card p-4 mb-4 rounded-4">
-                  <h6>Tips for better results</h6>
+                  <h6>Советы по написанию</h6>
                   <ul className="small mt-2">
-                    <li>Use clear, simple language</li>
-                    <li>Add real examples to gallery</li>
-                    <li>Competitive pricing attracts first clients</li>
-                    <li>Fast delivery increases conversions</li>
+                    <li>Используйте понятный и простой язык</li>
+                    <li>Добавляйте реальные примеры в галерею</li>
+                    <li>Конкурентные цены привлекают первых клиентов</li>
+                    <li>Быстрая доставка повышает конверсию</li>
                   </ul>
                 </div>
 
                 <div className="preview-card">
-                  {
-                    titleImage === null ? (
-                      <div className="preview-img" />
-                    ): (
-                      <img className="preview-img" src={URL.createObjectURL(titleImage)} alt="previewimg" />
-                    )
-                  }
+
+                  <ServiceCardComponent
+                    title={title !== "" ? title : "Service preview"}
+                    freelancerName={getUserData()?.firstName + " " + getUserData()?.lastName}
+                    price={price}
+                    image={titleImage}
+                  />
+                </div>
+
+                {/* <div className="preview-card">
+                  {titleImage === null ? (
+                    <div className="preview-img" />
+                  ) : (
+                    <img
+                      className="preview-img"
+                      src={URL.createObjectURL(titleImage)}
+                      alt="previewimg"
+                    />
+                  )}
                   <strong>{title !== "" ? title : "Service preview"}</strong>
                   <p className="small text-muted mt-1">
                     {getUserData()?.firstName + " " + getUserData()?.lastName}
                   </p>
-                  <div className="create-service-page-price">{price} ₽</div>
-                </div>
+                  <div className="service-price">{price} ₽</div>
+                </div>*/}
               </div>
             </div>
           </div>

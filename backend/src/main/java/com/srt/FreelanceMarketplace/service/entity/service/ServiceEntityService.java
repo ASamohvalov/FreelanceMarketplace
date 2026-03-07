@@ -82,6 +82,7 @@ public class ServiceEntityService {
                 .subcategory(subcategory)
                 .deadlineDays(request.getDeadlineDays())
                 .revisionsCount(request.getRevisionsCount())
+                .price(request.getPrice())
                 .build();
 
         processFiles(request, serviceEntity);

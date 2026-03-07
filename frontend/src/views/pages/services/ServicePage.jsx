@@ -6,6 +6,7 @@ import { useState } from "react";
 import { getServiceByIdRequest } from "../../../logic/requests/service/serviceRequest";
 import ProposalModalWindow from "../../components/modal_windows/ProposalModalWindow";
 import NavLocation from "../../components/elements/NavLocation";
+import ReactMarkdown from "react-markdown";
 import "./css/service_page.css";
 
 export default function ServicePage() {
@@ -71,7 +72,9 @@ export default function ServicePage() {
             </div>
 
             <div className="card p-4 mb-4 rounded-4">
-              {serviceData.description}
+              <ReactMarkdown>
+                {serviceData.description}
+              </ReactMarkdown>
             </div>
 
             <div className="card p-4 mb-4 rounded-4">
@@ -107,7 +110,6 @@ export default function ServicePage() {
                 Оформить заказ
               </button>
 
-              {/* todo*/}
               {isProposalBeenSent ? (
                 <button className="btn btn-success w-100 mb-3" disabled>
                   Отклик успешно отправлен

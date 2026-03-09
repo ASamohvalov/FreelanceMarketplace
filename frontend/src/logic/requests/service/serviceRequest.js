@@ -33,3 +33,10 @@ export async function getServiceByIdRequest(id) {
   }
   return await sendGet(`service/get_by_id/${id}`);
 }
+
+/**
+ * @returns {map} { status: int, data: map }
+ */
+export async function getAllPersonalServices(id) {
+  return await sendAuthGet(`service/freelancer/${id}`);
+}

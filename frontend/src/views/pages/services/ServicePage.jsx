@@ -3,11 +3,15 @@ import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getServiceByIdRequest } from "../../../logic/requests/service/serviceRequest";
+import {
+  getAllPersonalServices,
+  getServiceByIdRequest,
+} from "../../../logic/requests/service/serviceRequest";
 import ProposalModalWindow from "../../components/modal_windows/ProposalModalWindow";
 import NavLocation from "../../components/elements/NavLocation";
 import ReactMarkdown from "react-markdown";
 import "./css/service_page.css";
+import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -18,6 +22,8 @@ export default function ServicePage() {
   const [isProposalVisible, setIsProposalVisible] = useState(false);
   const [isProposalBeenSent, setIsProposalBeenSent] = useState(false);
 
+  const [personalServices, setPersonalServices] = useState([]);
+
   useEffect(() => {
     (async () => {
       const response = await getServiceByIdRequest(id);
@@ -27,6 +33,16 @@ export default function ServicePage() {
       }
       setServiceData(response.data);
       setIsProposalBeenSent(response.data.proposalBeenSent);
+
+      // get all personal services
+      const getPersonalResponse = await getAllPersonalServices(
+        response.data.freelancer.id,
+      );
+      if (getPersonalResponse.status !== 200) {
+        navigate(`/error?code=${getPersonalResponse.status}`);
+        return;
+      }
+      setPersonalServices(getPersonalResponse.data);
     })();
   }, [navigate, id]);
 
@@ -41,9 +57,12 @@ export default function ServicePage() {
         onSubmit={() => setIsProposalBeenSent(true)}
       />
 
-      <div className="container my-4">
+      <div className="container my-5">
         <NavLocation>
-          <Link to="/services" className="text-decoration-none">Services </Link>/ {serviceData.category} / {serviceData.subcategory}
+          <Link to="/services" className="text-decoration-none">
+            Services{" "}
+          </Link>
+          / {serviceData.category} / {serviceData.subcategory}
         </NavLocation>
 
         <h2 className="fw-bold mb-2">{serviceData.title}</h2>
@@ -72,9 +91,7 @@ export default function ServicePage() {
             </div>
 
             <div className="card p-4 mb-4 rounded-4">
-              <ReactMarkdown>
-                {serviceData.description}
-              </ReactMarkdown>
+              <ReactMarkdown>{serviceData.description}</ReactMarkdown>
             </div>
 
             <div className="card p-4 mb-4 rounded-4">
@@ -145,29 +162,31 @@ export default function ServicePage() {
           </div>
         </div>
 
-        <h4 className="mt-5 mb-4">More services by this seller</h4>
+        {personalServices.length > 1 && (
+          <>
+            <h4 className="mt-5 mb-4">Еще услуги у фрилансера</h4>
 
-        <div className="row g-4">
-          <div className="col-md-4 col-lg-3">
-            <div className="service-card">
-              <div className="service-card-img"></div>
-              <div className="service-card-body">
-                <strong>Landing page design</strong>
-                <div className="text-muted small">from 1499 ₽</div>
-              </div>
+            <div className="row g-4">
+              {personalServices.map((s, idx) => {
+                if (s.id !== serviceData.id) {
+                  return (
+                    <div className="col-md-4 col-lg-3" key={idx}>
+                      <ServiceCardComponent
+                        id={s.id}
+                        title={s.title}
+                        price={s.price}
+                        freelancerName={
+                          s.freelancer.firstName + " " + s.freelancer.lastName
+                        }
+                        image={null}
+                      />
+                    </div>
+                  );
+                }
+              })}
             </div>
-          </div>
-
-          <div className="col-md-4 col-lg-3">
-            <div className="service-card">
-              <div className="service-card-img"></div>
-              <div className="service-card-body">
-                <strong>WooCommerce setup</strong>
-                <div className="text-muted small">from 2499 ₽</div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
       <FooterComponent />

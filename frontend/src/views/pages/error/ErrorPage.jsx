@@ -1,33 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import "./css/error_page.css";
 
-export default function ErrorPage({ code, message }) {
+export default function ErrorPage() {
+  const [searchParams] = useSearchParams();
+
+  const code = Number(searchParams.get("code")) || 404;
 
   return (
     <>
       <HeaderComponent />
       <main id="error-page-main">
         <div className="error-card border">
-          <div className="error-emoji">😕</div>
-          <div className="error-code">404</div>
+          <div className="error-code">{code}</div>
 
           <div className="error-title">
-            Page not found
+            {(() => {
+              switch (code) {
+                case 403: return "вход запрещен";
+                case 500: return "серверная ошибка";
+                case 300: return "клиентская ошибка";
+                default:  return "страница не найдена";
+              }
+            })()}
           </div>
 
           <p className="error-text">
-            The page you are looking for doesn’t exist or has been moved.
-            Don’t worry — let’s get you back on track.
+            Страница, которую вы ищете, не существует или была перемещена.
           </p>
 
           <div className="d-flex justify-content-center gap-3">
             <Link to="/" className="btn btn-purple">
-              Go to homepage
+              На главную
             </Link>
-            <a href="javascript:history.back()" className="btn btn-outline-secondary">
-              Go back
-            </a>
+            <Link
+              to=".."
+              className="btn btn-outline-secondary"
+            >
+              Вернуться обратно
+            </Link>
           </div>
         </div>
       </main>

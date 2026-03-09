@@ -24,6 +24,11 @@ public class ServiceController {
         return service.getAll();
     }
 
+    @GetMapping("/freelancer/{freelancerId}")
+    public List<ServiceResponse> getAllByFreelancer(@PathVariable UUID freelancerId) {
+        return service.getAllByFreelancerId(freelancerId);
+    }
+
     @GetMapping("/get_by_id/{serviceId}")
     public ServiceInfoResponse getById(@PathVariable UUID serviceId) {
         return service.getResponseById(serviceId);

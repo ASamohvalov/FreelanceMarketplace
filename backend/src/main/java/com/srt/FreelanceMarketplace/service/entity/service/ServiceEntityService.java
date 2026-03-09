@@ -42,6 +42,13 @@ public class ServiceEntityService {
                 .toList();
     }
 
+    public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {
+        FreelancerEntity freelancer = freelancerService.getById(freelancerId);
+        return repository.findAllByFreelancer(freelancer).stream()
+                .map(freelanceMapper::serviceEntityToResponse)
+                .toList();
+    }
+
     public ServiceEntity getById(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
@@ -90,7 +97,7 @@ public class ServiceEntityService {
     }
 
     public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
-        return repository.getAllByFreelancer(entity).stream()
+        return repository.findAllByFreelancer(entity).stream()
                 .map(freelanceMapper::entityToUserServiceResponse)
                 .toList();
     }

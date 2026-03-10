@@ -8,15 +8,13 @@ export default async function getMessages(setMessages, conversationId, handleErr
   }
   setMessages(response.data);
 
-  // var lastSendTime = Date.now();
-  // console.log(lastSendTime);
-  // const interval = setInterval(async () => {
-  //   console.log(lastSendTime);
-  //   const res = await getAllMessagesAfterDateRequest(conversationId, lastSendTime);
-  //   if (res === 200) {
-  //     lastSendTime = Date.now();
-  //     setMessages(prev => [...prev, ...res.data]);
-
-  //   }
-  // }, 5000) // every 5 seconds
+  var lastSendTime = new Date(Date.now());
+  return setInterval(async () => {
+    console.log(lastSendTime);
+    const res = await getAllMessagesAfterDateRequest(conversationId, lastSendTime.toISOString());
+    if (res.status === 200) {
+      lastSendTime = new Date(Date.now());
+      setMessages(prev => [...prev, ...res.data]); // todo is read message
+    }
+  }, 5000) // every 5 seconds
 }

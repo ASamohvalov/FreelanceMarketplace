@@ -3,10 +3,7 @@ import HeaderComponent from "../../components/HeaderComponent";
 import ChatListComponent from "../../components/messages/ChatListComponent";
 import MessagesComponent from "../../components/messages/MessagesComponent";
 import { useEffect } from "react";
-import {
-  getAllConversationsRequest,
-  getAllMessagesRequest,
-} from "../../../logic/requests/message/messageRequest";
+import { getAllConversationsRequest } from "../../../logic/requests/message/messageRequest";
 import "./css/messages_page.css";
 import { useNavigate } from "react-router-dom";
 import { getUserData } from "../../../logic/jwt";
@@ -18,6 +15,8 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
+  const [interval, setInterval] = useState(null);
+
   useEffect(() => {
     (async () => {
       const response = await getAllConversationsRequest();
@@ -27,7 +26,11 @@ export default function MessagesPage() {
       }
       setConversations(response.data);
     })();
-  }, [navigate]);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [navigate, interval]);
 
   return (
     <>
@@ -38,10 +41,13 @@ export default function MessagesPage() {
             <ChatListComponent
               conversations={conversations}
               onSelect={async (c) => {
+                if (interval !== null) clearInterval(interval);
                 setSelectedConversation(c);
-                await getMessages(setMessages, c.id, () => {
-                  navigate("/error");
-                });
+                setInterval(
+                  await getMessages(setMessages, c.id, () => {
+                    navigate("/error");
+                  }),
+                );
               }}
             />
             <MessagesComponent

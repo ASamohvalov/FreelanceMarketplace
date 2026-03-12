@@ -31,7 +31,7 @@ export default function App() {
       <Route path="/messages" element={<MessagesPage />} />
       <Route path="/notifications" element={<NotificationsPage />} />
 
-      <Route path="/pay" element={<PaymentPage />} />
+      <Route path="/pay/:serviceId" element={<PaymentPage />} />
     </Routes>
   );
 }

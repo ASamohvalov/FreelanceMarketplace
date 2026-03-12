@@ -6,7 +6,7 @@ export default function ServiceCardComponent({
   title,
   price,
   freelancerName,
-  image,
+  image
 }) {
   return (
     <Link to={`/service/${id}`} className="text-decoration-none text-body">

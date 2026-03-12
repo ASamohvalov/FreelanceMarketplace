@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.entity.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;

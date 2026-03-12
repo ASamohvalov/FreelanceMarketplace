@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.service.entity.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
@@ -116,6 +117,18 @@ public class ServiceEntityService {
         }
     }
 
+    public PaymentInfoResponse getPaymentInfo(UUID serviceId) {
+        ServiceEntity service = getByIdWithAuthor(serviceId);
+        return PaymentInfoResponse.builder()
+                .serviceId(service.getId())
+                .price(service.getPrice())
+                .serviceName(service.getTitle())
+                .commission(getOrderCommission(service.getPrice()))
+                .freelancerFirstName(service.getFreelancer().getUser().getFirstName())
+                .freelancerLastName(service.getFreelancer().getUser().getLastName())
+                .build();
+    }
+
     // for create service
 
     private void validateFiles(ServiceRequest request) {
@@ -154,5 +167,9 @@ public class ServiceEntityService {
                 .service(service)
                 .isTitleImage(isTitle)
                 .build();
+    }
+
+    private int getOrderCommission(int servicePrice) {
+        return servicePrice / 10;
     }
 }

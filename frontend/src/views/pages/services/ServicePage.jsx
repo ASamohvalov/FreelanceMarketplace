@@ -123,7 +123,7 @@ export default function ServicePage() {
             <div className="card p-4 service-sidebar rounded-4">
               <div className="price mb-3">{serviceData.price} ₽</div>
 
-              <Link to="/pay" className="btn btn-primary w-100 mb-3">
+              <Link to={`/pay/${id}`} className="btn btn-primary w-100 mb-3">
                 Оформить заказ
               </Link>
 

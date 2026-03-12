@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.controller.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
@@ -43,5 +44,10 @@ public class ServiceController {
     @GetMapping("/title_image/{serviceId}")
     public byte[] getImage(@PathVariable UUID serviceId) {
         return service.getImage(serviceId);
+    }
+
+    @GetMapping("/payment/info/{serviceId}")
+    public PaymentInfoResponse getPaymentInfo(@PathVariable UUID serviceId) {
+        return service.getPaymentInfo(serviceId);
     }
 }

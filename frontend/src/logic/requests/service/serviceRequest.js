@@ -40,3 +40,10 @@ export async function getServiceByIdRequest(id) {
 export async function getAllPersonalServices(id) {
   return await sendAuthGet(`service/freelancer/${id}`);
 }
+
+/**
+ * @returns {map} { status: int, data: map }
+ */
+export default async function getPaymentInfoRequest(serviceId) {
+  return await sendGet(`service/payment/info/${serviceId}`);
+}

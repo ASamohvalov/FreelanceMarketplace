@@ -6,12 +6,16 @@ export default function ServiceCardComponent({
   title,
   price,
   freelancerName,
-  image
+  image,
+  isPreview,
 }) {
   return (
-    <Link to={`/service/${id}`} className="text-decoration-none text-body">
+    <Link
+      to={`/service/${id}`}
+      onClick={(e) => isPreview && e.preventDefault()}
+      className={`text-decoration-none text-body ${isPreview && "service-card-disable_link"}`}
+    >
       <div className="service-card p-3 shadow-sm">
-
         {image === null ? (
           <div className="service-img mb-3"></div>
         ) : (

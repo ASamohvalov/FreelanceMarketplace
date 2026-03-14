@@ -9,6 +9,10 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
+.service-card-disable_link {
+  pointer-events: none;
+}
+
 .service-price {
   font-size: 24px;
   font-weight: 700;

@@ -1,5 +1,8 @@
 .proposal-modal-window {
-  position: relative;
+  background-color: white;
+  position: absolute;
   left: 50%;
+  top: 30%;
   transform: translateX(-50%);
+  z-index: 1;
 }

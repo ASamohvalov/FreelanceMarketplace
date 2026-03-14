@@ -6,6 +6,7 @@ import {
 } from "../../../logic/requests/message/messageRequest";
 import MessageCardComponent from "./MessageCardComponent";
 import { getUserData } from "../../../logic/jwt";
+import { useRef } from "react";
 
 export default function MessagesComponent({
   messages,
@@ -14,6 +15,8 @@ export default function MessagesComponent({
   addNewMessageHandle,
 }) {
   const [message, setMessage] = useState("");
+
+  const messageChatRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -28,6 +31,8 @@ export default function MessagesComponent({
         }
       }
     })();
+
+    messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
   }, [messages, errorHandle]);
 
   return (
@@ -38,7 +43,9 @@ export default function MessagesComponent({
           : "Чат"}
       </div>
 
-      <div className="chat-messages">
+      <div className="chat-messages"
+        ref={messageChatRef}
+      >
         {messages.map((m, idx) => (
           <MessageCardComponent message={m} key={idx} />
         ))}

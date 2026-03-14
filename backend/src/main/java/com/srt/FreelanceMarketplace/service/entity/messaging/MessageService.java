@@ -9,12 +9,10 @@ import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,7 +55,9 @@ public class MessageService {
         ConversationEntity conversation = conversationService.getReferenceById(conversationId);
 
         if (after != null) {
-            return repository.findAllByConversationWithSendAtBeforeOrderBySendAtAsc(conversation, after).stream()
+            return repository.findAllUnreadMessagesAfterDate(
+                            conversation, after, authHelperService.getUser()
+                    ).stream()
                     .map(mapper::fromEntity)
                     .toList();
         }

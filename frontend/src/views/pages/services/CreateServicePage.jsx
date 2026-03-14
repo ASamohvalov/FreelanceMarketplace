@@ -179,7 +179,7 @@ export default function CreateServicePage() {
               <div className="card p-4 form-section rounded-4">
                 <h5>
                   Описание{" "}
-                  <a className="" href="https://www.markdownlang.com/ru/cheatsheet/">
+                  <a href="https://www.markdownlang.com/ru/cheatsheet/" target="_blank">
                     <small className="h6 text-decoration-none">(в формате MarkDown)</small>
                   </a>
                 </h5>
@@ -343,25 +343,9 @@ export default function CreateServicePage() {
                     freelancerName={getUserData()?.firstName + " " + getUserData()?.lastName}
                     price={price}
                     image={titleImage}
+                    isPreview={true}
                   />
                 </div>
-
-                {/* <div className="preview-card">
-                  {titleImage === null ? (
-                    <div className="preview-img" />
-                  ) : (
-                    <img
-                      className="preview-img"
-                      src={URL.createObjectURL(titleImage)}
-                      alt="previewimg"
-                    />
-                  )}
-                  <strong>{title !== "" ? title : "Service preview"}</strong>
-                  <p className="small text-muted mt-1">
-                    {getUserData()?.firstName + " " + getUserData()?.lastName}
-                  </p>
-                  <div className="service-price">{price} ₽</div>
-                </div>*/}
               </div>
             </div>
           </div>

@@ -17,12 +17,16 @@ CREATE TABLE services (
     description TEXT,
     price INT,
     deadline_days INT,
-    revisions_count INT
+    revisions_count INT,
+    title_image_id UUID
 );
 
 CREATE TABLE service_images (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     image_path VARCHAR(255),
-    service_id UUID REFERENCES services(id),
-    is_title_image BOOLEAN
+    service_id UUID REFERENCES services(id)
 );
+
+ALTER TABLE services
+ADD CONSTRAINT fk_services_title_image
+FOREIGN KEY (title_image_id) REFERENCES service_images(id) ON DELETE SET NULL;

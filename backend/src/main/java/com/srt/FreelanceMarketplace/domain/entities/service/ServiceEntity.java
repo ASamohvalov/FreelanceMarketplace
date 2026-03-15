@@ -43,6 +43,10 @@ public class ServiceEntity {
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceImageEntity> images;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "title_image_id")
+    private ServiceImageEntity titleImage;
+
     // this is crutch
     // null ptr ex - service.getImages().add(some);
     public List<ServiceImageEntity> getImages() {

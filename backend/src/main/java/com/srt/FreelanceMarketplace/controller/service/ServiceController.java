@@ -11,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,15 +38,15 @@ public class ServiceController {
         return service.getResponseById(serviceId);
     }
 
+    @GetMapping("/image/title/{serviceId}")
+    public byte[] getImage(@PathVariable UUID serviceId) {
+        return service.getImage(serviceId);
+    }
+
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
     public void addService(@ModelAttribute @Valid ServiceRequest request) {
         service.create(request);
-    }
-
-    @GetMapping("/title_image/{serviceId}")
-    public byte[] getImage(@PathVariable UUID serviceId) {
-        return service.getImage(serviceId);
     }
 
     @GetMapping("/payment/info/{serviceId}")

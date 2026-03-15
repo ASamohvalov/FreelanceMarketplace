@@ -1,10 +1,7 @@
 package com.srt.FreelanceMarketplace.domain.entities.service;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,7 +9,8 @@ import java.util.UUID;
 @Table(name = "service_images")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class ServiceImageEntity {
     @Id
@@ -24,6 +22,4 @@ public class ServiceImageEntity {
     @ManyToOne
     @JoinColumn(name = "service_id")
     private ServiceEntity service;
-
-    private boolean isTitleImage;
 }

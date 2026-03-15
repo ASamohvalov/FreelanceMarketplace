@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.entity.service;
 
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
 import com.srt.FreelanceMarketplace.repository.service.ServiceImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

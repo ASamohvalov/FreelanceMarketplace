@@ -16,7 +16,7 @@ export default function ServicesListComponent({ services }) {
                   " " +
                   service.freelancer.lastName
                 }
-                image={null}
+                image={service.imageURL || null}
               />
             </div>
           );

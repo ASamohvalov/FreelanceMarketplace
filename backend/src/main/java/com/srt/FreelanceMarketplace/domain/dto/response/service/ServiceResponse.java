@@ -15,4 +15,5 @@ public class ServiceResponse {
     private String title;
     private int price;
     private FreelancerResponse freelancer;
+    private String imageURL;
 }

@@ -29,8 +29,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ServiceEntityService {
     private final ServiceRepository repository;
+    private final FreelanceMapper mapper;
 
-    private final FreelanceMapper freelanceMapper;
     private final FreelancerService freelancerService;
     private final AuthHelperService authHelperService;
     private final FileStorageUtil fileStorageUtil;
@@ -39,14 +39,31 @@ public class ServiceEntityService {
 
     public List<ServiceResponse> getAll() {
         return repository.findAllWithFreelancer().stream()
-                .map(freelanceMapper::serviceEntityToResponse)
+                .map(s -> {
+                    ServiceResponse res = mapper.serviceEntityToResponse(s);
+                    if (s.getTitleImage() != null) {
+                        res.setImageURL(getImageURL(s));
+                    }
+                    return res;
+                })
                 .toList();
+    }
+
+    @Transactional
+    public byte[] getImage(UUID serviceId) {
+        ServiceEntity serviceEntity = getById(serviceId);
+        try {
+            ServiceImageEntity image = serviceEntity.getTitleImage();
+            return fileStorageUtil.downloadFile(image.getImagePath());
+        } catch (IOException e) {
+            throw new IllegalStateException("some error with downloading file from disk - " + e);
+        }
     }
 
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {
         FreelancerEntity freelancer = freelancerService.getById(freelancerId);
         return repository.findAllByFreelancer(freelancer).stream()
-                .map(freelanceMapper::serviceEntityToResponse)
+                .map(mapper::serviceEntityToResponse)
                 .toList();
     }
 
@@ -69,7 +86,7 @@ public class ServiceEntityService {
 
     public ServiceInfoResponse getResponseById(UUID id) {
         ServiceEntity service = getById(id);
-        ServiceInfoResponse response = freelanceMapper.serviceEntityToInfoResponse(service);
+        ServiceInfoResponse response = mapper.serviceEntityToInfoResponse(service);
         if (authHelperService.isAuthenticated()) {
             response.setProposalBeenSent(proposalRepository.existsByServiceAndAuthor(service, authHelperService.getUser()));
         }
@@ -79,8 +96,7 @@ public class ServiceEntityService {
     public void create(ServiceRequest request) {
         validateFiles(request);
 
-        FreelancerEntity freelancer = freelancerService.findByUser(authHelperService.getUser())
-                .orElseThrow(() -> new IllegalStateException("user has FREELANCER_ROLE but hasn't freelancer entity"));
+        FreelancerEntity freelancer = freelancerService.getByUserOrElseThrow(authHelperService.getUser());
         ServiceSubcategoryEntity subcategory = subcategoryService.getById(request.getSubcategoryId());
 
         ServiceEntity serviceEntity = ServiceEntity.builder()
@@ -99,22 +115,8 @@ public class ServiceEntityService {
 
     public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
         return repository.findAllByFreelancer(entity).stream()
-                .map(freelanceMapper::entityToUserServiceResponse)
+                .map(mapper::entityToUserServiceResponse)
                 .toList();
-    }
-
-    @Transactional
-    public byte[] getImage(UUID serviceId) {
-        ServiceEntity serviceEntity = repository.findById(serviceId)
-                .orElseThrow(() -> new GlobalBadRequestException("such id not found"));
-        try {
-            ServiceImageEntity image = serviceEntity.getImages().stream()
-                    .filter(ServiceImageEntity::isTitleImage)
-                    .findAny().orElseThrow(() -> new IllegalStateException("not found title image in service"));
-            return fileStorageUtil.downloadFile(image.getImagePath());
-        } catch (IOException e) {
-            throw new IllegalStateException("some error with downloading file from disk - " + e);
-        }
     }
 
     public PaymentInfoResponse getPaymentInfo(UUID serviceId) {
@@ -145,17 +147,14 @@ public class ServiceEntityService {
 
     private void processFiles(ServiceRequest request, ServiceEntity service) {
         // image saving
-        service.getImages().add(
-                uploadFile(request.getTitleImage(), service, true)
-        );
+        ServiceImageEntity titleImageEntity = uploadFile(request.getTitleImage(), service);
+        service.setTitleImage(titleImageEntity);
         request.getImages().forEach((file) -> {
-            service.getImages().add(
-                    uploadFile(file, service, false)
-            );
+            service.getImages().add(uploadFile(file, service));
         });
     }
 
-    private ServiceImageEntity uploadFile(MultipartFile file, ServiceEntity service, boolean isTitle) {
+    private ServiceImageEntity uploadFile(MultipartFile file, ServiceEntity service) {
         String imageName = fileStorageUtil.getRandomName(file);
         try {
             fileStorageUtil.uploadFile(file, imageName);
@@ -165,11 +164,15 @@ public class ServiceEntityService {
         return ServiceImageEntity.builder()
                 .imagePath(imageName)
                 .service(service)
-                .isTitleImage(isTitle)
                 .build();
     }
 
     private int getOrderCommission(int servicePrice) {
         return servicePrice / 10;
+    }
+
+    // TODO!!!!
+    private String getImageURL(ServiceEntity service) {
+        return "localhost:8080/api/service/image/title/" + service.getId();
     }
 }

@@ -33,7 +33,7 @@ export default function ServicesPage() {
     <>
       <HeaderComponent />
 
-      <main>
+      <main style={{minHeight: "80vh"}}>
         <div className="container mt-4 mb-4">
           <div className="row align-items-start">
             <div className="col-lg-3 mb-4">

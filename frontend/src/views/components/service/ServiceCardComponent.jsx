@@ -21,7 +21,7 @@ export default function ServiceCardComponent({
         ) : (
           <img
             className="preview-img"
-            src={URL.createObjectURL(image)}
+            src={image instanceof File ? URL.createObjectURL(image) : image}
             alt="previewimg"
           />
         )}

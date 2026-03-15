@@ -2,7 +2,6 @@ package com.srt.FreelanceMarketplace.repository.service;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
-import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

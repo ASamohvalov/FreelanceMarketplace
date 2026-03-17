@@ -18,9 +18,14 @@ import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -49,15 +54,10 @@ public class ServiceEntityService {
                 .toList();
     }
 
-    @Transactional
-    public byte[] getImage(UUID serviceId) {
+    public File getImage(UUID serviceId) {
         ServiceEntity serviceEntity = getById(serviceId);
-        try {
-            ServiceImageEntity image = serviceEntity.getTitleImage();
-            return fileStorageUtil.downloadFile(image.getImagePath());
-        } catch (IOException e) {
-            throw new IllegalStateException("some error with downloading file from disk - " + e);
-        }
+        ServiceImageEntity image = serviceEntity.getTitleImage();
+        return fileStorageUtil.downloadFile(image.getImagePath());
     }
 
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {

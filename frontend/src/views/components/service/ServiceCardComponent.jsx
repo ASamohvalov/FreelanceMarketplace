@@ -19,11 +19,16 @@ export default function ServiceCardComponent({
         {image === null ? (
           <div className="service-img mb-3"></div>
         ) : (
+
           <img
             className="preview-img"
-            src={image instanceof File ? URL.createObjectURL(image) : image}
+            src={isPreview
+              ? URL.createObjectURL(image)
+              : (image.startsWith('http') ? image : `http://${image}`)
+            }
             alt="previewimg"
           />
+
         )}
         <h6 className="fw-semibold">{title}</h6>
         <small className="text-muted">{freelancerName} • Developer</small>

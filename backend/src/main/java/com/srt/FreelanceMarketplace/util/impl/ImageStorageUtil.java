@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.util.impl;
 
+import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,9 +36,8 @@ public class ImageStorageUtil implements FileStorageUtil {
     }
 
     @Override
-    public byte[] downloadFile(String filename) throws IOException {
-        File file = new File(storageLocation + filename);
-        return Files.readAllBytes(file.toPath());
+    public File downloadFile(String filename) {
+        return new File(storageLocation + filename);
     }
 
     @Override

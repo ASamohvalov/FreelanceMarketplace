@@ -13,13 +13,18 @@ import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
 import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
 import com.srt.FreelanceMarketplace.service.logic.AuthHelperService;
+import com.srt.FreelanceMarketplace.util.impl.ImageStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -33,6 +38,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final ServiceEntityService serviceEntityService;
     private final RoleService roleService;
+    private final ImageStorageUtil imageStorageUtil;
 
     public void save(UserEntity entity) {
         repository.save(entity);
@@ -82,6 +88,27 @@ public class UserService {
             response.setServices(serviceEntityService.getAllByFreelancer(freelancer));
         }
         return response;
+    }
+
+    public void uploadAvatar(MultipartFile avatar) {
+        UserEntity user = authHelperService.getUser();
+        String fileName = imageStorageUtil.getRandomName(avatar);
+        try {
+            imageStorageUtil.uploadFile(avatar, fileName);
+        } catch (IOException e) {
+            throw new IllegalStateException("error file uploading: " + e);
+        }
+        user.setAvatarPath(fileName);
+        repository.save(user);
+    }
+
+    public Optional<File> getAvatar(UUID userId) {
+        UserEntity user = repository.findById(userId)
+                .orElseThrow(() -> new GlobalBadRequestException("user not found"));
+        if (user.getAvatarPath() == null) {
+            return Optional.empty();
+        }
+        return Optional.of(imageStorageUtil.downloadFile(user.getAvatarPath()));
     }
 
     private boolean hasRole(UserEntity user, RoleEnum role) {

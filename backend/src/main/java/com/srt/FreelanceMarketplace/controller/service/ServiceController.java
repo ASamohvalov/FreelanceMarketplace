@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -44,9 +45,12 @@ public class ServiceController {
 
     @GetMapping("/image/title/{serviceId}")
     public ResponseEntity<Resource> getImage(@PathVariable UUID serviceId) {
-        File file = service.getImage(serviceId);
-        Resource resource = new FileSystemResource(file);
-        String contentType = determineContentType(file.toPath());
+        Optional<File> file = service.getImage(serviceId);
+        if (file.isEmpty()) {
+            return ResponseEntity.ok().build();
+        }
+        Resource resource = new FileSystemResource(file.get());
+        String contentType = determineContentType(file.get().toPath());
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .body(resource);

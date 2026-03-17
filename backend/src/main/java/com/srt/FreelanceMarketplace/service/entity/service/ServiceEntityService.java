@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -54,10 +55,13 @@ public class ServiceEntityService {
                 .toList();
     }
 
-    public File getImage(UUID serviceId) {
+    public Optional<File> getImage(UUID serviceId) {
         ServiceEntity serviceEntity = getById(serviceId);
         ServiceImageEntity image = serviceEntity.getTitleImage();
-        return fileStorageUtil.downloadFile(image.getImagePath());
+        if (image == null) {
+            return Optional.empty();
+        }
+        return Optional.of(fileStorageUtil.downloadFile(image.getImagePath()));
     }
 
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {

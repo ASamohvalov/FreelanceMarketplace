@@ -1,0 +1,56 @@
+package com.srt.FreelanceMarketplace.service.application.messaging;
+
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NewMessageRequest;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
+import com.srt.FreelanceMarketplace.mapper.MessageMapper;
+import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
+import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
+import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class MessageService {
+    private final MessageRepository repository;
+    private final MessageMapper mapper;
+
+    private final ConversationDomainService conversationDomainService;
+    private final AuthHelperService authHelperService;
+
+    public void sendMessage(NewMessageRequest request) {
+        MessageEntity message = MessageEntity.builder()
+                .conversation(conversationDomainService.getById(request.getConversationId()))
+                .author(authHelperService.getUser())
+                .message(request.getMessage())
+                .sendAt(Instant.now())
+                .build();
+        repository.save(message);
+    }
+
+    public List<MessageResponse> getMessages(UUID conversationId, Instant after) {
+        conversationDomainService.throwIfNotExistsById(conversationId);
+        ConversationEntity conversation = conversationDomainService.getReferenceById(conversationId);
+
+        if (after != null) {
+            return repository.findAllUnreadMessagesAfterDate(
+                            conversation, after, authHelperService.getUser()
+                    ).stream()
+                    .map(mapper::fromEntity)
+                    .toList();
+        }
+        return repository.findAllByConversationOrderBySendAtAsc(conversation).stream()
+                .map(mapper::fromEntity)
+                .toList();
+    }
+
+    public void readMessages(List<UUID> messages) {
+        messages.forEach(repository::updateReadById);
+    }
+}

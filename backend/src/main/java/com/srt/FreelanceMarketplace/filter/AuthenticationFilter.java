@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.filter;
 
-import com.srt.FreelanceMarketplace.service.logic.JwtService;
+import com.srt.FreelanceMarketplace.service.infrastructure.JwtService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

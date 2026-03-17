@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.service;
 
-import com.srt.FreelanceMarketplace.service.entity.service.OrderService;
+import com.srt.FreelanceMarketplace.service.application.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

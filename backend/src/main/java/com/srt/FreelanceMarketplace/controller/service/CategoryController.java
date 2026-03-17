@@ -5,8 +5,9 @@ import com.srt.FreelanceMarketplace.domain.dto.request.service.SubcategoryReques
 import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.CategoryWithSubcategoryResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.SubcategoryResponse;
-import com.srt.FreelanceMarketplace.service.entity.service.ServiceCategoryService;
-import com.srt.FreelanceMarketplace.service.entity.service.SubcategoryService;
+import com.srt.FreelanceMarketplace.service.application.service.CategoryService;
+import com.srt.FreelanceMarketplace.service.domain.service.CategoryDomainService;
+import com.srt.FreelanceMarketplace.service.domain.service.SubcategoryDomainService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,33 +19,32 @@ import java.util.List;
 @RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
-    private final ServiceCategoryService serviceCategoryService;
-    private final SubcategoryService subcategoryService;
+    private final CategoryService categoryService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public void createCategory(@Valid @RequestBody CategoryRequest request) {
-        serviceCategoryService.create(request);
+        categoryService.createCategory(request);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/subcategory/create")
     public void createSubcategory(@Valid @RequestBody SubcategoryRequest request) {
-        subcategoryService.create(request);
+        categoryService.createSubcategory(request);
     }
 
     @GetMapping("/get_all")
     public List<CategoryResponse> getAllCategories() {
-        return serviceCategoryService.getAll();
+        return categoryService.getAllCategories();
     }
 
     @GetMapping("/subcategory/get_all")
     public List<SubcategoryResponse> getAllSubcategories() {
-        return subcategoryService.getAll();
+        return categoryService.getAllSubcategories();
     }
 
     @GetMapping("/get_all_info")
     public List<CategoryWithSubcategoryResponse> getAllSubcategoriesInfo() {
-        return serviceCategoryService.getAllWithSubcategory();
+        return categoryService.getAllWithSubcategory();
     }
 }

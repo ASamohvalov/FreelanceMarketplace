@@ -2,7 +2,7 @@ package com.srt.FreelanceMarketplace.controller.messaging;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.ProposalRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ProposalResponse;
-import com.srt.FreelanceMarketplace.service.entity.messaging.ProposalService;
+import com.srt.FreelanceMarketplace.service.application.messaging.ProposalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

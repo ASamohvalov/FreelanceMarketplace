@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.controller.messaging;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NotificationResponse;
-import com.srt.FreelanceMarketplace.service.entity.messaging.NotificationService;
+import com.srt.FreelanceMarketplace.service.application.messaging.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -4,7 +4,8 @@ import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
-import com.srt.FreelanceMarketplace.service.entity.service.ServiceEntityService;
+import com.srt.FreelanceMarketplace.service.application.service.ServiceApplicationService;
+import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @RequestMapping("/service")
 @RequiredArgsConstructor
 public class ServiceController {
-    private final ServiceEntityService service;
+    private final ServiceApplicationService service;
 
     @GetMapping("/get_all")
     public List<ServiceResponse> getAll() {

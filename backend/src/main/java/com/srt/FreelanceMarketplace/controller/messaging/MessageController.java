@@ -2,9 +2,10 @@ package com.srt.FreelanceMarketplace.controller.messaging;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
-import com.srt.FreelanceMarketplace.domain.messaging.NewMessageRequest;
-import com.srt.FreelanceMarketplace.service.entity.messaging.ConversationService;
-import com.srt.FreelanceMarketplace.service.entity.messaging.MessageService;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NewMessageRequest;
+import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
+import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
+import com.srt.FreelanceMarketplace.service.domain.messaging.MessageDomainService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
-    private final ConversationService conversationService;
+    private final ConversationDomainService conversationDomainService;
 
     @PostMapping("/send")
     public void sendMessage(@RequestBody @Valid NewMessageRequest request) {
@@ -36,7 +37,7 @@ public class MessageController {
 
     @GetMapping("/conversation/personal/get_all")
     public List<ConversationResponse> getAllConversations() {
-        return conversationService.getAllConversations();
+        return conversationDomainService.getAllConversations();
     }
 
     @PutMapping("/message/read")

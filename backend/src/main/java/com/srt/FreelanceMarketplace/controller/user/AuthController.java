@@ -4,7 +4,7 @@ import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.JwtResponse;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.SignInRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.SignUpRequest;
-import com.srt.FreelanceMarketplace.service.logic.AuthService;
+import com.srt.FreelanceMarketplace.service.application.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

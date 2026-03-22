@@ -5,7 +5,6 @@ import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoRespo
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.service.application.service.ServiceApplicationService;
-import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;

@@ -67,7 +67,8 @@ public class ProposalService {
 
         ConversationEntity conversation = messagingService.createConversation(
                 proposal.getService().getFreelancer(),
-                proposal.getAuthor()
+                proposal.getAuthor(),
+                proposal.getService()
         );
 
         messageService.sendMessageByAuthor(conversation, proposal.getDescription(), proposal.getAuthor());

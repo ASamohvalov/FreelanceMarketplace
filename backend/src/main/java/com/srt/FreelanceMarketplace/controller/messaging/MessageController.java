@@ -1,11 +1,11 @@
 package com.srt.FreelanceMarketplace.controller.messaging;
 
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NewMessageRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderServiceInfoResponse;
 import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
-import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
-import com.srt.FreelanceMarketplace.service.domain.messaging.MessageDomainService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
-    private final ConversationDomainService conversationDomainService;
 
     @PostMapping("/send")
     public void sendMessage(@RequestBody @Valid NewMessageRequest request) {
@@ -37,7 +36,12 @@ public class MessageController {
 
     @GetMapping("/conversation/personal/get_all")
     public List<ConversationResponse> getAllConversations() {
-        return conversationDomainService.getAllConversations();
+        return messageService.getAllConversations();
+    }
+
+    @GetMapping("/conversation/{conversationId}/context")
+    public ConversationContextResponse getConversationContext(@PathVariable UUID conversationId) {
+        return messageService.getServiceByConversationId(conversationId);
     }
 
     @PutMapping("/message/read")

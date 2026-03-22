@@ -4,5 +4,7 @@ CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) NOT NULL,
     service_id UUID REFERENCES services(id) NOT NULL,
-    status order_status NOT NULL DEFAULT 'IN_PROGRESS'
+    status order_status NOT NULL DEFAULT 'IN_PROGRESS',
+    order_date TIMESTAMP NOT NULL,
+    deadline_date TIMESTAMP NOT NULL
 );

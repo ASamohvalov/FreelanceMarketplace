@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -24,17 +25,24 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "service_id")
     private ServiceEntity service;
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(nullable = false)
     private OrderStatusEnum status = OrderStatusEnum.IN_PROGRESS;
+
+    @Column(nullable = false)
+    private Instant orderDate;
+
+    @Column(nullable = false)
+    private Instant deadlineDate;
 
     public OrderEntity(ServiceEntity service, UserEntity user) {
         this.service = service;

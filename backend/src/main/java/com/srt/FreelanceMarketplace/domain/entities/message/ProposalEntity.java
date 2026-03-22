@@ -21,15 +21,17 @@ public class ProposalEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private UserEntity author;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "service_id")
     private ServiceEntity service;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private boolean isAccepted = false;
 }

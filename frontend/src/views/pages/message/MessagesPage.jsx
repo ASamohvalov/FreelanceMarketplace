@@ -1,18 +1,20 @@
-import { useState } from "react";
-import HeaderComponent from "../../components/HeaderComponent";
-import ChatListComponent from "../../components/messages/ChatListComponent";
-import MessagesComponent from "../../components/messages/MessagesComponent";
-import { useEffect } from "react";
-import { getAllConversationsRequest } from "../../../logic/requests/message/messageRequest";
-import "./css/messages_page.css";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserData } from "../../../logic/jwt";
 import getMessages from "../../../logic/message";
+import { getAllConversationsRequest, getConversationContextInfo } from "../../../logic/requests/message/messageRequest";
+import HeaderComponent from "../../components/HeaderComponent";
+import ChatListComponent from "../../components/messages/ChatListComponent";
+import MessagesComponent from "../../components/messages/MessagesComponent";
+import "./css/messages_page.css";
+import ConversationContextInfo from "../../components/order/ConversationContextInfo";
 
 export default function MessagesPage() {
   const navigate = useNavigate();
+
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [contextInfo, setContextInfo] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   const [interval, setInterval] = useState(null);
@@ -37,7 +39,7 @@ export default function MessagesPage() {
       <HeaderComponent />
       <main>
         <div className="container mt-4">
-          <div className="chat-container border d-flex">
+          <div className="chat-container d-flex">
             <ChatListComponent
               conversations={conversations}
               onSelect={async (c) => {
@@ -48,6 +50,13 @@ export default function MessagesPage() {
                     navigate("/error");
                   }),
                 );
+
+                const contextResponse = await getConversationContextInfo(c.id);
+                if (contextResponse.status !== 200) {
+                  navigate("/error");
+                  return;
+                }
+                setContextInfo(contextResponse.data);
               }}
             />
             <MessagesComponent
@@ -69,6 +78,9 @@ export default function MessagesPage() {
                 setMessages(mes);
               }}
             />
+            {contextInfo !== null &&
+              <ConversationContextInfo info={contextInfo} />
+            }
           </div>
         </div>
       </main>

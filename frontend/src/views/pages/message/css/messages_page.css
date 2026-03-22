@@ -1,27 +1,7 @@
 .chat-container {
-  height: 85vh;
+  height: 88vh;
   background: white;
   border-radius: 20px;
   overflow: hidden;
-  margin-left: auto;
-  max-width: 1000px;
-  margin: auto;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-.message {
-  max-width: 65%;
-  padding: 14px 18px;
-  border-radius: 16px;
-  margin-bottom: 15px;
-}
-
-.message-sent {
-  background: #6f42c1;
-  color: white;
-  margin-left: auto;
-}
-
-.message-received {
-  background: #f1f3ff;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
 }

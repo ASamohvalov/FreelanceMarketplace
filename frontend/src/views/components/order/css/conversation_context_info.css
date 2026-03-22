@@ -1,0 +1,32 @@
+.service-panel{
+  background:#fbfbfe;
+  height:100%;
+  overflow-y:auto;
+}
+
+.service-info-card{
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.service-preview{
+  height:140px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#6f42c1,#4c6ef5);
+  margin-bottom:15px;
+}
+
+.order-badge{
+  font-size:.75rem;
+}
+
+.info-label{
+  font-size:.8rem;
+  color:#6c757d;
+}
+
+.info-value{
+  font-weight:600;
+}

@@ -36,14 +36,14 @@ export default function MessagesComponent({
   }, [messages, errorHandle]);
 
   return (
-    <div className="col-8 d-flex flex-column">
-      <div className="p-3 border-bottom fw-semibold">
+    <div className="col-6 d-flex flex-column border-start border-end">
+      <div className="chat-header">
         {conversation
           ? conversation?.member.firstName + " " + conversation?.member.lastName
           : "Чат"}
       </div>
 
-      <div className="chat-messages"
+      <div className="chat-messages flex-grow-1"
         ref={messageChatRef}
       >
         {messages.map((m, idx) => (

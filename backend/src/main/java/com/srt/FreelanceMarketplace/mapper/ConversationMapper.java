@@ -8,6 +8,6 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ConversationMapper {
-    @Mapping(target = "id", expression = "java(entity.getConversation().getId())")
+    @Mapping(target = "id", source = "entity.conversation.id")
     ConversationResponse fromConversationMemberToResponse(ConversationMemberEntity entity);
 }

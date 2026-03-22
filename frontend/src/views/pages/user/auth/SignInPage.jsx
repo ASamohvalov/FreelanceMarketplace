@@ -31,7 +31,6 @@ export default function SignInPage() {
       password.current.value,
     );
     if (response.status == 200) {
-      console.log(response);
       login(response.data.accessToken, response.data.refreshToken);
       navigate("/");
       return;

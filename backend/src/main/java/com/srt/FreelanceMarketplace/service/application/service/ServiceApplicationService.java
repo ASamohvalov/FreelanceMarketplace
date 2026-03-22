@@ -4,7 +4,6 @@ import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
@@ -14,6 +13,7 @@ import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ProposalDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
+import com.srt.FreelanceMarketplace.service.domain.service.ServiceImageDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.SubcategoryDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
@@ -43,13 +43,7 @@ public class ServiceApplicationService {
 
     public List<ServiceResponse> getAll() {
         return repository.findAllWithFreelancer().stream()
-                .map(s -> {
-                    ServiceResponse res = mapper.serviceEntityToResponse(s);
-                    if (s.getTitleImage() != null) {
-                        res.setImageURL(getImageURL(s));
-                    }
-                    return res;
-                })
+                .map(domainService::mapToServiceResponse)
                 .toList();
     }
 
@@ -148,10 +142,5 @@ public class ServiceApplicationService {
 
     private int getOrderCommission(int servicePrice) {
         return servicePrice / 10;
-    }
-
-    // TODO!!!!
-    private String getImageURL(ServiceEntity service) {
-        return "localhost:8080/api/service/image/title/" + service.getId();
     }
 }

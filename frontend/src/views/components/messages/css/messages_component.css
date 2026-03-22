@@ -8,3 +8,20 @@
   border-top: 1px solid #eee;
   padding: 15px;
 }
+
+.message-sent {
+  background: #4c6ef5;
+  color: white;
+  margin-left: auto;
+}
+
+.message-received {
+  background: #e9ecff;
+}
+
+.message {
+  max-width: 65%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  margin-bottom: 15px;
+}

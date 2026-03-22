@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CollectionId;
 
 import java.util.UUID;
 
@@ -20,11 +21,11 @@ public class ConversationMemberEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "member_id")
     private UserEntity member;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "conversation_id")
     private ConversationEntity conversation;
 

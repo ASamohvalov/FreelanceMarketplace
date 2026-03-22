@@ -24,3 +24,7 @@ export async function sendMessageRequest(conversationId, message) {
 export async function sendReadMessageRequest(messageIds) {
   return await sendAuthPut("messaging/message/read", messageIds);
 }
+
+export async function getConversationContextInfo(conversationId) {
+  return await sendAuthGet(`messaging/conversation/${conversationId}/context`);
+}

@@ -21,18 +21,20 @@ public class MessageEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private UserEntity author;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "conversation_id")
     private ConversationEntity conversation;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String message;
 
+    @Column(nullable = false)
     private Instant sendAt;
 
+    @Column(nullable = false)
     private boolean isRead;
 }

@@ -1,12 +1,21 @@
 package com.srt.FreelanceMarketplace.service.application.messaging;
 
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NewMessageRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
+import com.srt.FreelanceMarketplace.mapper.ConversationMapper;
+import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
+import com.srt.FreelanceMarketplace.mapper.OrderMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
+import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationMemberDomainService;
+import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
+import com.srt.FreelanceMarketplace.service.domain.service.ServiceImageDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +31,11 @@ public class MessageService {
     private final MessageMapper mapper;
 
     private final ConversationDomainService conversationDomainService;
+    private final ConversationMemberDomainService conversationMemberDomainService;
     private final AuthHelperService authHelperService;
+    private final ConversationMapper conversationMapper;
+    private final OrderMapper orderMapper;
+    private final ServiceDomainService serviceDomainService;
 
     public void sendMessage(NewMessageRequest request) {
         MessageEntity message = MessageEntity.builder()
@@ -52,5 +65,20 @@ public class MessageService {
 
     public void readMessages(List<UUID> messages) {
         messages.forEach(repository::updateReadById);
+    }
+
+    public List<ConversationResponse> getAllConversations() {
+        return conversationMemberDomainService.findAllByMemberWithMember(authHelperService.getUser()).stream()
+                .map(conversationMapper::fromConversationMemberToResponse)
+                .toList();
+    }
+
+    public ConversationContextResponse getServiceByConversationId(UUID conversationId) {
+        ConversationEntity conversation = conversationDomainService.getByIdWithOrderAndServiceAndFreelancer(conversationId);
+        return new ConversationContextResponse(
+                orderMapper.toResponse(conversation.getOrder()),
+                serviceDomainService.mapToServiceResponse(conversation.getService()),
+                conversation.getType()
+        );
     }
 }

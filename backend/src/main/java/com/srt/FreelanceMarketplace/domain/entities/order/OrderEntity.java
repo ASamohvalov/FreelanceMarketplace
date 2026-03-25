@@ -39,13 +39,8 @@ public class OrderEntity {
     private OrderStatusEnum status = OrderStatusEnum.IN_PROGRESS;
 
     @Column(nullable = false)
-    private Instant orderDate;
+    private Instant orderDate = Instant.now();
 
     @Column(nullable = false)
     private Instant deadlineDate;
-
-    public OrderEntity(ServiceEntity service, UserEntity user) {
-        this.service = service;
-        this.user = user;
-    }
 }

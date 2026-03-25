@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import FooterComponent from "../../components/FooterComponent";
 import "./css/services_page.css";
-import NavLocation from "../../components/elements/NavLocation";
 
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ export default function ServicesPage() {
       <main style={{minHeight: "80vh"}}>
         <div className="container mt-4 mb-4">
           <div className="row align-items-start">
-            <div className="col-lg-3 mb-4">
+            <div className="col-lg-3 mb-4 position-sticky" style={{top: "82px"}}>
               <div
                 className="service-page-sidebar shadow-sm border"
               >

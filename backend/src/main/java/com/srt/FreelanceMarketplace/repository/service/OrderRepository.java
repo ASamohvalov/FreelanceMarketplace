@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.repository.service;
 
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,12 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
             where o.user = :user
             """)
     List<OrderEntity> findAllByUserWithService(UserEntity user);
+
+    @Query("""
+            select count(o) > 0 from OrderEntity o
+            where o.service = :service
+            and o.user = :user
+            and o.status = "IN_PROGRESS"
+            """)
+    boolean existsByServiceAndUser(ServiceEntity service, UserEntity user);
 }

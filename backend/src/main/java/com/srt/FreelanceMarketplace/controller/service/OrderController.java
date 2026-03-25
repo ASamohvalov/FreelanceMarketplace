@@ -1,13 +1,10 @@
 package com.srt.FreelanceMarketplace.controller.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.service.application.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/order")
@@ -15,8 +12,8 @@ import java.util.UUID;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/service/{serviceId}")
-    public void order(@PathVariable UUID serviceId) {
-        orderService.order(serviceId);
+    @PostMapping("/make")
+    public void order(@RequestBody @Valid MakeOrderRequest request) {
+        orderService.order(request);
     }
 }

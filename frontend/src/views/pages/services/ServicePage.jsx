@@ -12,6 +12,7 @@ import NavLocation from "../../components/elements/NavLocation";
 import ReactMarkdown from "react-markdown";
 import "./css/service_page.css";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
+import OrderModalWindow from "../../components/modal_windows/OrderModalWindow";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -20,6 +21,7 @@ export default function ServicePage() {
 
   const [serviceData, setServiceData] = useState([]);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
+  const [isOrderVisible, setIsOrderVisible] = useState(false);
   const [isProposalBeenSent, setIsProposalBeenSent] = useState(false);
 
   const [personalServices, setPersonalServices] = useState([]);
@@ -55,6 +57,12 @@ export default function ServicePage() {
         isVisible={isProposalVisible}
         onClose={() => setIsProposalVisible(false)}
         onSubmit={() => setIsProposalBeenSent(true)}
+      />
+
+      <OrderModalWindow
+        id={id}
+        isVisible={isOrderVisible}
+        onClose={() => setIsOrderVisible(false)}
       />
 
       <div className="container my-5">
@@ -123,9 +131,15 @@ export default function ServicePage() {
             <div className="card p-4 service-sidebar rounded-4">
               <div className="price mb-3">{serviceData.price} ₽</div>
 
-              <Link to={`/pay/${id}`} className="btn btn-primary w-100 mb-3">
+              {/* <Link to={`/pay/${id}`} className="btn btn-primary w-100 mb-3">
+              </Link>*/}
+
+              <button
+                className="btn btn-primary w-100 mb-3"
+                onClick={() => setIsOrderVisible(true)}
+              >
                 Оформить заказ
-              </Link>
+              </button>
 
               {isProposalBeenSent ? (
                 <button className="btn btn-success w-100 mb-3" disabled>

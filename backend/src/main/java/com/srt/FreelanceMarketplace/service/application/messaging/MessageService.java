@@ -42,7 +42,6 @@ public class MessageService {
                 .conversation(conversationDomainService.getById(request.getConversationId()))
                 .author(authHelperService.getUser())
                 .message(request.getMessage())
-                .sendAt(Instant.now())
                 .build();
         repository.save(message);
     }

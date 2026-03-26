@@ -33,8 +33,10 @@ public class MessageEntity {
     private String message;
 
     @Column(nullable = false)
-    private Instant sendAt;
+    @Builder.Default
+    private Instant sendAt = Instant.now();
 
     @Column(nullable = false)
-    private boolean isRead;
+    @Builder.Default
+    private boolean isRead = false;
 }

@@ -26,8 +26,6 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
                 .recipient(recipient)
                 .entityType(getEntityType(order))
                 .entityId(order.getId())
-                .sendAt(Instant.now())
-                .hide(false)
                 .build();
         repository.save(notification);
     }
@@ -41,8 +39,6 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
                 .recipient(recipient)
                 .entityType(getEntityType(proposal))
                 .entityId(proposal.getId())
-                .sendAt(Instant.now())
-                .hide(false)
                 .build();
         repository.save(notification);
     }

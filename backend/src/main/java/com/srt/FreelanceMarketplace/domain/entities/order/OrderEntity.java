@@ -36,9 +36,11 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(nullable = false)
+    @Builder.Default
     private OrderStatusEnum status = OrderStatusEnum.IN_PROGRESS;
 
     @Column(nullable = false)
+    @Builder.Default
     private Instant orderDate = Instant.now();
 
     @Column(nullable = false)

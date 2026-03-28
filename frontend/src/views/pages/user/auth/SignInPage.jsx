@@ -15,14 +15,14 @@ export default function SignInPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    document.title = "Sign in";
+    document.title = "Авторизация";
   });
 
   async function handleSubmit(event) {
     event.preventDefault();
 
     if (!email.current.value || !password.current.value) {
-      setError("All fields are requerd");
+      setError("Все поля обязательны");
       return;
     }
 
@@ -35,14 +35,13 @@ export default function SignInPage() {
       navigate("/");
       return;
     } else if (response.status == 400) {
-      setError("invalid email or password");
+      setError("Неверный email или пароль");
     }
   }
 
   return (
     <>
-      <HeaderComponent />
-      <FormWrapper Title="Sign in" error={error}>
+      <FormWrapper Title="Авторизация" error={error}>
         <form onSubmit={handleSubmit} className="mb-4 sign-form">
           <label htmlFor="email">Email</label>
           <input
@@ -60,10 +59,10 @@ export default function SignInPage() {
           />
           <div className="d-flex gap-3 justify-content-center">
             <button className="btn btn-main sign-form_submit" type="submit">
-              Submit
+              Войти
             </button>
             <NavLink to="/sign-up" className="btn btn-outline-secondary">
-              Register
+              Зарегистрироваться
             </NavLink>
           </div>
         </form>

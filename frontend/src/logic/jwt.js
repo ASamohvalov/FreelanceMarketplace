@@ -51,7 +51,7 @@ export function getUserData() {
     return null;
   }
 }
-
+ 
 /**
  * @returns {bool}
  */

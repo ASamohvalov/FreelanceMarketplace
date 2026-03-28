@@ -12,28 +12,32 @@ import MessagesPage from "./views/pages/message/MessagesPage.jsx";
 import NotificationsPage from "./views/pages/message/NotificationsPage.jsx";
 import PaymentPage from "./views/pages/order/PaymentPage.jsx";
 import OrderSuccessPage from "./views/pages/order/OrderSuccessPage.jsx";
+import Layout from "./views/pages/Layout.jsx";
 
 // base routing
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/error" element={<ErrorPage />} />
-      <Route path="/sign-in" element={<SignInPage />} />
-      <Route path="/sign-up" element={<SignUpPage />} />
+      <Routes>
+          <Route path="/" element={<Layout/>}>
+          
+      <Route index element={<HomePage />} />
+      <Route path="error" element={<ErrorPage />} />
+      <Route path="sign-in" element={<SignInPage />} />
+      <Route path="sign-up" element={<SignUpPage />} />
 
-      <Route path="/become-freelancer" element={<BecomeFreelancerPage />} />
-      <Route path="/personal-account" element={<PersonalAccountPage />} />
+      <Route path="become-freelancer" element={<BecomeFreelancerPage />} />
+      <Route path="personal-account" element={<PersonalAccountPage />} />
 
-      <Route path="/services" element={<ServicesPage />} />
-      <Route path="/create-service" element={<CreateServicePage />} />
-      <Route path="/service/:id" element={<ServicePage />} />
+      <Route path="services" element={<ServicesPage />} />
+      <Route path="create-service" element={<CreateServicePage />} />
+      <Route path="service/:id" element={<ServicePage />} />
 
-      <Route path="/messages" element={<MessagesPage />} />
-      <Route path="/notifications" element={<NotificationsPage />} />
+      <Route path="messages" element={<MessagesPage />} />
+      <Route path="notifications" element={<NotificationsPage />} />
 
-      <Route path="/pay/:serviceId" element={<PaymentPage />} />
-      <Route path="/order/success" element={<OrderSuccessPage />} />
+      <Route path="pay/:serviceId" element={<PaymentPage />} />
+      <Route path="order/success" element={<OrderSuccessPage />} />
+          </Route>
     </Routes>
   );
 }

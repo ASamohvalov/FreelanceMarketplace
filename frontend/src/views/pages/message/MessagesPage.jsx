@@ -26,6 +26,7 @@ export default function MessagesPage() {
         navigate("/error");
         return;
       }
+        console.log(response.data);
       setConversations(response.data);
     })();
 
@@ -36,7 +37,6 @@ export default function MessagesPage() {
 
   return (
     <>
-      <HeaderComponent />
       <main>
         <div className="container mt-4">
           <div className="chat-container d-flex">

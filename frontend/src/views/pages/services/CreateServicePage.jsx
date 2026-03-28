@@ -49,7 +49,8 @@ export default function CreateServicePage() {
         return;
       }
       setCategories(response.data);
-      setSelectedCategory(response.data[0].id);
+        setSelectedCategory(response.data[0].id);
+        setSelectedSubcategory(response.data[0].subcategories[0].id);
     })();
   }, [navigate]);
 
@@ -58,18 +59,20 @@ export default function CreateServicePage() {
 
     var err = false;
     if (title.length < 10) {
-      setError({ title: "Error: min title length is 10 symbols" });
+      setError({ title: "Ошибка: минимальная длина заголовка - 10 символов" });
       err = true;
     }
     if (price < 20) {
-      setError({ price: "Error: price min is 20 rubles" });
+      setError({ price: "Ошибка: минимальная цена - 20 рублей" });
       err = true;
     }
     if (description.length < 100) {
-      setError({ description: "Error: min description length is 100 symbols" });
+      setError({ description: "Ошибка: минимальная длина описания - 100 символов" });
       err = true;
     }
     if (err) return;
+    
+      console.log(selectedCategory);
 
     const response = await createServiceRequest({
       title: title,
@@ -89,11 +92,10 @@ export default function CreateServicePage() {
 
   return (
     <>
-      <HeaderComponent />
 
       <main>
         <div className="container my-4">
-          <NavLocation>Services / Create new</NavLocation>
+          <NavLocation>Услуги / Создание новой</NavLocation>
           <h2 className="fw-bold mb-2">Создание новой услуги</h2>
           <p className="text-muted mb-4">
             Заполните приведенную ниже информацию, чтобы клиенты могли легко
@@ -310,7 +312,7 @@ export default function CreateServicePage() {
                 </div>
 
                 <div className="form-text">
-                  Upload images that represent your service (up to 5).
+                  Загрузите изображения, которые представляют ваш сервис (до 5).
                 </div>
               </div>
 
@@ -319,7 +321,7 @@ export default function CreateServicePage() {
                   className="btn btn-primary btn-lg w-100"
                   onClick={handleSubmit}
                 >
-                  Create service
+                  Создать услугу
                 </button>
               </div>
             </div>

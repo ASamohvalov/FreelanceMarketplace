@@ -50,7 +50,6 @@ export default function ServicePage() {
 
   return (
     <>
-      <HeaderComponent />
 
       <ProposalModalWindow
         id={id}
@@ -68,7 +67,7 @@ export default function ServicePage() {
       <div className="container my-5">
         <NavLocation>
           <Link to="/services" className="text-decoration-none">
-            Services{" "}
+            Услуги{" "}
           </Link>
           / {serviceData.category} / {serviceData.subcategory}
         </NavLocation>
@@ -77,7 +76,7 @@ export default function ServicePage() {
 
         <div className="d-flex align-items-center gap-3 mb-4">
           <span className="text-warning">★★★★★</span>
-          <span>4.9 (128 reviews)</span>
+          <span>4.9 (128 отзывов)</span>
           <span className="badge bg-light text-dark">
             {serviceData.category}
           </span>
@@ -103,26 +102,25 @@ export default function ServicePage() {
             </div>
 
             <div className="card p-4 mb-4 rounded-4">
-              <h4 className="mb-3">Reviews</h4>
+              <h4 className="mb-3">Отзывы</h4>
 
               <div className="review">
                 <div className="d-flex justify-content-between">
-                  <strong>Alex</strong>
+                  <strong>Алексей</strong>
                   <span className="text-warning">★★★★★</span>
                 </div>
                 <p className="mt-2">
-                  Amazing experience. The website looks clean and works
-                  perfectly.
+                  Лучший сервис!
                 </p>
               </div>
 
               <div className="review">
                 <div className="d-flex justify-content-between">
-                  <strong>Maria</strong>
+                  <strong>Мария</strong>
                   <span className="text-warning">★★★★☆</span>
                 </div>
                 <p className="mt-2">
-                  Fast delivery and good communication. Would order again.
+                  Лучший сервис!
                 </p>
               </div>
             </div>
@@ -163,14 +161,14 @@ export default function ServicePage() {
                       " " +
                       serviceData.freelancer?.lastName}
                   </strong>
-                  <div className="text-muted small">Web Developer</div>
+                  <div className="text-muted small">Веб-разработчик</div>
                 </div>
               </div>
 
               <ul className="list-unstyled mt-3 small">
-                <li>✔ Response time: 1 hour</li>
-                <li>✔ Delivery: 3 days</li>
-                <li>✔ Revisions: 2</li>
+                <li>✔ Время ответа: 1 час</li>
+                <li>✔ Доставка: 3 дня</li>
+                <li>✔ Редактирование: 2</li>
               </ul>
             </div>
           </div>

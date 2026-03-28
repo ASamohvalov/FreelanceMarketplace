@@ -39,7 +39,6 @@ export function BecomeFreelancerPage() {
   if (loading) {
     return (
       <>
-        <HeaderComponent />
         <LoadingComponent />
       </>
     )

@@ -1,38 +1,38 @@
 export default function FooterComponent() {
   return (
-    <footer>
+    <footer className="">
       <div className="container">
         <div className="row">
           <div className="col-md-4">
-            <h5>Freelance Market</h5>
+            <h5>Фриланс Маркет</h5>
             <p className="small mt-3">
-              Connecting businesses with top freelance talent worldwide.
+              Соединяем фрилансеров и компании по всему миру.
             </p>
           </div>
 
           <div className="col-md-4">
-            <h6>Company</h6>
+            <h6>Компания</h6>
             <ul className="list-unstyled small mt-3">
               <li>
-                <a href="#">About</a>
+                <a href="#">О нас</a>
               </li>
               <li>
-                <a href="#">Careers</a>
+                <a href="#">Карьера</a>
               </li>
               <li>
-                <a href="#">Support</a>
+                <a href="#">Поддержка</a>
               </li>
             </ul>
           </div>
 
           <div className="col-md-4">
-            <h6>Legal</h6>
+            <h6>Правовая информация</h6>
             <ul className="list-unstyled small mt-3">
               <li>
-                <a href="#">Terms</a>
+                <a href="#">Правила</a>
               </li>
               <li>
-                <a href="#">Privacy</a>
+                <a href="#">Политика конфиденциальности</a>
               </li>
             </ul>
           </div>
@@ -40,7 +40,7 @@ export default function FooterComponent() {
 
         <hr className="bg-secondary mt-4" />
         <div className="text-center small">
-          © 2025 Freelance Market. All rights reserved.
+          © 2026 Фриланс Маркет. Все права защищены.
         </div>
       </div>
     </footer>

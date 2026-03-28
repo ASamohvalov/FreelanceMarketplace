@@ -1,54 +1,62 @@
-import HeaderComponent from "../components/HeaderComponent";
-import FooterComponent from "../components/FooterComponent";
+import { useContext } from 'react';
 import './css/home_page.css';
+import { userContext } from '../../logic/store/userContext';
+import { useEffect } from 'react';
+import { hasRole, isAuth } from '../../logic/jwt';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function HomePage() {
+    const [user, setUser] = useContext(userContext);
+    const [search, setSearch] = useState('');
+    useEffect(() => {
+        setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
+    }, [setUser]);
   return (
     <>
-      <HeaderComponent />
-      <section className="hero text-center">
+          <section className="hero text-center">
         <div className="container">
-          <h1 className="display-5 fw-bold">Find the Perfect Freelancer for Your Project</h1>
-          <p className="lead mt-3">Web development, design, marketing and more — all in one place.</p>
+          <h1 className="display-5 fw-bold">Найди подходящего фрилансера для своего проекта</h1>
+          <p className="lead mt-3">Веб-разработка, дизайн, маркетинг и многое другое — все в одном месте.</p>
 
           <div className="hero-search input-group">
-            <input type="text" className="form-control form-control-lg" placeholder="Search for services..." />
-            <button className="btn btn-light btn-lg">Search</button>
+            <input type="text" className="form-control form-control-lg" placeholder="Найдите услуги..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <NavLink to={`/services?search=${search}`} className="btn btn-light btn-lg">Поиск</NavLink>
           </div>
         </div>
       </section>
 
       <section className="py-5">
         <div className="container">
-          <h2 className="text-center mb-5">Popular Categories</h2>
+          <h2 className="text-center mb-5">Популярные категории</h2>
 
           <div className="row g-4">
 
             <div className="col-md-3">
               <div className="category-card">
                 <h5>Development & IT</h5>
-                <small className="text-muted">1200+ services</small>
+                <small className="text-muted">Много услуг</small>
               </div>
             </div>
 
             <div className="col-md-3">
               <div className="category-card">
                 <h5>Design & Creative</h5>
-                <small className="text-muted">980+ services</small>
+                <small className="text-muted">Много услуг</small>
               </div>
             </div>
 
             <div className="col-md-3">
               <div className="category-card">
                 <h5>Marketing & Sales</h5>
-                <small className="text-muted">760+ services</small>
+                <small className="text-muted">Много услуг</small>
               </div>
             </div>
 
             <div className="col-md-3">
               <div className="category-card">
                 <h5>Writing & Content</h5>
-                <small className="text-muted">640+ services</small>
+                <small className="text-muted">Много услуг</small>
               </div>
             </div>
 
@@ -58,7 +66,7 @@ export default function HomePage() {
 
       <section className="py-5 bg-light">
         <div className="container">
-          <h2 className="text-center mb-5">Featured Services</h2>
+          <h2 className="text-center mb-5">Особые услуги</h2>
 
           <div className="row g-4">
 
@@ -66,9 +74,9 @@ export default function HomePage() {
               <div className="service-card">
                 <div className="service-img"></div>
                 <div className="p-4">
-                  <strong>I will build your WordPress website</strong>
+                  <strong>Я сверстаю ваш сайт на WordPress</strong>
                   <div className="text-muted small mt-2">Cris James</div>
-                  <div className="mt-3 fw-bold">From 1999 ₽</div>
+                  <div className="mt-3 fw-bold">От 1999 ₽</div>
                 </div>
               </div>
             </div>
@@ -77,9 +85,9 @@ export default function HomePage() {
               <div className="service-card">
                 <div className="service-img"></div>
                 <div className="p-4">
-                  <strong>I will design a modern logo</strong>
+                  <strong>Я сделаю красивый логотип вашей компании!</strong>
                   <div className="text-muted small mt-2">Anna Lee</div>
-                  <div className="mt-3 fw-bold">From 999 ₽</div>
+                  <div className="mt-3 fw-bold">От 999 ₽</div>
                 </div>
               </div>
             </div>
@@ -88,9 +96,9 @@ export default function HomePage() {
               <div className="service-card">
                 <div className="service-img"></div>
                 <div className="p-4">
-                  <strong>I will create a marketing strategy</strong>
+                  <strong>Я продумаю стратегию маркетинга</strong>
                   <div className="text-muted small mt-2">Michael Scott</div>
-                  <div className="mt-3 fw-bold">From 2499 ₽</div>
+                  <div className="mt-3 fw-bold">От 2499 ₽</div>
                 </div>
               </div>
             </div>
@@ -101,28 +109,28 @@ export default function HomePage() {
 
       <section className="py-5">
         <div className="container">
-          <h2 className="text-center mb-5">How It Works</h2>
+          <h2 className="text-center mb-5">Как это работает</h2>
 
           <div className="row g-4">
 
             <div className="col-md-4">
               <div className="step-card">
-                <h4>1️⃣ Search</h4>
-                <p className="text-muted mt-3">Browse thousands of services and find what you need.</p>
+                <h4>1️⃣ Поиск</h4>
+                <p className="text-muted mt-3">Исследуйте тысячи услуг и найдите то, что вам нужно.</p>
               </div>
             </div>
 
             <div className="col-md-4">
               <div className="step-card">
-                <h4>2️⃣ Hire</h4>
-                <p className="text-muted mt-3">Choose the best freelancer and place your order.</p>
+                <h4>2️⃣ Нанять</h4>
+                <p className="text-muted mt-3">Выберите лучшего фрилансера и закажите работу.</p>
               </div>
             </div>
 
             <div className="col-md-4">
               <div className="step-card">
-                <h4>3️⃣ Get Results</h4>
-                <p className="text-muted mt-3">Receive high-quality work delivered on time.</p>
+                <h4>3️⃣ Получить результаты</h4>
+                <p className="text-muted mt-3">Получите высококачественную работу в срок.</p>
               </div>
             </div>
 
@@ -132,13 +140,12 @@ export default function HomePage() {
 
       <section className="cta">
         <div className="container">
-          <h2>Start Selling Your Services Today</h2>
-          <p className="mt-3">Join thousands of freelancers earning online.</p>
-          <a href="#" className="btn btn-light btn-lg mt-3">Become a Freelancer</a>
+          <h2>Начните продавать свои услуги прямо сейчас</h2>
+          <p className="mt-3">Присоединяйтесь к тысячам фрилансеров, получающих доход онлайн.</p>
+          <a href="#" className="btn btn-light btn-lg mt-3">Стать фрилансером</a>
         </div>
       </section>
 
-      <FooterComponent />
     </>
   );
 }

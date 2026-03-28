@@ -19,7 +19,6 @@ export default function OrderSuccessPage() {
 
   return (
     <>
-      <HeaderComponent />
       <main style={{ height: "90vh" }}>
         <div className="container mt-5 mb-5">
           <div className="order-success-page_card mx-auto">

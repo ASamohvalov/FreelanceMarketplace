@@ -58,7 +58,6 @@ export default function PaymentPage() {
 
   return (
     <>
-      <HeaderComponent />
       <main style={{ height: "90vh" }}>
         <div className="container mt-5">
           <h3 className="fw-semibold">Оплата заказа</h3>

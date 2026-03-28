@@ -3,81 +3,79 @@ import HeaderComponent from "../../components/HeaderComponent";
 import { useState } from "react";
 import LoadingComponent from "../../components/LoadingComponent";
 import { getAllServicesRequest } from "../../../logic/requests/service/serviceRequest";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import FooterComponent from "../../components/FooterComponent";
 import "./css/services_page.css";
+import { Filters } from "../../components/services/Filters";
 
 export default function ServicesPage() {
-  const navigate = useNavigate();
-  const [services, setServices] = useState([]);
-  // const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const [services, setServices] = useState([]);
+    // const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [filters, setFilters] = useState({
+        title: searchParams.get("search") || "",
+        price: 0,
+        maxPrice: 0,
+        active: searchParams.get("search") || false,
+    });
 
-  useEffect(() => {
-    document.title = "Services";
+    useEffect(() => {
+        document.title = "Услуги";
 
-    (async () => {
-      const result = await getAllServicesRequest();
-      if (result.status !== 200) {
-        navigate("/error");
-        return;
-      }
-      setServices(result.data);
-      setLoading(false);
-    })();
-  }, [navigate]);
+        (async () => {
+            const result = await getAllServicesRequest();
+            if (result.status !== 200) {
+                navigate("/error");
+                return;
+            }
+            setServices(result.data);
+            const maxPrice = Math.max(...result.data.map((service) => service.price));
+            setFilters((prev) => ({
+                ...prev,
+                price: maxPrice,
+                maxPrice: maxPrice,
+            }));
+            setLoading(false);
+        })();
+    }, [navigate]);
 
-  return (
-    <>
-      <HeaderComponent />
+    return (
+        <>
+            <main style={{ minHeight: "80vh" }}>
+                <div className="container mt-4 mb-4">
+                    <div className="row align-items-start">
+                        <div
+                            className="col-lg-3 mb-4 position-sticky"
+                            style={{ top: "82px" }}
+                        >
+                            <Filters
+                                services={[services, setServices]}
+                                filters={filters}
+                                setFilters={setFilters}
+                            />
+                        </div>
 
-      <main style={{minHeight: "80vh"}}>
-        <div className="container mt-4 mb-4">
-          <div className="row align-items-start">
-            <div className="col-lg-3 mb-4 position-sticky" style={{top: "82px"}}>
-              <div
-                className="service-page-sidebar shadow-sm border"
-              >
-                <h5 className="mb-3">Фильтры</h5>
-
-                <div className="mb-3">
-                  <label className="form-label">Название</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Поиск..."
-                  />
+                        {loading ? (
+                            <LoadingComponent />
+                        ) : (
+                            <ServicesListComponent
+                                services={services.filter((service) => {
+                                    return (
+                                        service.title
+                                            .toLowerCase()
+                                            .includes(
+                                                filters.title.toLowerCase(),
+                                            ) && service.price <= filters.price
+                                    );
+                                })}
+                            />
+                        )}
+                    </div>
                 </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Цена до</label>
-                  <input type="range" className="form-range" />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Тип услуги</label>
-                  <select className="form-select">
-                    <option>Все</option>
-                    <option>Frontend</option>
-                    <option>Backend</option>
-                    <option>Design</option>
-                  </select>
-                </div>
-
-                <button className="btn btn-main w-100">Применить</button>
-              </div>
-            </div>
-
-            {loading ? (
-              <LoadingComponent />
-            ) : (
-              <ServicesListComponent services={services} />
-            )}
-          </div>
-        </div>
-      </main>
-      <FooterComponent />
-    </>
-  );
+            </main>
+        </>
+    );
 }

@@ -33,7 +33,6 @@ export default function NotificationsPage() {
 
   return (
     <>
-      <HeaderComponent />
 
       <main>
         <div className="container mt-5 mb-5 notification-page-div">
@@ -82,7 +81,6 @@ export default function NotificationsPage() {
         </div>
       </main>
 
-      <FooterComponent />
     </>
   );
 }

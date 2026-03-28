@@ -1,17 +1,21 @@
 import { useEffect } from "react";
-import HeaderComponent from "../../components/HeaderComponent";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
-import { getUserData, isAuth } from "../../../logic/jwt";
+import { getUserData, isAuth, hasRole } from "../../../logic/jwt";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getInfoRequest } from "../../../logic/requests/user/userRequest";
 import './css/personal_account_page.css';
-import FooterComponent from "../../components/FooterComponent";
+import { userContext } from "../../../logic/store/userContext";
+import { useContext } from "react";
 
 export default function PersonalAccountPage() {
+  const [user, setUser] = useContext(userContext);
   useEffect(() => {
-    document.title = "Personal Account";
+    document.title = "Личный кабинет";
   }, [])
+      useEffect(() => {
+          setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
+      }, [setUser]);
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -40,7 +44,6 @@ export default function PersonalAccountPage() {
   if (loading) {
     return (
       <>
-        <HeaderComponent />
       </>
     )
   }
@@ -49,7 +52,6 @@ export default function PersonalAccountPage() {
 
   return (
     <>
-      <HeaderComponent />
 
       <main>
         <div className="container">
@@ -67,9 +69,9 @@ export default function PersonalAccountPage() {
                 </h4>
                 <div className="text-muted">Full-Stack Web Developer</div>
                 <div className="mt-2">
-                  <span className="badge badge-purple">Top Rated</span>
+                  <span className="badge badge-purple">Оценка</span>
                   <span className="ms-2 text-warning">★★★★★</span>
-                  <span className="ms-1">4.9 (128 reviews)</span>
+                  <span className="ms-1">4.9 (128 отзывов)</span>
                 </div>
               </div>
             </div>
@@ -84,15 +86,15 @@ export default function PersonalAccountPage() {
 
             <div className="row text-center mt-3">
               <div className="col-md-4">
-                <div className="fw-bold">Response Rate</div>
+                <div className="fw-bold">Качество выполнения</div>
                 <div>98%</div>
               </div>
               <div className="col-md-4">
-                <div className="fw-bold">Completed Orders</div>
+                <div className="fw-bold">Завершенные заказы</div>
                 <div>156</div>
               </div>
               <div className="col-md-4">
-                <div className="fw-bold">Member Since</div>
+                <div className="fw-bold">Дата регистрации</div>
                 <div>2022</div>
               </div>
             </div>
@@ -102,26 +104,26 @@ export default function PersonalAccountPage() {
             <div className="col-md-4">
               <div className="stat-card">
                 <h5>$12,450</h5>
-                <div className="text-muted">Total Earnings</div>
+                <div className="text-muted">Общий доход</div>
               </div>
             </div>
             <div className="col-md-4">
               <div className="stat-card">
                 <h5>8</h5>
-                <div className="text-muted">Active Orders</div>
+                <div className="text-muted">Активные заказы</div>
               </div>
             </div>
             <div className="col-md-4">
               <div className="stat-card">
                 <h5>3</h5>
-                <div className="text-muted">Pending Requests</div>
+                <div className="text-muted">Завершенные заказы</div>
               </div>
             </div>
           </div>
           {
             userData.services && userData.services.lenght > 0 && (
               <>
-                <h5 className="mb-3">My Services</h5>
+                <h5 className="mb-3">Мои услуги</h5>
 
                 <div className="row g-4">
                   {

@@ -9,7 +9,6 @@ export default function ErrorPage() {
 
   return (
     <>
-      <HeaderComponent />
       <main id="error-page-main">
         <div className="error-card border">
           <div className="error-code">{code}</div>

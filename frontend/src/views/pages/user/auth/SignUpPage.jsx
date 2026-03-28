@@ -12,7 +12,7 @@ import "./css/sign_page.css";
 
 export default function SignUpPage() {
   useEffect(() => {
-    document.title = "Sign up";
+    document.title = "Регистрация";
   }, []);
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ export default function SignUpPage() {
       !firstName.current.value ||
       !lastName.current.value
     ) {
-      setError("All fields are requerd");
+      setError("Все поля обязательны");
       return;
     }
 
@@ -63,13 +63,12 @@ export default function SignUpPage() {
       navigate("/");
       return;
     }
-    setError("this email already taken");
+    setError("Этот email уже занят");
   }
 
   return (
     <>
-      <HeaderComponent />
-      <FormWrapper Title="Sign up" error={error}>
+      <FormWrapper Title="Регистрация" error={error}>
         <form onSubmit={handleSubmit} className="mb-4 sign-form">
           <label htmlFor="email">Email</label>
           <input
@@ -125,16 +124,16 @@ export default function SignUpPage() {
               onChange={() => setIsFreelancer(true)}
             />
             <label className="btn text-dark w-100" htmlFor="freelancer-input">
-              Freelancer
+                Фрилансер
             </label>
           </div>
 
           <div className="d-flex gap-3 justify-content-center">
             <button className="btn btn-main sign-form_submit" type="submit">
-              Submit
+              Подтвердить
             </button>
             <NavLink to="/sign-in" className="btn btn-outline-secondary">
-              Login
+                Вход
             </NavLink>
           </div>
         </form>

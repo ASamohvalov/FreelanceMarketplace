@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
@@ -9,6 +9,7 @@ import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingService;
+import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class OrderService {
     private final ServiceDomainService serviceDomainService;
     private final AuthHelperService authHelperService;
     private final MessagingService messagingService;
+    private final NotificationSenderService notificationSenderService;
 
     public void order(MakeOrderRequest request) {
         ServiceEntity service = serviceDomainService.getByIdWithAuthor(request.getServiceId());
@@ -42,16 +44,31 @@ public class OrderService {
                 .deadlineDate(request.getDeadlineDate())
                 .service(service)
                 .user(authHelperService.getUser())
-                .status(OrderStatusEnum.IN_PROGRESS)
-                .orderDate(Instant.now())
                 .build();
         repository.save(order);
 
-        messagingService.createConversation(
+        if (!messagingService.isConversationExists(
                 service.getFreelancer(),
-                authHelperService.getUser(),
-                service,
-                order
+                authHelperService.getUser())
+        ) {
+            messagingService.createConversation(
+                    service.getFreelancer(),
+                    authHelperService.getUser(),
+                    service,
+                    order
+            );
+        } else {
+            messagingService.changeConversationType(
+                    service.getFreelancer(),
+                    authHelperService.getUser(),
+                    ConversationTypeEnum.ORDER
+            );
+        }
+
+        notificationSenderService.sendNewOrder(
+                order,
+                service.getFreelancer().getUser(),
+                authHelperService.getUser()
         );
     }
 }

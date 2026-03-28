@@ -1,6 +1,8 @@
 package com.srt.FreelanceMarketplace.service.domain.messaging;
 
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +37,13 @@ public class ConversationDomainService {
     public ConversationEntity getByIdWithOrderAndServiceAndFreelancer(UUID id) {
         return repository.findByIdWithOrderAndServiceAndFreelancer(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such conversation not found"));
+    }
+
+    /**
+     * @throws IllegalStateException the member ids should be correct
+     */
+    public ConversationEntity getByMemberIds(UUID member1Id, UUID member2Id) {
+        return repository.findByMemberIds(member1Id, member2Id)
+                .orElseThrow(() -> new IllegalStateException("conversation by this ids not found"));
     }
 }

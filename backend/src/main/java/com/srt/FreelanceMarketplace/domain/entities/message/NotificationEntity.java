@@ -25,29 +25,36 @@ public class NotificationEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "recipient_id")
     private UserEntity recipient;
 
     @Size(max = 55)
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(nullable = false)
     private NotificationTypeEnum type;
 
     @Size(max = 55)
+    @Column(nullable = false)
     private String entityType;
 
+    @Column(nullable = false)
     private UUID entityId;
 
-    // default is NOW()
-    private Instant sendAt;
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant sendAt = Instant.now();
 
     private Instant readAt;
 
-    private boolean hide;
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean hide = false;
 }

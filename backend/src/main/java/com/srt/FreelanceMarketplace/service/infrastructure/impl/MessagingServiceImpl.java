@@ -36,7 +36,11 @@ public class MessagingServiceImpl implements MessagingService {
     }
 
     @Override
-    public ConversationEntity createConversation(FreelancerEntity freelancer, UserEntity user, ServiceEntity service, OrderEntity order) {
+    public ConversationEntity createConversation(
+            FreelancerEntity freelancer,
+            UserEntity user,
+            ServiceEntity service,
+            OrderEntity order) {
         ConversationEntity conversation = new ConversationEntity();
         conversation.setService(service);
         conversation.setOrder(order);
@@ -47,5 +51,20 @@ public class MessagingServiceImpl implements MessagingService {
         conversationMemberDomainService.save(new ConversationMemberEntity(user, conversation));
 
         return conversation;
+    }
+
+    @Override
+    public boolean isConversationExists(FreelancerEntity freelancer, UserEntity user) {
+        return conversationMemberDomainService.existsByMembers(freelancer.getUser(), user);
+    }
+
+    @Override
+    public void changeConversationType(FreelancerEntity freelancer, UserEntity user, ConversationTypeEnum type) {
+        ConversationEntity conversation = conversationDomainService.getByMemberIds(
+                freelancer.getUser().getId(),
+                user.getId()
+        );
+        conversation.setType(type);
+        conversationDomainService.save(conversation);
     }
 }

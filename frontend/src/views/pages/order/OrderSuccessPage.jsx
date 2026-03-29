@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import FooterComponent from "../../components/FooterComponent";
-import HeaderComponent from "../../components/HeaderComponent";
 import "./css/order_success_page.css"
 import { useEffect } from "react";
 import { useState } from "react";

@@ -23,6 +23,15 @@
 
 .notification-component-icon_right {
   cursor: pointer;
+  font-size: 27px;
+}
+
+.notification-component-icon_right_green {
+  color: #22c55e;
+}
+
+.notification-component-icon_right_red {
+  color: #F54927;
 }
 
 .notification-component-message {

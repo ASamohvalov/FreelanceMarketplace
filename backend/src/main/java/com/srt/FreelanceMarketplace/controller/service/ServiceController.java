@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
@@ -58,8 +59,8 @@ public class ServiceController {
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
-    public void addService(@ModelAttribute @Valid ServiceRequest request) {
-        service.create(request);
+    public IdentifierDto addService(@ModelAttribute @Valid ServiceRequest request) {
+        return service.create(request);
     }
 
     @GetMapping("/payment/info/{serviceId}")

@@ -71,8 +71,6 @@ export default function CreateServicePage() {
       err = true;
     }
     if (err) return;
-    
-      console.log(selectedCategory);
 
     const response = await createServiceRequest({
       title: title,
@@ -88,6 +86,16 @@ export default function CreateServicePage() {
       navigate("/error");
       return;
     }
+
+    navigate("/create-service/success", {
+      state: {
+        serviceId: response.data.id,
+        serviceName: title,
+        category: selectedCategory, // todo
+        selectedSubcategory: selectedSubcategory, //todo
+        price: price,
+      }
+    });
   }
 
   return (

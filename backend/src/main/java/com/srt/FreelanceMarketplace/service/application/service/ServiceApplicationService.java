@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
@@ -13,7 +14,6 @@ import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ProposalDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
-import com.srt.FreelanceMarketplace.service.domain.service.ServiceImageDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.SubcategoryDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
@@ -63,7 +63,7 @@ public class ServiceApplicationService {
                 .toList();
     }
 
-    public void create(ServiceRequest request) {
+    public IdentifierDto create(ServiceRequest request) {
         validateFiles(request);
 
         FreelancerEntity freelancer = freelancerService.getByUserOrElseThrow(authHelperService.getUser());
@@ -80,7 +80,7 @@ public class ServiceApplicationService {
                 .build();
 
         processFiles(request, serviceEntity);
-        repository.save(serviceEntity);
+        return new IdentifierDto(repository.save(serviceEntity).getId());
     }
 
     public PaymentInfoResponse getPaymentInfo(UUID serviceId) {

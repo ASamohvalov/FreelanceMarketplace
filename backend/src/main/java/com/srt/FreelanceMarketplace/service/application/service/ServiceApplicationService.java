@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +48,7 @@ public class ServiceApplicationService {
                 .toList();
     }
 
-    public Optional<File> getImage(UUID serviceId) {
+    public Optional<Path> getImage(UUID serviceId) {
         ServiceEntity serviceEntity = domainService.getById(serviceId);
         ServiceImageEntity image = serviceEntity.getTitleImage();
         if (image == null) {

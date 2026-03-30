@@ -6,6 +6,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoRespo
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.service.application.service.ServiceApplicationService;
+import com.srt.FreelanceMarketplace.util.FileHelperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -15,9 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ServiceController {
     private final ServiceApplicationService service;
+    private final FileHelperUtil fileHelperUtil;
 
     @GetMapping("/get_all")
     public List<ServiceResponse> getAll() {
@@ -46,14 +45,13 @@ public class ServiceController {
 
     @GetMapping("/image/title/{serviceId}")
     public ResponseEntity<Resource> getImage(@PathVariable UUID serviceId) {
-        Optional<File> file = service.getImage(serviceId);
-        if (file.isEmpty()) {
+        Optional<Path> path = service.getImage(serviceId);
+        if (path.isEmpty()) {
             return ResponseEntity.ok().build();
         }
-        Resource resource = new FileSystemResource(file.get());
-        String contentType = determineContentType(file.get().toPath());
+        Resource resource = new FileSystemResource(path.get());
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
+                .contentType(fileHelperUtil.getContentType(path.get()))
                 .body(resource);
     }
 
@@ -66,14 +64,5 @@ public class ServiceController {
     @GetMapping("/payment/info/{serviceId}")
     public PaymentInfoResponse getPaymentInfo(@PathVariable UUID serviceId) {
         return service.getPaymentInfo(serviceId);
-    }
-
-    private String determineContentType(Path path) {
-        try {
-            String type = Files.probeContentType(path);
-            return type != null ? type : "application/octet-stream";
-        } catch (IOException e) {
-            return "application/octet-stream";
-        }
     }
 }

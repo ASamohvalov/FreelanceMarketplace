@@ -36,8 +36,8 @@ public class ImageStorageUtil implements FileStorageUtil {
     }
 
     @Override
-    public File downloadFile(String filename) {
-        return new File(storageLocation + filename);
+    public Path downloadFile(String filename) {
+        return Path.of(storageLocation + filename);
     }
 
     @Override

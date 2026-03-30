@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -88,7 +89,7 @@ public class UserService {
         repository.save(user);
     }
 
-    public Optional<File> getAvatar(UUID userId) {
+    public Optional<Path> getAvatar(UUID userId) {
         UserEntity user = repository.findById(userId)
                 .orElseThrow(() -> new GlobalBadRequestException("user not found"));
         if (user.getAvatarPath() == null) {

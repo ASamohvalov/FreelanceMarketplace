@@ -11,6 +11,7 @@ spring:
     hibernate:
       ddl-auto: validate
     how-sql: true
+    open-in-view: false
 
   flyway:
     enabled: true
@@ -35,4 +36,4 @@ token:
     exp-mins: 15
 
 storage:
-  location: /home/artem/tmp/uploads/images/
+  location: ~/tmp/uploads/images/

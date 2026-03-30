@@ -16,13 +16,14 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
     @Query("""
             select s from ServiceEntity s
             join fetch s.freelancer
+            where s.isHide = false
             """)
-    List<ServiceEntity> findAllWithFreelancer();
+    List<ServiceEntity> findAllNotHideWithFreelancer();
 
-    @EntityGraph(attributePaths = {"freelancer"})
+    @EntityGraph(attributePaths = {"freelancer.user", "freelancer.jobTitle"})
     List<ServiceEntity> findAllByFreelancer(FreelancerEntity freelancer);
 
-    @EntityGraph(attributePaths = {"freelancer"})
+    @EntityGraph(attributePaths = {"freelancer", "freelancer.user"})
     @Query("select s from ServiceEntity s where id = :id")
     Optional<ServiceEntity> findByIdWithFreelancer(UUID id);
 }

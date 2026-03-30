@@ -20,7 +20,7 @@ public class FreelancerEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     private UserEntity user;
 
     @ManyToOne
@@ -28,6 +28,6 @@ public class FreelancerEntity {
     // can be null!!!
     private JobTitleEntity jobTitle;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String aboutYourself;
 }

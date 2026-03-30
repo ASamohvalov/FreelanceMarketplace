@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -43,7 +42,7 @@ public class ServiceApplicationService {
     private final ProposalDomainService proposalService;
 
     public List<ServiceResponse> getAll() {
-        return repository.findAllWithFreelancer().stream()
+        return repository.findAllNotHideWithFreelancer().stream()
                 .map(domainService::mapToServiceResponse)
                 .toList();
     }
@@ -58,7 +57,7 @@ public class ServiceApplicationService {
     }
 
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {
-        FreelancerEntity freelancer = freelancerService.getById(freelancerId);
+        FreelancerEntity freelancer = freelancerService.getByIdWithJobTitle(freelancerId);
         return repository.findAllByFreelancer(freelancer).stream()
                 .map(mapper::serviceEntityToResponse)
                 .toList();
@@ -103,6 +102,16 @@ public class ServiceApplicationService {
             response.setProposalBeenSent(proposalService.existsByServiceAndAuthor(service, authHelperService.getUser()));
         }
         return response;
+    }
+
+    public void hideService(UUID serviceId, boolean hide) {
+        ServiceEntity service = domainService.getByIdWithAuthor(serviceId);
+        if (!authHelperService.getUser().getId()
+                .equals(service.getFreelancer().getUser().getId())) {
+            throw new GlobalBadRequestException("the user does not own this service");
+        }
+        service.setHide(hide);
+        repository.save(service);
     }
 
     // for create service

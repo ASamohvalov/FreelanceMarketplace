@@ -21,23 +21,28 @@ public class ServiceEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "freelancer_id")
     private FreelancerEntity freelancer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "subcategory_id")
     private ServiceSubcategoryEntity subcategory;
 
-    @Size(max = 50)
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     @Size(min = 100)
     private String description;
 
+    @Column(nullable = false)
     private int price;
+
+    @Column(nullable = false)
     private int deadlineDays;
+
+    @Column(nullable = false)
     private int revisionsCount;
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -46,6 +51,10 @@ public class ServiceEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "title_image_id")
     private ServiceImageEntity titleImage;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean isHide = false;
 
     // this is crutch
     // null ptr ex - service.getImages().add(some);

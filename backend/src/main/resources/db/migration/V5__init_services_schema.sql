@@ -1,23 +1,24 @@
 CREATE TABLE service_categories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(50) UNIQUE
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE service_subcategories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(50) UNIQUE,
-    category_id UUID REFERENCES service_categories(id)
+    name VARCHAR(50) UNIQUE NOT NULL,
+    category_id UUID REFERENCES service_categories(id) NOT NULL
 );
 
 CREATE TABLE services (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    freelancer_id UUID REFERENCES freelancers(id),
-    subcategory_id UUID REFERENCES service_subcategories(id),
-    title VARCHAR(50),
-    description TEXT,
-    price INT,
-    deadline_days INT,
-    revisions_count INT,
+    freelancer_id UUID NOT NULL REFERENCES freelancers(id),
+    subcategory_id UUID NOT NULL REFERENCES service_subcategories(id),
+    title VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    price INT NOT NULL,
+    deadline_days INT NOT NULL,
+    revisions_count INT NOT NULL,
+    is_hide BOOLEAN DEFAULT FALSE NOT NULL,
     title_image_id UUID
 );
 

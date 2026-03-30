@@ -1,4 +1,4 @@
-import { sendAuthGet, sendAuthPost, sendAuthPut } from "../requestSender";
+import { sendAuthGet, sendAuthPatch, sendAuthPost } from "../requestSender";
 
 export async function getAllConversationsRequest() {
   return await sendAuthGet("messaging/conversation/personal/get_all");
@@ -22,7 +22,7 @@ export async function sendMessageRequest(conversationId, message) {
 }
 
 export async function sendReadMessageRequest(messageIds) {
-  return await sendAuthPut("messaging/message/read", messageIds);
+  return await sendAuthPatch("messaging/message/read", messageIds);
 }
 
 export async function getConversationContextInfo(conversationId) {

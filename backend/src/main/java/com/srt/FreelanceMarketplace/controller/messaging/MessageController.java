@@ -44,7 +44,7 @@ public class MessageController {
         return messageService.getServiceByConversationId(conversationId);
     }
 
-    @PutMapping("/message/read")
+    @PatchMapping("/message/read")
     public void readMessages(@RequestBody List<UUID> messages) {
         messageService.readMessages(messages);
     }

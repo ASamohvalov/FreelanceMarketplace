@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface ServiceCategoryRepository extends JpaRepository<ServiceCategoryEntity, UUID> {
     boolean existsByName(String name);
 
-    @EntityGraph(attributePaths = {"subcategory"})
+    @EntityGraph(attributePaths = {"subcategories"})
     @Query("select c from ServiceCategoryEntity c")
     List<ServiceCategoryEntity> findAllWithSubcategory();
 }

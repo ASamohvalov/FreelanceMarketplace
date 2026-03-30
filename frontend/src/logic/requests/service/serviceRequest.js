@@ -12,7 +12,7 @@ export async function createServiceRequest(args) {
  * @returns {map} { status: int, data: [{ ... }, ...] }
  */
 export async function getAllServicesRequest() {
-  return await sendGet("service/get_all");
+  return await sendGet("service/get");
 }
 
 /**
@@ -29,9 +29,9 @@ export async function getImageByServiceIdRequest(id) {
  */
 export async function getServiceByIdRequest(id) {
   if (isAuth()) {
-    return await sendAuthGet(`service/get_by_id/${id}`);
+    return await sendAuthGet(`service/get/${id}`);
   }
-  return await sendGet(`service/get_by_id/${id}`);
+  return await sendGet(`service/get/${id}`);
 }
 
 /**

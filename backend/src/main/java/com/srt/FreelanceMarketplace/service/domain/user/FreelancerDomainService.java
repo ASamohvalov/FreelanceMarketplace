@@ -27,6 +27,11 @@ public class FreelancerDomainService {
                 .orElseThrow(() -> new GlobalBadRequestException("such freelancer not found"));
     }
 
+    public FreelancerEntity getByIdWithJobTitle(UUID id) {
+        return repository.findByIdWithJobTitle(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such freelancer not found"));
+    }
+
     public FreelancerEntity getByUserOrElseThrow(UserEntity user) {
         return repository.findByUser(user)
                 .orElseThrow(() -> new IllegalStateException("user has FREELANCER_ROLE but hasn't freelancer entity"));

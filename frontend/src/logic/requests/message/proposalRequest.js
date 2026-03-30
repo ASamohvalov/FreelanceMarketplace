@@ -1,4 +1,4 @@
-import { sendAuthPost, sendAuthPut } from "../requestSender";
+import { sendAuthPatch, sendAuthPost } from "../requestSender";
 
 /**
  * @param {string} serviceId
@@ -13,5 +13,5 @@ export async function sendProposalRequest(serviceId, description) {
 }
 
 export async function sendProposalReplyRequest(proposalId) {
-  return await sendAuthPut(`proposal/reply/${proposalId}`);
+  return await sendAuthPatch(`proposal/reply/${proposalId}`);
 }

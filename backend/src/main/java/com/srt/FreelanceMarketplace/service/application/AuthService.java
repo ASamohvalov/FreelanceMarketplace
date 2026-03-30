@@ -34,7 +34,7 @@ public class AuthService {
     private final RoleDomainService roleDomainService;
 
     public JwtResponse signIn(SignInRequest request) {
-        UserEntity user = userDomainService.findByEmail(request.getEmail())
+        UserEntity user = userDomainService.findByEmailWithRoles(request.getEmail())
                 .orElseThrow(() -> new GlobalBadRequestException("incorrect email or password"));
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new GlobalBadRequestException("incorrect email or password");

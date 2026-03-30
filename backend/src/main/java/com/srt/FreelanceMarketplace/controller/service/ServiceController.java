@@ -28,7 +28,7 @@ public class ServiceController {
     private final ServiceApplicationService service;
     private final FileHelperUtil fileHelperUtil;
 
-    @GetMapping("/get_all")
+    @GetMapping("/get")
     public List<ServiceResponse> getAll() {
         return service.getAll();
     }
@@ -38,7 +38,7 @@ public class ServiceController {
         return service.getAllByFreelancerId(freelancerId);
     }
 
-    @GetMapping("/get_by_id/{serviceId}")
+    @GetMapping("/get/{serviceId}")
     public ServiceInfoResponse getById(@PathVariable UUID serviceId) {
         return service.getResponseById(serviceId);
     }
@@ -64,5 +64,17 @@ public class ServiceController {
     @GetMapping("/payment/info/{serviceId}")
     public PaymentInfoResponse getPaymentInfo(@PathVariable UUID serviceId) {
         return service.getPaymentInfo(serviceId);
+    }
+
+    @PatchMapping("/hide/{serviceId}")
+    @PreAuthorize("hasRole('ROLE_FREELANCER')")
+    public void hideService(@PathVariable UUID serviceId) {
+        service.hideService(serviceId, true);
+    }
+
+    @PatchMapping("/show/{serviceId}")
+    @PreAuthorize("hasRole('ROLE_FREELANCER')")
+    public void showService(@PathVariable UUID serviceId) {
+        service.hideService(serviceId, false);
     }
 }

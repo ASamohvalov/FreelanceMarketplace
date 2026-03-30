@@ -30,7 +30,7 @@ public class ProposalController {
     }
 
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
-    @PutMapping("/reply/{proposalId}")
+    @PatchMapping("/reply/{proposalId}")
     public void sendReply(@PathVariable UUID proposalId) {
         proposalService.sendReply(proposalId);
     }

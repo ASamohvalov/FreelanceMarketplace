@@ -64,7 +64,7 @@ public class CategoryService {
     }
 
     public List<CategoryWithSubcategoryResponse> getAllWithSubcategory() {
-        return repository.findAll().stream()
+        return repository.findAllWithSubcategory().stream()
                 .map(c -> new CategoryWithSubcategoryResponse(
                         c.getId(),
                         c.getName(),

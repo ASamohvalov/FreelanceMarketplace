@@ -36,4 +36,4 @@ token:
     exp-mins: 15
 
 storage:
-  location: ~/tmp/uploads/images/
+  location: /home/artem/tmp/uploads/images/

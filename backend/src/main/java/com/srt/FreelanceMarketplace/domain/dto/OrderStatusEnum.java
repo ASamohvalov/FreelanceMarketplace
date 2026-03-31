@@ -1,5 +1,5 @@
 package com.srt.FreelanceMarketplace.domain.dto;
 
 public enum OrderStatusEnum {
-    IN_PROGRESS, COMPLETED
+    IN_PROGRESS, SUBMITTED, REVISION, COMPLETED
 }

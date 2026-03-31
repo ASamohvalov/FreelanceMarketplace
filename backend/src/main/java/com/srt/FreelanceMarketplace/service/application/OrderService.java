@@ -1,12 +1,19 @@
 package com.srt.FreelanceMarketplace.service.application;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.order.SendOrderReportRequest;
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
+import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingService;
 import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
@@ -20,11 +27,14 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository repository;
+    private final OrderDomainService domainService;
 
     private final ServiceDomainService serviceDomainService;
     private final AuthHelperService authHelperService;
     private final MessagingService messagingService;
     private final NotificationSenderService notificationSenderService;
+    private final FreelancerDomainService freelancerDomainService;
+    private final OrderReportDomainService orderReportDomainService;
 
     public void order(MakeOrderRequest request) {
         ServiceEntity service = serviceDomainService.getByIdWithAuthor(request.getServiceId());
@@ -70,5 +80,21 @@ public class OrderService {
                 service.getFreelancer().getUser(),
                 authHelperService.getUser()
         );
+    }
+
+    public void sendReport(SendOrderReportRequest request) {
+        FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
+        OrderEntity order = domainService.getById(request.getOrderId());
+
+        OrderReportEntity report = OrderReportEntity.builder()
+                .report(request.getReport())
+                .freelancer(freelancer)
+                .order(order)
+                .build();
+
+        order.setStatus(OrderStatusEnum.SUBMITTED);
+
+        orderReportDomainService.save(report);
+        repository.save(order);
     }
 }

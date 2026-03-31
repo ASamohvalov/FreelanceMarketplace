@@ -9,18 +9,39 @@ import { getUserData } from "../../../logic/jwt";
 import { useRef } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import getMessages from "../../../logic/message";
+import { useCallback } from "react";
 
 export default function MessagesComponent() {
     const [message, setMessage] = useState("");
-    const { messages = [], setMessages = () => {}, conversation = null, errorHandle = () => {}, addNewMessageHandle = () => {} } = useOutletContext();
+    const [messages, setMessages] = useState([]);
+    
+    const { conversation = null } = useOutletContext();
     const navigate = useNavigate();
     const conversationId = useParams();
     console.log(conversationId);
+    const errorHandle = useCallback(() => {
+        navigate("/error");
+    }, [navigate]);
 
     const messageChatRef = useRef();
-    getMessages(setMessages, conversationId.conversationId, () => {
-                                            navigate("/error");
-                                        })
+    useEffect(() => {
+        getMessages(setMessages, conversationId.conversationId, errorHandle);
+        const interval = setInterval(() => {
+            getMessages(setMessages, conversationId.conversationId, errorHandle);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+    
+    const addNewMessageHandle = (message, conversationId) => {
+        setMessages((prev) => [...prev, {
+            id: null,
+            conversationId: conversationId,
+            text: message,
+            authorId: getUserData().id,
+            sendAt: new Date().getTime(),
+            read: false,
+        }]);
+    };
 
   useEffect(() => {
     (async () => {
@@ -37,7 +58,7 @@ export default function MessagesComponent() {
     })();
 
     messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
-  }, [messages, errorHandle]);
+  }, [messages]);
 
   return (
     <div className="col-6 d-flex flex-column border-start border-end">
@@ -75,7 +96,7 @@ export default function MessagesComponent() {
                 errorHandle();
                 return;
               }
-              addNewMessageHandle(message, conversation.id);
+              addNewMessageHandle(message, conversationId.conversationId);
               setMessage("");
             }
           }}

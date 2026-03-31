@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import HomePage from "./views/pages/HomePage.jsx";
 import SignInPage from "./views/pages/user/auth/SignInPage.jsx";
 import SignUpPage from "./views/pages/user/auth/SignUpPage.jsx";
@@ -14,6 +14,7 @@ import PaymentPage from "./views/pages/order/PaymentPage.jsx";
 import OrderSuccessPage from "./views/pages/order/OrderSuccessPage.jsx";
 import Layout from "./views/pages/Layout.jsx";
 import CreateServiceSuccessPage from "./views/pages/services/CreateServiceSuccessPage.jsx";
+import MessagesComponent from "./views/components/messages/MessagesComponent.jsx";
 
 // base routing
 export default function App() {
@@ -33,7 +34,9 @@ export default function App() {
         <Route path="create-service/success" element={<CreateServiceSuccessPage />} />
         <Route path="service/:id" element={<ServicePage />} />
 
-        <Route path="messages" element={<MessagesPage />} />
+              <Route path="messages" element={<MessagesPage />} >
+                  <Route path=":conversationId" element={<MessagesComponent/>} />
+              </Route>
         <Route path="notifications" element={<NotificationsPage />} />
 
         <Route path="pay/:serviceId" element={<PaymentPage />} />

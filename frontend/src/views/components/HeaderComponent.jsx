@@ -6,10 +6,15 @@ import { Badge, BadgePlus, Bell, BriefcaseBusiness, CirclePlus, Menu } from 'luc
 import { useContext } from "react";
 import { userContext } from "../../logic/store/userContext";
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function HeaderComponent({ state }) {
     const [isHidden, setIsHidden] = state;
     const [user, setUser] = useContext(userContext);
+    
+    useEffect(() => {
+        setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
+    }, [setUser]);
     
     async function onLogoutClick(event) {
         event.preventDefault();
@@ -69,7 +74,7 @@ export default function HeaderComponent({ state }) {
                         <li className="nav-item ms-2 me-3 flex justify-content-center align-items-center" style={{color: "white"}}>
                                     <Menu onClick={()=>setIsHidden(!isHidden)} size={36}/>
                                 </li>
-                        {user?.hasRole && (
+                        {user && user?.hasRole && (
                             <>
                                 <li className="nav-item d-flex gap-2 text-white align-items-center">
                                     <Bell size={24} />
@@ -84,7 +89,7 @@ export default function HeaderComponent({ state }) {
                             </>
                         )}
                         {(() => {
-                            if (user?.hasRole) {
+                            if (getUserData()?.roles) {
                                 return (
                                     <li className="nav-item d-flex gap-2 text-white align-items-center">
                                         <BadgePlus size={24} />

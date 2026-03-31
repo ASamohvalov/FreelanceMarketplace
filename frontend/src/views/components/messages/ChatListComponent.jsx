@@ -1,11 +1,13 @@
+import { Link } from "react-router-dom";
 import "./css/chat_list_component.css";
 
 export default function ChatListComponent({ conversations, onSelect }) {
   return (
     <div className="col-3 chat-sidebar">
       <div className="chat-header">Сообщения</div>
-      {conversations.map((c) => (
-        <div className="chat-sidebar-item" key={c.id}
+          {conversations.map((c) => (
+              <Link to={`/messages/${c.id}`} key={c.id}>
+        <div className="chat-sidebar-item"
           onClick={() => onSelect(c)}
         >
           <div className="fw-semibold">
@@ -15,6 +17,7 @@ export default function ChatListComponent({ conversations, onSelect }) {
             {conversations.type === "ORDER" ? "Название услуги..." : "Обсуждение усулги"}
           </small>
         </div>
+          </Link>
       ))}
     </div>
   );

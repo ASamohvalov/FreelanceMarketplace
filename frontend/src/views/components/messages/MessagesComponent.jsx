@@ -7,16 +7,20 @@ import {
 import MessageCardComponent from "./MessageCardComponent";
 import { getUserData } from "../../../logic/jwt";
 import { useRef } from "react";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import getMessages from "../../../logic/message";
 
-export default function MessagesComponent({
-  messages,
-  conversation,
-  errorHandle,
-  addNewMessageHandle,
-}) {
-  const [message, setMessage] = useState("");
+export default function MessagesComponent() {
+    const [message, setMessage] = useState("");
+    const { messages = [], setMessages = () => {}, conversation = null, errorHandle = () => {}, addNewMessageHandle = () => {} } = useOutletContext();
+    const navigate = useNavigate();
+    const conversationId = useParams();
+    console.log(conversationId);
 
-  const messageChatRef = useRef();
+    const messageChatRef = useRef();
+    getMessages(setMessages, conversationId.conversationId, () => {
+                                            navigate("/error");
+                                        })
 
   useEffect(() => {
     (async () => {

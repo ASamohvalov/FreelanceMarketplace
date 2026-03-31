@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import {
   getAllPersonalServices,
@@ -13,9 +13,12 @@ import ReactMarkdown from "react-markdown";
 import "./css/service_page.css";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import OrderModalWindow from "../../components/modal_windows/OrderModalWindow";
+import { userContext } from "../../../logic/store/userContext";
+import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
 
 export default function ServicePage() {
   const { id } = useParams();
+  const [user, setUser] = useContext(userContext);
 
   const navigate = useNavigate();
 
@@ -135,6 +138,7 @@ export default function ServicePage() {
               <button
                 className="btn btn-primary w-100 mb-3"
                 onClick={() => setIsOrderVisible(true)}
+                disabled={!getUserData()?.roles}
               >
                 Оформить заказ
               </button>
@@ -146,7 +150,8 @@ export default function ServicePage() {
               ) : (
                 <button
                   className="btn btn-primary w-100 mb-3"
-                  onClick={() => setIsProposalVisible(true)}
+                  disabled={!getUserData()?.roles}
+                  onClick={() => user?.hasRole && setIsProposalVisible(true)}
                 >
                   Оставить отклик на обсуждение
                 </button>

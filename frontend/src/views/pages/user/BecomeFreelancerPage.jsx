@@ -1,15 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import HeaderComponent from "../../components/HeaderComponent";
 import { getAllJobTitlesRequest } from "../../../logic/requests/jobTitle";
 import { becomeFreelancerRequest } from "../../../logic/requests/user/freelancerRequest";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../../components/LoadingComponent";
 import { hasRole, isAuth } from "../../../logic/jwt";
+import { userContext } from "../../../logic/store/userContext";
 
 export function BecomeFreelancerPage() {
   const navigate = useNavigate();
 
   const phoneNumber = useRef(null);
+  const [user, setUser] = useContext(userContext);
+useEffect(() => {
+        setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
+    }, [setUser]);
 
   const [error, setError] = useState(null);
   const [jobTitles, setJobTitles] = useState([]);
@@ -71,7 +76,6 @@ export function BecomeFreelancerPage() {
 
   return (
     <>
-      <HeaderComponent />
 
       <div className="mx-auto" style={{ width: "500px", marginTop: "200px" }}>
         <div
@@ -80,9 +84,9 @@ export function BecomeFreelancerPage() {
           { error }
         </div>
         <div className="shadow w-100 bg-dark rounded p-4 text-light">
-          <div className="text-center mb-3 h4">Become Freelancer</div>
+          <div className="text-center mb-3 h4">Стать фрилансером</div>
           <form onSubmit={ handleSubmit } className="mb-4">
-            <label htmlFor="phoneNumber-input">Phone number</label>
+            <label htmlFor="phoneNumber-input">Номер телефона</label>
             <input
               className="form-control mb-3"
               id="phoneNumber-input"
@@ -103,7 +107,7 @@ export function BecomeFreelancerPage() {
                   })
                 }
               </select>
-              <label htmlFor="jobTitle-select">Your position</label>
+              <label htmlFor="jobTitle-select">Ваша должность</label>
             </div>
             <div className="mb-3">
               <a
@@ -113,7 +117,7 @@ export function BecomeFreelancerPage() {
             </div>
 
             <button className="btn btn-primary" type="submit">
-              Submit
+              Стать фрилансером
             </button>
           </form>
         </div>

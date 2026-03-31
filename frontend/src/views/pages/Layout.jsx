@@ -14,7 +14,7 @@ export default function Layout() {
       <userContext.Provider value={[user, setUser]}>
         <HeaderComponent state={[isHidden, setIsHidden]} />
         <Aside state={[isHidden, setIsHidden]} />
-        <Outlet />
+        <Outlet/>
         <FooterComponent />
       </userContext.Provider>
     </>

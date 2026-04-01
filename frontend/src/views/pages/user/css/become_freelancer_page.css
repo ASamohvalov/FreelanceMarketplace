@@ -1,0 +1,18 @@
+
+.form {
+  color: #666;
+}
+
+.form_wrapper {
+  border-radius: 16px;
+}
+
+.form_title {
+  color: #3b1d6d;
+  font-size: 48px;
+  font-weight: 800;
+}
+
+.form_submit {
+  background-color: #3b1d6d;
+}

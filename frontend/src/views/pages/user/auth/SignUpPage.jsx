@@ -5,7 +5,6 @@ import {
   signInRequest,
   signUpRequest,
 } from "../../../../logic/requests/user/authRequest";
-import HeaderComponent from "../../../components/HeaderComponent";
 import { login } from "../../../../logic/jwt";
 import { FormWrapper } from "../../../components/elements/FormWrapper";
 import "./css/sign_page.css";
@@ -112,7 +111,7 @@ export default function SignUpPage() {
               onChange={() => setIsFreelancer(false)}
             />
             <label className="btn text-dark w-100" htmlFor="buyer-input">
-              Buyer
+              Покупатель
             </label>
 
             <input

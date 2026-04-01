@@ -1,32 +1,28 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import HeaderComponent from "../../components/HeaderComponent";
+import "./css/become_freelancer_page.css"
 import { getAllJobTitlesRequest } from "../../../logic/requests/jobTitle";
 import { becomeFreelancerRequest } from "../../../logic/requests/user/freelancerRequest";
 import { useNavigate } from "react-router-dom";
 import LoadingComponent from "../../components/LoadingComponent";
 import { hasRole, isAuth } from "../../../logic/jwt";
-import { userContext } from "../../../logic/store/userContext";
 
 export function BecomeFreelancerPage() {
   const navigate = useNavigate();
 
   const phoneNumber = useRef(null);
-  const [user, setUser] = useContext(userContext);
-useEffect(() => {
-        setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
-    }, [setUser]);
 
   const [error, setError] = useState(null);
-  const [jobTitles, setJobTitles] = useState([]);
+    const [jobTitles, setJobTitles] = useState([]);
+    const [aboutMe, setAboutMe] = useState("");
   const [selectedJobTitleId, setSelectedJobTitleId] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuth() || hasRole("ROLE_FREELANCER")) {
-      navigate(-1);
-      return;
+      //navigate(-1);
+      //return;
     }
-    document.title = "Become Freelancer";
+    document.title = "Стать фрилансером";
 
     (async () => {
       setJobTitles(
@@ -54,8 +50,9 @@ useEffect(() => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!phoneNumber.current.value) {
+    if (!phoneNumber.current.value || !aboutMe) {
       setError("All fields are required");
+      return;
     }
 
     if (jobTitles == []) {
@@ -66,7 +63,7 @@ useEffect(() => {
       setSelectedJobTitleId(jobTitles[0].id)
     }
 
-    const response = await becomeFreelancerRequest(phoneNumber.current.value, selectedJobTitleId);
+    const response = await becomeFreelancerRequest(selectedJobTitleId, aboutMe);
     if (response.status == 200) {
       navigate("/");
       return;
@@ -77,16 +74,16 @@ useEffect(() => {
   return (
     <>
 
-      <div className="mx-auto" style={{ width: "500px", marginTop: "200px" }}>
+      <div className="mx-auto" style={{ width: "500px", marginTop: "10vh", marginBottom: "20vh"}}>
         <div
-          className={`mb-2 bg-danger p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
+          className={`mb-2 bg-danger text-white text-center p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
         >
           { error }
         </div>
-        <div className="shadow w-100 bg-dark rounded p-4 text-light">
-          <div className="text-center mb-3 h4">Стать фрилансером</div>
+        <div className="shadow w-100 form rounded-2 p-4 text-light">
+          <div className="text-center form_title mb-3 h4">Стать фрилансером</div>
           <form onSubmit={ handleSubmit } className="mb-4">
-            <label htmlFor="phoneNumber-input">Номер телефона</label>
+            <label htmlFor="phoneNumber-input" className="text-secondary">Номер телефона</label>
             <input
               className="form-control mb-3"
               id="phoneNumber-input"
@@ -110,15 +107,20 @@ useEffect(() => {
               <label htmlFor="jobTitle-select">Ваша должность</label>
             </div>
             <div className="mb-3">
-              <a
-                className="btn btn-light"
-                onClick={ () => null }
-              >+</a>
+              <label htmlFor="about-u" className="text-secondary"> О себе</label>
+              <textarea
+                id="about-u"
+                rows={3}
+                value={aboutMe}
+                onChange={(e) => setAboutMe(e.target.value)}
+                className="form-control"
+              />
             </div>
-
-            <button className="btn btn-primary" type="submit">
-              Стать фрилансером
-            </button>
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-main p-2 form_submit mx-auto" type="submit">
+                Стать фрилансером
+              </button>
+            </div>
           </form>
         </div>
       </div>

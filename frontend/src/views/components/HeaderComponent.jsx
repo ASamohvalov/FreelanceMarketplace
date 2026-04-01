@@ -1,16 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getUserData, hasRole, isAuth, logout } from "../../logic/jwt";
 import { logoutRequest } from "../../logic/requests/user/userRequest";
 import "./css/header_component.css";
-import { Badge, BadgePlus, Bell, BriefcaseBusiness, CirclePlus, Menu } from 'lucide-react';
+import { BadgePlus, Bell, BriefcaseBusiness, CirclePlus, Menu } from 'lucide-react';
 import { useContext } from "react";
 import { userContext } from "../../logic/store/userContext";
-import { useState } from "react";
 import { useEffect } from "react";
 
 export default function HeaderComponent({ state }) {
     const [isHidden, setIsHidden] = state;
     const [user, setUser] = useContext(userContext);
+    const navigate = useNavigate();
+    
+    console.log(getUserData());
     
     useEffect(() => {
         setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
@@ -20,7 +22,7 @@ export default function HeaderComponent({ state }) {
         event.preventDefault();
         await logoutRequest();
         logout();
-        window.location.reload();
+        navigate("/");
     }
 
     function authLinks() {

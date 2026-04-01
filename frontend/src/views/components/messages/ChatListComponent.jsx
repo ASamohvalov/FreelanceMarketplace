@@ -6,7 +6,7 @@ export default function ChatListComponent({ conversations, onSelect }) {
     <div className="col-3 chat-sidebar">
       <div className="chat-header">Сообщения</div>
           {conversations.map((c) => (
-              <Link to={`/messages/${c.id}`} key={c.id}>
+              <Link style={{textDecoration: "none"}} to={`/messages/${c.id}`} key={c.id}>
         <div className="chat-sidebar-item"
           onClick={() => onSelect(c)}
         >

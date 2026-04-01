@@ -7,15 +7,13 @@ import {
 import MessageCardComponent from "./MessageCardComponent";
 import { getUserData } from "../../../logic/jwt";
 import { useRef } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import getMessages from "../../../logic/message";
 import { useCallback } from "react";
 
-export default function MessagesComponent() {
+export default function MessagesComponent({conversation = null}) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
-    
-    const { conversation = null } = useOutletContext();
     const navigate = useNavigate();
     const conversationId = useParams();
     console.log(conversationId);
@@ -30,7 +28,7 @@ export default function MessagesComponent() {
             getMessages(setMessages, conversationId.conversationId, errorHandle);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [errorHandle, conversationId]);
     
     const addNewMessageHandle = (message, conversationId) => {
         setMessages((prev) => [...prev, {
@@ -82,14 +80,14 @@ export default function MessagesComponent() {
           className="form-control"
           placeholder="Введите сообщение..."
           value={message}
-          onChange={(e) => conversation !== null && setMessage(e.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
         />
         <button
           className="btn btn-primary"
           onClick={async () => {
             if (message.length > 0) {
               const response = await sendMessageRequest(
-                conversation.id,
+                conversationId.conversationId,
                 message,
               );
               if (response.status !== 200) {

@@ -15,6 +15,8 @@ import OrderSuccessPage from "./views/pages/order/OrderSuccessPage.jsx";
 import Layout from "./views/pages/Layout.jsx";
 import CreateServiceSuccessPage from "./views/pages/services/CreateServiceSuccessPage.jsx";
 import MessagesComponent from "./views/components/messages/MessagesComponent.jsx";
+import ConversationContextInfo from "./views/components/order/ConversationContextInfo.jsx";
+import { ChatOutlet } from "./views/pages/message/ChatOutlet.jsx";
 
 // base routing
 export default function App() {
@@ -35,7 +37,7 @@ export default function App() {
         <Route path="service/:id" element={<ServicePage />} />
 
               <Route path="messages" element={<MessagesPage />} >
-                  <Route path=":conversationId" element={<MessagesComponent/>} />
+                  <Route path=":conversationId" element={<ChatOutlet/>} />
               </Route>
         <Route path="notifications" element={<NotificationsPage />} />
 

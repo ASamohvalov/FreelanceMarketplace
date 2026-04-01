@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { getUserData } from "../../../logic/jwt";
-import getMessages from "../../../logic/message";
 import {
     getAllConversationsRequest,
     getConversationContextInfo,
 } from "../../../logic/requests/message/messageRequest";
-import HeaderComponent from "../../components/HeaderComponent";
 import ChatListComponent from "../../components/messages/ChatListComponent";
-import MessagesComponent from "../../components/messages/MessagesComponent";
 import "./css/messages_page.css";
-import ConversationContextInfo from "../../components/order/ConversationContextInfo";
 
 export default function MessagesPage() {
     const navigate = useNavigate();
@@ -30,10 +25,6 @@ export default function MessagesPage() {
             setConversations(response.data);
         })();
     }, [navigate]);
-    
-    
-
-    
 
     return (
         <>
@@ -55,11 +46,8 @@ export default function MessagesPage() {
                             }}
                         />
                         <Outlet
-                            context={{ conversation: selectedConversation }}
+                            context={{ conversation: selectedConversation, contextInfo: contextInfo }}
                         />
-                        {contextInfo !== null && (
-                            <ConversationContextInfo info={contextInfo} />
-                        )}
                     </div>
                 </div>
             </main>

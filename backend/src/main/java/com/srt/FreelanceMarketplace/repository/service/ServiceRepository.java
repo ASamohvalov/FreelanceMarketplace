@@ -21,7 +21,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
             """)
     List<ServiceEntity> findAllNotHideWithFreelancer();
 
-    @EntityGraph(attributePaths = {"freelancer.user", "freelancer.jobTitle"})
+    @EntityGraph(attributePaths = {"freelancer.user", "freelancer.jobTitle", "titleImage"})
     List<ServiceEntity> findAllByFreelancer(FreelancerEntity freelancer);
 
     @EntityGraph(attributePaths = {"freelancer", "freelancer.user"})

@@ -42,29 +42,32 @@ export default function OrdersPage({ func, freelancer }) {
           return;
         }
         setOrders(resultFreelancer.data);
-    }
-    if (result.status !== 200) {
+      }
+      if (result.status !== 200) {
         navigate("/error");
         return;
-    }
-    setServices(result.data);
-    
-    const maxPrice = Math.max(
+      }
+      setServices(result.data);
+
+      const maxPrice = Math.max(
         ...result.data.map((service) => service.service.price),
-    );
-    const maxPriceFreelancer = Math.max(
-        ...resultFreelancer.data.map((service) => service.service.price),
-    );
-    setFilters((prev) => ({
+      );
+      let maxPriceFreelancer = 0;
+      if (isFreelancer) {
+        maxPriceFreelancer = Math.max(
+          ...resultFreelancer.data.map((service) => service.service.price),
+        );
+      }
+      setFilters((prev) => ({
         ...prev,
         price: maxPrice,
         maxPrice: maxPrice,
-        maxPriceFreelancer: maxPriceFreelancer
-    }));
-    setLoading(false);
-})();
-}, [navigate, func, isFreelancer]);
-console.log(orders);
+        maxPriceFreelancer: maxPriceFreelancer,
+      }));
+      setLoading(false);
+    })();
+  }, [navigate, func, isFreelancer]);
+  console.log(orders);
 
   return (
     <>
@@ -93,7 +96,10 @@ console.log(orders);
                   <button
                     onClick={() => {
                       setVariant("работы");
-                      setFilters((prev)=>({...prev, price: filters.maxPriceFreelancer}))
+                      setFilters((prev) => ({
+                        ...prev,
+                        price: filters.maxPriceFreelancer,
+                      }));
                     }}
                   >
                     Мои работы

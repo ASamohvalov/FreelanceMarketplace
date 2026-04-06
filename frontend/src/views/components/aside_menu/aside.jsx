@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
 import "./styles/aside.css"
-import { Bell, HandPlatter, House, MessageCircle } from "lucide-react";
+import { HandPlatter, House, MessageCircle } from "lucide-react";
 import { AsideComponent } from "./ui/aside_component";
 import { getUserData, isAuth } from "../../../logic/jwt";
-import { userContext } from "../../../logic/store/userContext";
 
 const links = [
     {
@@ -15,6 +13,11 @@ const links = [
         icon: <HandPlatter size={32}></HandPlatter>,
         title: "Услуги",
         to: "/services",
+    },
+    {
+        icon: <HandPlatter size={32}></HandPlatter>,
+        title: "Заказы",
+        to: "/MyOrders",
     },
     {
         icon: <HandPlatter size={32}></HandPlatter>,

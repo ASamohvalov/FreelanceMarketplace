@@ -17,7 +17,9 @@ import CreateServiceSuccessPage from "./views/pages/services/CreateServiceSucces
 import MessagesComponent from "./views/components/messages/MessagesComponent.jsx";
 import ConversationContextInfo from "./views/components/order/ConversationContextInfo.jsx";
 import { ChatOutlet } from "./views/pages/message/ChatOutlet.jsx";
-import OwnServicesPage from "./views/pages/services/OwnServices.jsx";
+import OwnServicesPage from "./views/pages/order/OrdersPage.jsx";
+import { getAllServicesRequest, getOwnServicesRequest } from "./logic/requests/service/serviceRequest.js";
+import OrdersPage from "./views/pages/order/OrdersPage.jsx";
 
 // base routing
 export default function App() {
@@ -32,8 +34,9 @@ export default function App() {
         <Route path="become-freelancer" element={<BecomeFreelancerPage />} />
         <Route path="personal-account" element={<PersonalAccountPage />} />
 
-        <Route path="services" element={<ServicesPage />} />
-        <Route path="OwnServices" element={<OwnServicesPage />} />
+        <Route path="services" element={<ServicesPage func={getAllServicesRequest}/>} />
+        <Route path="OwnServices" element={<ServicesPage func={getOwnServicesRequest}/>} />
+        <Route path="MyOrders" element={<OrdersPage/>} />
         <Route path="create-service" element={<CreateServicePage />} />
         <Route path="create-service/success" element={<CreateServiceSuccessPage />} />
         <Route path="service/:id" element={<ServicePage />} />

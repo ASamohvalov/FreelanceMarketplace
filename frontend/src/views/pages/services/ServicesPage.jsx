@@ -9,7 +9,7 @@ import FooterComponent from "../../components/FooterComponent";
 import "./css/services_page.css";
 import { Filters } from "../../components/services/Filters";
 
-export default function ServicesPage() {
+export default function ServicesPage({func}) {
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
     // const [images, setImages] = useState([]);
@@ -26,7 +26,7 @@ export default function ServicesPage() {
         document.title = "Услуги";
 
         (async () => {
-            const result = await getAllServicesRequest();
+            const result = await func();
             if (result.status !== 200) {
                 navigate("/error");
                 return;
@@ -40,7 +40,7 @@ export default function ServicesPage() {
             }));
             setLoading(false);
         })();
-    }, [navigate]);
+    }, [navigate, func]);
 
     return (
         <>

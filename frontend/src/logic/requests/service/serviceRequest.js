@@ -16,7 +16,13 @@ export async function getAllServicesRequest() {
 }
 
 export async function getOwnServicesRequest(){
-  return await sendGet("service/get/own");
+  return await sendAuthGet("service/get/own");
+}
+export async function getOrderFreelancerRequest(){
+  return await sendAuthGet("order/freelancer/get");
+}
+export async function getOrderCustomerRequest(){
+  return await sendAuthGet("order/customer/get");
 }
 export async function showOwnServicesRequest(id){
   return await sendAuthPatch(`service/show/${id}`);

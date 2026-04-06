@@ -1,5 +1,18 @@
 import { Link } from "react-router-dom";
 import "./service_card_component.css";
+import { hideOwnServicesRequest, showOwnServicesRequest } from "../../../logic/requests/service/serviceRequest";
+import { useState } from "react";
+
+function handleHide(e, id) {
+  e.stopPropagation();
+  e.preventDefault();
+  hideOwnServicesRequest(id);
+}
+function handleShow(e, id) {
+  e.stopPropagation();
+  e.preventDefault();
+  showOwnServicesRequest(id);
+}
 
 export default function ServiceCardComponent({
   id,
@@ -8,33 +21,59 @@ export default function ServiceCardComponent({
   freelancerName,
   image,
   isPreview,
+  from,
+  hidden,
+  orderInfo
 }) {
+  const [hiddenState, setHidden] = useState(hidden);
+  console.log(orderInfo);
+  
+  
   return (
     <Link
       to={`/service/${id}`}
       onClick={(e) => isPreview && e.preventDefault()}
       className={`text-decoration-none text-body ${isPreview && "service-card-disable_link"}`}
     >
-      <div className="service-card p-3 shadow-sm">
+      <div className={`${orderInfo && !orderInfo.status === "IN_PROGRESS" && "bg-secondary"} service-card p-3 shadow-sm`}>
         {image === null ? (
           <div className="service-img mb-3"></div>
         ) : (
-
           <img
             className="preview-img"
-            src={isPreview
-              ? URL.createObjectURL(image)
-              : (image.startsWith('http') ? image : `http://${image}`)
+            src={
+              isPreview
+                ? URL.createObjectURL(image)
+                : image.startsWith("http")
+                  ? image
+                  : `http://${image}`
             }
             alt="previewimg"
           />
-
         )}
         <h6 className="fw-semibold">{title}</h6>
         <small className="text-muted">{freelancerName} • Developer</small>
         <div className="d-flex justify-content-between align-items-center mt-3">
           <span className="service-price">{price}₽</span>
           <button className="btn btn-sm btn-outline-primary">Подробнее</button>
+          {from == "/OwnServices" &&
+            (!hiddenState ? (
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                onClick={(e) => {handleHide(e, id); setHidden(true)}}
+                key={"delete"}
+              >
+                -
+              </button>
+            ) : (
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                onClick={(e) => {handleShow(e, id); setHidden(false)}}
+                key={"show"}
+              >
+                +
+              </button>
+            ))}
         </div>
       </div>
     </Link>

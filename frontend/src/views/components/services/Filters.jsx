@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const Filters = ({ filters, setFilters }) => {
+export const Filters = ({ filters, variant="заказы", setFilters }) => {
     const [temp, setTemp] = useState({
         title: filters.title,
         price: filters.price,
@@ -47,7 +47,7 @@ export const Filters = ({ filters, setFilters }) => {
                     <input
                         type="range"
                         min={0}
-                        max={filters.maxPrice}
+                        max={variant==="заказы" ? filters.maxPrice : filters.maxFreelancerPrice}
                         value={temp.price}
                         onChange={(e) =>
                             setTemp({ ...temp, price: e.target.value })

@@ -51,6 +51,7 @@ public class AuthService {
         return new JwtResponse(accessToken, refreshToken);
     }
 
+    @Transactional
     public void signUp(SignUpRequest request) {
         if (userDomainService.existsByEmail(request.getEmail())) {
             throw new GlobalBadRequestException("this email already taken");

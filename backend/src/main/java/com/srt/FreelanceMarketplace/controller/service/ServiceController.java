@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.controller.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
@@ -76,5 +77,11 @@ public class ServiceController {
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
     public void showService(@PathVariable UUID serviceId) {
         service.hideService(serviceId, false);
+    }
+
+    @GetMapping("/get/own")
+    @PreAuthorize("hasRole('ROLE_FREELANCER')")
+    public List<GetOwnServiceResponse> getAllOwnServices() {
+        return service.getAllOwnServices();
     }
 }

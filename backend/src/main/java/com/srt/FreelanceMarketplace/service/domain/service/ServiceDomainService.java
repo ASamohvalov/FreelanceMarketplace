@@ -1,5 +1,8 @@
 package com.srt.FreelanceMarketplace.service.domain.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderServiceInfoResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceOrderInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
@@ -40,12 +43,24 @@ public class ServiceDomainService {
 
     public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
         return repository.findAllByFreelancer(entity).stream()
-                .map(mapper::entityToUserServiceResponse)
+                .map(mapper::toUserServiceResponse)
                 .toList();
     }
 
     public ServiceResponse mapToServiceResponse(ServiceEntity entity) {
         ServiceResponse serviceResponse = mapper.serviceEntityToResponse(entity);
+        serviceResponse.setImageURL(serviceImageService.getUrl(entity.getTitleImage()).orElse(null));
+        return serviceResponse;
+    }
+
+    public GetOwnServiceResponse mapToGetOwnService(ServiceEntity entity) {
+        GetOwnServiceResponse serviceResponse = mapper.toOwnServiceResponse(entity);
+        serviceResponse.setImageURL(serviceImageService.getUrl(entity.getTitleImage()).orElse(null));
+        return serviceResponse;
+    }
+
+    public ServiceOrderInfoResponse mapToServiceOrderInfoResponse(ServiceEntity entity) {
+        ServiceOrderInfoResponse serviceResponse = mapper.toServiceOrderInfoResponse(entity);
         serviceResponse.setImageURL(serviceImageService.getUrl(entity.getTitleImage()).orElse(null));
         return serviceResponse;
     }

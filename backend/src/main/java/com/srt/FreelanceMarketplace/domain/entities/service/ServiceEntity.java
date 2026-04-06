@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +56,14 @@ public class ServiceEntity {
     @Column(nullable = false)
     @Builder.Default
     private boolean isHide = false;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant createdAt = Instant.now();
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant updatedAt = Instant.now();
 
     // this is crutch
     // null ptr ex - service.getImages().add(some);

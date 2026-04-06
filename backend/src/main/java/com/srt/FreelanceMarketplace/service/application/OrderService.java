@@ -4,11 +4,15 @@ import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.SendOrderReportRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
+import com.srt.FreelanceMarketplace.mapper.OrderMapper;
+import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
@@ -22,12 +26,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository repository;
     private final OrderDomainService domainService;
+    private final OrderMapper mapper;
 
     private final ServiceDomainService serviceDomainService;
     private final AuthHelperService authHelperService;
@@ -35,6 +41,7 @@ public class OrderService {
     private final NotificationSenderService notificationSenderService;
     private final FreelancerDomainService freelancerDomainService;
     private final OrderReportDomainService orderReportDomainService;
+    private final UserMapper userMapper;
 
     public void order(MakeOrderRequest request) {
         ServiceEntity service = serviceDomainService.getByIdWithAuthor(request.getServiceId());
@@ -46,14 +53,15 @@ public class OrderService {
                 .equals(authHelperService.getUser().getId())) {
             throw new GlobalBadRequestException("the user cannot order his own service");
         }
-        if (repository.existsByServiceAndUser(service, authHelperService.getUser())) {
+        if (repository.existsByServiceAndCustomer(service, authHelperService.getUser())) {
             throw new GlobalBadRequestException("this order has already been placed");
         }
 
         OrderEntity order = OrderEntity.builder()
                 .deadlineDate(request.getDeadlineDate())
                 .service(service)
-                .user(authHelperService.getUser())
+                .customer(authHelperService.getUser())
+                .freelancer(service.getFreelancer())
                 .build();
         repository.save(order);
 
@@ -96,5 +104,26 @@ public class OrderService {
 
         orderReportDomainService.save(report);
         repository.save(order);
+    }
+
+
+    public List<OrderCustomerResponse> getCustomerOrders() {
+        return domainService.findAllByCustomer(authHelperService.getUser()).stream()
+                .map(o -> new OrderCustomerResponse(
+                        mapper.toResponse(o),
+                        serviceDomainService.mapToServiceResponse(o.getService())
+                ))
+                .toList();
+    }
+
+    public List<OrderFreelancerResponse> getFreelancerOrders() {
+        FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
+        return domainService.findAllByFreelancer(freelancer).stream()
+                .map(o -> new OrderFreelancerResponse(
+                        mapper.toResponse(o),
+                        serviceDomainService.mapToServiceOrderInfoResponse(o.getService()),
+                        userMapper.entityToUserNameResponse(o.getCustomer())
+                ))
+                .toList();
     }
 }

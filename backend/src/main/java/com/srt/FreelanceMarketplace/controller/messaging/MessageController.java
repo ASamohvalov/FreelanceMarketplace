@@ -4,7 +4,6 @@ import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationCo
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NewMessageRequest;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderServiceInfoResponse;
 import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

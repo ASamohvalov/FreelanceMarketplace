@@ -17,6 +17,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
             select s from ServiceEntity s
             join fetch s.freelancer
             where s.isHide = false
+            order by s.updatedAt desc
             """)
     List<ServiceEntity> findAllNotHideWithFreelancer();
 

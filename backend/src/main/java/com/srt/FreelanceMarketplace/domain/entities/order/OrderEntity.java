@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.domain.entities.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
@@ -26,8 +27,12 @@ public class OrderEntity {
     private UUID id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "customer_id")
+    private UserEntity customer;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "freelancer_id")
+    private FreelancerEntity freelancer;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "service_id")

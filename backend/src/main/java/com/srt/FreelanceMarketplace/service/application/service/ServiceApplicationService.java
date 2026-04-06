@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.service.application.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
@@ -112,6 +113,12 @@ public class ServiceApplicationService {
         }
         service.setHide(hide);
         repository.save(service);
+    }
+
+    public List<GetOwnServiceResponse> getAllOwnServices() {
+        return repository.findAllByFreelancer(freelancerService.getByUser(authHelperService.getUser())).stream()
+                .map(domainService::mapToGetOwnService)
+                .toList();
     }
 
     // for create service

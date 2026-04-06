@@ -1,8 +1,10 @@
 package com.srt.FreelanceMarketplace.repository.service;
 
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,17 +15,18 @@ import java.util.UUID;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     @Query("""
-            select o from OrderEntity o
-            join fetch o.service
-            where o.user = :user
-            """)
-    List<OrderEntity> findAllByUserWithService(UserEntity user);
-
-    @Query("""
             select count(o) > 0 from OrderEntity o
             where o.service = :service
-            and o.user = :user
+            and o.customer = :customer
             and o.status = "IN_PROGRESS"
             """)
-    boolean existsByServiceAndUser(ServiceEntity service, UserEntity user);
+    boolean existsByServiceAndCustomer(ServiceEntity service, UserEntity customer);
+
+    @EntityGraph(attributePaths = {"service", "customer"})
+    @Query("select o from OrderEntity o where o.freelancer = :freelancer")
+    List<OrderEntity> findAllByFreelancerWithServiceAndCustomer(FreelancerEntity freelancer);
+
+    @EntityGraph(attributePaths = {"service", "freelancer.jobTitle", "freelancer.user"})
+    @Query("select o from OrderEntity o where o.customer = :customer")
+    List<OrderEntity> findAllByCustomerWithServiceAndFreelancerAndJobTitle(UserEntity customer);
 }

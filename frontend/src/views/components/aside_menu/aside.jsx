@@ -29,7 +29,7 @@ const links = [
 ]
 
 export const Aside = ({ state }) => {
-    const isFreelancer = getUserData().roles.includes("ROLE_FREELANCER");
+    const isFreelancer = getUserData()?.roles.includes("ROLE_FREELANCER");
     
   const [isHidden,] = state;
   return <aside className={`aside overflow-hidden pt-5 z-3 text-white fw-semibold d-flex flex-column gap-4 position-fixed start-0 top-5 bg-orange ${isHidden ? "aside-visible" : "aside-hidden"}`}>

@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function CreateServiceSuccessPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state);
   
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function CreateServiceSuccessPage() {
               <div className="col-md-6 mb-3">
                 <div className="text-muted small">Категория</div>
                 <div className="fw-semibold">
-                  {state.category + " / " + state.subcategory}
+                  {state.category.name + " / " + state.selectedSubcategory.name}
                 </div>
               </div>
 

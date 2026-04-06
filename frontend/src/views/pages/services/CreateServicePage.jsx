@@ -39,7 +39,7 @@ export default function CreateServicePage() {
       navigate(-1);
       return;
     }
-    document.title = "Create service";
+    document.title = "Создать услугу";
 
     (async () => {
       const response = await getAllCategoryInfo();
@@ -49,8 +49,9 @@ export default function CreateServicePage() {
         return;
       }
       setCategories(response.data);
-        setSelectedCategory(response.data[0].id);
-        setSelectedSubcategory(response.data[0].subcategories[0].id);
+        setSelectedCategory(response.data[0]);
+        
+        setSelectedSubcategory(response.data[0].subcategories[0]);
     })();
   }, [navigate]);
 
@@ -79,7 +80,7 @@ export default function CreateServicePage() {
       price: price,
       deadlineDays: Number(deadlineDays.current.value),
       revisionsCount: Number(revisionsCount.current.value),
-      subcategoryId: selectedSubcategory,
+      subcategoryId: selectedSubcategory.id,
       images: images,
     });
     if (response.status !== 200) {
@@ -143,7 +144,7 @@ export default function CreateServicePage() {
                     ) : (
                       <select
                         className="form-select"
-                        value={selectedCategory}
+                        value={selectedCategory.id}
                         onChange={(e) => {
                           setSelectedCategory(e.target.value);
                           setSelectedSubcategory("");
@@ -167,12 +168,12 @@ export default function CreateServicePage() {
                     ) : (
                       <select
                         className="form-select"
-                        value={selectedSubcategory}
+                        value={selectedSubcategory.id}
                         onChange={(e) => setSelectedSubcategory(e.target.value)}
                       >
                         {(() => {
                           const element = categories.find(
-                            (category) => category.id === selectedCategory,
+                            (category) => category.id === selectedCategory.id,
                           );
                           return element?.subcategories.map((category) => (
                             <option key={category.id} value={category.id}>

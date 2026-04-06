@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./styles/aside.css"
 import { Bell, HandPlatter, House, MessageCircle } from "lucide-react";
 import { AsideComponent } from "./ui/aside_component";
-import { isAuth } from "../../../logic/jwt";
+import { getUserData, isAuth } from "../../../logic/jwt";
+import { userContext } from "../../../logic/store/userContext";
 
 const links = [
     {
@@ -16,6 +17,11 @@ const links = [
         to: "/services",
     },
     {
+        icon: <HandPlatter size={32}></HandPlatter>,
+        title: "Мои услуги",
+        to: "/OwnServices",
+    },
+    {
         icon: <MessageCircle size={32}></MessageCircle>,
         title: "Сообщения",
         to: "/messages",
@@ -23,11 +29,14 @@ const links = [
 ]
 
 export const Aside = ({ state }) => {
+    const isFreelancer = getUserData().roles.includes("ROLE_FREELANCER");
+    
   const [isHidden,] = state;
   return <aside className={`aside overflow-hidden pt-5 z-3 text-white fw-semibold d-flex flex-column gap-4 position-fixed start-0 top-5 bg-orange ${isHidden ? "aside-visible" : "aside-hidden"}`}>
       {
           links.map((item, id) => {
               if(!isAuth() && item.title === "Сообщения") return;
+              if(!isFreelancer && item.title === "Мои услуги") return;
               return <AsideComponent key={id} icon={item.icon} title={item.title} to={item.to} />
           })
     }

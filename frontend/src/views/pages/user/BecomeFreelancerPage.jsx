@@ -74,7 +74,7 @@ export function BecomeFreelancerPage() {
   return (
     <>
 
-      <div className="mx-auto" style={{ width: "500px", marginTop: "10vh", marginBottom: "20vh"}}>
+      <div className="mx-auto" style={{ width: "500px", marginTop: "10vh", marginBottom: "20vh", marginLeft: 80}}>
         <div
           className={`mb-2 bg-danger text-white text-center p-4 border border-danger rounded shadow ${error ? "visible" : "invisible"}`}
         >

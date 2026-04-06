@@ -53,7 +53,7 @@ export default function PersonalAccountPage() {
   return (
     <>
 
-      <main style={{minHeight:"80vh"}}>
+      <main style={{minHeight:"80vh", marginLeft: 80}}>
         <div className="container">
           <div className="profile-card mb-4 mt-4">
             <div className="d-flex align-items-center gap-4">

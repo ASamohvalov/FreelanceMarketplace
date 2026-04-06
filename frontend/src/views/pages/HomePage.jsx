@@ -13,7 +13,7 @@ export default function HomePage() {
         setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
     }, [setUser]);
   return (
-    <>
+    <div style={{marginLeft: "80px"}}>
           <section className="hero text-center">
         <div className="container">
           <h1 className="display-5 fw-bold">Найди подходящего фрилансера для своего проекта</h1>
@@ -146,6 +146,6 @@ export default function HomePage() {
         </div>
       </section>
 
-    </>
+    </div>
   );
 }

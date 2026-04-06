@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import HeaderComponent from "../../components/HeaderComponent";
 import { useState } from "react";
 import LoadingComponent from "../../components/LoadingComponent";
-import { getAllServicesRequest } from "../../../logic/requests/service/serviceRequest";
+import { getAllServicesRequest, getOwnServicesRequest } from "../../../logic/requests/service/serviceRequest";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import FooterComponent from "../../components/FooterComponent";
 import "./css/services_page.css";
 import { Filters } from "../../components/services/Filters";
 
-export default function ServicesPage() {
+export default function OwnServicesPage() {
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
     // const [images, setImages] = useState([]);
@@ -26,7 +26,7 @@ export default function ServicesPage() {
         document.title = "Услуги";
 
         (async () => {
-            const result = await getAllServicesRequest();
+            const result = await getOwnServicesRequest();
             if (result.status !== 200) {
                 navigate("/error");
                 return;

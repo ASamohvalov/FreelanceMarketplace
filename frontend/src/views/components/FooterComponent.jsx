@@ -1,6 +1,6 @@
 export default function FooterComponent() {
   return (
-    <footer className="" style={{display: "absolute", bottom: 0}}>
+    <footer className="" style={{display: "absolute", bottom: 0, marginLeft: 80}}>
       <div className="container">
         <div className="row">
           <div className="col-md-4">

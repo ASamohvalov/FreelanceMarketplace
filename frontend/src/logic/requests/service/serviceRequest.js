@@ -1,5 +1,5 @@
 import { isAuth } from "../../jwt";
-import { sendAuthGet, sendAuthPostFormData, sendGet } from "../requestSender";
+import { sendAuthGet, sendAuthPatch, sendAuthPostFormData, sendGet } from "../requestSender";
 
 /**
  * @returns {map} { status: int, data: null }
@@ -13,6 +13,16 @@ export async function createServiceRequest(args) {
  */
 export async function getAllServicesRequest() {
   return await sendGet("service/get");
+}
+
+export async function getOwnServicesRequest(){
+  return await sendGet("service/get/own");
+}
+export async function showOwnServicesRequest(id){
+  return await sendAuthPatch(`service/show/${id}`);
+}
+export async function hideOwnServicesRequest(id){
+  return await sendAuthPatch(`service/hide/${id}`);
 }
 
 /**

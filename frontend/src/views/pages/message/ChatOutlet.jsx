@@ -4,11 +4,10 @@ import ConversationContextInfo from "../../components/order/ConversationContextI
 
 export function ChatOutlet() {
     const params = useOutletContext();
-    console.log(params);
   return (
     <>
-      <MessagesComponent conversation={params.conversation} />
-      <ConversationContextInfo />
+      <MessagesComponent conversation={params.conversation} setSelectedConversations={params.setSelectedConversations} size={params.size} uShown={params.uShown} />
+      <ConversationContextInfo size={params.size} uShown={params.uShown}/>
     </>
   );
 }

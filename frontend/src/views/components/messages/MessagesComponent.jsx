@@ -7,39 +7,46 @@ import {
 import MessageCardComponent from "./MessageCardComponent";
 import { getUserData } from "../../../logic/jwt";
 import { useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import getMessages from "../../../logic/message";
 import { useCallback } from "react";
 
-export default function MessagesComponent({conversation = null}) {
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const navigate = useNavigate();
-    const conversationId = useParams();
-    console.log(conversationId);
-    const errorHandle = useCallback(() => {
-        navigate("/error");
-    }, [navigate]);
+export default function MessagesComponent({
+  conversation = null,
+  uShown,
+  size,
+}) {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
+  const conversationId = useParams();
+  const [shown, setShown] = uShown;
+  const errorHandle = useCallback(() => {
+    navigate("/error");
+  }, [navigate]);
 
-    const messageChatRef = useRef();
-    useEffect(() => {
-        getMessages(setMessages, conversationId.conversationId, errorHandle);
-        const interval = setInterval(() => {
-            getMessages(setMessages, conversationId.conversationId, errorHandle);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [errorHandle, conversationId]);
-    
-    const addNewMessageHandle = (message, conversationId) => {
-        setMessages((prev) => [...prev, {
-            id: null,
-            conversationId: conversationId,
-            text: message,
-            authorId: getUserData().id,
-            sendAt: new Date().getTime(),
-            read: false,
-        }]);
-    };
+  const messageChatRef = useRef();
+  useEffect(() => {
+    getMessages(setMessages, conversationId.conversationId, errorHandle);
+    const interval = setInterval(() => {
+      getMessages(setMessages, conversationId.conversationId, errorHandle);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [errorHandle, conversationId]);
+
+  const addNewMessageHandle = (message, conversationId) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: null,
+        conversationId: conversationId,
+        text: message,
+        authorId: getUserData().id,
+        sendAt: new Date().getTime(),
+        read: false,
+      },
+    ]);
+  };
 
   useEffect(() => {
     (async () => {
@@ -59,17 +66,33 @@ export default function MessagesComponent({conversation = null}) {
   }, [messages]);
 
   return (
-    <div className="col-6 d-flex flex-column border-start border-end">
-      <div className="chat-header">
+    <div
+      className={`${!size ? "col-6" : "col-12"} h-100 d-flex flex-column border-start border-end`}
+    >
+      <div className="chat-header d-flex gap-4">
+        {size && (
+          <>
+            <NavLink
+              className="btn btn-primary rounded-2 text-decoration-none"
+              to={"/messages"}
+            >
+              Назад
+            </NavLink>
+            <button
+              className="btn btn-secondary rounded-2"
+              onClick={() => setShown((prev) => !prev)}
+            >
+              Сведения
+            </button>
+          </>
+        )}
         {conversation
           ? conversation?.member.firstName + " " + conversation?.member.lastName
           : "Чат"}
       </div>
 
-      <div className="chat-messages flex-grow-1"
-        ref={messageChatRef}
-      >
-        {messages.map((m, idx) => (
+      <div className="chat-messages flex-grow-1" ref={messageChatRef}>
+        {messages?.map((m, idx) => (
           <MessageCardComponent message={m} key={idx} />
         ))}
       </div>

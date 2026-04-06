@@ -93,3 +93,7 @@ export function daysBetween(date1, date2) {
   const differenceMs = Math.abs(date1 - date2);
   return Math.round(differenceMs / ONE_DAY);
 }
+
+export function now(){
+  return Date.now();
+}

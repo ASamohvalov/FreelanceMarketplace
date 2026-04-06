@@ -67,7 +67,6 @@ export default function OrdersPage({ func, freelancer }) {
       setLoading(false);
     })();
   }, [navigate, func, isFreelancer]);
-  console.log(orders);
 
   return (
     <>
@@ -85,15 +84,17 @@ export default function OrdersPage({ func, freelancer }) {
                 variant={variant}
               />
               {isFreelancer && (
-                <div className="flex flex-row gap-5">
+                <div className="mt-3 d-flex flex-column gap-3">
                   <button
                     onClick={() => {
                       setVariant("заказы");
                     }}
+                    className="btn btn-success"
                   >
                     Мои заказы
                   </button>
                   <button
+                    className="btn btn-warning"
                     onClick={() => {
                       setVariant("работы");
                       setFilters((prev) => ({
@@ -122,10 +123,11 @@ export default function OrdersPage({ func, freelancer }) {
                       service.price <= filters.price
                     );
                   })}
-                orderInfo={services.map((service) => service.order)}
-              />
+                orderInfo={services}
+                />
             ) : (
-              <ServicesListComponent
+                <ServicesListComponent
+                isOrder={true}
                 services={orders
                   .map((service) => service.service)
                   .filter((service) => {
@@ -136,7 +138,7 @@ export default function OrdersPage({ func, freelancer }) {
                       service.price <= filters.price
                     );
                   })}
-                orderInfo={services.map((service) => service.order)}
+                orderInfo={orders}
               />
             )}
           </div>

@@ -6,3 +6,10 @@ export async function sendOrderRequest(serviceId, deadline) {
     deadlineDate: deadline,
   });
 }
+
+export async function sendOrderReportRequest(report, orderId) {
+  return await sendAuthPost("order/report/send", {
+    orderId: orderId,
+    report: report
+  });
+}

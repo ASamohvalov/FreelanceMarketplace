@@ -21,11 +21,32 @@ public class OrderDomainService {
                 .orElseThrow(() -> new GlobalBadRequestException("such order not found"));
     }
 
+    public OrderEntity getByIdWithFreelancer(UUID id) {
+        return repository.findByIdWithFreelancer(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such order not found"));
+    }
+
+    public OrderEntity getByIdWithFreelancerAndService(UUID id) {
+        return repository.findByIdWithFreelancerAndService(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such order not found"));
+    }
+
+    public OrderEntity getReferenceIfExistsById(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new GlobalBadRequestException("such order not found");
+        }
+        return repository.getReferenceById(id);
+    }
+
     public List<OrderEntity> findAllByFreelancer(FreelancerEntity freelancer) {
         return repository.findAllByFreelancerWithServiceAndCustomer(freelancer);
     }
 
     public List<OrderEntity> findAllByCustomer(UserEntity user) {
         return repository.findAllByCustomerWithServiceAndFreelancerAndJobTitle(user);
+    }
+
+    public void save(OrderEntity order) {
+        repository.save(order);
     }
 }

@@ -33,4 +33,6 @@ public class OrderReportEntity {
     @Column(nullable = false)
     @Builder.Default
     private Instant createdAt = Instant.now();
+
+    private boolean accepted;
 }

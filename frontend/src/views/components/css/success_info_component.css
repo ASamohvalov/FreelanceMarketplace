@@ -1,0 +1,12 @@
+.order-success-component_card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  max-width: 820px;
+}
+
+.order-success-component_icon {
+  font-size: 64px;
+  color: #22c55e;
+}

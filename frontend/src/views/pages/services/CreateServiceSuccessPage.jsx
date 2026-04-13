@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function CreateServiceSuccessPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  
 
   useEffect(() => {
     if (!state) {

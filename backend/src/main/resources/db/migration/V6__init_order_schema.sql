@@ -15,5 +15,6 @@ CREATE TABLE order_reports (
     order_id UUID REFERENCES orders(id) NOT NULL,
     freelancer_id UUID REFERENCES freelancers(id) NOT NULL,
     report TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW() NOT NULL
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    accepted BOOLEAN NOT NULL
 );

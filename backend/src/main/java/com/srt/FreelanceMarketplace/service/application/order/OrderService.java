@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.service.application;
+package com.srt.FreelanceMarketplace.service.application.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
@@ -40,7 +40,6 @@ public class OrderService {
     private final MessagingService messagingService;
     private final NotificationSenderService notificationSenderService;
     private final FreelancerDomainService freelancerDomainService;
-    private final OrderReportDomainService orderReportDomainService;
     private final UserMapper userMapper;
 
     public void order(MakeOrderRequest request) {
@@ -89,23 +88,6 @@ public class OrderService {
                 authHelperService.getUser()
         );
     }
-
-    public void sendReport(SendOrderReportRequest request) {
-        FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
-        OrderEntity order = domainService.getById(request.getOrderId());
-
-        OrderReportEntity report = OrderReportEntity.builder()
-                .report(request.getReport())
-                .freelancer(freelancer)
-                .order(order)
-                .build();
-
-        order.setStatus(OrderStatusEnum.SUBMITTED);
-
-        orderReportDomainService.save(report);
-        repository.save(order);
-    }
-
 
     public List<OrderCustomerResponse> getCustomerOrders() {
         return domainService.findAllByCustomer(authHelperService.getUser()).stream()

@@ -14,12 +14,14 @@ import PaymentPage from "./views/pages/order/PaymentPage.jsx";
 import OrderSuccessPage from "./views/pages/order/OrderSuccessPage.jsx";
 import Layout from "./views/pages/Layout.jsx";
 import CreateServiceSuccessPage from "./views/pages/services/CreateServiceSuccessPage.jsx";
-import MessagesComponent from "./views/components/messages/MessagesComponent.jsx";
-import ConversationContextInfo from "./views/components/order/ConversationContextInfo.jsx";
 import { ChatOutlet } from "./views/pages/message/ChatOutlet.jsx";
-import OwnServicesPage from "./views/pages/order/OrdersPage.jsx";
-import { getAllServicesRequest, getOwnServicesRequest } from "./logic/requests/service/serviceRequest.js";
+import {
+  getAllServicesRequest,
+  getOwnServicesRequest,
+} from "./logic/requests/service/serviceRequest.js";
 import OrdersPage from "./views/pages/order/OrdersPage.jsx";
+import SendOrderReportPage from "./views/pages/order/SendOrderReportPage.jsx";
+import SendOrderReportSuccessPage from "./views/pages/order/SendOrderReportSuccessPage.jsx";
 
 // base routing
 export default function App() {
@@ -34,20 +36,31 @@ export default function App() {
         <Route path="become-freelancer" element={<BecomeFreelancerPage />} />
         <Route path="personal-account" element={<PersonalAccountPage />} />
 
-        <Route path="services" element={<ServicesPage func={getAllServicesRequest}/>} />
-        <Route path="OwnServices" element={<ServicesPage func={getOwnServicesRequest}/>} />
-        <Route path="MyOrders" element={<OrdersPage/>} />
+        <Route
+          path="services"
+          element={<ServicesPage func={getAllServicesRequest} />}
+        />
+        <Route
+          path="OwnServices"
+          element={<ServicesPage func={getOwnServicesRequest} />}
+        />
+        <Route path="MyOrders" element={<OrdersPage />} />
         <Route path="create-service" element={<CreateServicePage />} />
-        <Route path="create-service/success" element={<CreateServiceSuccessPage />} />
+        <Route
+          path="create-service/success"
+          element={<CreateServiceSuccessPage />}
+        />
         <Route path="service/:id" element={<ServicePage />} />
 
-              <Route path="messages" element={<MessagesPage />} >
-                  <Route path=":conversationId" element={<ChatOutlet/>} />
-              </Route>
+        <Route path="messages" element={<MessagesPage />}>
+          <Route path=":conversationId" element={<ChatOutlet />} />
+        </Route>
         <Route path="notifications" element={<NotificationsPage />} />
 
         <Route path="pay/:serviceId" element={<PaymentPage />} />
         <Route path="order/success" element={<OrderSuccessPage />} />
+        <Route path="order/report/send" element={<SendOrderReportPage />} />
+        <Route path="order/report/send/success" element={<SendOrderReportSuccessPage />} />
       </Route>
     </Routes>
   );

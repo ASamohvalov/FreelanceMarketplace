@@ -47,12 +47,25 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
     @Override
     public void sendNewOrderReport(OrderReportEntity report, UserEntity recipient, UserEntity sender) {
         NotificationEntity notification = NotificationEntity.builder()
-                .title("Новый заказ")
+                .title("Отчёт по заказу")
                 .message(String.format("%s %s отправил отчёт по заказу - %s", sender.getFirstName(), sender.getLastName(), report.getOrder().getService().getTitle()))
                 .type(NotificationTypeEnum.NEW_ORDER_REPORT)
                 .recipient(recipient)
                 .entityType(getEntityType(report))
                 .entityId(report.getId())
+                .build();
+        repository.save(notification);
+    }
+
+    @Override
+    public void sendOrderCompleted(OrderEntity order, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Заказ завершен")
+                .message(String.format("%s %s принял ваш отчёт по заказу - %s", sender.getFirstName(), sender.getLastName(), order.getService().getTitle()))
+                .type(NotificationTypeEnum.ORDER_COMPLETED)
+                .recipient(recipient)
+                .entityType(getEntityType(order))
+                .entityId(order.getId())
                 .build();
         repository.save(notification);
     }

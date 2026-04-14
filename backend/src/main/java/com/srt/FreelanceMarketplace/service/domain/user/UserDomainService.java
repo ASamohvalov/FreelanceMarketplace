@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,5 +33,9 @@ public class UserDomainService {
 
     public boolean existsByEmail(String email) {
         return repository.existsByEmail(email);
+    }
+
+    public UserEntity getReferenceById(UUID id) {
+        return repository.getReferenceById(id);
     }
 }

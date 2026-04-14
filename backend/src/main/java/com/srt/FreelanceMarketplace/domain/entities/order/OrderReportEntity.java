@@ -1,8 +1,11 @@
 package com.srt.FreelanceMarketplace.domain.entities.order;
 
+import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -34,5 +37,12 @@ public class OrderReportEntity {
     @Builder.Default
     private Instant createdAt = Instant.now();
 
-    private boolean accepted;
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(nullable = false)
+    @Builder.Default
+    private OrderReportStatusEnum status = OrderReportStatusEnum.PENDING;
+
+    @Column(columnDefinition = "TEXT")
+    private String customerComment;
 }

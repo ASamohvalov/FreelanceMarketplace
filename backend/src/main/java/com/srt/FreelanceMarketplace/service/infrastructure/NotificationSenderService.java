@@ -20,4 +20,9 @@ public interface NotificationSenderService {
      * @param report report.order.serviceEntity NOT NULL!
      */
     void sendNewOrderReport(OrderReportEntity report, UserEntity recipient, UserEntity sender);
+
+    /**
+     * @param order order.serviceEntity NOT NULL!
+     */
+    void sendOrderCompleted(OrderEntity order, UserEntity recipient, UserEntity sender);
 }

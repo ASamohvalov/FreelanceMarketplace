@@ -1,9 +1,10 @@
 package com.srt.FreelanceMarketplace.controller.messaging;
 
+import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NewMessageRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -21,8 +23,8 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/send")
-    public void sendMessage(@RequestBody @Valid NewMessageRequest request) {
-        messageService.sendMessage(request);
+    public Map<String, UUID> sendMessage(@RequestBody @Valid NewMessageRequest request) {
+        return messageService.sendMessage(request);
     }
 
     @GetMapping("/message/get/{conversationId}")
@@ -46,5 +48,15 @@ public class MessageController {
     @PatchMapping("/message/read")
     public void readMessages(@RequestBody List<UUID> messages) {
         messageService.readMessages(messages);
+    }
+
+    @DeleteMapping("/message/delete/{messageId}")
+    public void deleteMessage(@PathVariable UUID messageId) {
+        messageService.deleteMessage(messageId);
+    }
+
+    @PutMapping("/message/edit")
+    public void editMessage(@RequestBody @Valid EditMessageRequest request) {
+        messageService.editMessage(request);
     }
 }

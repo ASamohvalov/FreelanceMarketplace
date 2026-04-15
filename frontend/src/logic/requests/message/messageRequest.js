@@ -1,4 +1,4 @@
-import { sendAuthGet, sendAuthPatch, sendAuthPost } from "../requestSender";
+import { sendAuthDelete, sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPut } from "../requestSender";
 
 export async function getAllConversationsRequest() {
   return await sendAuthGet("messaging/conversation/personal/get_all");
@@ -27,4 +27,15 @@ export async function sendReadMessageRequest(messageIds) {
 
 export async function getConversationContextInfo(conversationId) {
   return await sendAuthGet(`messaging/conversation/${conversationId}/context`);
+}
+
+export async function sendDeleteMessageRequest(messageId) {
+  return await sendAuthDelete(`messaging/message/delete/${messageId}`);
+}
+
+export async function sendEditMessageRequest(messageId, text) {
+  return await sendAuthPut("messaging/message/edit", {
+    id: messageId,
+    message: text
+  });
 }

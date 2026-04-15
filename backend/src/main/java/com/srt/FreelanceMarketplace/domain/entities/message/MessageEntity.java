@@ -38,5 +38,9 @@ public class MessageEntity {
 
     @Column(nullable = false)
     @Builder.Default
+    private Instant updateAt = Instant.now();
+
+    @Column(nullable = false)
+    @Builder.Default
     private boolean isRead = false;
 }

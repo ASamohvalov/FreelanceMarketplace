@@ -34,11 +34,11 @@ export default function MessagesComponent({
     return () => clearInterval(interval);
   }, [errorHandle, conversationId]);
 
-  const addNewMessageHandle = (message, conversationId) => {
+  const addNewMessageHandle = (id, message, conversationId) => {
     setMessages((prev) => [
       ...prev,
       {
-        id: null,
+        id: id,
         conversationId: conversationId,
         text: message,
         authorId: getUserData().id,
@@ -117,7 +117,7 @@ export default function MessagesComponent({
                 errorHandle();
                 return;
               }
-              addNewMessageHandle(message, conversationId.conversationId);
+              addNewMessageHandle(response.data.id, message, conversationId.conversationId);
               setMessage("");
             }
           }}

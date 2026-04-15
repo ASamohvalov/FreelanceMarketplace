@@ -26,6 +26,7 @@ CREATE TABLE messages (
     author_id UUID REFERENCES users(id) NOT NULL,
     conversation_id UUID REFERENCES conversations(id) NOT NULL,
     send_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    update_at TIMESTAMP DEFAULT NOW() NOT NULL,
     is_read BOOLEAN DEFAULT FALSE NOT NULL,
     message TEXT NOT NULL
 );

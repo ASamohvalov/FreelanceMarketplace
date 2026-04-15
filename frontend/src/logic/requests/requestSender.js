@@ -111,6 +111,19 @@ export async function sendAuthPatch(path, params = {}) {
 
 /**
  * @param {string} path required without / in begin
+ * @param {map} params
+ *
+ * @returns {map} { status: int?, data: map? }
+ * can return data from url "auth/update_tokens"
+ *
+ * @example sendAuthPut('/hello', { message: 'hello world' })
+ */
+export async function sendAuthDelete(path, params = {}) {
+  return await sendAuth(path, "DELETE", params);
+}
+
+/**
+ * @param {string} path required without / in begin
  * @param {map} data
  *
  * @returns {map} { status: int?, data: map? }
@@ -193,12 +206,15 @@ async function sendAuth(
     } else if (requestType === "PUT") {
       response = await axios.put(BACKEND_URL + path, data, {
         headers: { Authorization: "Bearer " + token },
-        params: data,
       });
     } else if (requestType === "PATCH") {
       response = await axios.patch(BACKEND_URL + path, data, {
         headers: { Authorization: "Bearer " + token },
-        params: data,
+      });
+    } else if (requestType === "DELETE") {
+      response = await axios.delete(BACKEND_URL + path, {
+        headers: { Authorization: "Bearer " + token },
+        data: data
       });
     } else {
       console.log("logic ERROR");

@@ -27,11 +27,10 @@ export default function NotificationCardComponent({
   return (
     <div className="notification-component-card mb-3 d-flex gap-3 align-items-start border">
       <div className="notification-component-icon flex-shrink-0">
-        {notification.type === "NEW_PROPOSAL" && (
-          <i className="bi bi-envelope-fill" />
-        )}
+        {notification.type === "NEW_PROPOSAL" && <i className="bi bi-envelope-fill" />}
         {notification.type === "NEW_ORDER" && <i className="bi bi-cart-fill" />}
-        {notification.type === "NEW_ORDER_REPORT" && <i class="bi bi-file-earmark-post"></i>}
+        {notification.type === "NEW_ORDER_REPORT" && <i className="bi bi-file-earmark-post" />}
+        {notification.type === "ORDER_COMPLETED" && <i className="bi bi-calendar-check" />}
       </div>
 
       <div className="flex-grow-1">

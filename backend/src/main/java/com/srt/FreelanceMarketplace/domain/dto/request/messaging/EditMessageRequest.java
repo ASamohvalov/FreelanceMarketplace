@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.dto.response.messaging;
+package com.srt.FreelanceMarketplace.domain.dto.request.messaging;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,9 +9,9 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class NewMessageRequest {
+public class EditMessageRequest {
     @NotNull
-    private UUID conversationId;
+    private UUID id;
     @NotBlank
     private String message;
 }

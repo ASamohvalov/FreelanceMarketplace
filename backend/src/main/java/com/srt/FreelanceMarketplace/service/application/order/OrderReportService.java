@@ -3,17 +3,21 @@ package com.srt.FreelanceMarketplace.service.application.order;
 import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.SendOrderReportRequest;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderReportResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.report.ReceivedOrderReportResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.report.SentOrderReportResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.SendRejectOrderReportResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.OrderReportMapper;
+import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderReportRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
+import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import jakarta.transaction.Transactional;
@@ -34,6 +38,8 @@ public class OrderReportService {
     private final AuthHelperService authHelperService;
     private final OrderDomainService orderDomainService;
     private final NotificationSenderService notificationSenderService;
+    private final UserDomainService userDomainService;
+    private final UserMapper userMapper;
 
     public void sendReport(SendOrderReportRequest request) {
         FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
@@ -49,10 +55,14 @@ public class OrderReportService {
             throw new GlobalBadRequestException("the user does not own this service");
         }
 
+        UserEntity customer = userDomainService.getReferenceById(order.getCustomer().getId());
+
         OrderReportEntity report = OrderReportEntity.builder()
+                .title(request.getTitle())
                 .report(request.getReport())
                 .freelancer(freelancer)
                 .order(order)
+                .customer(customer)
                 .build();
 
         order.setStatus(OrderStatusEnum.SUBMITTED);
@@ -63,21 +73,35 @@ public class OrderReportService {
         notificationSenderService.sendNewOrderReport(report, order.getCustomer(), authHelperService.getUser());
     }
 
-    public List<OrderReportResponse> getReports(UUID orderId) {
+    public List<ReceivedOrderReportResponse> getReceivedReportsByOrder(UUID orderId) {
         OrderEntity order = orderDomainService.getReferenceIfExistsById(orderId);
-        return repository.findAllByOrder(order).stream()
-                .map(mapper::toResponse)
+        return repository.findAllByOrderWithFreelancer(order).stream()
+                .map(mapper::toReceivedResponse)
+                .toList();
+    }
+
+    public List<ReceivedOrderReportResponse> getReceivedReports() {
+        return repository.findAllByCustomerWithFreelancer(authHelperService.getUser()).stream()
+                .map(mapper::toReceivedResponse)
+                .toList();
+    }
+
+    public List<SentOrderReportResponse> getSentReports() {
+        return repository.findAllByFreelancerWithCustomer(
+                freelancerDomainService.getByUser(authHelperService.getUser())).stream()
+                .map(mapper::toSentResponse)
                 .toList();
     }
 
     @Transactional
-    public void acceptReport(UUID reportId) {
+    public void acceptReport(UUID reportId, SendRejectOrderReportResponse response) {
         OrderReportEntity report = domainService.getByIdWithOrderAndFreelancerAndService(reportId);
 
         validateResponseOnOrderRequest(report);
 
         report.setStatus(OrderReportStatusEnum.ACCEPTED);
         report.getOrder().setStatus(OrderStatusEnum.COMPLETED);
+        report.setCustomerComment(response.getComment());
         repository.save(report);
 
         notificationSenderService.sendOrderCompleted(
@@ -88,7 +112,7 @@ public class OrderReportService {
     }
 
     public void rejectReport(UUID reportId, SendRejectOrderReportResponse response) {
-        OrderReportEntity report = domainService.getByIdWithOrder(reportId);
+        OrderReportEntity report = domainService.getByIdWithOrderAndFreelancerAndService(reportId);
 
         validateResponseOnOrderRequest(report);
 
@@ -96,6 +120,12 @@ public class OrderReportService {
         report.setCustomerComment(response.getComment());
 
         repository.save(report);
+
+        notificationSenderService.sendReportRejected(
+                report,
+                report.getFreelancer().getUser(),
+                authHelperService.getUser()
+        );
     }
 
     private void validateResponseOnOrderRequest(OrderReportEntity report) {

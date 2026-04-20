@@ -1,5 +1,3 @@
-import HeaderComponent from "../../components/HeaderComponent";
-import FooterComponent from "../../components/FooterComponent";
 import { useState } from "react";
 import { useEffect } from "react";
 import {
@@ -32,53 +30,51 @@ export default function NotificationsPage() {
   }
 
   return (
-    <>
-      <main>
-        <div className="container mt-5 mb-5 notification-page-div">
-          <div className="mb-3">
-            <h3 className="fw-bold">Уведомления</h3>
-            <div className="form-check form-switch m-0">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="showHidden"
-                onClick={async () => {
-                  if (!showHidden && allNotifications.length === 0) {
-                    const response =
-                      await getAllPersonalNotificationsWithHiddenRequest();
-                    if (response.status !== 200) {
-                      navigate("/error");
-                      return;
-                    }
-                    setAllNotifications(response.data);
+    <main>
+      <div className="container mt-5 mb-5 notification-page-div">
+        <div className="mb-3">
+          <h3 className="fw-bold">Уведомления</h3>
+          <div className="form-check form-switch m-0">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="showHidden"
+              onClick={async () => {
+                if (!showHidden && allNotifications.length === 0) {
+                  const response =
+                    await getAllPersonalNotificationsWithHiddenRequest();
+                  if (response.status !== 200) {
+                    navigate("/error");
+                    return;
                   }
-                  setShowHidden(!showHidden);
-                }}
-              />
-              <label
-                className="form-check-label small text-muted"
-                htmlFor="showHidden"
-              >
-                Показать скрытые
-              </label>
-            </div>
-          </div>
-          <div>
-            {(() => {
-              const notifi = showHidden ? allNotifications : notifications;
-              return notifi.map((n, idx) => (
-                <NotificationCardComponent
-                  notification={n}
-                  key={idx}
-                  onHide={deleteCardById}
-                  hidden={showHidden}
-                  idx={idx}
-                />
-              ));
-            })()}
+                  setAllNotifications(response.data);
+                }
+                setShowHidden(!showHidden);
+              }}
+            />
+            <label
+              className="form-check-label small text-muted"
+              htmlFor="showHidden"
+            >
+              Показать скрытые
+            </label>
           </div>
         </div>
-      </main>
-    </>
+        <div>
+          {(() => {
+            const notifi = showHidden ? allNotifications : notifications;
+            return notifi.map((n, idx) => (
+              <NotificationCardComponent
+                notification={n}
+                key={idx}
+                onHide={deleteCardById}
+                hidden={showHidden}
+                idx={idx}
+              />
+            ));
+          })()}
+        </div>
+      </div>
+    </main>
   );
 }

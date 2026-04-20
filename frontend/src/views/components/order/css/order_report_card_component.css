@@ -1,0 +1,17 @@
+.report-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.report-card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.report-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+}

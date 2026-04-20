@@ -59,12 +59,17 @@ public class MessagingServiceImpl implements MessagingService {
     }
 
     @Override
-    public void changeConversationType(FreelancerEntity freelancer, UserEntity user, ConversationTypeEnum type) {
+    public void changeConversationType(
+            FreelancerEntity freelancer,
+            UserEntity user,
+            ConversationTypeEnum type,
+            OrderEntity order) {
         ConversationEntity conversation = conversationDomainService.getByMemberIds(
                 freelancer.getUser().getId(),
                 user.getId()
         );
         conversation.setType(type);
+        conversation.setOrder(order);
         conversationDomainService.save(conversation);
     }
 }

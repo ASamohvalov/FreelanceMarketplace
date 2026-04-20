@@ -12,7 +12,7 @@ export default function ModalWindowComponent({
 }) {
   return (
     <div
-      className={`proposal-modal-window p-4 rounded-4 shadow ${!isVisible && "d-none"}`}
+      className={`modal-window p-4 rounded-4 shadow ${!isVisible && "d-none"}`}
       style={{ width: "min(500px, 50%)" }}
     >
       <div className="d-flex gap-3 justify-content-center">

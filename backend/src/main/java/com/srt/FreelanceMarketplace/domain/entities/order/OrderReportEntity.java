@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.domain.entities.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;
@@ -29,6 +30,13 @@ public class OrderReportEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "freelancer_id")
     private FreelancerEntity freelancer;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id")
+    private UserEntity customer;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String report;

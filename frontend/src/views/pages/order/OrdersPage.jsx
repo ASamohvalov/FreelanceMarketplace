@@ -10,7 +10,7 @@ import { getUserData } from "../../../logic/jwt";
 import {
   getOrderCustomerRequest,
   getOrderFreelancerRequest,
-} from "../../../logic/requests/service/serviceRequest";
+} from "../../../logic/requests/order/orderRequest";
 
 export default function OrdersPage({ func, freelancer }) {
   const navigate = useNavigate();

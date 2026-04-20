@@ -86,9 +86,7 @@ export default function MessagesComponent({
             </button>
           </>
         )}
-        {conversation
-          ? conversation?.member.firstName + " " + conversation?.member.lastName
-          : "Чат"}
+        Чат
       </div>
 
       <div className="chat-messages flex-grow-1" ref={messageChatRef}>

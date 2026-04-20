@@ -25,3 +25,22 @@ body {
 .text-secondary-main {
   color: #D4D4D4;
 }
+
+/* elements */
+.order-report-status {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.order-report-status_pending {
+  background: #fff3cd;
+}
+
+.order-report-status_approved {
+  background: #d1e7dd;
+}
+
+.order-report-status_rejected {
+  background: #f8d7da;
+}

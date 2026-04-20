@@ -1,8 +1,39 @@
-.proposal-modal-window {
+.modal-window {
   background-color: white;
   position: absolute;
   left: 50%;
   top: 30%;
   transform: translateX(-50%);
   z-index: 1;
+}
+
+.order-report-modal-window {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  max-width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.order-report-modal-window_file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #f8f9ff;
+  margin-bottom: 8px;
+}
+
+.order-report-modal-window_comment-box {
+  display: none;
+}
+
+.order-report-modal-window_optional {
+  font-size: 0.75rem;
+  color: #6c757d;
 }

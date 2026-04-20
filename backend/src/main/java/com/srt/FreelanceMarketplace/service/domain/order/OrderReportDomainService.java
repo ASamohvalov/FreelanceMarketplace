@@ -18,8 +18,8 @@ public class OrderReportDomainService {
                 .orElseThrow(() -> new GlobalBadRequestException("no such order report"));
     }
 
-    public OrderReportEntity getByIdWithOrder(UUID id) {
-        return repository.findByIdWithOrder(id)
+    public OrderReportEntity getByIdWithOrderAndService(UUID id) {
+        return repository.findByIdWithOrderAndService(id)
                 .orElseThrow(() -> new GlobalBadRequestException("no such order report"));
     }
 

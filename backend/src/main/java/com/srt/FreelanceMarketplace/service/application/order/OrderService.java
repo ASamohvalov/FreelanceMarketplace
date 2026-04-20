@@ -78,7 +78,8 @@ public class OrderService {
             messagingService.changeConversationType(
                     service.getFreelancer(),
                     authHelperService.getUser(),
-                    ConversationTypeEnum.ORDER
+                    ConversationTypeEnum.ORDER,
+                    order
             );
         }
 

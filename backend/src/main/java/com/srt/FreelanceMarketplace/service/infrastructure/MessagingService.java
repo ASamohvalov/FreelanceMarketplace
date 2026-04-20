@@ -26,6 +26,7 @@ public interface MessagingService {
     void changeConversationType(
             FreelancerEntity freelancer,
             UserEntity user,
-            ConversationTypeEnum type
+            ConversationTypeEnum type,
+            OrderEntity order
     );
 }

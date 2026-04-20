@@ -48,7 +48,7 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
     public void sendNewOrderReport(OrderReportEntity report, UserEntity recipient, UserEntity sender) {
         NotificationEntity notification = NotificationEntity.builder()
                 .title("Отчёт по заказу")
-                .message(String.format("%s %s отправил отчёт по заказу - %s", sender.getFirstName(), sender.getLastName(), report.getOrder().getService().getTitle()))
+                .message(String.format("%s %s отправил отчёт по заказу: \"%s\"", sender.getFirstName(), sender.getLastName(), report.getOrder().getService().getTitle()))
                 .type(NotificationTypeEnum.NEW_ORDER_REPORT)
                 .recipient(recipient)
                 .entityType(getEntityType(report))
@@ -61,11 +61,29 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
     public void sendOrderCompleted(OrderEntity order, UserEntity recipient, UserEntity sender) {
         NotificationEntity notification = NotificationEntity.builder()
                 .title("Заказ завершен")
-                .message(String.format("%s %s принял ваш отчёт по заказу - %s", sender.getFirstName(), sender.getLastName(), order.getService().getTitle()))
+                .message(String.format("%s %s завершил заказ: \"%s\"", sender.getFirstName(), sender.getLastName(), order.getService().getTitle()))
                 .type(NotificationTypeEnum.ORDER_COMPLETED)
                 .recipient(recipient)
                 .entityType(getEntityType(order))
                 .entityId(order.getId())
+                .build();
+        repository.save(notification);
+    }
+
+    @Override
+    public void sendReportRejected(OrderReportEntity report, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Отчёт отклонен")
+                .message(String.format(
+                        "%s %s отклонил ваш отчёт: \"%s\", по заказу: \"%s\"",
+                        sender.getFirstName(),
+                        sender.getLastName(),
+                        report.getTitle(),
+                        report.getOrder().getService().getTitle()))
+                .type(NotificationTypeEnum.ORDER_COMPLETED)
+                .recipient(recipient)
+                .entityType(getEntityType(report))
+                .entityId(report.getId())
                 .build();
         repository.save(notification);
     }

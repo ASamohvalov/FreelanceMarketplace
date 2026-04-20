@@ -1,5 +1,5 @@
 import "./styles/aside.css";
-import { HandPlatter, House, MessageCircle } from "lucide-react";
+import { BookText, HandPlatter, House, MessageCircle } from "lucide-react";
 import { AsideComponent } from "./ui/aside_component";
 import { getUserData, isAuth } from "../../../logic/jwt";
 
@@ -25,6 +25,11 @@ const links = [
     to: "/OwnServices",
   },
   {
+    icon: <BookText size={32}></BookText>,
+    title: "Отчёты",
+    to: "/order/reports",
+  },
+  {
     icon: <MessageCircle size={32}></MessageCircle>,
     title: "Сообщения",
     to: "/messages",
@@ -41,6 +46,7 @@ export const Aside = ({ state }) => {
     >
       {links.map((item, id) => {
         if (!isAuth() && item.title === "Сообщения") return;
+        if (!isAuth() && item.title === "Отчёты") return;
         if (!isAuth() && item.title === "Заказы") return;
         if (!isFreelancer && item.title === "Мои услуги") return;
         return (

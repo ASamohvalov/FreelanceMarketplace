@@ -8,10 +8,13 @@ import FileUploadComponent from "../../components/FileUploadComponent";
 import { sendOrderReportRequest } from "../../../logic/requests/order/orderRequest";
 
 export default function SendOrderReportPage() {
-  const { state } = useLocation();
-  const [report, setReport] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { state } = useLocation();
+
+  const [report, setReport] = useState("");
+  const [title, setTitle] = useState("");
+  const [error, setError] = useState("");
+
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
@@ -25,30 +28,43 @@ export default function SendOrderReportPage() {
 
   async function handleSubmit() {
     if (!report) {
-      setError("Заполните поле описания отчёта");
+      setError("Заполните все поля");
+      return;
     }
 
-    const response = await sendOrderReportRequest(report, state.orderId);
+    const response = await sendOrderReportRequest(title, report, state.orderId);
     if (response.status !== 200) {
       navigate(`/error?code=${response.status}`);
+      return;
     }
 
     navigate("/order/report/send/success");
   }
 
   return (
-    <main style={{ height: "93vh" }}>
+    <main style={{ minHeight: "93vh" }}>
       <div className="container my-4">
         <NavLocation>
           <Link to="/MyOrders">Заказы </Link> / Написание отчёта
         </NavLocation>
         <h2 className="fw-bold mb-2">Отчёт по заказу</h2>
         <p className="text-muted mb-4">
-          Заполните приведенную ниже информацию, чтобы клиенты могли легко найти
-          и понять суть вашего сервиса.
+          Заполните приведенную ниже информацию, чтобы клиент смог корректно оценить вашу работу
         </p>
 
         <div className="card p-4 form-section rounded-4">
+          <h5>Заголовок</h5>
+
+          <div className="mb-4">
+            <input
+              className="form-control"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value)
+                setError("");
+              }}
+            />
+          </div>
           <h5>
             Описание{" "}
             <a

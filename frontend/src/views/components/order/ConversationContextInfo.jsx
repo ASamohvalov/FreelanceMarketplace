@@ -52,21 +52,17 @@ export default function ConversationContextInfo({ size, uShown }) {
                 <div className="info-value">{info?.service?.price} ₽</div>
               </div>
 
-              {info?.order && (
-                <>
-                  <div className="mb-3">
-                    <div className="info-label">Срок выполнения</div>
-                    <div className="info-value">7 дней</div>
-                  </div>
+              <div className="mb-3">
+                <div className="info-label">Срок выполнения</div>
+                <div className="info-value">7 дней</div>
+              </div>
 
-                  <div className="mb-3">
-                    <div className="info-label">Статус</div>
-                    <span className="badge bg-warning text-dark order-badge">
-                      {info?.order.status}
-                    </span>
-                  </div>
-                </>
-              )}
+              <div className="mb-3">
+                <div className="info-label">Статус</div>
+                <span className="badge bg-warning text-dark order-badge">
+                  {info?.order.status}
+                </span>
+              </div>
 
               <button
                 className="btn btn-outline-primary w-100 mb-2"
@@ -104,7 +100,7 @@ export default function ConversationContextInfo({ size, uShown }) {
 
           {info?.service.imageUrl ? (
             <img src={info.service.imageUrl}></img>
-          ): (
+          ) : (
             <div className="service-preview"></div>
           )}
 
@@ -127,21 +123,17 @@ export default function ConversationContextInfo({ size, uShown }) {
             <div className="info-value">{info?.service?.price} ₽</div>
           </div>
 
-          {info?.order && (
-            <>
-              <div className="mb-3">
-                <div className="info-label">Срок выполнения</div>
-                <div className="info-value">7 дней</div>
-              </div>
+          <div className="mb-3">
+            <div className="info-label">Срок выполнения</div>
+            <div className="info-value">7 дней</div>
+          </div>
 
-              <div className="mb-3">
-                <div className="info-label">Статус</div>
-                <span className="badge bg-warning text-dark order-badge">
-                  {info?.order.status}
-                </span>
-              </div>
-            </>
-          )}
+          <div className="mb-3">
+            <div className="info-label">Статус</div>
+            <span className="badge bg-warning text-dark order-badge">
+              {info?.order?.status}
+            </span>
+          </div>
 
           <button
             className="btn btn-outline-primary w-100 mb-2"

@@ -16,6 +16,8 @@ CREATE TABLE order_reports (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_id UUID REFERENCES orders(id) NOT NULL,
     freelancer_id UUID REFERENCES freelancers(id) NOT NULL,
+    customer_id UUID REFERENCES users(id) NOT NULL,
+    title VARCHAR(255) NOT NULL,
     report TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     status order_report_status DEFAULT 'PENDING' NOT NULL,

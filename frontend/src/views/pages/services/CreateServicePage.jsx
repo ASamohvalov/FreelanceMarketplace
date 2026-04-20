@@ -50,7 +50,7 @@ export default function CreateServicePage() {
       }
       setCategories(response.data);
         setSelectedCategory(response.data[0]);
-        
+
         setSelectedSubcategory(response.data[0].subcategories[0]);
     })();
   }, [navigate]);
@@ -362,8 +362,6 @@ export default function CreateServicePage() {
           </div>
         </div>
       </main>
-
-      <FooterComponent />
     </>
   );
 }

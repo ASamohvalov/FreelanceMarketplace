@@ -14,4 +14,6 @@ public class SendOrderReportRequest {
     private UUID orderId;
     @NotBlank
     private String report;
+    @NotBlank
+    private String title;
 }

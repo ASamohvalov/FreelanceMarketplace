@@ -18,15 +18,11 @@ export async function getAllServicesRequest() {
 export async function getOwnServicesRequest(){
   return await sendAuthGet("service/get/own");
 }
-export async function getOrderFreelancerRequest(){
-  return await sendAuthGet("order/freelancer/get");
-}
-export async function getOrderCustomerRequest(){
-  return await sendAuthGet("order/customer/get");
-}
+
 export async function showOwnServicesRequest(id){
   return await sendAuthPatch(`service/show/${id}`);
 }
+
 export async function hideOwnServicesRequest(id){
   return await sendAuthPatch(`service/hide/${id}`);
 }

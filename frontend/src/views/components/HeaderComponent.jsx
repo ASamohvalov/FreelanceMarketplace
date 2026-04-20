@@ -13,9 +13,7 @@ export default function HeaderComponent({ state }) {
     const [shrink, setShrink] = useState();
     const widthRef = useRef(null);
     const navigate = useNavigate();
-    
-    console.log(getUserData());
-    
+
     useEffect(() => {
         setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
     }, [setUser]);
@@ -24,7 +22,7 @@ export default function HeaderComponent({ state }) {
         const {width} = widthRef.current.getBoundingClientRect();
         setShrink(width < 650);
     }, [setShrink])
-    
+
     async function onLogoutClick(event) {
         event.preventDefault();
         await logoutRequest();
@@ -94,7 +92,7 @@ export default function HeaderComponent({ state }) {
                                         {!shrink && "Уведомления"}
                                     </Link>
                                 </li>
-                                
+
                             </>
                         )}
                         {(() => {
@@ -127,7 +125,7 @@ export default function HeaderComponent({ state }) {
                     </ul>
 
                     <div className="flex-fill d-flex justify-content-end ">
-                    
+
                         <BriefcaseBusiness size={40} color="white"></BriefcaseBusiness>
                     </div>
 

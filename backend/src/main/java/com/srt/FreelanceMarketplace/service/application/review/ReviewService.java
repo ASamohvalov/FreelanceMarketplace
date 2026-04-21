@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application.review;
 
+import com.srt.FreelanceMarketplace.domain.dto.request.review.EditReviewRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.review.SendReviewRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewResponse;
 import com.srt.FreelanceMarketplace.domain.entities.message.ReviewEntity;
@@ -16,7 +17,9 @@ import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,7 +27,7 @@ import java.util.UUID;
 public class ReviewService {
     private final ReviewRepository repository;
     private final ReviewDomainService domainService;
-    private final ReviewMapper reviewMapper;
+    private final ReviewMapper mapper;
 
     private final OrderDomainService orderDomainService;
     private final AuthHelperService authHelperService;
@@ -51,24 +54,27 @@ public class ReviewService {
         repository.save(review);
     }
 
-    public void editReview(SendReviewRequest request) {
-        OrderEntity order = orderDomainService.getById(request.getOrderId());
+    public void editReview(EditReviewRequest request) {
+        ReviewEntity review = domainService.getByIdWithOrderAndCustomerById(request.getReviewId());
 
-        if (!order.getCustomer().getId()
+        if (!review.getOrder().getCustomer().getId()
                 .equals(authHelperService.getUser().getId())) {
             throw new GlobalBadRequestException("this user don't customer of this order");
         }
 
-        if (repository.existsByOrder(order)) {
-            throw new GlobalBadRequestException("the review already sent");
-        }
+        review.setReview(request.getReview());
+        review.setRating(request.getRating());
+        review.setUpdatedAt(Instant.now());
 
-        ReviewEntity review = ReviewEntity.builder()
-                .rating(request.getRating())
-                .review(request.getReview())
-                .order(order)
-                .build();
         repository.save(review);
+    }
+
+    public ReviewResponse getReviewByOrder(UUID orderId) {
+        OrderEntity order = orderDomainService.getReferenceIfExistsById(orderId);
+        Optional<ReviewEntity> review = repository.findFirstWithAuthorByOrder(order);
+        return review.isPresent()
+                ? mapper.toResponse(review.get())
+                : new ReviewResponse();
     }
 
     public List<ReviewResponse> getReviewByService(UUID serviceId) {
@@ -79,7 +85,7 @@ public class ReviewService {
     }
 
     private ReviewResponse mapToResponse(ReviewEntity review) {
-        ReviewResponse response = reviewMapper.toResponse(review);
+        ReviewResponse response = mapper.toResponse(review);
         response.setAuthor(userMapper.entityToUserNameResponse(review.getOrder().getCustomer()));
         return response;
     }

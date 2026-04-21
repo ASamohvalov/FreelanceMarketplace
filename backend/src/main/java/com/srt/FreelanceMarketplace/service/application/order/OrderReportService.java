@@ -76,19 +76,19 @@ public class OrderReportService {
 
     public List<ReceivedOrderReportResponse> getReceivedReportsByOrder(UUID orderId) {
         OrderEntity order = orderDomainService.getReferenceIfExistsById(orderId);
-        return repository.findAllByOrderWithFreelancer(order).stream()
+        return repository.findAllWithFreelancerByOrder(order).stream()
                 .map(mapper::toReceivedResponse)
                 .toList();
     }
 
     public List<ReceivedOrderReportResponse> getReceivedReports() {
-        return repository.findAllByCustomerWithFreelancer(authHelperService.getUser()).stream()
+        return repository.findAllWithFreelancerByCustomerOrderByCreatedAtDesc(authHelperService.getUser()).stream()
                 .map(mapper::toReceivedResponse)
                 .toList();
     }
 
     public List<SentOrderReportResponse> getSentReports() {
-        return repository.findAllByFreelancerWithCustomer(
+        return repository.findAllWithCustomerByFreelancerOrderByCreatedAtDesc(
                 freelancerDomainService.getByUser(authHelperService.getUser())).stream()
                 .map(mapper::toSentResponse)
                 .toList();

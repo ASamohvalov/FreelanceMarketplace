@@ -124,7 +124,7 @@ export default function ServicePage() {
               <ReactMarkdown>{serviceData.description}</ReactMarkdown>
             </div>
 
-            {reviews.length > 0 && reviewCheckInfo.canReview && (
+            {(reviews.length > 0 || reviewCheckInfo.canReview) && (
               <div className="card p-4 mb-4 rounded-4">
                 <h4 className="mb-3">Отзывы</h4>
 
@@ -143,15 +143,17 @@ export default function ServicePage() {
                 {reviewCheckInfo.canReview && (
                   <div className="mt-2">
                     <button
-                      onClick={() =>
-                        navigate("/review/send", {
+                      onClick={() => {
+                        navigate(reviewCheckInfo.action === "EDIT"
+                          ? "/review/send?edit=1"
+                          : "/review/send", {
                           state: {
                             orderId: reviewCheckInfo.orderId,
                             serviceTitle: serviceData.title,
                             freelancer: serviceData.freelancer,
                           },
                         })
-                      }
+                      }}
                       className="w-100 btn btn-primary"
                     >
                       {reviewCheckInfo.action === "CREATE" && "Оставить отзыв"}
@@ -228,7 +230,7 @@ export default function ServicePage() {
                         freelancerName={
                           s.freelancer.firstName + " " + s.freelancer.lastName
                         }
-                        image={null}
+                        image={s.imageURL || null}
                       />
                     </div>
                   );

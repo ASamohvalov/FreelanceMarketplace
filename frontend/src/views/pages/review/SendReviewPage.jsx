@@ -1,28 +1,44 @@
 import "./css/send_review_page.css";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { sendReviewRequest } from "../../../logic/requests/review/reviewRequest";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { getReviewByOrder, sendEditReviewRequest, sendReviewRequest } from "../../../logic/requests/review/reviewRequest";
 
 export default function SendReviewPage() {
   // { orderId, serviceTitle, freelancer }
   const { state } = useLocation();
+  const [ edit ] = useSearchParams();
   const navigate = useNavigate();
 
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState("");
+  const [reviewId, setReviewId] = useState(null);
 
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
     if (!state) {
       navigate("/error");
+      return;
     }
-  }, [navigate, state])
+
+    if (edit) {
+      (async () => {
+        const response = await getReviewByOrder(state.orderId);
+        if (response.status !== 200) {
+          navigate(`/error?code=${response.status}`);
+          return;
+        }
+        setRating(response.data.rating);
+        setReview(response.data.review);
+        setReviewId(response.data.id);
+      })();
+    }
+  }, [navigate, state, edit])
 
   return (
     <main style={{ minHeight: "90vh" }}>
       <div className="container mt-5 mb-5">
-        <h3 className="mb-4 fw-semibold">Оставить отзыв</h3>
+        <h3 className="mb-4 fw-semibold">{edit ? "Редактирование отзыва" : "Оставить отзыв"}</h3>
 
         <div
           className="send-review-page_card mx-auto"
@@ -61,12 +77,21 @@ export default function SendReviewPage() {
             <button
               className="btn btn-primary"
               onClick={async () => {
-                const response = await sendReviewRequest(state.orderId, rating, review);
-                if (response.status !== 200) {
-                  navigate(`/error?code=${response.status}`);
-                  return;
+                if (edit) {
+                  const response = await sendEditReviewRequest(reviewId, rating, review);
+                  if (response.status !== 200) {
+                    navigate(`/error?code=${response.status}`);
+                    return;
+                  }
+                  setMessage("Отзыв отредактирован");
+                } else {
+                  const response = await sendReviewRequest(state.orderId, rating, review);
+                  if (response.status !== 200) {
+                    navigate(`/error?code=${response.status}`);
+                    return;
+                  }
+                  setMessage("Отзыв отправлен");
                 }
-                setMessage("отзыв отправлен");
               }}
             >Отправить отзыв</button>
 

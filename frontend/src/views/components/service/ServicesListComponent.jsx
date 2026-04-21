@@ -3,7 +3,11 @@ import { getUserData } from "../../../logic/jwt";
 import ServiceCardComponent from "./ServiceCardComponent";
 import OrderCard from "../order/OrderCard";
 
-export default function ServicesListComponent({ services, orderInfo, isOrder }) {
+export default function ServicesListComponent({
+  services,
+  orderInfo,
+  isOrder,
+}) {
   const me = getUserData();
   const location = useLocation();
   console.log(services, orderInfo);
@@ -20,7 +24,9 @@ export default function ServicesListComponent({ services, orderInfo, isOrder }) 
                   hidden={service.hide}
                   title={service.title}
                   price={service.price}
-                  orderInfo={orderInfo?.filter(item=>item.service.id===service.id)}
+                  orderInfo={orderInfo?.filter(
+                    (item) => item.service.id === service.id,
+                  )}
                   freelancerName={
                     (service?.freelancer?.firstName || me.firstName) +
                     " " +
@@ -28,14 +34,16 @@ export default function ServicesListComponent({ services, orderInfo, isOrder }) 
                   }
                   image={service.imageURL || null}
                   from={location.pathname}
-                  />
-                ) : (
-                  <ServiceCardComponent
+                />
+              ) : (
+                <ServiceCardComponent
                   id={service.id}
                   hidden={service.hide}
                   title={service.title}
                   price={service.price}
-                  orderInfo={orderInfo?.filter(item=>item.service.id===service.id)}
+                  orderInfo={orderInfo?.filter(
+                    (item) => item.service.id === service.id,
+                  )}
                   freelancerName={
                     (service?.freelancer?.firstName || me.firstName) +
                     " " +

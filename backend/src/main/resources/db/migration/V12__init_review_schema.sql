@@ -3,5 +3,6 @@ CREATE TABLE reviews (
     order_id UUID REFERENCES orders(id) NOT NULL,
     review TEXT NOT NULL,
     rating INT NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW() NOT NULL
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    updated_at TIMESTAMP DEFAULT NOW() NOT NULL
  );

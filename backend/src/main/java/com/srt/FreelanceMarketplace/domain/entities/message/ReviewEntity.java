@@ -32,4 +32,8 @@ public class ReviewEntity {
     @Column(nullable = false)
     @Builder.Default
     private Instant createdAt = Instant.now();
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant updatedAt = Instant.now();
 }

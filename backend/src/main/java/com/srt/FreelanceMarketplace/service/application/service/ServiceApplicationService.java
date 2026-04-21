@@ -67,7 +67,7 @@ public class ServiceApplicationService {
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {
         FreelancerEntity freelancer = freelancerService.getByIdWithJobTitle(freelancerId);
         return repository.findAllByFreelancer(freelancer).stream()
-                .map(mapper::serviceEntityToResponse)
+                .map(domainService::mapToServiceResponse)
                 .toList();
     }
 

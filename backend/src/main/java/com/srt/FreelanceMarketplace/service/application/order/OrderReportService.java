@@ -24,6 +24,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -101,6 +102,7 @@ public class OrderReportService {
 
         report.setStatus(OrderReportStatusEnum.ACCEPTED);
         report.getOrder().setStatus(OrderStatusEnum.COMPLETED);
+        report.getOrder().setCompletionDate(Instant.now());
         report.setCustomerComment(response.getComment());
         repository.save(report);
 
@@ -111,12 +113,14 @@ public class OrderReportService {
         );
     }
 
+    @Transactional
     public void rejectReport(UUID reportId, SendRejectOrderReportResponse response) {
         OrderReportEntity report = domainService.getByIdWithOrderAndFreelancerAndService(reportId);
 
         validateResponseOnOrderRequest(report);
 
         report.setStatus(OrderReportStatusEnum.REJECTED);
+        report.getOrder().setStatus(OrderStatusEnum.IN_PROGRESS);
         report.setCustomerComment(response.getComment());
 
         repository.save(report);

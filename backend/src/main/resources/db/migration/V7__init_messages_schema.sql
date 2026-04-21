@@ -30,10 +30,3 @@ CREATE TABLE messages (
     is_read BOOLEAN DEFAULT FALSE NOT NULL,
     message TEXT NOT NULL
 );
-
-CREATE TABLE service_reviews (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    author_id UUID REFERENCES users(id) NOT NULL,
-    service_id UUID REFERENCES services(id) NOT NULL,
-    review TEXT NOT NULL
- );

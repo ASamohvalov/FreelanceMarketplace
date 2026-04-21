@@ -38,4 +38,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     @EntityGraph(attributePaths = {"freelancer", "service"})
     @Query("select o from OrderEntity o where o.id = :id")
     Optional<OrderEntity> findByIdWithFreelancerAndService(UUID id);
+
+    Optional<OrderEntity> findFirstByServiceAndCustomerOrderByCompletionDateDesc(
+            ServiceEntity service, UserEntity customer);
 }

@@ -128,7 +128,7 @@ export default function OrderReportPage() {
                     {order.service.freelancer.firstName +
                       " " +
                       order.service.freelancer.lastName +
-                      " | " +
+                      " • " +
                       order.service.title}
                   </option>
                 ))

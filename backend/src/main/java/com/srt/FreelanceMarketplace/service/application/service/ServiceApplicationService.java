@@ -2,11 +2,14 @@ package com.srt.FreelanceMarketplace.service.application.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewCheckActionEnum;
+import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewCheckResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEntity;
@@ -14,6 +17,8 @@ import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ProposalDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
+import com.srt.FreelanceMarketplace.service.domain.review.ReviewDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.SubcategoryDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
@@ -41,6 +46,8 @@ public class ServiceApplicationService {
     private final AuthHelperService authHelperService;
     private final SubcategoryDomainService subcategoryService;
     private final ProposalDomainService proposalService;
+    private final OrderDomainService orderDomainService;
+    private final ReviewDomainService reviewDomainService;
 
     public List<ServiceResponse> getAll() {
         return repository.findAllNotHideWithFreelancer().stream()
@@ -119,6 +126,21 @@ public class ServiceApplicationService {
         return repository.findAllByFreelancer(freelancerService.getByUser(authHelperService.getUser())).stream()
                 .map(domainService::mapToGetOwnService)
                 .toList();
+    }
+
+    public ReviewCheckResponse reviewCheck(UUID serviceId) {
+        ServiceEntity service = domainService.getReferenceIfExistsById(serviceId);
+        Optional<OrderEntity> order = orderDomainService.findLastOrderByCustomer(
+                service, authHelperService.getUser());
+
+        if (order.isEmpty()) {
+            return new ReviewCheckResponse(false,  ReviewCheckActionEnum.NONE, null);
+        }
+
+        ReviewCheckActionEnum action = reviewDomainService.existsByOrder(order.get())
+                ? ReviewCheckActionEnum.EDIT
+                : ReviewCheckActionEnum.CREATE;
+        return new ReviewCheckResponse(true, action, order.get().getId());
     }
 
     // for create service

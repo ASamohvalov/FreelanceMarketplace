@@ -12,7 +12,12 @@ import "./css/service_page.css";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import OrderModalWindow from "../../components/modal_windows/OrderModalWindow";
 import { userContext } from "../../../logic/store/userContext";
-import { getUserData } from "../../../logic/jwt";
+import { getUserData, isAuth } from "../../../logic/jwt";
+import {
+  getReviewsByServiceRequest,
+  sendCanReviewRequest,
+} from "../../../logic/requests/review/reviewRequest";
+import ReviewStarsComponent from "../../components/reviews/ReviewStarsComponent";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -24,8 +29,10 @@ export default function ServicePage() {
   const [isProposalVisible, setIsProposalVisible] = useState(false);
   const [isOrderVisible, setIsOrderVisible] = useState(false);
   const [isProposalBeenSent, setIsProposalBeenSent] = useState(false);
+  const [reviews, setReviews] = useState([]);
 
   const [personalServices, setPersonalServices] = useState([]);
+  const [reviewCheckInfo, setReviewCheckInfo] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -46,6 +53,22 @@ export default function ServicePage() {
         return;
       }
       setPersonalServices(getPersonalResponse.data);
+
+      const reviewResponse = await getReviewsByServiceRequest(id);
+      if (reviewResponse.status !== 200) {
+        navigate(`/error?code=${reviewResponse.status}`);
+        return;
+      }
+      setReviews(reviewResponse.data);
+
+      if (isAuth()) {
+        const reviewCheckResponse = await sendCanReviewRequest(id);
+        if (reviewCheckResponse.status !== 200) {
+          navigate(`/error?code=${reviewCheckResponse.status}`);
+          return;
+        }
+        setReviewCheckInfo(reviewCheckResponse.data);
+      }
     })();
   }, [navigate, id]);
 
@@ -101,36 +124,49 @@ export default function ServicePage() {
               <ReactMarkdown>{serviceData.description}</ReactMarkdown>
             </div>
 
-            <div className="card p-4 mb-4 rounded-4">
-              <h4 className="mb-3">Отзывы</h4>
+            {reviews.length > 0 && reviewCheckInfo.canReview && (
+              <div className="card p-4 mb-4 rounded-4">
+                <h4 className="mb-3">Отзывы</h4>
 
-              <div className="review">
-                <div className="d-flex justify-content-between">
-                  <strong>Алексей</strong>
-                  <span className="text-warning">★★★★★</span>
-                </div>
-                <p className="mt-2">
-                  Лучший сервис!
-                </p>
-              </div>
+                {reviews.map((review, idx) => (
+                  <div className="review" key={idx}>
+                    <div className="d-flex justify-content-between">
+                      <strong>
+                        {review.author.firstName + " " + review.author.lastName}
+                      </strong>
+                      <ReviewStarsComponent rating={review.rating} />
+                    </div>
+                    <p className="mt-2">{review.review}</p>
+                  </div>
+                ))}
 
-              <div className="review">
-                <div className="d-flex justify-content-between">
-                  <strong>Мария</strong>
-                  <span className="text-warning">★★★★☆</span>
-                </div>
-                <p className="mt-2">
-                  Лучший сервис!
-                </p>
+                {reviewCheckInfo.canReview && (
+                  <div className="mt-2">
+                    <button
+                      onClick={() =>
+                        navigate("/review/send", {
+                          state: {
+                            orderId: reviewCheckInfo.orderId,
+                            serviceTitle: serviceData.title,
+                            freelancer: serviceData.freelancer,
+                          },
+                        })
+                      }
+                      className="w-100 btn btn-primary"
+                    >
+                      {reviewCheckInfo.action === "CREATE" && "Оставить отзыв"}
+                      {reviewCheckInfo.action === "EDIT" &&
+                        "Редактировать отзыв"}
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
           </div>
+
           <div className="col-lg-4">
             <div className="card p-4 service-sidebar rounded-4">
               <div className="price mb-3">{serviceData.price} ₽</div>
-
-              {/* <Link to={`/pay/${id}`} className="btn btn-primary w-100 mb-3">
-              </Link>*/}
 
               <button
                 className="btn btn-primary w-100 mb-3"

@@ -23,6 +23,7 @@ import OrdersPage from "./views/pages/order/OrdersPage.jsx";
 import SendOrderReportPage from "./views/pages/order/SendOrderReportPage.jsx";
 import SendOrderReportSuccessPage from "./views/pages/order/SendOrderReportSuccessPage.jsx";
 import OrderReportPage from "./views/pages/order/OrderReportPage.jsx";
+import SendReviewPage from "./views/pages/review/SendReviewPage.jsx";
 
 // base routing
 export default function App() {
@@ -61,9 +62,13 @@ export default function App() {
         <Route path="pay/:serviceId" element={<PaymentPage />} />
         <Route path="order/success" element={<OrderSuccessPage />} />
         <Route path="order/report/send" element={<SendOrderReportPage />} />
-        <Route path="order/report/send/success" element={<SendOrderReportSuccessPage />} />
+        <Route
+          path="order/report/send/success"
+          element={<SendOrderReportSuccessPage />}
+        />
         <Route path="order/reports" element={<OrderReportPage />} />
 
+        <Route path="review/send" element={<SendReviewPage />} />
       </Route>
     </Routes>
   );

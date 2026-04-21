@@ -1,0 +1,17 @@
+.send-review-page_card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.send-review-page_stars i {
+  font-size: 24px;
+  cursor: pointer;
+  color: #ccc;
+  transition: 0.2s;
+}
+
+.send-review-page_stars i.active {
+  color: #f59e0b;
+}

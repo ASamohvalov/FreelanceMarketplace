@@ -70,7 +70,7 @@ export default function OrderReportModalWindow({
             onClick={() => {
               commentBoxRef.current.style.display = "block";
             }}
-          >Отправить отзыв</button>
+          >Отправить ответ</button>
         )}
         <button
           className="btn btn-outline-secondary"
@@ -107,6 +107,7 @@ export default function OrderReportModalWindow({
                 return;
               }
               alert("Отчёт успешно принят");
+              onClose();
             }}
           >
             <i className="bi bi-check-lg me-1"></i>
@@ -122,6 +123,7 @@ export default function OrderReportModalWindow({
                 return;
               }
               alert("Отчёт успешно отклонен");
+              onClose();
             }}
           >
             <i className="bi bi-x-lg me-1"></i>

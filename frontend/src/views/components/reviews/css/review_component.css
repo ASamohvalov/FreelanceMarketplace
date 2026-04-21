@@ -1,0 +1,16 @@
+.review-component_review {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.review-star-component_star i {
+  font-size: 14px;
+  cursor: pointer;
+  color: #ccc;
+  transition: 0.2s;
+}
+
+.review-star-component_star i.active {
+  color: #f59e0b;
+}

@@ -7,6 +7,7 @@ CREATE TABLE orders (
     service_id UUID REFERENCES services(id) NOT NULL,
     status order_status NOT NULL DEFAULT 'IN_PROGRESS',
     order_date TIMESTAMP DEFAULT NOW() NOT NULL,
+    completion_date TIMESTAMP,
     deadline_date TIMESTAMP NOT NULL
 );
 

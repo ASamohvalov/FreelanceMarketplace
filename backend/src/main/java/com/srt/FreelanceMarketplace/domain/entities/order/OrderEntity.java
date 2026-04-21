@@ -48,6 +48,9 @@ public class OrderEntity {
     @Builder.Default
     private Instant orderDate = Instant.now();
 
+    @Column(nullable = true)
+    private Instant completionDate;
+
     @Column(nullable = false)
     private Instant deadlineDate;
 }

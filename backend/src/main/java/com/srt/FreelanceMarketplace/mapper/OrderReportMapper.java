@@ -12,10 +12,12 @@ public interface OrderReportMapper {
     @Mapping(target = "user.id", source = "customer.id")
     @Mapping(target = "user.firstName", source = "customer.firstName")
     @Mapping(target = "user.lastName", source = "customer.lastName")
+    @Mapping(target = "orderId", source = "order.id")
     SentOrderReportResponse toSentResponse(OrderReportEntity entity);
 
     @Mapping(target = "freelancer.firstName", source = "freelancer.user.firstName")
     @Mapping(target = "freelancer.lastName", source = "freelancer.user.lastName")
     @Mapping(target = "freelancer.jobTitle", source = "freelancer.jobTitle.name")
+    @Mapping(target = "orderId", source = "order.id")
     ReceivedOrderReportResponse toReceivedResponse(OrderReportEntity entity);
 }

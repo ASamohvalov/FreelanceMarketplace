@@ -1,8 +1,12 @@
 import { useRef, useState } from "react";
 import "./css/modal_window.css";
-import { acceptOrderReportRequest, rejectOrderReportRequest } from "../../../logic/requests/order/orderReportRequest";
+import {
+  acceptOrderReportRequest,
+  rejectOrderReportRequest,
+} from "../../../logic/requests/order/orderReportRequest";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import { getUserData } from "../../../logic/jwt";
 
 export default function OrderReportModalWindow({
   id,
@@ -13,32 +17,49 @@ export default function OrderReportModalWindow({
   report,
   isVisible,
   onClose,
-  isReceived=true,
+  isReceived = true,
 }) {
   const commentBoxRef = useRef(null);
   const navigate = useNavigate();
 
   const [comment, setComment] = useState("");
 
+  const userData = getUserData();
+
   return (
     <div className={`order-report-modal-window ${!isVisible && "d-none"}`}>
       <div className="d-flex justify-content-between align-items-start mb-3">
         <div>
           <h4 className="fw-semibold mb-1">{title}</h4>
-          <small className="text-muted">{user?.firstName + " " + user?.lastName} • {sendDate}</small>
+          <small className="text-muted">
+            {isReceived
+              ? user?.firstName + " " + user?.lastName
+              : userData.firstName + " " + userData.lastName}{" "}
+            • {sendDate}
+          </small>
         </div>
 
-        {status === "ACCEPTED" && <span className="order-report-status order-report-status_approved">Принят</span>}
-        {status === "REJECTED" && <span className="order-report-status order-report-status_rejected">Отклонен</span>}
-        {status === "PENDING" && <span className="order-report-status order-report-status_pending">На проверке</span>}
+        {status === "ACCEPTED" && (
+          <span className="order-report-status order-report-status_approved">
+            Принят
+          </span>
+        )}
+        {status === "REJECTED" && (
+          <span className="order-report-status order-report-status_rejected">
+            Отклонен
+          </span>
+        )}
+        {status === "PENDING" && (
+          <span className="order-report-status order-report-status_pending">
+            На проверке
+          </span>
+        )}
       </div>
 
       <hr />
 
       <div className="mb-4">
-        <ReactMarkdown>
-          {report}
-        </ReactMarkdown>
+        <ReactMarkdown>{report}</ReactMarkdown>
       </div>
 
       <div className="mb-4">
@@ -64,18 +85,19 @@ export default function OrderReportModalWindow({
       <hr />
 
       <div className="d-flex gap-3 mb-3">
-        {(isReceived && status === "PENDING") && (
+        {isReceived && status === "PENDING" && (
           <button
             className="btn btn-primary"
             onClick={() => {
               commentBoxRef.current.style.display = "block";
             }}
-          >Отправить ответ</button>
+          >
+            Отправить ответ
+          </button>
         )}
-        <button
-          className="btn btn-outline-secondary"
-          onClick={onClose}
-        >Закрыть</button>
+        <button className="btn btn-outline-secondary" onClick={onClose}>
+          Закрыть
+        </button>
       </div>
 
       <div

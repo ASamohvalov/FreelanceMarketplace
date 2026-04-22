@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ReceivedOrderReportResponse {
     private UUID id;
+    private UUID orderId;
     private String title;
     private String report;
     private Instant createdAt;

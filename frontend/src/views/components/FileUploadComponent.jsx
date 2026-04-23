@@ -37,6 +37,10 @@ export default function FileUploadComponent({ files, setFiles, title, maxFiles }
           ))}
         </div>
       </div>
+
+      <div className="form-text">
+        Максимальное количество файлов: {maxFiles}.
+      </div>
     </div>
   );
 }

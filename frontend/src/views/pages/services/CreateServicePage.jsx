@@ -13,6 +13,7 @@ import FooterComponent from "../../components/FooterComponent";
 import NavLocation from "../../components/elements/NavLocation";
 import ReactMarkdown from "react-markdown";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
+import FileUploadComponent from "../../components/FileUploadComponent";
 
 export default function CreateServicePage() {
   const navigate = useNavigate();
@@ -281,49 +282,12 @@ export default function CreateServicePage() {
                 <div className="form-text"></div>
               </div>
 
-              <div className="card p-4 form-section rounded-4">
-                <h5>Галерея</h5>
-
-                <div className="mb-3">
-                  {/* TODO, file delete in input */}
-                  <input
-                    type="file"
-                    className="form-control"
-                    onChange={(e) => {
-                      if (images.length === 4) {
-                        return;
-                      }
-                      const array = [...images];
-                      array.push(e.target.files[0]);
-                      setImages(array);
-                    }}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <div id="file-list">
-                    {images.map((image, idx) => (
-                      <div className="file-row" key={idx}>
-                        <span className="file-name">{image.name}</span>
-                        <span
-                          className="icon remove"
-                          onClick={() => {
-                            const array = [...images];
-                            array.splice(idx, 1);
-                            setImages(array);
-                          }}
-                        >
-                          ✕
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="form-text">
-                  Загрузите изображения, которые представляют ваш сервис (до 5).
-                </div>
-              </div>
+              <FileUploadComponent
+                title={"Галлерея"}
+                files={images}
+                setFiles={setImages}
+                maxFiles={5}
+              />
 
               <div className="card p-4 rounded-4">
                 <button

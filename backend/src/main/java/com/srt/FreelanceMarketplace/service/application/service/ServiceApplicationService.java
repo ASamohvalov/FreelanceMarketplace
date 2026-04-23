@@ -136,8 +136,7 @@ public class ServiceApplicationService {
         if (order.isEmpty()) {
             return new ReviewCheckResponse(false,  ReviewCheckActionEnum.NONE, null);
         }
-
-        ReviewCheckActionEnum action = reviewDomainService.existsByOrder(order.get())
+        ReviewCheckActionEnum action = reviewDomainService.existsByService(service)
                 ? ReviewCheckActionEnum.EDIT
                 : ReviewCheckActionEnum.CREATE;
         return new ReviewCheckResponse(true, action, order.get().getId());

@@ -148,6 +148,7 @@ export default function ServicePage() {
                           ? "/review/send?edit=1"
                           : "/review/send", {
                           state: {
+                            serviceId: serviceData.id,
                             orderId: reviewCheckInfo.orderId,
                             serviceTitle: serviceData.title,
                             freelancer: serviceData.freelancer,

@@ -27,3 +27,7 @@ export async function getReviewsByServiceRequest(serviceId) {
 export async function getReviewByOrder(orderId) {
   return await sendAuthGet(`review/get/by_order/${orderId}`);
 }
+
+export async function getPersonalReviewByServiceRequest(serviceId) {
+  return await sendAuthGet(`review/get/personal/by_service/${serviceId}`);
+}

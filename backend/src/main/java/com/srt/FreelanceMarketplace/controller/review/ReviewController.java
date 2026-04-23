@@ -35,8 +35,13 @@ public class ReviewController {
         return reviewService.getReviewByOrder(orderId);
     }
 
+    @GetMapping("/get/personal/by_service/{serviceId}")
+    public ReviewResponse getPersonalReviewByService(@PathVariable UUID serviceId) {
+        return reviewService.getPersonalReviewByService(serviceId);
+    }
+
     @GetMapping("/get/by_service/{serviceId}")
-    public List<ReviewResponse> getReviewByService(@PathVariable UUID serviceId) {
-        return reviewService.getReviewByService(serviceId);
+    public List<ReviewResponse> getReviewsByService(@PathVariable UUID serviceId) {
+        return reviewService.getReviewsByService(serviceId);
     }
 }

@@ -24,6 +24,10 @@ public class ServiceDomainService {
 
     private final ServiceImageDomainService serviceImageService;
 
+    public ServiceEntity getReferenceById(UUID id) {
+        return repository.getReferenceById(id);
+    }
+
     public ServiceEntity getById(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));

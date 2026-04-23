@@ -1,12 +1,16 @@
-import "./css/send_review_page.css";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { getReviewByOrder, sendEditReviewRequest, sendReviewRequest } from "../../../logic/requests/review/reviewRequest";
+import {
+  getPersonalReviewByServiceRequest,
+  sendEditReviewRequest,
+  sendReviewRequest,
+} from "../../../logic/requests/review/reviewRequest";
+import "./css/send_review_page.css";
 
 export default function SendReviewPage() {
-  // { orderId, serviceTitle, freelancer }
+  // { orderId, serviceId, serviceTitle, freelancer }
   const { state } = useLocation();
-  const [ edit ] = useSearchParams();
+  const [edit] = useSearchParams();
   const navigate = useNavigate();
 
   const [rating, setRating] = useState(5);
@@ -20,10 +24,11 @@ export default function SendReviewPage() {
       navigate("/error");
       return;
     }
+    console.log(state);
 
     if (edit) {
       (async () => {
-        const response = await getReviewByOrder(state.orderId);
+        const response = await getPersonalReviewByServiceRequest(state.serviceId);
         if (response.status !== 200) {
           navigate(`/error?code=${response.status}`);
           return;
@@ -33,12 +38,14 @@ export default function SendReviewPage() {
         setReviewId(response.data.id);
       })();
     }
-  }, [navigate, state, edit])
+  }, [navigate, state, edit]);
 
   return (
     <main style={{ minHeight: "90vh" }}>
       <div className="container mt-5 mb-5">
-        <h3 className="mb-4 fw-semibold">{edit ? "Редактирование отзыва" : "Оставить отзыв"}</h3>
+        <h3 className="mb-4 fw-semibold">
+          {edit ? "Редактирование отзыва" : "Оставить отзыв"}
+        </h3>
 
         <div
           className="send-review-page_card mx-auto"
@@ -46,7 +53,10 @@ export default function SendReviewPage() {
         >
           <div className="order-preview mb-4">
             <div className="fw-semibold">{state.serviceTitle}</div>
-            <div className="text-muted small">Исполнитель: {state.freelancer.firstName + " " + state.freelancer.lastName}</div>
+            <div className="text-muted small">
+              Исполнитель:{" "}
+              {state.freelancer.firstName + " " + state.freelancer.lastName}
+            </div>
           </div>
 
           <div className="mb-4">
@@ -78,14 +88,22 @@ export default function SendReviewPage() {
               className="btn btn-primary"
               onClick={async () => {
                 if (edit) {
-                  const response = await sendEditReviewRequest(reviewId, rating, review);
+                  const response = await sendEditReviewRequest(
+                    reviewId,
+                    rating,
+                    review,
+                  );
                   if (response.status !== 200) {
                     navigate(`/error?code=${response.status}`);
                     return;
                   }
                   setMessage("Отзыв отредактирован");
                 } else {
-                  const response = await sendReviewRequest(state.orderId, rating, review);
+                  const response = await sendReviewRequest(
+                    state.orderId,
+                    rating,
+                    review,
+                  );
                   if (response.status !== 200) {
                     navigate(`/error?code=${response.status}`);
                     return;
@@ -93,12 +111,16 @@ export default function SendReviewPage() {
                   setMessage("Отзыв отправлен");
                 }
               }}
-            >Отправить отзыв</button>
+            >
+              Отправить отзыв
+            </button>
 
             <button
               className="btn btn-outline-secondary"
               onClick={() => navigate(-1)}
-            >Назад</button>
+            >
+              Назад
+            </button>
           </div>
 
           {message && (

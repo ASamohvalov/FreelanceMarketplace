@@ -77,7 +77,14 @@ public class ReviewService {
                 : new ReviewResponse();
     }
 
-    public List<ReviewResponse> getReviewByService(UUID serviceId) {
+    public ReviewResponse getPersonalReviewByService(UUID serviceId) {
+        ServiceEntity service = serviceDomainService.getReferenceIfExistsById(serviceId);
+        return mapToResponse(
+                repository.findFirstByOrder_serviceAndOrder_customer(service, authHelperService.getUser())
+        );
+    }
+
+    public List<ReviewResponse> getReviewsByService(UUID serviceId) {
         ServiceEntity service = serviceDomainService.getReferenceIfExistsById(serviceId);
         return repository.findAllByServiceWithAuthor(service).stream()
                 .map(this::mapToResponse)

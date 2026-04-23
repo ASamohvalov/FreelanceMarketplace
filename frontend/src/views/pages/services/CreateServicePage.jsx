@@ -50,11 +50,13 @@ export default function CreateServicePage() {
         return;
       }
       setCategories(response.data);
-        setSelectedCategory(response.data[0]);
+      
+        setSelectedCategory(response.data[0].id);
 
-        setSelectedSubcategory(response.data[0].subcategories[0]);
+        setSelectedSubcategory(response.data[0].subcategories[0].id);
     })();
   }, [navigate]);
+  
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -73,7 +75,7 @@ export default function CreateServicePage() {
       err = true;
     }
     if (err) return;
-
+    
     const response = await createServiceRequest({
       title: title,
       titleImage: titleImage,
@@ -81,24 +83,27 @@ export default function CreateServicePage() {
       price: price,
       deadlineDays: Number(deadlineDays.current.value),
       revisionsCount: Number(revisionsCount.current.value),
-      subcategoryId: selectedSubcategory.id,
+      subcategoryId: selectedSubcategory,
       images: images,
     });
     if (response.status !== 200) {
       navigate("/error");
       return;
     }
-
+    const da = categories.filter((category)=>category.id === selectedCategory)[0]
+    console.log(da);
     navigate("/create-service/success", {
       state: {
         serviceId: response.data.id,
         serviceName: title,
-        category: selectedCategory, // todo
-        selectedSubcategory: selectedSubcategory, //todo
+        category: da, // todo
+        selectedSubcategory: da.subcategories.filter((item)=>item.id === selectedSubcategory)[0], //todo
         price: price,
       }
     });
   }
+  
+  
 
   return (
     <>
@@ -174,7 +179,7 @@ export default function CreateServicePage() {
                       >
                         {(() => {
                           const element = categories.find(
-                            (category) => category.id === selectedCategory.id,
+                            (category) => category.id === selectedCategory,
                           );
                           return element?.subcategories.map((category) => (
                             <option key={category.id} value={category.id}>

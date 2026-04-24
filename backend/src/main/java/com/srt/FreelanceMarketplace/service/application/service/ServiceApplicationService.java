@@ -33,6 +33,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -104,11 +105,18 @@ public class ServiceApplicationService {
     }
 
     public ServiceInfoResponse getResponseById(UUID id) {
-        ServiceEntity service = domainService.getById(id);
+        ServiceEntity service = domainService.getByIdWithImagesAndSubcategory(id);
         ServiceInfoResponse response = mapper.serviceEntityToInfoResponse(service);
+
         if (authHelperService.isAuthenticated()) {
             response.setProposalBeenSent(proposalService.existsByServiceAndAuthor(service, authHelperService.getUser()));
         }
+
+        List<UUID> imageIds = service.getImages().stream()
+                .map(ServiceImageEntity::getId)
+                .toList();
+
+        response.setImageIds(imageIds);
         return response;
     }
 
@@ -134,7 +142,7 @@ public class ServiceApplicationService {
                 service, authHelperService.getUser());
 
         if (order.isEmpty()) {
-            return new ReviewCheckResponse(false,  ReviewCheckActionEnum.NONE, null);
+            return new ReviewCheckResponse(false, ReviewCheckActionEnum.NONE, null);
         }
         ReviewCheckActionEnum action = reviewDomainService.existsByService(service)
                 ? ReviewCheckActionEnum.EDIT
@@ -145,7 +153,6 @@ public class ServiceApplicationService {
     // for create service
 
     private void validateFiles(ServiceRequest request) {
-        // todo file format
         if (!fileStorageUtil.isValidFile(request.getTitleImage())) {
             throw new GlobalBadRequestException("invalid file format");
         }

@@ -18,6 +18,8 @@ import {
   sendCanReviewRequest,
 } from "../../../logic/requests/review/reviewRequest";
 import ReviewStarsComponent from "../../components/reviews/ReviewStarsComponent";
+import ImageCarouselComponent from "../../components/service/image/ImageCarouselComponent";
+import { getServiceImageUrl } from "../../../logic/image";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -110,14 +112,12 @@ export default function ServicePage() {
 
         <div className="row">
           <div className="col-lg-8">
-            <div className="service-collage">
-              <div className="collage-main"></div>
-              <div className="collage-side">
-                <div className="collage-item"></div>
-                <div className="collage-item"></div>
-                <div className="collage-item"></div>
-                <div className="collage-item"></div>
-              </div>
+            <div className="mb-3">
+              <ImageCarouselComponent
+                imageUrls={serviceData?.imageIds?.map((i) =>
+                  getServiceImageUrl(i),
+                )}
+              />
             </div>
 
             <div className="card p-4 mb-4 rounded-4">
@@ -144,16 +144,19 @@ export default function ServicePage() {
                   <div className="mt-2">
                     <button
                       onClick={() => {
-                        navigate(reviewCheckInfo.action === "EDIT"
-                          ? "/review/send?edit=1"
-                          : "/review/send", {
-                          state: {
-                            serviceId: serviceData.id,
-                            orderId: reviewCheckInfo.orderId,
-                            serviceTitle: serviceData.title,
-                            freelancer: serviceData.freelancer,
+                        navigate(
+                          reviewCheckInfo.action === "EDIT"
+                            ? "/review/send?edit=1"
+                            : "/review/send",
+                          {
+                            state: {
+                              serviceId: serviceData.id,
+                              orderId: reviewCheckInfo.orderId,
+                              serviceTitle: serviceData.title,
+                              freelancer: serviceData.freelancer,
+                            },
                           },
-                        })
+                        );
                       }}
                       className="w-100 btn btn-primary"
                     >

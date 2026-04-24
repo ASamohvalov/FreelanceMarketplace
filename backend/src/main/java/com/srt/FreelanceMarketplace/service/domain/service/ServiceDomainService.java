@@ -1,6 +1,5 @@
 package com.srt.FreelanceMarketplace.service.domain.service;
 
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceOrderInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
@@ -30,6 +29,11 @@ public class ServiceDomainService {
 
     public ServiceEntity getById(UUID id) {
         return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
+    }
+
+    public ServiceEntity getByIdWithImagesAndSubcategory(UUID id) {
+        return repository.findWithImagesAndSubcategoryAndFreelancerById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
     }
 

@@ -1,7 +1,9 @@
 package com.srt.FreelanceMarketplace.util.impl;
 
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
+import com.srt.FreelanceMarketplace.util.FileHelperUtil;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -42,7 +44,8 @@ public class ImageStorageUtil implements FileStorageUtil {
 
     @Override
     public boolean isValidFile(MultipartFile file) {
-        return true;
+        String contentType = file.getContentType();
+        return contentType != null && contentType.startsWith("image/");
     }
 
     @Override

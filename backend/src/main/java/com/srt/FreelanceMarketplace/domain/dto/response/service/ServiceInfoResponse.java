@@ -4,6 +4,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,4 +18,5 @@ public class ServiceInfoResponse {
     private String subcategory;
     private FreelancerResponse freelancer;
     private boolean proposalBeenSent;
+    private List<UUID> imageIds;
 }

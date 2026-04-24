@@ -27,4 +27,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
     @EntityGraph(attributePaths = {"freelancer", "freelancer.user"})
     @Query("select s from ServiceEntity s where id = :id")
     Optional<ServiceEntity> findByIdWithFreelancer(UUID id);
+
+    @EntityGraph(attributePaths = {"images", "subcategory.category", "freelancer.user", "freelancer.jobTitle"})
+    Optional<ServiceEntity> findWithImagesAndSubcategoryAndFreelancerById(UUID id);
 }

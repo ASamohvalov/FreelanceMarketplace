@@ -38,7 +38,7 @@ public class ServiceEntity {
     private String description;
 
     @Column(nullable = false)
-    private int price;
+    private long price;
 
     @Column(nullable = false)
     private int deadlineDays;

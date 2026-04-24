@@ -15,7 +15,7 @@ CREATE TABLE services (
     subcategory_id UUID NOT NULL REFERENCES service_subcategories(id),
     title VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
-    price INT NOT NULL,
+    price BIGINT NOT NULL,
     deadline_days INT NOT NULL,
     revisions_count INT NOT NULL,
     is_hide BOOLEAN DEFAULT FALSE NOT NULL,

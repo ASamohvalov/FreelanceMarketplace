@@ -1,4 +1,11 @@
-CREATE TYPE notification_type AS ENUM ('NEW_ORDER', 'NEW_PROPOSAL', 'NEW_REVIEW', 'NEW_ORDER_REPORT', 'ORDER_COMPLETED');
+CREATE TYPE notification_type AS ENUM (
+    'NEW_ORDER',
+    'NEW_PROPOSAL',
+    'NEW_REVIEW',
+    'NEW_ORDER_REPORT',
+    'ORDER_COMPLETED',
+    'MONEY_TRANSFERRED'
+);
 
 CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,

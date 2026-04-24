@@ -9,6 +9,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.order.SendRejectOrderRep
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
+import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.OrderReportMapper;
@@ -16,6 +17,7 @@ import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderReportRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
+import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
@@ -40,14 +42,14 @@ public class OrderReportService {
     private final OrderDomainService orderDomainService;
     private final NotificationSenderService notificationSenderService;
     private final UserDomainService userDomainService;
-    private final UserMapper userMapper;
+    private final TransferDomainService transferDomainService;
 
     public void sendReport(SendOrderReportRequest request) {
         FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
         OrderEntity order = orderDomainService.getByIdWithFreelancerAndService(request.getOrderId());
 
         if (order.getStatus() == OrderStatusEnum.SUBMITTED ||
-            order.getStatus() == OrderStatusEnum.COMPLETED) {
+                order.getStatus() == OrderStatusEnum.COMPLETED) {
             throw new GlobalBadRequestException("the report has already been sent");
         }
 
@@ -89,7 +91,7 @@ public class OrderReportService {
 
     public List<SentOrderReportResponse> getSentReports() {
         return repository.findAllWithCustomerByFreelancerOrderByCreatedAtDesc(
-                freelancerDomainService.getByUser(authHelperService.getUser())).stream()
+                        freelancerDomainService.getByUser(authHelperService.getUser())).stream()
                 .map(mapper::toSentResponse)
                 .toList();
     }
@@ -106,8 +108,17 @@ public class OrderReportService {
         report.setCustomerComment(response.getComment());
         repository.save(report);
 
+        TransferEntity transfer = transferDomainService.getTransferByOrder(report.getOrder());
+        transferDomainService.completeTransfer(transfer);
+
         notificationSenderService.sendOrderCompleted(
                 report.getOrder(),
+                report.getFreelancer().getUser(),
+                authHelperService.getUser()
+        );
+
+        notificationSenderService.sendMoneyTransferred(
+                transfer,
                 report.getFreelancer().getUser(),
                 authHelperService.getUser()
         );

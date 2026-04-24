@@ -14,6 +14,6 @@ public class PaymentInfoResponse {
     private String serviceName;
     private String freelancerFirstName;
     private String freelancerLastName;
-    private int price;
-    private int commission;
+    private long price;
+    private long commission;
 }

@@ -1,0 +1,18 @@
+INSERT INTO accounts (user_id) VALUES
+((SELECT id FROM users WHERE email = 'f1@f1')),
+((SELECT id FROM users WHERE email = 'f@f')),
+((SELECT id FROM users WHERE email = 'dev1@mail.com')),
+((SELECT id FROM users WHERE email = 'dev2@mail.com')),
+((SELECT id FROM users WHERE email = 'dev3@mail.com')),
+((SELECT id FROM users WHERE email = 'dev4@mail.com')),
+((SELECT id FROM users WHERE email = 'dev5@mail.com')),
+((SELECT id FROM users WHERE email = 'designer1@mail.com')),
+((SELECT id FROM users WHERE email = 'designer2@mail.com')),
+((SELECT id FROM users WHERE email = 'seo1@mail.com')),
+((SELECT id FROM users WHERE email = 'copy1@mail.com')),
+((SELECT id FROM users WHERE email = 'translator1@mail.com')),
+((SELECT id FROM users WHERE email = 'video1@mail.com')),
+((SELECT id FROM users WHERE email = 'biz1@mail.com')),
+((SELECT id FROM users WHERE email = 'data1@mail.com')),
+((SELECT id FROM users WHERE email = 'shop1@mail.com')),
+((SELECT id FROM users WHERE email = 'auto1@mail.com'))

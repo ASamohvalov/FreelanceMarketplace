@@ -23,8 +23,10 @@ import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.SubcategoryDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
+import com.srt.FreelanceMarketplace.service.infrastructure.CommissionService;
 import com.srt.FreelanceMarketplace.util.FileStorageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +35,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,7 @@ public class ServiceApplicationService {
     private final ProposalDomainService proposalService;
     private final OrderDomainService orderDomainService;
     private final ReviewDomainService reviewDomainService;
+    private final CommissionService commissionService;
 
     public List<ServiceResponse> getAll() {
         return repository.findAllNotHideWithFreelancer().stream()
@@ -98,7 +100,7 @@ public class ServiceApplicationService {
                 .serviceId(service.getId())
                 .price(service.getPrice())
                 .serviceName(service.getTitle())
-                .commission(getOrderCommission(service.getPrice()))
+                .commission(commissionService.getCommission(service.getPrice()))
                 .freelancerFirstName(service.getFreelancer().getUser().getFirstName())
                 .freelancerLastName(service.getFreelancer().getUser().getLastName())
                 .build();
@@ -183,9 +185,5 @@ public class ServiceApplicationService {
                 .imagePath(imageName)
                 .service(service)
                 .build();
-    }
-
-    private int getOrderCommission(int servicePrice) {
-        return servicePrice / 10;
     }
 }

@@ -19,8 +19,8 @@ export function BecomeFreelancerPage() {
 
   useEffect(() => {
     if (!isAuth() || hasRole("ROLE_FREELANCER")) {
-      //navigate(-1);
-      //return;
+      navigate(-1);
+      return;
     }
     document.title = "Стать фрилансером";
 
@@ -50,7 +50,7 @@ export function BecomeFreelancerPage() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!phoneNumber.current.value || !aboutMe) {
+    if (!aboutMe) {
       setError("All fields are required");
       return;
     }
@@ -63,7 +63,7 @@ export function BecomeFreelancerPage() {
       setSelectedJobTitleId(jobTitles[0].id)
     }
 
-    const response = await becomeFreelancerRequest(selectedJobTitleId, aboutMe);
+    const response = await becomeFreelancerRequest(aboutMe, selectedJobTitleId);
     if (response.status == 200) {
       navigate("/");
       return;
@@ -83,14 +83,6 @@ export function BecomeFreelancerPage() {
         <div className="shadow w-100 form rounded-2 p-4 text-light">
           <div className="text-center form_title mb-3 h4">Стать фрилансером</div>
           <form onSubmit={ handleSubmit } className="mb-4">
-            <label htmlFor="phoneNumber-input" className="text-secondary">Номер телефона</label>
-            <input
-              className="form-control mb-3"
-              id="phoneNumber-input"
-              type="number"
-              ref={ phoneNumber }
-            />
-
             <div className="form-floating mb-3">
               <select
                 className="form-select"

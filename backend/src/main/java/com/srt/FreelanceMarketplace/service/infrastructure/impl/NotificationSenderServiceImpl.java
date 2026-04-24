@@ -5,8 +5,10 @@ import com.srt.FreelanceMarketplace.domain.entities.message.NotificationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
+import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.repository.messaging.NotificationRepository;
+import com.srt.FreelanceMarketplace.service.infrastructure.CommissionService;
 import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class NotificationSenderServiceImpl implements NotificationSenderService {
     private final NotificationRepository repository;
+
+    private final CommissionService commissionService;
 
     @Override
     public void sendNewOrder(OrderEntity order, UserEntity recipient, UserEntity sender) {
@@ -88,6 +92,23 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
         repository.save(notification);
     }
 
+    @Override
+    public void sendMoneyTransferred(TransferEntity transfer, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Перевод денег")
+                .message(String.format(
+                        "Получен перевод от %s %s, сумма: %s р",
+                        sender.getFirstName(),
+                        sender.getLastName(),
+                        commissionService.getPriceWithoutCommission(transfer.getAmount())))
+                .type(NotificationTypeEnum.ORDER_COMPLETED)
+                .recipient(recipient)
+                .entityType(getEntityType(transfer))
+                .entityId(transfer.getId())
+                .build();
+        repository.save(notification);
+    }
+
     private String getEntityType(Object entity) {
         if (entity instanceof OrderEntity) {
             return "orders";
@@ -96,6 +117,9 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
             return "proposals";
         }
         if (entity instanceof OrderReportEntity) {
+            return "order_reports";
+        }
+        if (entity instanceof TransferEntity) {
             return "order_reports";
         }
         throw new IllegalStateException("no such entity type");

@@ -31,7 +31,7 @@ public class ServiceRequest {
 
     @NotNull
     @Min(20)
-    private int price;
+    private long price;
 
     @NotNull
     private int deadlineDays;

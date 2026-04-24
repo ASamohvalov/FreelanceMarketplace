@@ -1,21 +1,18 @@
 package com.srt.FreelanceMarketplace.service.application.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
-import com.srt.FreelanceMarketplace.domain.dto.request.order.SendOrderReportRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
-import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.OrderMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
-import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
+import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
@@ -41,6 +38,7 @@ public class OrderService {
     private final NotificationSenderService notificationSenderService;
     private final FreelancerDomainService freelancerDomainService;
     private final UserMapper userMapper;
+    private final TransferDomainService transferDomainService;
 
     public void order(MakeOrderRequest request) {
         ServiceEntity service = serviceDomainService.getByIdWithAuthor(request.getServiceId());
@@ -82,6 +80,8 @@ public class OrderService {
                     order
             );
         }
+
+        transferDomainService.generateHeldTransfer(order);
 
         notificationSenderService.sendNewOrder(
                 order,

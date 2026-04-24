@@ -7,9 +7,9 @@ import { sendAuthPost, sendUpdateTokensRequest } from "../requestSender";
  *
  * @returns {map} { status: int, data: map }
  */
-export async function becomeFreelancerRequest(phoneNumber, jobTitleId) {
+export async function becomeFreelancerRequest(aboutMe, jobTitleId) {
   const response = await sendAuthPost("user/become_freelancer", {
-    phoneNumber: phoneNumber,
+    aboutYourself: aboutMe,
     jobTitleId: jobTitleId,
   });
   const { accessToken, refreshToken } = (await sendUpdateTokensRequest()).data;

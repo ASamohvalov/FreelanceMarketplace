@@ -11,6 +11,7 @@ import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
+import com.srt.FreelanceMarketplace.service.domain.payment.AccountDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.JobTitleDomainService;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -43,6 +43,7 @@ public class UserService {
     private final ServiceDomainService serviceService;
     private final FileStorageUtil fileStorageUtil;
     private final TokenDomainService tokenService;
+    private final AccountDomainService accountDomainService;
 
     public void logout(JwtRequest request) {
         tokenService.deleteByToken(request.getRefreshToken());
@@ -54,16 +55,20 @@ public class UserService {
         if (freelancerService.existsByUser(user)) {
             throw new GlobalBadRequestException("user already freelancer");
         }
+
         JobTitleEntity jobTitle = jobTitleService.getById(request.getJobTitleId());
         FreelancerEntity freelancer = FreelancerEntity.builder()
                 .jobTitle(jobTitle)
                 .user(authHelperService.getUser())
                 .aboutYourself(request.getAboutYourself())
                 .build();
+
         freelancerService.save(freelancer);
         List<RoleEntity> roles = user.getRoles();
         roles.add(roleService.getByName(RoleEnum.ROLE_FREELANCER));
         repository.save(user);
+
+        accountDomainService.create(user);
     }
 
     public UserInfoResponse getInfo() {

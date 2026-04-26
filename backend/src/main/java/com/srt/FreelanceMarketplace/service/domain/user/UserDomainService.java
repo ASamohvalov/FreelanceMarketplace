@@ -1,11 +1,8 @@
 package com.srt.FreelanceMarketplace.service.domain.user;
 
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
-import com.srt.FreelanceMarketplace.mapper.UserMapper;
+import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
-import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
-import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
-import com.srt.FreelanceMarketplace.util.impl.ImageStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,5 +34,12 @@ public class UserDomainService {
 
     public UserEntity getReferenceById(UUID id) {
         return repository.getReferenceById(id);
+    }
+
+    public UserEntity getReferenceIfExistsById(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new GlobalBadRequestException("user not found");
+        }
+        return getReferenceById(id);
     }
 }

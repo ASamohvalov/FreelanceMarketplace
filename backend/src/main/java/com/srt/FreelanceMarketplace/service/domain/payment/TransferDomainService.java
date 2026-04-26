@@ -4,10 +4,13 @@ import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.AccountEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.repository.payment.TransferRepository;
 import com.srt.FreelanceMarketplace.service.infrastructure.CommissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +50,14 @@ public class TransferDomainService {
     public TransferEntity getTransferByOrder(OrderEntity order) {
         return repository.findByOrder(order)
                 .orElseThrow(() -> new IllegalStateException("transfer by the order not found"));
+    }
+
+    public List<TransferEntity> getWithServiceAndCustomerAllByAccount(AccountEntity account) {
+        return repository.findWithServiceAndCustomerAllByRecipientAccountAndStatusOrderByCreatedAtDesc(
+                account, TransferStatusEnum.RELEASED);
+    }
+
+    public List<TransferEntity> getWithServiceAndCustomerAllBySender(UserEntity sender) {
+        return repository.findWithServiceAndCustomerAllByOrder_customerOrderByCreatedAtDesc(sender);
     }
 }

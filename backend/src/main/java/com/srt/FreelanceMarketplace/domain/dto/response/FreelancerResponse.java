@@ -12,4 +12,7 @@ public class FreelancerResponse {
     private String firstName;
     private String lastName;
     private String jobTitle;
+    private String jobTitleId;
+    private String aboutYourself;
+    private String email;
 }

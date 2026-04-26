@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.controller;
 
-import com.srt.FreelanceMarketplace.domain.dto.request.JobTitleRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.JobTitleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.JobTitleResponse;
 import com.srt.FreelanceMarketplace.service.application.user.JobTitleService;
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ import java.util.List;
 public class JobTitleController {
     private final JobTitleService jobTitleService;
 
-    @GetMapping("/get_all")
+    @GetMapping("/get")
     public List<JobTitleResponse> getAll() {
         return jobTitleService.getAll();
     }

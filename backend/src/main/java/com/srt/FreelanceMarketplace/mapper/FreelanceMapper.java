@@ -27,6 +27,8 @@ public interface FreelanceMapper {
     @Mapping(target = "jobTitle", expression = "java(freelancer.getJobTitle().getName())")
     @Mapping(target = "firstName", expression = "java(freelancer.getUser().getFirstName())")
     @Mapping(target = "lastName", expression = "java(freelancer.getUser().getLastName())")
+    @Mapping(target = "jobTitleId", source = "freelancer.jobTitle.id")
+    @Mapping(target = "email", source = "freelancer.user.email")
     FreelancerResponse freelancerEntityToResponse(FreelancerEntity freelancer);
 
     ServiceEntity serviceRequestToEntity(ServiceRequest response);

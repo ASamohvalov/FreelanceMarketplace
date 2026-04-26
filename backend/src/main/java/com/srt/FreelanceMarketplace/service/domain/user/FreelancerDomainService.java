@@ -38,6 +38,12 @@ public class FreelancerDomainService {
     }
 
     public FreelancerEntity getByUser(UserEntity user) {
-        return repository.findByUser(user).orElseThrow(() -> new IllegalStateException("freelancer not found"));
+        return repository.findByUser(user)
+                .orElseThrow(() -> new IllegalStateException("freelancer not found"));
+    }
+
+    public FreelancerEntity getByUserWithJobTitle(UserEntity user) {
+        return repository.findWithJobTitleByUser(user)
+                .orElseThrow(() -> new IllegalStateException("freelancer not found"));
     }
 }

@@ -1,0 +1,14 @@
+.personal-account-card-component_transfer-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.personal-account-card-component_income {
+  color: #22c55e;
+}
+
+.personal-account-card-component_expense {
+  color: #dc3545;
+}

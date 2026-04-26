@@ -1,7 +1,8 @@
 package com.srt.FreelanceMarketplace.service.application.user;
 
 import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
-import com.srt.FreelanceMarketplace.domain.dto.request.FreelancerRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
@@ -101,6 +102,13 @@ public class UserService {
             return Optional.empty();
         }
         return Optional.of(fileStorageUtil.downloadFile(user.getAvatarPath()));
+    }
+
+    public void editProfile(EditUserProfileRequest request) {
+        UserEntity user = authHelperService.getUser();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        repository.save(user);
     }
 
     private boolean hasRole(UserEntity user, RoleEnum role) {

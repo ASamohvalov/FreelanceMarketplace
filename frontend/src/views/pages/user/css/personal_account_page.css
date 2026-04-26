@@ -1,62 +1,39 @@
-body {
-  background: #f5f5f5;
+.personal-account-page_profile-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
-.navbar-custom {
-  background: #4b1f73;
+.personal-account-page_edit-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
 }
 
-.sidebar {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  height: 100%;
-}
-
-.profile-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-
-.avatar-lg {
-  width: 96px;
-  height: 96px;
+.personal-account-page_avatar {
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
-  background: #4b1f73;
-  color: #fff;
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+  background: #dee2ff;
+  margin: auto;
+  margin-bottom: 15px;
 }
 
-.stat-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+.personal-account-page_balance-card {
+  background: linear-gradient(90deg, #6f42c1, #4c6ef5);
+  color: white;
+  border-radius: 20px;
+  padding: 25px;
 }
 
-.service-card {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+.personal-account-page_cabinet-user .personal-account-page_freelancer-only {
+  display: none;
 }
 
-.service-img {
-  height: 120px;
-  background: #ddd;
-}
-
-.badge-purple {
-  background: #4b1f73;
-}
-
-.progress {
-  height: 8px;
+input.editable,
+textarea.editable {
+  display: none;
 }

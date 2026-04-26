@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.controller.user;
 
-import com.srt.FreelanceMarketplace.domain.dto.request.FreelancerRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.service.application.user.UserService;
@@ -59,12 +60,8 @@ public class UserController {
         return userService.getInfo();
     }
 
-    private String determineContentType(Path path) {
-        try {
-            String type = Files.probeContentType(path);
-            return type != null ? type : "application/octet-stream";
-        } catch (IOException e) {
-            return "application/octet-stream";
-        }
+    @PutMapping("/profile/edit")
+    public void editProfile(@RequestBody @Valid EditUserProfileRequest request) {
+        userService.editProfile(request);
     }
 }

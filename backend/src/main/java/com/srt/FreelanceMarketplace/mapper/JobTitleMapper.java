@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.mapper;
 
 
-import com.srt.FreelanceMarketplace.domain.dto.request.JobTitleRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.JobTitleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.JobTitleResponse;
 import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
 import org.mapstruct.Mapper;

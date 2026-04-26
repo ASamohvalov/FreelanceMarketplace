@@ -13,8 +13,6 @@ import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderSer
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
 @RequiredArgsConstructor
 public class NotificationSenderServiceImpl implements NotificationSenderService {

@@ -17,6 +17,13 @@ public class JobTitleDomainService {
         repository.save(entity);
     }
 
+    public JobTitleEntity getReferenceIfExitsById(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new GlobalBadRequestException("job title not found");
+        }
+        return repository.getReferenceById(id);
+    }
+
     public JobTitleEntity getById(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such job title not found"));

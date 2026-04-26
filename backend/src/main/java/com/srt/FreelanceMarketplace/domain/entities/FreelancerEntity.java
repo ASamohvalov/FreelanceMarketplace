@@ -25,7 +25,6 @@ public class FreelancerEntity {
 
     @ManyToOne
     @JoinColumn(name = "job_title_id")
-    // can be null!!!
     private JobTitleEntity jobTitle;
 
     @Column(columnDefinition = "TEXT", nullable = false)

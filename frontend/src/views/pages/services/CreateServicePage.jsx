@@ -50,13 +50,13 @@ export default function CreateServicePage() {
         return;
       }
       setCategories(response.data);
-      
+
         setSelectedCategory(response.data[0].id);
 
         setSelectedSubcategory(response.data[0].subcategories[0].id);
     })();
   }, [navigate]);
-  
+
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -75,7 +75,7 @@ export default function CreateServicePage() {
       err = true;
     }
     if (err) return;
-    
+
     const response = await createServiceRequest({
       title: title,
       titleImage: titleImage,
@@ -102,12 +102,9 @@ export default function CreateServicePage() {
       }
     });
   }
-  
-  
 
   return (
     <>
-
       <main>
         <div className="container my-4">
           <NavLocation>Услуги / Создание новой</NavLocation>

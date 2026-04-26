@@ -1,17 +1,34 @@
-import { login } from "../../jwt";
-import { sendAuthPost, sendUpdateTokensRequest } from "../requestSender";
+import { getUserData, login } from "../../jwt";
+import { sendAuthPost, sendAuthPut, sendGet, sendUpdateTokensRequest } from "../requestSender";
 
-/**
- * @param {string} phoneNumber
- * @param {string} jobTitleId
- *
- * @returns {map} { status: int, data: map }
- */
 export async function becomeFreelancerRequest(aboutMe, jobTitleId) {
   const response = await sendAuthPost("user/become_freelancer", {
     aboutYourself: aboutMe,
     jobTitleId: jobTitleId,
   });
+  const { accessToken, refreshToken } = (await sendUpdateTokensRequest()).data;
+  login(accessToken, refreshToken);
+  return response;
+}
+
+export async function getFreelancerRequest() {
+  const { id } = getUserData();
+  return await sendGet(`freelancer/get/by_user/${id}`);
+}
+
+export async function editFreelancerProfile(
+  firstName,
+  lastName,
+  jobTitleId,
+  aboutYourself
+) {
+  const response = await sendAuthPut("freelancer/profile/edit", {
+    firstName: firstName,
+    lastName: lastName,
+    jobTitleId: jobTitleId,
+    aboutYourself: aboutYourself
+  });
+
   const { accessToken, refreshToken } = (await sendUpdateTokensRequest()).data;
   login(accessToken, refreshToken);
   return response;

@@ -1,144 +1,255 @@
-import { useEffect } from "react";
-import ServiceCardComponent from "../../components/service/ServiceCardComponent";
-import { getUserData, isAuth, hasRole } from "../../../logic/jwt";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { getInfoRequest } from "../../../logic/requests/user/userRequest";
-import './css/personal_account_page.css';
-import { userContext } from "../../../logic/store/userContext";
-import { useContext } from "react";
+import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
+import { getAllJobTitlesRequest } from "../../../logic/requests/jobTitle";
+import {
+  editFreelancerProfile,
+  getFreelancerRequest,
+} from "../../../logic/requests/user/freelancerRequest";
+import "./css/personal_account_page.css";
+import {
+  getBalanceRequest,
+  getExpenseTransfersRequest,
+  getIncomeTransfersRequest,
+} from "../../../logic/requests/payment/accountRequest";
+import TransferCardComponent from "../../components/payment/TransferCardComponent";
+import { fromIsoDate } from "../../../logic/time";
+import { editProfileRequest } from "../../../logic/requests/user/userRequest";
+
+function getSpaceCount(str) {
+  return str.trim().split(/\S/).length;
+}
 
 export default function PersonalAccountPage() {
-  const [user, setUser] = useContext(userContext);
-  useEffect(() => {
-    document.title = "Личный кабинет";
-  }, [])
-      useEffect(() => {
-          setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
-      }, [setUser]);
-
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // personal data
+  const [fullName, setFullName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [aboutYourself, setAboutYourself] = useState("");
+  const [email, setEmail] = useState("");
+  const [balance, setBalance] = useState(0);
+
+  // data
+  const [jobTitles, setJobTitles] = useState([]);
+  const [expenseTransfers, setExpenseTransfers] = useState([]);
+  const [incomeTransfers, setIncomeTransfers] = useState([]);
+
+  // variables
+  const isFreelancer = hasRole("ROLE_FREELANCER");
 
   useEffect(() => {
-    // if user dont have tokens in localstorage
     if (!isAuth()) {
-      navigate(-1); // go back
+      navigate(-1);
       return;
     }
 
+    document.title = "Личный кабинет";
+
     (async () => {
-      const response = await getInfoRequest();
-      if (response.status !== 200) {
-        console.log("logic error");
-        navigate(-1);
+      const jobTitleResponse = await getAllJobTitlesRequest();
+      if (jobTitleResponse.status !== 200) {
+        navigate(`/error?code=${jobTitleResponse.status}`);
         return;
       }
-      setUserData(response.data);
-      setLoading(false);
+      setJobTitles(jobTitleResponse.data);
+
+      const expenseTransfersResponse = await getExpenseTransfersRequest();
+      if (expenseTransfersResponse.status !== 200) {
+        navigate(`/error?code=${expenseTransfersResponse.status}`);
+        return;
+      }
+      setExpenseTransfers(expenseTransfersResponse.data);
+
+      if (isFreelancer) {
+        const personalDataResponse = await getFreelancerRequest();
+        if (personalDataResponse.status !== 200) {
+          navigate(`/error?code=${personalDataResponse.status}`);
+          return;
+        }
+        setFullName(
+          personalDataResponse.data.firstName +
+            " " +
+            personalDataResponse.data.lastName,
+        );
+        setJobTitle({
+          id: personalDataResponse.data.jobTitleId,
+          name: personalDataResponse.data.jobTitle,
+        });
+        setAboutYourself(personalDataResponse.data.aboutYourself);
+        setEmail(personalDataResponse.data.email);
+
+        const balanceResponse = await getBalanceRequest();
+        if (balanceResponse.status !== 200) {
+          navigate(`/error?code=${balanceResponse.status}`);
+          return;
+        }
+        setBalance(balanceResponse.data.balance);
+
+        const incomeTransfersResponse = await getIncomeTransfersRequest();
+        if (incomeTransfersResponse.status !== 200) {
+          navigate(`/error?code=${incomeTransfersResponse.status}`);
+          return;
+        }
+        setIncomeTransfers(incomeTransfersResponse.data);
+      } else {
+        const userData = getUserData();
+        setFullName(userData.firstName + " " + userData.lastName);
+        setEmail(userData.sub);
+      }
     })();
-  }, [navigate])
-
-
-  if (loading) {
-    return (
-      <>
-      </>
-    )
-  }
-
-  const localUserData = getUserData();
+  }, [navigate, isFreelancer]);
 
   return (
-    <>
+    <main style={{ minHeight: "90vh" }}>
+      <div className="container mt-5 mb-5">
+        <div className="row g-4">
+          <div className="col-lg-3">
+            <div className="personal-account-page_profile-card">
+              <i
+                className="bi bi-pencil personal-account-page_edit-btn"
+                onClick={() => {
+                  setEditMode(!editMode);
+                }}
+              ></i>
 
-      <main style={{minHeight:"80vh", marginLeft: 80}}>
-        <div className="container">
-          <div className="profile-card mb-4 mt-4">
-            <div className="d-flex align-items-center gap-4">
-              <div className="avatar-lg">CJ</div>
-              <div>
-                <h4 className="mb-1">
-                  {
-                    (() => {
-                      const usdata = userData ? userData : localUserData;
-                      return usdata.firstName + " " + usdata.lastName;
-                    })()
-                  }
-                </h4>
-                <div className="text-muted">Full-Stack Web Developer</div>
-                <div className="mt-2">
-                  <span className="badge badge-purple">Оценка</span>
-                  <span className="ms-2 text-warning">★★★★★</span>
-                  <span className="ms-1">4.9 (128 отзывов)</span>
+              <div className="personal-account-page_avatar"></div>
+
+              <div className="text-center">
+                <h5 className={editMode ? "d-none" : ""}>{fullName}</h5>
+                <input
+                  className={`form-control mb-2 ${editMode ? "" : "d-none"}`}
+                  value={fullName}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                  }}
+                />
+
+                <div className="text-muted small">{email}</div>
+              </div>
+
+              {isFreelancer && (
+                <div className="personal-account-page_freelancer-only mt-3">
+                  <hr />
+
+                  <div
+                    className={`text-center fw-semibold ${editMode ? "d-none" : ""}`}
+                  >
+                    {jobTitle.name}
+                  </div>
+                  <select
+                    className={`form-select mb-2 ${editMode ? "" : "d-none"}`}
+                    value={jobTitle.id}
+                    onChange={(e) => setJobTitle(e.target.value)}
+                  >
+                    {jobTitles.map((jt) => (
+                      <option key={jt.id} value={jt.id}>
+                        {jt.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div
+                    id="aboutText"
+                    className={`text-muted small mt-1 ${editMode ? "d-none" : ""}`}
+                  >
+                    {aboutYourself}
+                  </div>
+                  <textarea
+                    rows={6}
+                    value={aboutYourself}
+                    className={`form-control mt-2 ${editMode ? "" : "d-none"}`}
+                    onChange={(e) => setAboutYourself(e.target.value)}
+                  ></textarea>
                 </div>
-              </div>
-            </div>
+              )}
 
-            <hr />
-
-            <p>
-              {
-                userData?.aboutYourself
-              }
-            </p>
-
-            <div className="row text-center mt-3">
-              <div className="col-md-4">
-                <div className="fw-bold">Качество выполнения</div>
-                <div>98%</div>
-              </div>
-              <div className="col-md-4">
-                <div className="fw-bold">Завершенные заказы</div>
-                <div>156</div>
-              </div>
-              <div className="col-md-4">
-                <div className="fw-bold">Дата регистрации</div>
-                <div>2022</div>
-              </div>
+              <button
+                className={`btn btn-primary w-100 mt-3 ${editMode ? "" : "d-none"}`}
+                onClick={async () => {
+                  const [firstName, lastName] = fullName.trim().split(/\s+/);
+                  if (isFreelancer) {
+                    const response = await editFreelancerProfile(
+                      firstName,
+                      lastName,
+                      jobTitle,
+                      aboutYourself,
+                    );
+                    if (response.status !== 200) {
+                      navigate(`/error?code=${response.status}`);
+                      return;
+                    }
+                  } else {
+                    const response = await editProfileRequest(firstName, lastName);
+                    if (response.status !== 200) {
+                      navigate(`/error?code=${response.status}`);
+                      return;
+                    }
+                  }
+                  setSuccessMessage("Профиль успешно обновлен");
+                }}
+              >
+                Сохранить
+              </button>
+              {successMessage && (
+                <div
+                  className={`mt-3 alert alert-success ${editMode ? "" : "d-none"}`}
+                  role="alert"
+                >
+                  {successMessage}
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="row mb-4">
-            <div className="col-md-4">
-              <div className="stat-card">
-                <h5>$12,450</h5>
-                <div className="text-muted">Общий доход</div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="stat-card">
-                <h5>8</h5>
-                <div className="text-muted">Активные заказы</div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="stat-card">
-                <h5>3</h5>
-                <div className="text-muted">Завершенные заказы</div>
-              </div>
-            </div>
-          </div>
-          {
-            userData.services && userData.services.lenght > 0 && (
-              <>
-                <h5 className="mb-3">Мои услуги</h5>
-
-                <div className="row g-4">
-                  {
-                    userData.services.map((service) => {
-                      return (
-                        <ServiceCardComponent id={service.id} title={service.title} price={service.price} key={service.id} />
-                      );
-                    })
-                  }
+          <div className="col-lg-9">
+            {isFreelancer && (
+              <div className="personal-account-page_balance-card mb-4 freelancer-only">
+                <div className="d-flex justify-content-between">
+                  <div>
+                    <div className="small">Баланс</div>
+                    <div className="fs-4 fw-semibold">{balance} ₽</div>
+                  </div>
+                  <i className="bi bi-wallet2 fs-1"></i>
                 </div>
-              </>
-            )
-          }
+              </div>
+            )}
+
+            <h6 className="mb-3">Начисления (оплата заказов)</h6>
+
+            <div className="row g-3 mb-4">
+              {expenseTransfers.map((transfer, idx) => (
+                <TransferCardComponent
+                  serviceTitle={transfer.serviceTitle}
+                  price={transfer.amount}
+                  date={fromIsoDate(transfer.createdAt)}
+                  isIncome={false}
+                  key={idx}
+                />
+              ))}
+            </div>
+
+            {isFreelancer && (
+              <div className="personal-account-page_freelancer-only">
+                <h6 className="mb-3">Поступления (доход)</h6>
+
+                <div className="row g-3">
+                  {incomeTransfers.map((transfer, idx) => (
+                    <TransferCardComponent
+                      serviceTitle={transfer.serviceTitle}
+                      price={transfer.amount}
+                      date={fromIsoDate(transfer.createdAt)}
+                      key={idx}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

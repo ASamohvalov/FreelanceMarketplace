@@ -7,6 +7,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.order.SendRejectOrderRep
 import com.srt.FreelanceMarketplace.service.application.order.OrderReportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,9 @@ import java.util.UUID;
 public class OrderReportController {
     private final OrderReportService orderReportService;
 
-    @PostMapping("/send")
+    @PostMapping(value = "/send", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
-    public void sendReport(@RequestBody @Valid SendOrderReportRequest request) {
+    public void sendReport(@ModelAttribute @Valid SendOrderReportRequest request) {
         orderReportService.sendReport(request);
     }
 

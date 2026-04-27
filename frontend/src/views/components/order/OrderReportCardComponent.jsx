@@ -1,3 +1,4 @@
+import { getFileRUString } from "../../../logic/file";
 import "./css/order_report_card_component.css";
 
 export default function OrderReportCardComponent({
@@ -6,6 +7,7 @@ export default function OrderReportCardComponent({
   status,
   sendDate,
   isReceived=true,
+  fileCount,
   onOpen,
 }) {
   return (
@@ -31,7 +33,7 @@ export default function OrderReportCardComponent({
 
         <div className="d-flex align-items-center gap-2 text-muted small">
           <i className="bi bi-paperclip"></i>
-          <span>2 файла</span>
+          <span>{getFileRUString(fileCount ? fileCount : 0)}</span>
         </div>
 
         <div className="d-flex gap-2">

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -18,4 +19,5 @@ public class SentOrderReportResponse {
     private Instant createdAt;
     private OrderReportStatusEnum status;
     private UserNameResponse user;
+    private List<UUID> files;
 }

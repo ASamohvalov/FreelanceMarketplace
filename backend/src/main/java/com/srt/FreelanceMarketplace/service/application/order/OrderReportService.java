@@ -3,20 +3,21 @@ package com.srt.FreelanceMarketplace.service.application.order;
 import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.SendOrderReportRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.SendRejectOrderReportResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.report.ReceivedOrderReportResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.report.SentOrderReportResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.SendRejectOrderReportResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportFileEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.OrderReportMapper;
-import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderReportRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderReportFileDomainService;
 import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
@@ -43,6 +44,7 @@ public class OrderReportService {
     private final NotificationSenderService notificationSenderService;
     private final UserDomainService userDomainService;
     private final TransferDomainService transferDomainService;
+    private final OrderReportFileDomainService orderReportFileDomainService;
 
     public void sendReport(SendOrderReportRequest request) {
         FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
@@ -70,8 +72,11 @@ public class OrderReportService {
 
         order.setStatus(OrderStatusEnum.SUBMITTED);
 
+        var entityList = orderReportFileDomainService.uploadFiles(report, request.getFiles());
+
         repository.save(report);
         orderDomainService.save(order);
+        orderReportFileDomainService.saveAll(entityList);
 
         notificationSenderService.sendNewOrderReport(report, order.getCustomer(), authHelperService.getUser());
     }
@@ -79,20 +84,38 @@ public class OrderReportService {
     public List<ReceivedOrderReportResponse> getReceivedReportsByOrder(UUID orderId) {
         OrderEntity order = orderDomainService.getReferenceIfExistsById(orderId);
         return repository.findAllWithFreelancerByOrder(order).stream()
-                .map(mapper::toReceivedResponse)
+                .map(r -> {
+                    ReceivedOrderReportResponse res = mapper.toReceivedResponse(r);
+                    res.setFiles(r.getFiles().stream()
+                            .map(OrderReportFileEntity::getId)
+                            .toList());
+                    return res;
+                })
                 .toList();
     }
 
     public List<ReceivedOrderReportResponse> getReceivedReports() {
-        return repository.findAllWithFreelancerByCustomerOrderByCreatedAtDesc(authHelperService.getUser()).stream()
-                .map(mapper::toReceivedResponse)
+        return repository.findAllWithFreelancerAndFilesByCustomerOrderByCreatedAtDesc(authHelperService.getUser()).stream()
+                .map(r -> {
+                    ReceivedOrderReportResponse res = mapper.toReceivedResponse(r);
+                    res.setFiles(r.getFiles().stream()
+                            .map(OrderReportFileEntity::getId)
+                            .toList());
+                    return res;
+                })
                 .toList();
     }
 
     public List<SentOrderReportResponse> getSentReports() {
-        return repository.findAllWithCustomerByFreelancerOrderByCreatedAtDesc(
+        return repository.findAllWithCustomerAndFilesByFreelancerOrderByCreatedAtDesc(
                         freelancerDomainService.getByUser(authHelperService.getUser())).stream()
-                .map(mapper::toSentResponse)
+                .map(r -> {
+                    SentOrderReportResponse res =  mapper.toSentResponse(r);
+                    res.setFiles(r.getFiles().stream()
+                            .map(OrderReportFileEntity::getId)
+                            .toList());
+                    return res;
+                })
                 .toList();
     }
 

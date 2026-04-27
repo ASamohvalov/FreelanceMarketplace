@@ -16,10 +16,6 @@ import TransferCardComponent from "../../components/payment/TransferCardComponen
 import { fromIsoDate } from "../../../logic/time";
 import { editProfileRequest } from "../../../logic/requests/user/userRequest";
 
-function getSpaceCount(str) {
-  return str.trim().split(/\S/).length;
-}
-
 export default function PersonalAccountPage() {
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
@@ -110,20 +106,23 @@ export default function PersonalAccountPage() {
             <div className="personal-account-page_profile-card">
               <i
                 className="bi bi-pencil personal-account-page_edit-btn"
-                onClick={() => {
-                  setEditMode(!editMode);
-                }}
+                onClick={() => setEditMode(!editMode)}
               ></i>
 
               <div className="personal-account-page_avatar"></div>
 
               <div className="text-center">
                 <h5 className={editMode ? "d-none" : ""}>{fullName}</h5>
+
                 <input
                   className={`form-control mb-2 ${editMode ? "" : "d-none"}`}
                   value={fullName}
                   onChange={(e) => {
-                    setFullName(e.target.value);
+                    const value = e.target.value;
+                    if (value === " ") return;
+                    const spaceCount = (value.match(/ /g) || []).length;
+                    if (spaceCount > 1) return;
+                    setFullName(value);
                   }}
                 />
 

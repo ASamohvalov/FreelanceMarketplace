@@ -40,4 +40,6 @@ payment:
     percent: 10
 
 storage:
-  location: /home/artem/tmp/uploads/images/
+  location:
+    images: /home/artem/tmp/uploads/images/
+    documents: /home/artem/tmp/uploads/documents/

@@ -20,17 +20,15 @@ import com.srt.FreelanceMarketplace.service.domain.messaging.ProposalDomainServi
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
 import com.srt.FreelanceMarketplace.service.domain.review.ReviewDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
+import com.srt.FreelanceMarketplace.service.domain.service.ServiceImageDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.SubcategoryDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.CommissionService;
-import com.srt.FreelanceMarketplace.util.FileStorageUtil;
+import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +41,7 @@ public class ServiceApplicationService {
     private final ServiceRepository repository;
     private final FreelanceMapper mapper;
 
-    private final FileStorageUtil fileStorageUtil;
+    private final FileStorageStrategy imageStorageStrategy;
     private final FreelancerDomainService freelancerService;
     private final AuthHelperService authHelperService;
     private final SubcategoryDomainService subcategoryService;
@@ -51,6 +49,7 @@ public class ServiceApplicationService {
     private final OrderDomainService orderDomainService;
     private final ReviewDomainService reviewDomainService;
     private final CommissionService commissionService;
+    private final ServiceImageDomainService serviceImageDomainService;
 
     public List<ServiceResponse> getAll() {
         return repository.findAllNotHideWithFreelancer().stream()
@@ -64,7 +63,7 @@ public class ServiceApplicationService {
         if (image == null) {
             return Optional.empty();
         }
-        return Optional.of(fileStorageUtil.downloadFile(image.getImagePath()));
+        return Optional.of(imageStorageStrategy.get(image.getImagePath()));
     }
 
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {
@@ -75,12 +74,10 @@ public class ServiceApplicationService {
     }
 
     public IdentifierDto create(ServiceRequest request) {
-        validateFiles(request);
-
         FreelancerEntity freelancer = freelancerService.getByUserOrElseThrow(authHelperService.getUser());
         ServiceSubcategoryEntity subcategory = subcategoryService.getById(request.getSubcategoryId());
 
-        ServiceEntity serviceEntity = ServiceEntity.builder()
+        ServiceEntity service = ServiceEntity.builder()
                 .freelancer(freelancer)
                 .title(request.getTitle())
                 .description(request.getDescription())
@@ -90,8 +87,13 @@ public class ServiceApplicationService {
                 .price(request.getPrice())
                 .build();
 
-        processFiles(request, serviceEntity);
-        return new IdentifierDto(repository.save(serviceEntity).getId());
+        var entityList = serviceImageDomainService
+                .uploadImages(service, request.getTitleImage(), request.getImages());
+
+        repository.save(service);
+        serviceImageDomainService.saveAll(entityList);
+
+        return new IdentifierDto(service.getId());
     }
 
     public PaymentInfoResponse getPaymentInfo(UUID serviceId) {
@@ -150,40 +152,5 @@ public class ServiceApplicationService {
                 ? ReviewCheckActionEnum.EDIT
                 : ReviewCheckActionEnum.CREATE;
         return new ReviewCheckResponse(true, action, order.get().getId());
-    }
-
-    // for create service
-
-    private void validateFiles(ServiceRequest request) {
-        if (!fileStorageUtil.isValidFile(request.getTitleImage())) {
-            throw new GlobalBadRequestException("invalid file format");
-        }
-        request.getImages().forEach((file) -> {
-            if (!fileStorageUtil.isValidFile(file)) {
-                throw new GlobalBadRequestException("invalid file format");
-            }
-        });
-    }
-
-    private void processFiles(ServiceRequest request, ServiceEntity service) {
-        // image saving
-        ServiceImageEntity titleImageEntity = uploadFile(request.getTitleImage(), service);
-        service.setTitleImage(titleImageEntity);
-        request.getImages().forEach((file) -> {
-            service.getImages().add(uploadFile(file, service));
-        });
-    }
-
-    private ServiceImageEntity uploadFile(MultipartFile file, ServiceEntity service) {
-        String imageName = fileStorageUtil.getRandomName(file);
-        try {
-            fileStorageUtil.uploadFile(file, imageName);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-        return ServiceImageEntity.builder()
-                .imagePath(imageName)
-                .service(service)
-                .build();
     }
 }

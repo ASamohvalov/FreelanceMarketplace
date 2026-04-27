@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/category/**").permitAll()
                         .requestMatchers("/user/avatar/{userId}").permitAll()
                         .requestMatchers("/review/get/**").permitAll()
+                        .requestMatchers("/file/get/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager

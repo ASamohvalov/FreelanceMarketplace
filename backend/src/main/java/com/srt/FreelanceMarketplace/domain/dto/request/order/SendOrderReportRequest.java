@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,4 +18,6 @@ public class SendOrderReportRequest {
     private String report;
     @NotBlank
     private String title;
+
+    private List<MultipartFile> files;
 }

@@ -3,12 +3,16 @@ import "./css/conversation_context_info.css";
 import { getConversationContextInfo } from "../../../logic/requests/message/messageRequest";
 import { useEffect } from "react";
 import { useState } from "react";
+import { getUserData } from "../../../logic/jwt";
+import { fromIsoDate, fromIsoDateToDate } from "../../../logic/time";
 
 export default function ConversationContextInfo({ size, uShown }) {
   const navigate = useNavigate();
   const { conversationId } = useParams();
   const [info, setInfo] = useState();
   const [shown, setShown] = uShown;
+
+  const userData = getUserData();
 
   useEffect(() => {
     getConversationContextInfo(conversationId).then((response) => {
@@ -39,29 +43,32 @@ export default function ConversationContextInfo({ size, uShown }) {
               </div>
 
               <div className="mb-3">
-                <div className="info-label">Заказчик</div>
-                <div className="info-value">
-                  {info?.service?.freelancer?.firstName +
-                    " " +
-                    info?.service?.freelancer?.lastName}
-                </div>
-              </div>
-
-              <div className="mb-3">
                 <div className="info-label">Стоимость</div>
                 <div className="info-value">{info?.service?.price} ₽</div>
               </div>
 
               <div className="mb-3">
-                <div className="info-label">Срок выполнения</div>
-                <div className="info-value">7 дней</div>
+                <div className="info-label">День дедлайна</div>
+                <div className="info-value">{ fromIsoDate(info?.order?.deadlineDate) }</div>
               </div>
 
               <div className="mb-3">
                 <div className="info-label">Статус</div>
-                <span className="badge bg-warning text-dark order-badge">
-                  {info?.order.status}
-                </span>
+                {info?.order?.status === "IN_PROGRESS" && (
+                  <span className="badge bg-warning text-dark order-badge">
+                    В работе
+                  </span>
+                )}
+                {info?.order?.status === "SUBMITTED" && (
+                  <span className="badge bg-warning text-dark order-badge">
+                    Отчёт отправлен
+                  </span>
+                )}
+                {info?.order?.status === "COMPLETED" && (
+                  <span className="badge bg-success text-light order-badge">
+                    Завершён
+                  </span>
+                )}
               </div>
 
               <button
@@ -72,17 +79,19 @@ export default function ConversationContextInfo({ size, uShown }) {
                 Открыть услугу
               </button>
 
-              <button
-                className="btn btn-primary w-100"
-                onClick={() =>
-                  navigate("/order/report/send", {
-                    state: { orderId: info.order.id },
-                  })
-                }
-              >
-                <i className="bi bi-check-circle me-1"></i>
-                Сдать работу
-              </button>
+              {info?.service.freelancer.userId === userData.id && (
+                <button
+                  className="btn btn-primary w-100"
+                  onClick={() =>
+                    navigate("/order/report/send", {
+                      state: { orderId: info.order.id },
+                    })
+                  }
+                >
+                  <i className="bi bi-check-circle me-1"></i>
+                  Сдать работу
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -110,29 +119,32 @@ export default function ConversationContextInfo({ size, uShown }) {
           </div>
 
           <div className="mb-3">
-            <div className="info-label">Заказчик</div>
-            <div className="info-value">
-              {info?.service?.freelancer?.firstName +
-                " " +
-                info?.service?.freelancer?.lastName}
-            </div>
-          </div>
-
-          <div className="mb-3">
             <div className="info-label">Стоимость</div>
             <div className="info-value">{info?.service?.price} ₽</div>
           </div>
 
           <div className="mb-3">
-            <div className="info-label">Срок выполнения</div>
-            <div className="info-value">7 дней</div>
+            <div className="info-label">День дедлайна</div>
+            <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
           </div>
 
           <div className="mb-3">
             <div className="info-label">Статус</div>
-            <span className="badge bg-warning text-dark order-badge">
-              {info?.order?.status}
-            </span>
+            {info?.order?.status === "IN_PROGRESS" && (
+              <span className="badge bg-warning text-dark order-badge">
+                В работе
+              </span>
+            )}
+            {info?.order?.status === "SUBMITTED" && (
+              <span className="badge bg-warning text-dark order-badge">
+                Отчёт отправлен
+              </span>
+            )}
+            {info?.order?.status === "COMPLETED" && (
+              <span className="badge bg-success text-light order-badge">
+                Завершён
+              </span>
+            )}
           </div>
 
           <button
@@ -143,17 +155,19 @@ export default function ConversationContextInfo({ size, uShown }) {
             Открыть услугу
           </button>
 
-          <button
-            className="btn btn-primary w-100"
-            onClick={() =>
-              navigate("/order/report/send", {
-                state: { orderId: info.order.id },
-              })
-            }
-          >
-            <i className="bi bi-check-circle me-1"></i>
-            Сдать работу
-          </button>
+          {info?.service.freelancer.userId === userData.id && info?.order?.status === "IN_PROGRESS" && (
+            <button
+              className="btn btn-primary w-100"
+              onClick={() =>
+                navigate("/order/report/send", {
+                  state: { orderId: info.order.id },
+                })
+              }
+            >
+              <i className="bi bi-check-circle me-1"></i>
+              Сдать работу
+            </button>
+          )}
         </div>
       </div>
     );

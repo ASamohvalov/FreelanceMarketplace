@@ -9,6 +9,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -53,4 +54,7 @@ public class OrderReportEntity {
 
     @Column(columnDefinition = "TEXT")
     private String customerComment;
+
+    @OneToMany(mappedBy = "orderReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderReportFileEntity> files;
 }

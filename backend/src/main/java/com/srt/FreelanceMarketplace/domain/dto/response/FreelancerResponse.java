@@ -9,6 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FreelancerResponse {
     private UUID id;
+    private UUID userId;
     private String firstName;
     private String lastName;
     private String jobTitle;

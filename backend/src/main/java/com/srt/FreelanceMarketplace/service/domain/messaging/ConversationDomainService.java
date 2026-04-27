@@ -1,8 +1,6 @@
 package com.srt.FreelanceMarketplace.service.domain.messaging;
 
-import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
-import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;
 import lombok.RequiredArgsConstructor;

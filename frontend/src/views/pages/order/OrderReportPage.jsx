@@ -39,6 +39,8 @@ export default function OrderReportPage() {
       return;
     }
 
+    document.title = "Отчёты";
+
     (async () => {
       // get all customer orders
       const customerResponse = await getOrderCustomerRequest();
@@ -93,6 +95,7 @@ export default function OrderReportPage() {
         status={selectedOrderReport?.status}
         report={selectedOrderReport?.report}
         id={selectedOrderReport?.id}
+        fileIds={selectedOrderReport?.files}
       />
 
       <div className="container mt-5 mb-5">
@@ -156,6 +159,7 @@ export default function OrderReportPage() {
                       orderReportOpen(report);
                     }}
                     status={report.status}
+                    fileCount={report.files?.length}
                   />
                 </div>
               ))
@@ -170,6 +174,7 @@ export default function OrderReportPage() {
                       orderReportOpen(report);
                     }}
                     status={report.status}
+                    fileCount={report.files?.length}
                   />
                 </div>
               ))}

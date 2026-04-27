@@ -19,7 +19,7 @@ import com.srt.FreelanceMarketplace.service.domain.user.JobTitleDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.RoleDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.TokenDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
-import com.srt.FreelanceMarketplace.util.FileStorageUtil;
+import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +42,7 @@ public class UserService {
     private final JobTitleDomainService jobTitleService;
     private final RoleDomainService roleService;
     private final ServiceDomainService serviceService;
-    private final FileStorageUtil fileStorageUtil;
+    private final FileStorageStrategy imageStorageStrategy;
     private final TokenDomainService tokenService;
     private final AccountDomainService accountDomainService;
 
@@ -85,12 +85,7 @@ public class UserService {
 
     public void uploadAvatar(MultipartFile avatar) {
         UserEntity user = authHelperService.getUser();
-        String fileName = fileStorageUtil.getRandomName(avatar);
-        try {
-            fileStorageUtil.uploadFile(avatar, fileName);
-        } catch (IOException e) {
-            throw new IllegalStateException("error file uploading: " + e);
-        }
+        String fileName = imageStorageStrategy.save(avatar);
         user.setAvatarPath(fileName);
         repository.save(user);
     }
@@ -101,7 +96,7 @@ public class UserService {
         if (user.getAvatarPath() == null) {
             return Optional.empty();
         }
-        return Optional.of(fileStorageUtil.downloadFile(user.getAvatarPath()));
+        return Optional.of(imageStorageStrategy.get(user.getAvatarPath()));
     }
 
     public void editProfile(EditUserProfileRequest request) {

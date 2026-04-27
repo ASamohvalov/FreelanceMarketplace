@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @Repository
 public interface OrderReportRepository extends JpaRepository<OrderReportEntity, UUID> {
-    @EntityGraph(attributePaths = {"customer"})
-    List<OrderReportEntity> findAllWithCustomerByFreelancerOrderByCreatedAtDesc(FreelancerEntity freelancer);
+    @EntityGraph(attributePaths = {"customer", "files"})
+    List<OrderReportEntity> findAllWithCustomerAndFilesByFreelancerOrderByCreatedAtDesc(FreelancerEntity freelancer);
 
-    @EntityGraph(attributePaths = {"freelancer", "freelancer.user", "freelancer.jobTitle"})
-    List<OrderReportEntity> findAllWithFreelancerByCustomerOrderByCreatedAtDesc(UserEntity customer);
+    @EntityGraph(attributePaths = {"freelancer", "freelancer.user", "freelancer.jobTitle", "files"})
+    List<OrderReportEntity> findAllWithFreelancerAndFilesByCustomerOrderByCreatedAtDesc(UserEntity customer);
 
     @EntityGraph(attributePaths = {"freelancer", "freelancer.user", "freelancer.jobTitle"})
     List<OrderReportEntity> findAllWithFreelancerByOrder(OrderEntity order);

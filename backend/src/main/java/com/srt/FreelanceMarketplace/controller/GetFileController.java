@@ -1,6 +1,6 @@
-package com.srt.FreelanceMarketplace.controller.service;
+package com.srt.FreelanceMarketplace.controller;
 
-import com.srt.FreelanceMarketplace.service.application.service.ServiceImageService;
+import com.srt.FreelanceMarketplace.service.application.service.GetFileService;
 import com.srt.FreelanceMarketplace.util.FileHelperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -16,14 +16,24 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/service/image")
-public class ServiceImageController {
-    private final ServiceImageService serviceImageService;
+@RequestMapping("/file/get")
+// permit all
+public class GetFileController {
+    private final GetFileService getFileService;
     private final FileHelperUtil fileHelperUtil;
 
-    @GetMapping("/{imageId}")
+    @GetMapping("/service/image/{imageId}")
     public ResponseEntity<Resource> getImageById(@PathVariable UUID imageId) {
-        Path path = serviceImageService.getImageById(imageId);
+        Path path = getFileService.getServiceImageById(imageId);
+        Resource resource = new FileSystemResource(path);
+        return ResponseEntity.ok()
+                .contentType(fileHelperUtil.getContentType(path))
+                .body(resource);
+    }
+
+    @GetMapping("/report/file/{fileId}")
+    public ResponseEntity<Resource> getFileById(@PathVariable UUID fileId) {
+        Path path = getFileService.getReportFileById(fileId);
         Resource resource = new FileSystemResource(path);
         return ResponseEntity.ok()
                 .contentType(fileHelperUtil.getContentType(path))

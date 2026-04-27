@@ -23,7 +23,7 @@ export default function SendOrderReportPage() {
       return;
     }
 
-    document.title = "Написать отчет";
+    document.title = "Оформление отчёта";
   }, [navigate, state]);
 
   async function handleSubmit() {
@@ -32,7 +32,7 @@ export default function SendOrderReportPage() {
       return;
     }
 
-    const response = await sendOrderReportRequest(title, report, state.orderId);
+    const response = await sendOrderReportRequest(title, report, state.orderId, files);
     if (response.status !== 200) {
       navigate(`/error?code=${response.status}`);
       return;

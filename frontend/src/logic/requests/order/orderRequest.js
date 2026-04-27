@@ -1,4 +1,4 @@
-import { sendAuthGet, sendAuthPost } from "../requestSender";
+import { sendAuthGet, sendAuthPost, sendAuthPostFormData } from "../requestSender";
 
 export async function sendOrderRequest(serviceId, deadline) {
   return await sendAuthPost("order/make", {
@@ -7,11 +7,12 @@ export async function sendOrderRequest(serviceId, deadline) {
   });
 }
 
-export async function sendOrderReportRequest(title, report, orderId) {
-  return await sendAuthPost("order/report/send", {
+export async function sendOrderReportRequest(title, report, orderId, files) {
+  return await sendAuthPostFormData("order/report/send", {
     orderId: orderId,
     report: report,
-    title: title
+    title: title,
+    files: files,
   });
 }
 

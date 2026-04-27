@@ -7,6 +7,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { getUserData } from "../../../logic/jwt";
+import { checkIsImage, getReportFileUrl } from "../../../logic/image";
+import FileItemComponent from "../order/FileItemComponent";
 
 export default function OrderReportModalWindow({
   id,
@@ -17,6 +19,7 @@ export default function OrderReportModalWindow({
   report,
   isVisible,
   onClose,
+  fileIds,
   isReceived = true,
 }) {
   const commentBoxRef = useRef(null);
@@ -65,21 +68,14 @@ export default function OrderReportModalWindow({
       <div className="mb-4">
         <h6 className="fw-semibold mb-3">Файлы</h6>
 
-        <div className="order-report-modal-window_file-item">
-          <div>
-            <i className="bi bi-file-earmark-text me-2"></i>
-            report.pdf
-          </div>
-          <button className="btn btn-sm btn-outline-primary">Скачать</button>
-        </div>
-
-        <div className="order-report-modal-window_file-item">
-          <div>
-            <i className="bi bi-image me-2"></i>
-            design.png
-          </div>
-          <button className="btn btn-sm btn-outline-primary">Скачать</button>
-        </div>
+        {fileIds?.map((fileId, idx) => (
+          <FileItemComponent
+            key={idx}
+            fileId={fileId}
+            idx={idx}
+            getReportFileUrl={getReportFileUrl}
+          />
+        ))}
       </div>
 
       <hr />

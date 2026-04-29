@@ -16,3 +16,7 @@ export function checkIsImage(url) {
     img.src = url;
   });
 }
+
+export function getAvatarUrl(userId) {
+  return BACKEND_URL + `user/avatar/${userId}`;
+}

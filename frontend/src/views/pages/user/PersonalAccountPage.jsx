@@ -14,7 +14,8 @@ import {
 } from "../../../logic/requests/payment/accountRequest";
 import TransferCardComponent from "../../components/payment/TransferCardComponent";
 import { fromIsoDate } from "../../../logic/time";
-import { editProfileRequest } from "../../../logic/requests/user/userRequest";
+import { editProfileRequest, uploadAvatarRequest } from "../../../logic/requests/user/userRequest";
+import { getAvatarUrl } from "../../../logic/image";
 
 export default function PersonalAccountPage() {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ export default function PersonalAccountPage() {
   const [aboutYourself, setAboutYourself] = useState("");
   const [email, setEmail] = useState("");
   const [balance, setBalance] = useState(0);
+  const [uploadAvatar, setUploadAvatar] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(getAvatarUrl(getUserData().id));
 
   // data
   const [jobTitles, setJobTitles] = useState([]);
@@ -109,9 +112,32 @@ export default function PersonalAccountPage() {
                 onClick={() => setEditMode(!editMode)}
               ></i>
 
-              <div className="personal-account-page_avatar"></div>
+              {avatarUrl ? (
+                <img
+                  className="personal-account-page_avatar"
+                  src={avatarUrl}
+                  alt="Avatar"
+                  onError={(e) => {
+                    e.target.style.display = 'none'
+                    setAvatarUrl(null);
+                  }}
+                />
+              ) : (
+                <div className="personal-account-page_avatar"></div>
+              )}
 
               <div className="text-center">
+                <label
+                  htmlFor="inputFile"
+                  className={`btn btn-outline-secondary w-100 mb-2 ${editMode ? "" : "d-none"}`}
+                >Изменить аватар</label>
+                <input
+                  type="file"
+                  className="form-control mb-2 d-none"
+                  onChange={(e) => setUploadAvatar(e.target.files[0])}
+                  id="inputFile"
+                />
+
                 <h5 className={editMode ? "d-none" : ""}>{fullName}</h5>
 
                 <input
@@ -181,12 +207,25 @@ export default function PersonalAccountPage() {
                       return;
                     }
                   } else {
-                    const response = await editProfileRequest(firstName, lastName);
+                    const response = await editProfileRequest(
+                      firstName,
+                      lastName,
+                    );
                     if (response.status !== 200) {
                       navigate(`/error?code=${response.status}`);
                       return;
                     }
                   }
+
+                  if (uploadAvatar !== null) {
+                    const response = await uploadAvatarRequest(uploadAvatar);
+                    if (response.status !== 200) {
+                      navigate(`/error?code=${response.status}`);
+                      return;
+                    }
+                    setUploadAvatar(null);
+                  }
+
                   setSuccessMessage("Профиль успешно обновлен");
                 }}
               >

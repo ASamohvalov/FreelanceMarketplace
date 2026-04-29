@@ -20,6 +20,9 @@
   background: #dee2ff;
   margin: auto;
   margin-bottom: 15px;
+  object-fit: cover;
+  color: transparent;
+  display: block;
 }
 
 .personal-account-page_balance-card {

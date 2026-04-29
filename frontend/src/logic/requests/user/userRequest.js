@@ -1,5 +1,5 @@
 import { login } from "../../jwt";
-import { sendAuthGet, sendAuthPost, sendAuthPut, sendUpdateTokensRequest } from "../requestSender";
+import { sendAuthGet, sendAuthPost, sendAuthPostFormData, sendAuthPut, sendUpdateTokensRequest } from "../requestSender";
 
 export async function logoutRequest() {
   const refreshToken = localStorage.getItem("refreshToken");
@@ -19,4 +19,10 @@ export async function editProfileRequest(firstName, lastName) {
   const { accessToken, refreshToken } = (await sendUpdateTokensRequest()).data;
   login(accessToken, refreshToken);
   return response;
+}
+
+export async function uploadAvatarRequest(file) {
+  return await sendAuthPostFormData("user/avatar/upload", {
+    avatar: file,
+  });
 }

@@ -24,7 +24,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, UUID> {
     List<ReviewEntity> findAllByServiceWithAuthor(ServiceEntity service);
 
     @EntityGraph(attributePaths = {"order", "order.service", "order.customer"})
-    ReviewEntity findFirstByOrder_serviceAndOrder_customer(ServiceEntity service, UserEntity customer);
+    Optional<ReviewEntity> findFirstByOrder_serviceAndOrder_customer(ServiceEntity service, UserEntity customer);
 
     @EntityGraph(attributePaths = {"order", "order.customer"})
     Optional<ReviewEntity> findFirstWithAuthorByOrder(OrderEntity order);

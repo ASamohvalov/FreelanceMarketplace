@@ -10,7 +10,7 @@ import "./css/send_review_page.css";
 export default function SendReviewPage() {
   // { orderId, serviceId, serviceTitle, freelancer }
   const { state } = useLocation();
-  const [edit] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const [rating, setRating] = useState(5);
@@ -24,9 +24,8 @@ export default function SendReviewPage() {
       navigate("/error");
       return;
     }
-    console.log(state);
 
-    if (edit) {
+    if (searchParams.get("edit")) {
       (async () => {
         const response = await getPersonalReviewByServiceRequest(state.serviceId);
         if (response.status !== 200) {
@@ -38,13 +37,13 @@ export default function SendReviewPage() {
         setReviewId(response.data.id);
       })();
     }
-  }, [navigate, state, edit]);
+  }, [navigate, state, searchParams]);
 
   return (
     <main style={{ minHeight: "90vh" }}>
       <div className="container mt-5 mb-5">
         <h3 className="mb-4 fw-semibold">
-          {edit ? "Редактирование отзыва" : "Оставить отзыв"}
+          {searchParams.get("edit") ? "Редактирование отзыва" : "Оставить отзыв"}
         </h3>
 
         <div
@@ -87,7 +86,7 @@ export default function SendReviewPage() {
             <button
               className="btn btn-primary"
               onClick={async () => {
-                if (edit) {
+                if (searchParams.get("edit")) {
                   const response = await sendEditReviewRequest(
                     reviewId,
                     rating,

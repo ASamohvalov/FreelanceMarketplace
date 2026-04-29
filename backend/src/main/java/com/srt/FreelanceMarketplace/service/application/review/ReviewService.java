@@ -79,9 +79,8 @@ public class ReviewService {
 
     public ReviewResponse getPersonalReviewByService(UUID serviceId) {
         ServiceEntity service = serviceDomainService.getReferenceIfExistsById(serviceId);
-        return mapToResponse(
-                repository.findFirstByOrder_serviceAndOrder_customer(service, authHelperService.getUser())
-        );
+        var res = repository.findFirstByOrder_serviceAndOrder_customer(service, authHelperService.getUser());
+        return res.map(this::mapToResponse).orElseGet(ReviewResponse::new);
     }
 
     public List<ReviewResponse> getReviewsByService(UUID serviceId) {

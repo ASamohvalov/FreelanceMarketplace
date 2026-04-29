@@ -99,7 +99,7 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
                         sender.getFirstName(),
                         sender.getLastName(),
                         commissionService.getPriceWithoutCommission(transfer.getAmount())))
-                .type(NotificationTypeEnum.ORDER_COMPLETED)
+                .type(NotificationTypeEnum.MONEY_TRANSFERRED)
                 .recipient(recipient)
                 .entityType(getEntityType(transfer))
                 .entityId(transfer.getId())

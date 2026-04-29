@@ -31,6 +31,7 @@ export default function NotificationCardComponent({
         {notification.type === "NEW_ORDER" && <i className="bi bi-cart-fill" />}
         {notification.type === "NEW_ORDER_REPORT" && <i className="bi bi-file-earmark-post" />}
         {notification.type === "ORDER_COMPLETED" && <i className="bi bi-calendar-check" />}
+        {notification.type === "MONEY_TRANSFERRED" && <i className="bi bi-credit-card" />}
       </div>
 
       <div className="flex-grow-1">

@@ -16,6 +16,7 @@ import TransferCardComponent from "../../components/payment/TransferCardComponen
 import { fromIsoDate } from "../../../logic/time";
 import { editProfileRequest, uploadAvatarRequest } from "../../../logic/requests/user/userRequest";
 import { getAvatarUrl } from "../../../logic/image";
+import { JoystickIcon } from "lucide-react";
 
 export default function PersonalAccountPage() {
   const navigate = useNavigate();
@@ -160,8 +161,7 @@ export default function PersonalAccountPage() {
                   <hr />
 
                   <div
-                    className={`text-center fw-semibold ${editMode ? "d-none" : ""}`}
-                  >
+                    className={`text-center fw-semibold ${editMode ? "d-none" : ""}`}>
                     {jobTitle.name}
                   </div>
                   <select
@@ -199,7 +199,7 @@ export default function PersonalAccountPage() {
                     const response = await editFreelancerProfile(
                       firstName,
                       lastName,
-                      jobTitle,
+                      jobTitle.id || jobTitle,
                       aboutYourself,
                     );
                     if (response.status !== 200) {
@@ -223,7 +223,8 @@ export default function PersonalAccountPage() {
                       navigate(`/error?code=${response.status}`);
                       return;
                     }
-                    setUploadAvatar(null);
+
+                    setUploadAvatar(getAvatarUrl(getUserData().id));
                   }
 
                   setSuccessMessage("Профиль успешно обновлен");

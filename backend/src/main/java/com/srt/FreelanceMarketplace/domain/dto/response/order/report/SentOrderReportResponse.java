@@ -20,4 +20,5 @@ public class SentOrderReportResponse {
     private OrderReportStatusEnum status;
     private UserNameResponse user;
     private List<UUID> files;
+    private String customerComment;
 }

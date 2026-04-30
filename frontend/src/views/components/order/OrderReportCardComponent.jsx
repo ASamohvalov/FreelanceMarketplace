@@ -9,6 +9,7 @@ export default function OrderReportCardComponent({
   isReceived=true,
   fileCount,
   onOpen,
+  comment=null,
 }) {
   return (
     <div className="report-card">
@@ -45,6 +46,13 @@ export default function OrderReportCardComponent({
           </button>
         </div>
       </div>
+
+      {comment && (
+        <div className="p-2 border mt-4 rounded">
+          <small className="text-secondary">Комментарий</small>
+          <div>{comment}</div>
+        </div>
+      )}
     </div>
   );
 }

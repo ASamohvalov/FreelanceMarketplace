@@ -1,7 +1,7 @@
 export function getFileRUString(count) {
   const pr = new Intl.PluralRules('ru-RU');
   const suffixes = {
-    one: '',
+    one: 'л',
     few: 'ла',
     many: 'лов'
   };

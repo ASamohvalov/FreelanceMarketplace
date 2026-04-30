@@ -160,6 +160,7 @@ export default function OrderReportPage() {
                     }}
                     status={report.status}
                     fileCount={report.files?.length}
+                    comment={report.customerComment}
                   />
                 </div>
               ))
@@ -175,6 +176,7 @@ export default function OrderReportPage() {
                     }}
                     status={report.status}
                     fileCount={report.files?.length}
+                    comment={report.customerComment}
                   />
                 </div>
               ))}

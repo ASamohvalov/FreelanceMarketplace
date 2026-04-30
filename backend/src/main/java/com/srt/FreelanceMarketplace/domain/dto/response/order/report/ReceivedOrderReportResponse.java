@@ -20,4 +20,5 @@ public class ReceivedOrderReportResponse {
     private OrderReportStatusEnum status;
     private FreelancerResponse freelancer;
     private List<UUID> files;
+    private String customerComment;
 }

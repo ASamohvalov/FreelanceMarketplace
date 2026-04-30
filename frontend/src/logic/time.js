@@ -94,26 +94,44 @@ export function daysBetween(date1, date2) {
   return Math.round(differenceMs / ONE_DAY);
 }
 
-export function now(){
+export function now() {
   return Date.now();
 }
 
 export function fromIsoDateToDate(isoStr) {
   const date = new Date(isoStr);
-  return date.toLocaleString('ru-RU', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
+  return date.toLocaleString("ru-RU", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   });
 }
 
 export function fromIsoDate(isoStr) {
   const date = new Date(isoStr);
-  return date.toLocaleString('ru-RU', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+  return date.toLocaleString("ru-RU", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
+}
+
+export function calculateDays(startDate, endDate) {
+  const oneDay = 24 * 60 * 60 * 1000;
+  const firstDate = new Date(startDate)
+  const secondDate = new Date(endDate)
+  return Math.round(Math.abs((firstDate - secondDate) / oneDay));
+}
+
+export function getDayRUString(count) {
+  const pr = new Intl.PluralRules('ru-RU');
+  const suffixes = {
+    one: 'ень',
+    few: 'ня',
+    many: 'дней'
+  };
+
+  return `${count} д${suffixes[pr.select(count)]}`;
 }

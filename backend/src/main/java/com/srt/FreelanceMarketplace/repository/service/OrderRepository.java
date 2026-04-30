@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,4 +42,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     Optional<OrderEntity> findFirstByServiceAndCustomerOrderByCompletionDateDesc(
             ServiceEntity service, UserEntity customer);
+
+    @EntityGraph(attributePaths = {"customer", "service.titleImage", "service.freelancer.user", "service.freelancer.jobTitle"})
+    Optional<OrderEntity> findWithServiceAndCustomerById(UUID id);
 }

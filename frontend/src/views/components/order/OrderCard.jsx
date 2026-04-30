@@ -31,6 +31,7 @@ export default function OrderCard({
   orderDate,
   completionDate = null,
   status,
+  hideButtons=false
 }) {
   const [hiddenState, setHidden] = useState(hidden);
 
@@ -82,10 +83,12 @@ export default function OrderCard({
       )}
       <div className="fw-semibold mb-3">{price} ₽</div>
 
-      <div className="d-flex gap-2 flex-wrap">
-        <Link className="btn btn-sm btn-outline-primary" to={`/service/${serviceId}`}>К услуге</Link>
-        <button className="btn btn-sm btn-primary">Открыть заказ</button>
-      </div>
+      {!hideButtons && (
+        <div className="d-flex gap-2 flex-wrap">
+          <Link className="btn btn-sm btn-outline-primary" to={`/service/${serviceId}`}>К услуге</Link>
+          <Link className="btn btn-sm btn-primary" to={`/order/info/${id}`}>Открыть заказ</Link>
+        </div>
+      )}
     </div>
   );
 }

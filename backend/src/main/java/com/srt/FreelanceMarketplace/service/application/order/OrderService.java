@@ -2,12 +2,14 @@ package com.srt.FreelanceMarketplace.service.application.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
+import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.mapper.OrderMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,7 @@ public class OrderService {
     private final FreelancerDomainService freelancerDomainService;
     private final UserMapper userMapper;
     private final TransferDomainService transferDomainService;
+    private final FreelanceMapper freelanceMapper;
 
     public void order(MakeOrderRequest request) {
         ServiceEntity service = serviceDomainService.getByIdWithAuthor(request.getServiceId());
@@ -108,5 +112,16 @@ public class OrderService {
                         userMapper.entityToUserNameResponse(o.getCustomer())
                 ))
                 .toList();
+    }
+
+    public GetOrderDataResponse getOrderById(UUID id) {
+        OrderEntity order = repository.findWithServiceAndCustomerById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("order not found"));
+        return new GetOrderDataResponse(
+                mapper.toResponse(order),
+                serviceDomainService.mapToServiceOrderInfoResponse(order.getService()),
+                userMapper.entityToUserNameResponse(order.getCustomer()),
+                freelanceMapper.freelancerEntityToResponse(order.getFreelancer())
+        );
     }
 }

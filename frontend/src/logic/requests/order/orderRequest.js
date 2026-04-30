@@ -23,3 +23,7 @@ export async function getOrderFreelancerRequest(){
 export async function getOrderCustomerRequest(){
   return await sendAuthGet("order/customer/get");
 }
+
+export async function getOrderByIdRequest(id){
+  return await sendAuthGet(`order/get/${id}`);
+}

@@ -17,6 +17,12 @@ public abstract class TransferMapper {
     @Mapping(target = "sender.firstName", source = "order.customer.firstName")
     @Mapping(target = "sender.lastName", source = "order.customer.lastName")
     @Mapping(target = "sender.id", source = "order.customer.id")
-    @Mapping(target = "amount", expression = "java(commissionService.getPriceWithoutCommission(transfer.getAmount()))")
     public abstract TransferResponse toResponse(TransferEntity transfer);
+
+    @Mapping(target = "serviceTitle", source = "order.service.title")
+    @Mapping(target = "sender.firstName", source = "order.customer.firstName")
+    @Mapping(target = "sender.lastName", source = "order.customer.lastName")
+    @Mapping(target = "sender.id", source = "order.customer.id")
+    @Mapping(target = "amount", expression = "java(commissionService.getPriceWithoutCommission(transfer.getAmount()))")
+    public abstract TransferResponse toResponseWithoutCommission(TransferEntity transfer);
 }

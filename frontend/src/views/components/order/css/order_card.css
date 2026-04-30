@@ -1,0 +1,11 @@
+.order-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  transition: 0.3s;
+}
+
+.order-card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}

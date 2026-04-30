@@ -13,5 +13,6 @@ public class OrderResponse {
     private UUID id;
     private Instant orderDate;
     private Instant deadlineDate;
+    private Instant completionDate;
     private OrderStatusEnum status;
 }

@@ -31,7 +31,7 @@ public class AccountService {
     public List<TransferResponse> getIncomingTransfers() {
         AccountEntity account = domainService.getByUser(authHelperService.getUser());
         return transferDomainService.getWithServiceAndCustomerAllByAccount(account).stream()
-                .map(transferMapper::toResponse)
+                .map(transferMapper::toResponseWithoutCommission)
                 .toList();
     }
 

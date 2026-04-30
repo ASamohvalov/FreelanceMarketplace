@@ -6,11 +6,12 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import "../services/css/services_page.css";
 import { Filters } from "../../components/services/Filters";
-import { getUserData } from "../../../logic/jwt";
+import { getUserData, hasRole } from "../../../logic/jwt";
 import {
   getOrderCustomerRequest,
   getOrderFreelancerRequest,
 } from "../../../logic/requests/order/orderRequest";
+import OrderCard from "../../components/order/OrderCard";
 
 export default function OrdersPage({ func, freelancer }) {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function OrdersPage({ func, freelancer }) {
   const [orders, setOrders] = useState([]);
   // const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [variant, setVariant] = useState("заказы");
+  const [variant, setVariant] = useState("orders");
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     title: searchParams.get("search") || "",
@@ -28,7 +29,7 @@ export default function OrdersPage({ func, freelancer }) {
     active: searchParams.get("search") || false,
   });
 
-  const isFreelancer = getUserData()?.roles.includes("ROLE_FREELANCER");
+  const isFreelancer = hasRole("ROLE_FREELANCER");
   useEffect(() => {
     document.title = "Мои заказы";
 
@@ -42,6 +43,8 @@ export default function OrdersPage({ func, freelancer }) {
           return;
         }
         setOrders(resultFreelancer.data);
+
+        setVariant("works");
       }
       if (result.status !== 200) {
         navigate("/error");
@@ -69,81 +72,67 @@ export default function OrdersPage({ func, freelancer }) {
   }, [navigate, func, isFreelancer]);
 
   return (
-    <>
-      <main style={{ minHeight: "80vh", marginLeft: 80 }}>
-        <div className="container mt-4 mb-4">
-          <div className="row align-items-start">
-            <div
-              className="col-lg-3 mb-4 position-sticky"
-              style={{ top: "82px" }}
-            >
-              <Filters
-                services={[services, setServices]}
-                filters={filters}
-                setFilters={setFilters}
-                variant={variant}
-              />
-              {isFreelancer && (
-                <div className="mt-3 d-flex flex-column gap-3">
-                  <button
-                    onClick={() => {
-                      setVariant("заказы");
-                    }}
-                    className="btn btn-success"
-                  >
-                    Мои заказы
-                  </button>
-                  <button
-                    className="btn btn-warning"
-                    onClick={() => {
-                      setVariant("работы");
-                      setFilters((prev) => ({
-                        ...prev,
-                        price: filters.maxPriceFreelancer,
-                      }));
-                    }}
-                  >
-                    Мои работы
-                  </button>
-                </div>
-              )}
-            </div>
+    <main style={{ minHeight: "90vh" }}>
+      <div className="container mt-5 mb-5">
+        <h3 className="mb-4 fw-semibold">Заказы</h3>
 
-            {loading ? (
-              <LoadingComponent />
-            ) : variant === "заказы" ? (
-              <ServicesListComponent
-                services={services
-                  .map((service) => service.service)
-                  .filter((service) => {
-                    return (
-                      service.title
-                        .toLowerCase()
-                        .includes(filters.title.toLowerCase()) &&
-                      service.price <= filters.price
-                    );
-                  })}
-                orderInfo={services}
-                />
-            ) : (
-                <ServicesListComponent
-                isOrder={true}
-                services={orders
-                  .map((service) => service.service)
-                  .filter((service) => {
-                    return (
-                      service.title
-                        .toLowerCase()
-                        .includes(filters.title.toLowerCase()) &&
-                      service.price <= filters.price
-                    );
-                  })}
-                orderInfo={orders}
-              />
-            )}
-          </div>
+        <div className="order-nav mb-4">
+          {isFreelancer && (
+            <>
+              <button
+                className={variant === "works" ? "active" : ""}
+                onClick={() => {
+                  setVariant("works");
+                }}
+              >
+                Мои работы
+              </button>
+              <button
+                className={variant === "orders" ? "active" : ""}
+                onClick={() => {
+                  setVariant("orders");
+                }}
+              >
+                Мои заказы
+              </button>
+            </>
+          )}
         </div>
-      </main>
-    </>
+
+        <div className="row g-4">
+          {variant === "works"
+            ? orders.map((order, idx) => (
+                <div className="col-md-6 col-xl-4" key={idx}>
+                  <OrderCard
+                    id={order.order.id}
+                    serviceId={order.service.id}
+                    title={order.service.title}
+                    customer={order.customer}
+                    deadline={order.order.deadlineDate}
+                    orderDate={order.order.orderDate}
+                    completionDate={order.order.completionDate || null}
+                    price={order.service.price}
+                    status={order.order.status}
+                  />
+                </div>
+              ))
+            : services.map((order, idx) => (
+                <div className="col-md-6 col-xl-4" key={idx}>
+                  <OrderCard
+                    id={order.order.id}
+                    serviceId={order.service.id}
+                    title={order.service.title}
+                    freelancer={order.service.freelancer}
+                    deadline={order.order.deadlineDate}
+                    orderDate={order.order.orderDate}
+                    completionDate={order.order.completionDate || null}
+                    price={order.service.price}
+                    status={order.order.status}
+                  />
+                </div>
+              ))}
+        </div>
+      </div>
+    </main>
   );
 }

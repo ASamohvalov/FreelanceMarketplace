@@ -15,6 +15,8 @@ export default function NotificationsPage() {
   const [showHidden, setShowHidden] = useState(false);
 
   useEffect(() => {
+    document.title = "Уведомления";
+
     (async () => {
       const response = await getAllPersonalNotificationsRequest();
       if (response.status !== 200) {

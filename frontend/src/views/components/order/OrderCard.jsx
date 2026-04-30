@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import "../service/service_card_component.css";
 import {
   hideOwnServicesRequest,
   showOwnServicesRequest,
 } from "../../../logic/requests/service/serviceRequest";
 import { useState } from "react";
-import { now } from "../../../logic/time";
+import "./css/order_card.css";
+import { fromIsoDateToDate, sendAtDateToRUString } from "../../../logic/time";
 
 function handleHide(e, id) {
   e.stopPropagation();
@@ -20,70 +20,72 @@ function handleShow(e, id) {
 
 export default function OrderCard({
   id,
+  serviceId,
   title,
   price,
-  freelancerName,
-  image,
   isPreview,
-  from,
   hidden,
-  orderInfo,
+  customer = null,
+  freelancer = null,
+  deadline,
+  orderDate,
+  completionDate = null,
+  status,
 }) {
   const [hiddenState, setHidden] = useState(hidden);
-  const orderDate =
-    orderInfo && new Date(Date.parse(orderInfo[0].order?.orderDate));
-  const deadline =
-    orderInfo &&
-    new Date(Date.parse(orderInfo[0].order?.deadlineDate) - now()).getDate();
 
   return (
-    <Link
-      to={`/service/${id}`}
-      onClick={(e) => isPreview && e.preventDefault()}
-      className={`text-decoration-none text-body ${isPreview && "service-card-disable_link"}`}
-    >
-      <div
-        className={`${orderInfo && !orderInfo[0].order.status === "IN_PROGRESS" && "bg-secondary"} service-card p-3 shadow-sm`}
-      >
-        {image === null ? (
-          <div className="service-img mb-3"></div>
-        ) : (
-          <img
-            className="preview-img"
-            src={
-              isPreview
-                ? URL.createObjectURL(image)
-                : image.startsWith("http")
-                  ? image
-                  : `http://${image}`
-            }
-            alt="previewimg"
-          />
+    <div className="order-card">
+      <div className="d-flex justify-content-between mb-2">
+        <strong>{title}</strong>
+        {status === "COMPLETED" && (
+          <span className="order-report-status order-report-status_approved">
+            Завершён
+          </span>
         )}
-        <h6 className="text-muted">{freelancerName} • Фрилансер</h6>
-          <h6 className="fw-semibold">{title}</h6>
-        <hr></hr>
-        <h6 className="text-muted">
-          {orderInfo[0].customer.firstName +
-            " " +
-            orderInfo[0].customer.lastName}{" "}
-          • Клиент
-        </h6>
-        {orderInfo && (
-          <h6>
-            Дата заказа:{" "}
-            {"0" + orderDate.getMonth() + ".0" + orderDate.getDate()}
-          </h6>
+        {status === "REJECTED" && (
+          <span className="order-report-status order-report-status_rejected">
+            Отклонен
+          </span>
         )}
-        {orderInfo && <h6>Осталось до конца: {deadline.toString()} д.</h6>}
-        <h6>Статус: {orderInfo[0].order.status}</h6>
-        <hr></hr>
-        <div className="d-flex justify-content-center mb-3 align-items-center mt-3">
-          <span className="service-price">Цена: {price}₽</span>
-        </div>
-          <button className="btn w-100 btn-outline-primary">Подробнее</button>
-          <button className="btn w-100 mt-2 btn-outline-primary">Сдать</button>
+        {status === "IN_PROGRESS" && (
+          <span className="order-report-status order-report-status_pending">
+            В работе
+          </span>
+        )}
       </div>
-    </Link>
+
+      {customer && (
+        <div className="text-muted small mb-2">
+          Заказчик: {customer.firstName + " " + customer.lastName}
+        </div>
+      )}
+
+      {freelancer && (
+        <div className="text-muted small mb-2">
+          Исполнитель: {freelancer.firstName + " " + freelancer.lastName}
+        </div>
+      )}
+
+      <hr />
+
+      <div className="text-muted small mb-2">
+        Дедлайн: {fromIsoDateToDate(deadline)}
+      </div>
+      <div className="text-muted small mb-2">
+        Дата заказа: {fromIsoDateToDate(orderDate)}
+      </div>
+      {status !== "IN_PROGRESS" && (
+        <div className="text-muted small mb-2">
+          Дата завершения: {fromIsoDateToDate(completionDate)}
+        </div>
+      )}
+      <div className="fw-semibold mb-3">{price} ₽</div>
+
+      <div className="d-flex gap-2 flex-wrap">
+        <Link className="btn btn-sm btn-outline-primary" to={`/service/${serviceId}`}>К услуге</Link>
+        <button className="btn btn-sm btn-primary">Открыть заказ</button>
+      </div>
+    </div>
   );
 }

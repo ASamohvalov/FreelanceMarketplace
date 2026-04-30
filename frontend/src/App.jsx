@@ -24,6 +24,7 @@ import SendOrderReportPage from "./views/pages/order/SendOrderReportPage.jsx";
 import SendOrderReportSuccessPage from "./views/pages/order/SendOrderReportSuccessPage.jsx";
 import OrderReportPage from "./views/pages/order/OrderReportPage.jsx";
 import SendReviewPage from "./views/pages/review/SendReviewPage.jsx";
+import OrderPage from "./views/pages/order/OrderPage.jsx";
 
 // base routing
 export default function App() {
@@ -67,6 +68,7 @@ export default function App() {
           element={<SendOrderReportSuccessPage />}
         />
         <Route path="order/reports" element={<OrderReportPage />} />
+        <Route path="order/info/:id" element={<OrderPage />} />
 
         <Route path="review/send" element={<SendReviewPage />} />
       </Route>

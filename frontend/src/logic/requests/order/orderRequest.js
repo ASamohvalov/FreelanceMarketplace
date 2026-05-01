@@ -1,4 +1,4 @@
-import { sendAuthGet, sendAuthPost, sendAuthPostFormData } from "../requestSender";
+import { sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPostFormData } from "../requestSender";
 
 export async function sendOrderRequest(serviceId, deadline) {
   return await sendAuthPost("order/make", {
@@ -26,4 +26,8 @@ export async function getOrderCustomerRequest(){
 
 export async function getOrderByIdRequest(id){
   return await sendAuthGet(`order/get/${id}`);
+}
+
+export async function sendRejectOrderRequest(id) {
+  return await sendAuthPatch(`order/reject/${id}`);
 }

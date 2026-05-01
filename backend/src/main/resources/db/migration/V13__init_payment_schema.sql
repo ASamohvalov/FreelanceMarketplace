@@ -4,7 +4,7 @@ CREATE TABLE accounts (
     balance BIGINT DEFAULT 0 NOT NULL
 );
 
-CREATE TYPE transfer_status AS ENUM ('HELD', 'RELEASED');
+CREATE TYPE transfer_status AS ENUM ('HELD', 'RELEASED', 'CANCELLED');
 
 CREATE TABLE transfers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

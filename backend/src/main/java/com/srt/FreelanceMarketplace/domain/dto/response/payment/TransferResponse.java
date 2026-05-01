@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.response.payment;
 
+import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class TransferResponse {
     private long amount;
     private Instant createdAt;
     private UserNameResponse sender;
+    private TransferStatusEnum status;
 }

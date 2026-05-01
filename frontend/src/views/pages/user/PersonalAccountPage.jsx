@@ -16,7 +16,6 @@ import TransferCardComponent from "../../components/payment/TransferCardComponen
 import { fromIsoDate } from "../../../logic/time";
 import { editProfileRequest, uploadAvatarRequest } from "../../../logic/requests/user/userRequest";
 import { getAvatarUrl } from "../../../logic/image";
-import { JoystickIcon } from "lucide-react";
 
 export default function PersonalAccountPage() {
   const navigate = useNavigate();
@@ -266,6 +265,7 @@ export default function PersonalAccountPage() {
                   date={fromIsoDate(transfer.createdAt)}
                   isIncome={false}
                   key={idx}
+                  status={transfer.status}
                 />
               ))}
             </div>

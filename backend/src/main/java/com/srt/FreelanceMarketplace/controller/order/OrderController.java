@@ -39,4 +39,9 @@ public class OrderController {
     public List<OrderFreelancerResponse> getFreelancerOrders() {
         return orderService.getFreelancerOrders();
     }
+
+    @PatchMapping("/reject/{id}")
+    public void rejectOrder(@PathVariable UUID id) {
+        orderService.rejectOrder(id);
+    }
 }

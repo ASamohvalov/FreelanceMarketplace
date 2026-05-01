@@ -4,6 +4,7 @@ export default function TransferCardComponent({
   serviceTitle,
   price,
   date,
+  status,
   isIncome = true,
 }) {
   return (
@@ -12,9 +13,15 @@ export default function TransferCardComponent({
         <div className="d-flex justify-content-between">
           <strong>{serviceTitle}</strong>
           <span
-            className={`personal-account-card-component_${isIncome ? "income" : "expense"}`}
+            className={`personal-account-card-component_${status === "CANCELLED" ? "canseled" : isIncome ? "income" : "expense"}`}
           >
-            {isIncome ? "+" : "-"}
+            {status === "CANCELLED" ? (
+              <i className="bi bi-arrow-counterclockwise" />
+            ) : isIncome ? (
+              "+"
+            ) : (
+              "-"
+            )}
             {price} ₽
           </span>
         </div>

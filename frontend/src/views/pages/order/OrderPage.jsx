@@ -3,7 +3,7 @@ import OrderCard from "../../components/order/OrderCard";
 import "./css/order_page.css";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getOrderByIdRequest } from "../../../logic/requests/order/orderRequest";
+import { getOrderByIdRequest, sendRejectOrderRequest } from "../../../logic/requests/order/orderRequest";
 import {
   calculateDays,
   fromIsoDateToDate,
@@ -66,34 +66,55 @@ export default function OrderPage() {
                     onClick={() =>
                       navigate("/order/report/send", {
                         state: {
-                          state: { orderId: order.order.id },
-                        }
+                          orderId: order.order.id,
+                          serviceTitle: order.service.title,
+                          serviceId: order.service.id,
+                          freelancer: order.freelancer,
+                        },
                       })
-                    }>
+                    }
+                  >
                     <i className="bi bi-check-circle me-1" />
                     Сдать работу
                   </button>
                 ) : (
                   <>
-                    <Link
-                      className="btn btn-outline-secondary"
-                      to="/review/send"
-                    >
-                      <i className="bi bi-star me-1" />
-                      Оставить отзыв
-                    </Link>
+                    {order?.order?.status === "COMPLETED" && (
+                      <Link
+                        className="btn btn-outline-secondary"
+                        to="/review/send"
+                      >
+                        <i className="bi bi-star me-1" />
+                        Оставить отзыв
+                      </Link>
+                    )}
 
-                    <Link className="btn btn-outline-danger">
-                      <i className="bi bi-x-circle me-1" />
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={async () => {
+                          const response = await sendRejectOrderRequest(order.order.id);
+                          if (response.status !== 200) {
+                            navigate(`/error?code=${response.status}`);
+                            return;
+                          }
+                          alert("Заказ отменён, деньги возвращены");
+                        }}
+                      >
+                        <i className="bi bi-x-circle me-1" />
                       Отменить заказ
-                    </Link>
+                    </button>
                   </>
                 )}
               </div>
             </div>
 
             <div className="order-card_box">
-              <Link className="btn btn-outline-primary w-100" to="/order/reports">Открыть отчёты</Link>
+              <Link
+                className="btn btn-outline-primary w-100"
+                to="/order/reports"
+              >
+                Открыть отчёты
+              </Link>
             </div>
           </div>
 

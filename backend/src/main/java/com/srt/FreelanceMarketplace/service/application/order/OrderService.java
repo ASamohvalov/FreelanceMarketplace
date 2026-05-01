@@ -1,12 +1,15 @@
 package com.srt.FreelanceMarketplace.service.application.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
@@ -123,5 +126,18 @@ public class OrderService {
                 userMapper.entityToUserNameResponse(order.getCustomer()),
                 freelanceMapper.freelancerEntityToResponse(order.getFreelancer())
         );
+    }
+
+    public void rejectOrder(UUID id) {
+        OrderEntity order = domainService.getById(id);
+        if (!order.getCustomer().getId()
+                .equals(authHelperService.getUser().getId())) {
+            throw new GlobalBadRequestException("only the customer can reject the order");
+        }
+        order.setStatus(OrderStatusEnum.REJECTED);
+
+        transferDomainService.canselTransferByOrder(order);
+
+        repository.save(order);
     }
 }

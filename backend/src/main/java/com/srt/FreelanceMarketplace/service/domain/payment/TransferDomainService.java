@@ -60,4 +60,13 @@ public class TransferDomainService {
     public List<TransferEntity> getWithServiceAndCustomerAllBySender(UserEntity sender) {
         return repository.findWithServiceAndCustomerAllByOrder_customerOrderByCreatedAtDesc(sender);
     }
+
+    public void canselTransferByOrder(OrderEntity order) {
+        TransferEntity transfer = getTransferByOrder(order);
+        if (transfer.getStatus() != TransferStatusEnum.HELD) {
+            throw new IllegalStateException("you cannot cansel an already released transfer");
+        }
+        transfer.setStatus(TransferStatusEnum.CANCELLED);
+        repository.save(transfer);
+    }
 }

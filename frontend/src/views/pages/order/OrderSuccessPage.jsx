@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./css/order_success_page.css";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -54,10 +54,10 @@ export default function OrderSuccessPage() {
           Перейти в чат
         </button>
 
-        <button className="btn btn-outline-secondary px-4">
+        <Link className="btn btn-outline-secondary px-4" to="/MyOrders">
           <i className="bi bi-receipt me-2"></i>
           Мои заказы
-        </button>
+        </Link>
       </div>
     </SuccessInfoComponent>
   );

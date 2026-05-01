@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application.review;
 
+import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.review.EditReviewRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.review.SendReviewRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewResponse;
@@ -40,6 +41,10 @@ public class ReviewService {
         if (!order.getCustomer().getId()
                 .equals(authHelperService.getUser().getId())) {
             throw new GlobalBadRequestException("this user don't customer of this order");
+        }
+
+        if (order.getStatus() != OrderStatusEnum.COMPLETED) {
+            throw new GlobalBadRequestException("you can't leave a review on an unfinished order");
         }
 
         if (repository.existsByOrder(order)) {

@@ -50,8 +50,7 @@ public class OrderReportService {
         FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
         OrderEntity order = orderDomainService.getByIdWithFreelancerAndService(request.getOrderId());
 
-        if (order.getStatus() == OrderStatusEnum.SUBMITTED ||
-                order.getStatus() == OrderStatusEnum.COMPLETED) {
+        if (order.getStatus() != OrderStatusEnum.IN_PROGRESS) {
             throw new GlobalBadRequestException("the report has already been sent");
         }
 
@@ -69,8 +68,6 @@ public class OrderReportService {
                 .order(order)
                 .customer(customer)
                 .build();
-
-        order.setStatus(OrderStatusEnum.SUBMITTED);
 
         var entityList = orderReportFileDomainService.uploadFiles(report, request.getFiles());
 

@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.service.application.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
+import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewCheckActionEnum;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewCheckResponse;
@@ -145,7 +146,7 @@ public class ServiceApplicationService {
         Optional<OrderEntity> order = orderDomainService.findLastOrderByCustomer(
                 service, authHelperService.getUser());
 
-        if (order.isEmpty()) {
+        if (order.isEmpty() || order.get().getStatus() != OrderStatusEnum.COMPLETED) {
             return new ReviewCheckResponse(false, ReviewCheckActionEnum.NONE, null);
         }
         ReviewCheckActionEnum action = reviewDomainService.existsByService(service)

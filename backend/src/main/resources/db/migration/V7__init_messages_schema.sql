@@ -27,6 +27,7 @@ CREATE TABLE messages (
     conversation_id UUID REFERENCES conversations(id) NOT NULL,
     send_at TIMESTAMP DEFAULT NOW() NOT NULL,
     update_at TIMESTAMP DEFAULT NOW() NOT NULL,
-    is_read BOOLEAN DEFAULT FALSE NOT NULL,
+    read BOOLEAN DEFAULT FALSE NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
     message TEXT NOT NULL
 );

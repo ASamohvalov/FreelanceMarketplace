@@ -26,7 +26,7 @@ public class MessageDomainService {
                 .author(author)
                 .message(messageText)
                 .sendAt(Instant.now())
-                .isRead(false)
+                .read(false)
                 .build();
         repository.save(message);
     }
@@ -34,5 +34,12 @@ public class MessageDomainService {
     public MessageEntity getById(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("this message not found"));
+    }
+
+    public MessageEntity getReferenceIfExistsById(UUID id) {
+        if (!repository.existsById(id)) {
+            throw  new GlobalBadRequestException("this message not found");
+        }
+        return repository.getReferenceById(id);
     }
 }

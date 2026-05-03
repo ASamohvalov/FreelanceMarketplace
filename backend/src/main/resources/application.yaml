@@ -43,3 +43,13 @@ storage:
   location:
     images: /home/artem/tmp/uploads/images/
     documents: /home/artem/tmp/uploads/documents/
+
+message:
+  polling:
+    timeout-sec: 30
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

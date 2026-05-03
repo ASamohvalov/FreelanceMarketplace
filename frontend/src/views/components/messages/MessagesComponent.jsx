@@ -8,7 +8,7 @@ import MessageCardComponent from "./MessageCardComponent";
 import { getUserData } from "../../../logic/jwt";
 import { useRef } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
-import getMessages from "../../../logic/message";
+import {pool} from "../../../logic/message";
 import { useCallback } from "react";
 
 export default function MessagesComponent({
@@ -26,27 +26,15 @@ export default function MessagesComponent({
   }, [navigate]);
 
   const messageChatRef = useRef();
-  useEffect(() => {
-    getMessages(setMessages, conversationId.conversationId, errorHandle);
-    const interval = setInterval(() => {
-      getMessages(setMessages, conversationId.conversationId, errorHandle);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [errorHandle, conversationId]);
+  const isActiveRef = useRef();
 
-  const addNewMessageHandle = (id, message, conversationId) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: id,
-        conversationId: conversationId,
-        text: message,
-        authorId: getUserData().id,
-        sendAt: new Date().getTime(),
-        read: false,
-      },
-    ]);
-  };
+  useEffect(() => {
+    isActiveRef.current = true;
+
+    pool(isActiveRef, setMessages, conversationId.conversationId, errorHandle);
+
+    return () => isActiveRef.current = false;
+  }, [errorHandle, conversationId]);
 
   useEffect(() => {
     (async () => {
@@ -115,7 +103,6 @@ export default function MessagesComponent({
                 errorHandle();
                 return;
               }
-              addNewMessageHandle(response.data.id, message, conversationId.conversationId);
               setMessage("");
             }
           }}

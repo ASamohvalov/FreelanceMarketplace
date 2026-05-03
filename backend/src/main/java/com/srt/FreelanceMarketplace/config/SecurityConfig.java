@@ -45,6 +45,8 @@ public class SecurityConfig {
                 )
                 .sessionManagement(manager -> manager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .securityContext(context ->
+                        context.requireExplicitSave(false))
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

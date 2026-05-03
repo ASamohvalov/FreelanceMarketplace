@@ -42,5 +42,9 @@ public class MessageEntity {
 
     @Column(nullable = false)
     @Builder.Default
-    private boolean isRead = false;
+    private boolean read = false;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean deleted = false;
 }

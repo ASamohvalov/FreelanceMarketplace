@@ -20,7 +20,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
             select count(o) > 0 from OrderEntity o
             where o.service = :service
             and o.customer = :customer
-            and o.status != "COMPLETED"
+            and o.status = "IN_PROGRESS"
             """)
     boolean existsByServiceAndCustomer(ServiceEntity service, UserEntity customer);
 

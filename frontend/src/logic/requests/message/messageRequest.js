@@ -1,3 +1,4 @@
+import { LucideHotel } from "lucide-react";
 import { sendAuthDelete, sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPut } from "../requestSender";
 
 export async function getAllConversationsRequest() {
@@ -37,5 +38,12 @@ export async function sendEditMessageRequest(messageId, text) {
   return await sendAuthPut("messaging/message/edit", {
     id: messageId,
     message: text
+  });
+}
+
+export async function getMessageEventsRequest(conversationId, lastEventId=0) {
+  return await sendAuthGet("messaging/event/get", {
+    conversationId: conversationId,
+    lastEventId: lastEventId,
   });
 }

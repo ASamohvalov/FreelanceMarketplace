@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.repository.messaging;
 
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.MessageEventEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
-    List<MessageEntity> findAllByConversationOrderBySendAtAsc(ConversationEntity conversation);
+    List<MessageEntity> findAllByConversationAndDeletedFalseOrderBySendAtAsc(ConversationEntity conversation);
 
     @Query("""
             select m from MessageEntity m
@@ -24,6 +25,7 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
             where c = :conversation
             and m.sendAt > :date
             and a <> :author
+            and m.deleted = false
             order by m.sendAt asc
             """)
     List<MessageEntity> findAllUnreadMessagesAfterDate(
@@ -32,6 +34,6 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
 
     @Transactional
     @Modifying
-    @Query("update MessageEntity m set m.isRead = true where m.id = :id")
-    void updateReadById(UUID id);
+    @Query("update MessageEntity m set m.read = true where m = :message")
+    void updateRead(MessageEntity message);
 }

@@ -31,7 +31,7 @@ export default function ConversationContextInfo({ size, uShown }) {
             <div className="service-info-card">
               <h6 className="fw-semibold mb-3">
                 {info?.type === "ORDER"
-                  ? "Информация о заказе"
+                  ? "Информация о последнем заказе"
                   : "Информация об услуге"}
               </h6>
 
@@ -47,29 +47,33 @@ export default function ConversationContextInfo({ size, uShown }) {
                 <div className="info-value">{info?.service?.price} ₽</div>
               </div>
 
-              <div className="mb-3">
-                <div className="info-label">День дедлайна</div>
-                <div className="info-value">{ fromIsoDate(info?.order?.deadlineDate) }</div>
-              </div>
+              {info?.type === "ORDER" && (
+                <>
+                  <div className="mb-3">
+                    <div className="info-label">День дедлайна</div>
+                    <div className="info-value">{ fromIsoDate(info?.order?.deadlineDate) }</div>
+                  </div>
 
-              <div className="mb-3">
-                <div className="info-label">Статус</div>
-                {info?.order?.status === "IN_PROGRESS" && (
-                  <span className="badge bg-warning text-dark order-badge">
-                    В работе
-                  </span>
-                )}
-                {info?.order?.status === "SUBMITTED" && (
-                  <span className="badge bg-warning text-dark order-badge">
-                    Отчёт отправлен
-                  </span>
-                )}
-                {info?.order?.status === "COMPLETED" && (
-                  <span className="badge bg-success text-light order-badge">
-                    Завершён
-                  </span>
-                )}
-              </div>
+                  <div className="mb-3">
+                    <div className="info-label">Статус</div>
+                    {info?.order?.status === "IN_PROGRESS" && (
+                      <span className="badge bg-warning text-dark order-badge">
+                        В работе
+                      </span>
+                    )}
+                    {info?.order?.status === "REJECTED" && (
+                      <span className="badge bg-danger text-dark order-badge">
+                        Отклонен
+                      </span>
+                    )}
+                    {info?.order?.status === "COMPLETED" && (
+                      <span className="badge bg-success text-light order-badge">
+                        Завершён
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
 
               <button
                 className="btn btn-outline-primary w-100 mb-2"
@@ -103,7 +107,7 @@ export default function ConversationContextInfo({ size, uShown }) {
         <div className="service-info-card">
           <h6 className="fw-semibold mb-3">
             {info?.type === "ORDER"
-              ? "Информация о заказе"
+              ? "Информация о последнем заказе"
               : "Информация об услуге"}
           </h6>
 
@@ -123,29 +127,33 @@ export default function ConversationContextInfo({ size, uShown }) {
             <div className="info-value">{info?.service?.price} ₽</div>
           </div>
 
-          <div className="mb-3">
-            <div className="info-label">День дедлайна</div>
-            <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
-          </div>
+          {info?.type === "ORDER" && (
+            <>
+              <div className="mb-3">
+                <div className="info-label">День дедлайна</div>
+                <div className="info-value">{ fromIsoDate(info?.order?.deadlineDate) }</div>
+              </div>
 
-          <div className="mb-3">
-            <div className="info-label">Статус</div>
-            {info?.order?.status === "IN_PROGRESS" && (
-              <span className="badge bg-warning text-dark order-badge">
-                В работе
-              </span>
-            )}
-            {info?.order?.status === "SUBMITTED" && (
-              <span className="badge bg-warning text-dark order-badge">
-                Отчёт отправлен
-              </span>
-            )}
-            {info?.order?.status === "COMPLETED" && (
-              <span className="badge bg-success text-light order-badge">
-                Завершён
-              </span>
-            )}
-          </div>
+              <div className="mb-3">
+                <div className="info-label">Статус</div>
+                {info?.order?.status === "IN_PROGRESS" && (
+                  <span className="badge bg-warning text-dark order-badge">
+                    В работе
+                  </span>
+                )}
+                {info?.order?.status === "REJECTED" && (
+                  <span className="badge bg-danger text-dark order-badge">
+                    Отклонен
+                  </span>
+                )}
+                {info?.order?.status === "COMPLETED" && (
+                  <span className="badge bg-success text-light order-badge">
+                    Завершён
+                  </span>
+                )}
+              </div>
+            </>
+          )}
 
           <button
             className="btn btn-outline-primary w-100 mb-2"

@@ -1,12 +1,14 @@
 package com.srt.FreelanceMarketplace.service.application.messaging;
 
+import com.srt.FreelanceMarketplace.domain.dto.MessageEventTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageListResponse;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.MessageEventEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.ConversationMapper;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
@@ -15,13 +17,15 @@ import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationMemberDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.MessageDomainService;
+import com.srt.FreelanceMarketplace.service.domain.messaging.MessageEventDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
-import jakarta.transaction.Transactional;
+import com.srt.FreelanceMarketplace.service.infrastructure.MessagingEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,6 +43,8 @@ public class MessageService {
     private final ConversationMapper conversationMapper;
     private final OrderMapper orderMapper;
     private final ServiceDomainService serviceDomainService;
+    private final MessagingEventService messagingEventService;
+    private final MessageEventDomainService messageEventDomainService;
 
     public Map<String, UUID> sendMessage(NewMessageRequest request) {
         MessageEntity message = MessageEntity.builder()
@@ -48,27 +54,51 @@ public class MessageService {
                 .build();
         repository.save(message);
 
+        messagingEventService.publishEvent(MessageEventEntity.builder()
+                .message(message)
+                .type(MessageEventTypeEnum.NEW_MESSAGE)
+                .build());
+
         return Map.of("id", message.getId());
     }
 
-    public List<MessageResponse> getMessages(UUID conversationId, Instant after) {
+    public MessageListResponse getMessages(UUID conversationId, Instant after) {
         conversationDomainService.throwIfNotExistsById(conversationId);
         ConversationEntity conversation = conversationDomainService.getReferenceById(conversationId);
 
         if (after != null) {
-            return repository.findAllUnreadMessagesAfterDate(
-                            conversation, after, authHelperService.getUser()
-                    ).stream()
-                    .map(mapper::fromEntity)
-                    .toList();
+            return new MessageListResponse(
+                    repository.findAllUnreadMessagesAfterDate(
+                                    conversation, after, authHelperService.getUser()
+                            ).stream()
+                            .map(mapper::fromEntity)
+                            .toList(),
+                    messageEventDomainService.findLastId(conversation)
+            );
         }
-        return repository.findAllByConversationOrderBySendAtAsc(conversation).stream()
-                .map(mapper::fromEntity)
-                .toList();
+        return new MessageListResponse(
+                repository.findAllByConversationAndDeletedFalseOrderBySendAtAsc(conversation).stream()
+                        .map(mapper::fromEntity)
+                        .toList(),
+                messageEventDomainService.findLastId(conversation)
+        );
     }
 
     public void readMessages(List<UUID> messages) {
-        messages.forEach(repository::updateReadById);
+        List<MessageEventEntity> eventEntityList = new ArrayList<>();
+        for (UUID messageId : messages) {
+            MessageEntity message = domainService.getById(messageId);
+            repository.updateRead(message);
+
+            MessageEventEntity event = MessageEventEntity.builder()
+                    .message(message)
+                    .type(MessageEventTypeEnum.READ_MESSAGE)
+                    .build();
+            messagingEventService.publishEvent(event);
+
+            eventEntityList.add(event);
+        }
+        messageEventDomainService.saveAll(eventEntityList);
     }
 
     public List<ConversationResponse> getAllConversations() {
@@ -92,7 +122,15 @@ public class MessageService {
                 .equals(authHelperService.getUser().getId())) {
             throw new GlobalBadRequestException("the user cannot delete a message that is not his own");
         }
-        repository.delete(message);
+
+        message.setDeleted(true);
+        message.setUpdateAt(Instant.now());
+        repository.save(message);
+
+        messagingEventService.publishEvent(MessageEventEntity.builder()
+                .message(message)
+                .type(MessageEventTypeEnum.DELETE_MESSAGE)
+                .build());
     }
 
     public void editMessage(EditMessageRequest request) {
@@ -104,5 +142,10 @@ public class MessageService {
         message.setMessage(request.getMessage());
         message.setUpdateAt(Instant.now());
         repository.save(message);
+
+        messagingEventService.publishEvent(MessageEventEntity.builder()
+                .message(message)
+                .type(MessageEventTypeEnum.EDIT_MESSAGE)
+                .build());
     }
 }

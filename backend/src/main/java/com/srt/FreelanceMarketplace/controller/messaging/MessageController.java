@@ -3,11 +3,13 @@ package com.srt.FreelanceMarketplace.controller.messaging;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageListResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/messaging")
 @RequiredArgsConstructor
+@Slf4j
 public class MessageController {
     private final MessageService messageService;
 
@@ -28,7 +31,7 @@ public class MessageController {
     }
 
     @GetMapping("/message/get/{conversationId}")
-    public List<MessageResponse> getMessages(
+    public MessageListResponse getMessages(
             @PathVariable UUID conversationId,
             @RequestParam(value = "after", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant after
     ) {

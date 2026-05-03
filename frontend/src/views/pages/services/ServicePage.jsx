@@ -188,7 +188,7 @@ export default function ServicePage() {
               <button
                 className="btn btn-primary w-100 mb-3"
                 onClick={() => setIsOrderVisible(true)}
-                disabled={!getUserData()?.roles}
+                disabled={!getUserData()?.roles || serviceData?.freelancer?.userId === getUserData().id}
               >
                 Оформить заказ
               </button>
@@ -200,7 +200,7 @@ export default function ServicePage() {
               ) : (
                 <button
                   className="btn btn-primary w-100 mb-3"
-                  disabled={!getUserData()?.roles}
+                  disabled={!getUserData()?.roles || serviceData?.freelancer?.userId === getUserData().id}
                   onClick={() => setIsProposalVisible(true)}
                 >
                   Оставить отклик на обсуждение

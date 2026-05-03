@@ -48,7 +48,7 @@ export default function ServicesPage({func}) {
                 <div className="container mt-4 mb-4">
                     <div className="row align-items-start">
                         <div
-                            className="col-lg-3 mb-4 position-sticky"
+                            className="col-lg-3 mb-4 sticky-md-top"
                             style={{ top: "82px" }}
                         >
                             <Filters

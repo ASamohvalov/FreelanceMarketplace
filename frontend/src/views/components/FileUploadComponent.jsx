@@ -1,4 +1,30 @@
-export default function FileUploadComponent({ files, setFiles, title, maxFiles }) {
+const handleFIleTypes = (files, maxFiles, targetFiles) => {
+  if (files.length === maxFiles) return;
+
+  const allowedExtensions = ["pdf", "png", "doc", "docx"];
+  const newFiles = Array.from(targetFiles);
+
+  const validFiles = newFiles.filter((file) => {
+    const extension = file.name.split(".").pop().toLowerCase();
+    return allowedExtensions.includes(extension);
+  });
+
+  if (validFiles.length !== newFiles.length) {
+    alert(
+      `Некоторые файлы не были добавлены. Разрешены только форматы: ${allowedExtensions.join(", ")}`,
+    );
+  }
+
+  const array = [...files, ...validFiles].slice(0, maxFiles);
+  return array;
+};
+
+export default function FileUploadComponent({
+  files,
+  setFiles,
+  title,
+  maxFiles,
+}) {
   return (
     <div className="card p-4 form-section rounded-4">
       <h5>{title}</h5>
@@ -8,12 +34,7 @@ export default function FileUploadComponent({ files, setFiles, title, maxFiles }
           type="file"
           className="form-control"
           onChange={(e) => {
-            if (files.length === maxFiles) {
-              return;
-            }
-            const array = [...files];
-            array.push(e.target.files[0]);
-            setFiles(array);
+            setFiles(handleFIleTypes(files, maxFiles, e.target.files));
           }}
         />
       </div>

@@ -45,6 +45,8 @@ export default function SendOrderReportPage() {
 
     navigate("/order/report/send/success");
   }
+  console.log(files);
+  
 
   return (
     <main style={{ minHeight: "93vh" }}>

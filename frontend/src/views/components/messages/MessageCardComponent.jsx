@@ -5,9 +5,10 @@ import { useState } from "react";
 import { sendDeleteMessageRequest } from "../../../logic/requests/message/messageRequest";
 import "./css/messages_component.css";
 
-export default function MessageCardComponent({ message }) {
+export default function MessageCardComponent({ message, isAuthor, Opened, setMessage }) {
   const [time, setTime] = useState("");
   const [show, setShow] = useState(false);
+  const [isOpen, setIsOpen] = Opened;
 
   useEffect(() => {
     const sendAtDate =
@@ -24,14 +25,24 @@ export default function MessageCardComponent({ message }) {
 
   function onClick(e) {
     e.preventDefault();
-    setShow(!show);
+    setIsOpen(isOpen?.id === message.id ? null : message);
   }
+
+  useEffect(() => {
+    if (isOpen?.id === message.id) {
+      setShow(true);
+    } else if (isOpen === null) {
+      setShow(false);
+    }
+  }, [isOpen, message]);
 
   return (
     <div className="position-relative">
       <div
         className={`message ${message.authorId === id ? "message-sent" : "message-received"}`}
-        onContextMenu={(e) => onClick(e)}
+        onContextMenu={(e) => {
+          isAuthor && onClick(e);
+        }}
       >
         <div>{message.text}</div>
         <div className="text-end">
@@ -49,22 +60,17 @@ export default function MessageCardComponent({ message }) {
           </small>
         </div>
       </div>
-      {show && (
+      {isOpen?.id === message.id && show && (
         <div
           className={`position-absolute z-2 -bottom-10 bg-info gap-2 d-flex flex-column p-2 rounded-3 ${message.authorId === id ? "end-0" : "start-0"}`}
         >
-          <button
-            className="btn btn-primary"
-            onClick={async () => {
-              // todo
-            }}
-          >
+          <button className="btn btn-primary" onClick={() => {setMessage(message.text); setShow(false);}}>
             Изменить
           </button>
           <button
             className="btn btn-danger"
             onClick={async () => {
-              const response = await sendDeleteMessageRequest(message.id)
+              const response = await sendDeleteMessageRequest(message.id);
               if (response.status !== 200) {
                 console.log("logic ERROR");
               }

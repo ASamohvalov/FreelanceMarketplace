@@ -21,6 +21,12 @@ export async function sendMessageRequest(conversationId, message) {
     message: message,
   });
 }
+export async function sendMessageUpdateRequest(messageId, message) {
+  return await sendAuthPut("messaging/message/edit", {
+    id: messageId,
+    message: message
+  });
+}
 
 export async function sendReadMessageRequest(messageIds) {
   return await sendAuthPatch("messaging/message/read", messageIds);

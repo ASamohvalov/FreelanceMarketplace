@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import "./css/messages_component.css";
 import {
   sendMessageRequest,
+  sendMessageUpdateRequest,
   sendReadMessageRequest,
 } from "../../../logic/requests/message/messageRequest";
 import MessageCardComponent from "./MessageCardComponent";
 import { getUserData } from "../../../logic/jwt";
 import { useRef } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
-import {pool} from "../../../logic/message";
+import { pool } from "../../../logic/message";
 import { useCallback } from "react";
 
 export default function MessagesComponent({
@@ -21,6 +22,7 @@ export default function MessagesComponent({
   const navigate = useNavigate();
   const conversationId = useParams();
   const [shown, setShown] = uShown;
+  const [isOpen, setIsOpen] = useState(null);
   const errorHandle = useCallback(() => {
     navigate("/error");
   }, [navigate]);
@@ -33,7 +35,7 @@ export default function MessagesComponent({
 
     pool(isActiveRef, setMessages, conversationId.conversationId, errorHandle);
 
-    return () => isActiveRef.current = false;
+    return () => (isActiveRef.current = false);
   }, [errorHandle, conversationId]);
 
   useEffect(() => {
@@ -52,7 +54,8 @@ export default function MessagesComponent({
 
     messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
   }, [messages]);
-
+  console.log(messages);
+  
   return (
     <div
       className={`${!size ? "col-6" : "col-12"} h-100 d-flex flex-column border-start border-end`}
@@ -79,7 +82,13 @@ export default function MessagesComponent({
 
       <div className="chat-messages flex-grow-1" ref={messageChatRef}>
         {messages?.map((m, idx) => (
-          <MessageCardComponent message={m} key={idx} />
+          <MessageCardComponent
+            message={m}
+            key={idx}
+            isAuthor={m.authorId === getUserData().id}
+            Opened={[isOpen, setIsOpen]}
+            setMessage={setMessage}
+          />
         ))}
       </div>
 
@@ -95,10 +104,19 @@ export default function MessagesComponent({
           className="btn btn-primary"
           onClick={async () => {
             if (message.length > 0) {
-              const response = await sendMessageRequest(
-                conversationId.conversationId,
-                message,
-              );
+              let response;
+              if (isOpen) {
+                response = await sendMessageUpdateRequest(
+                  isOpen.id,
+                  message,
+                );
+                setIsOpen(null);
+              } else {
+                response = await sendMessageRequest(
+                  conversationId.conversationId,
+                  message,
+                );
+              }
               if (response.status !== 200) {
                 errorHandle();
                 return;

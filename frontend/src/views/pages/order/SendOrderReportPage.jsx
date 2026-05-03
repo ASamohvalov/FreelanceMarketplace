@@ -32,7 +32,12 @@ export default function SendOrderReportPage() {
       return;
     }
 
-    const response = await sendOrderReportRequest(title, report, state.orderId, files);
+    const response = await sendOrderReportRequest(
+      title,
+      report,
+      state.orderId,
+      files,
+    );
     if (response.status !== 200) {
       navigate(`/error?code=${response.status}`);
       return;
@@ -49,7 +54,8 @@ export default function SendOrderReportPage() {
         </NavLocation>
         <h2 className="fw-bold mb-2">Отчёт по заказу</h2>
         <p className="text-muted mb-4">
-          Заполните приведенную ниже информацию, чтобы клиент смог корректно оценить вашу работу
+          Заполните приведенную ниже информацию, чтобы клиент смог корректно
+          оценить вашу работу
         </p>
 
         <div className="card p-4 form-section rounded-4">
@@ -60,7 +66,7 @@ export default function SendOrderReportPage() {
               className="form-control"
               value={title}
               onChange={(e) => {
-                setTitle(e.target.value)
+                setTitle(e.target.value);
                 setError("");
               }}
             />
@@ -84,7 +90,7 @@ export default function SendOrderReportPage() {
               placeholder="Опишите свою проделанную работу"
               value={report}
               onChange={(e) => {
-                setReport(e.target.value)
+                setReport(e.target.value);
                 setError("");
               }}
             ></textarea>

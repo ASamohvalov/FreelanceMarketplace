@@ -2,16 +2,17 @@ import { useEffect } from "react";
 import HeaderComponent from "../../components/HeaderComponent";
 import { useState } from "react";
 import LoadingComponent from "../../components/LoadingComponent";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ServicesListComponent from "../../components/service/ServicesListComponent";
 import "../services/css/services_page.css";
 import { Filters } from "../../components/services/Filters";
-import { getUserData, hasRole } from "../../../logic/jwt";
+import { hasRole } from "../../../logic/jwt";
 import {
   getOrderCustomerRequest,
   getOrderFreelancerRequest,
 } from "../../../logic/requests/order/orderRequest";
 import OrderCard from "../../components/order/OrderCard";
+import { StatusSelect } from "../../components/elements/StatusSelect";
 
 export default function OrdersPage({ func, freelancer }) {
   const navigate = useNavigate();
@@ -28,6 +29,18 @@ export default function OrdersPage({ func, freelancer }) {
     maxPriceFreelancer: 0,
     active: searchParams.get("search") || false,
   });
+  const [filteredOrderReports, setFilteredOrderReports] = useState({
+    status: "all",
+  });
+  const handleStatusesSelect = (e) => {
+    const status = e.target.value;
+    if (status === "all") {
+      setFilteredOrderReports((prev) => ({ ...prev, status: "all" }));
+      return;
+    }
+
+    setFilteredOrderReports((prev) => ({ ...prev, status: status }));
+  };
 
   const isFreelancer = hasRole("ROLE_FREELANCER");
   useEffect(() => {
@@ -70,6 +83,7 @@ export default function OrdersPage({ func, freelancer }) {
       setLoading(false);
     })();
   }, [navigate, func, isFreelancer]);
+  
 
   return (
     <main style={{ minHeight: "90vh" }}>
@@ -97,40 +111,53 @@ export default function OrdersPage({ func, freelancer }) {
               </button>
             </>
           )}
+          <StatusSelect handleStatusesSelect={handleStatusesSelect} statuses={["all", "IN_PROGRESS", "COMPLETED", "REJECTED"]} />
         </div>
 
         <div className="row g-4">
           {variant === "works"
-            ? orders.map((order, idx) => (
-                <div className="col-md-6 col-xl-4" key={idx}>
-                  <OrderCard
-                    id={order.order.id}
-                    serviceId={order.service.id}
-                    title={order.service.title}
-                    customer={order.customer}
-                    deadline={order.order.deadlineDate}
-                    orderDate={order.order.orderDate}
-                    completionDate={order.order.completionDate || null}
-                    price={order.service.price}
-                    status={order.order.status}
-                  />
-                </div>
-              ))
-            : services.map((order, idx) => (
-                <div className="col-md-6 col-xl-4" key={idx}>
-                  <OrderCard
-                    id={order.order.id}
-                    serviceId={order.service.id}
-                    title={order.service.title}
-                    freelancer={order.service.freelancer}
-                    deadline={order.order.deadlineDate}
-                    orderDate={order.order.orderDate}
-                    completionDate={order.order.completionDate || null}
-                    price={order.service.price}
-                    status={order.order.status}
-                  />
-                </div>
-              ))}
+            ? orders
+                .filter((report) =>
+                  filteredOrderReports.status === "all"
+                    ? true
+                    : report.order.status === filteredOrderReports.status,
+                )
+                .map((order, idx) => (
+                  <div className="col-md-6 col-xl-4" key={idx}>
+                    <OrderCard
+                      id={order.order.id}
+                      serviceId={order.service.id}
+                      title={order.service.title}
+                      customer={order.customer}
+                      deadline={order.order.deadlineDate}
+                      orderDate={order.order.orderDate}
+                      completionDate={order.order.completionDate || null}
+                      price={order.service.price}
+                      status={order.order.status}
+                    />
+                  </div>
+                ))
+            : services
+                .filter((report) =>
+                  filteredOrderReports.status === "all"
+                    ? true
+                    : report.order.status === filteredOrderReports.status,
+                )
+                .map((order, idx) => (
+                  <div className="col-md-6 col-xl-4" key={idx}>
+                    <OrderCard
+                      id={order.order.id}
+                      serviceId={order.service.id}
+                      title={order.service.title}
+                      freelancer={order.service.freelancer}
+                      deadline={order.order.deadlineDate}
+                      orderDate={order.order.orderDate}
+                      completionDate={order.order.completionDate || null}
+                      price={order.service.price}
+                      status={order.order.status}
+                    />
+                  </div>
+                ))}
         </div>
       </div>
     </main>

@@ -7,10 +7,11 @@ export const Filters = ({ filters, variant="заказы", setFilters }) => {
     });
 
     useEffect(() => {
-        setTemp({
+        const a = () => setTemp({
             title: filters.title,
             price: filters.price,
         });
+        a();
     }, [filters]);
 
     return (

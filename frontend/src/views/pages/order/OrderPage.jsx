@@ -111,7 +111,8 @@ export default function OrderPage() {
             <div className="order-card_box">
               <Link
                 className="btn btn-outline-primary w-100"
-                to="/order/reports"
+                to={{pathname:"/order/reports", search: `?orderId=${order?.order?.id}`}}
+                
               >
                 Открыть отчёты
               </Link>
@@ -119,7 +120,7 @@ export default function OrderPage() {
           </div>
 
           <div className="col-lg-4">
-            <div className="order-card_box order-page_sidebar position-stiky">
+            <div className="order-card_box order-page_sidebar position-sticky">
               <h6 className="fw-semibold mb-3">Информация</h6>
 
               <div className="mb-2">

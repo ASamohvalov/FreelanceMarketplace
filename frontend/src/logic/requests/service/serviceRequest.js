@@ -1,11 +1,15 @@
 import { isAuth } from "../../jwt";
-import { sendAuthGet, sendAuthPatch, sendAuthPostFormData, sendGet } from "../requestSender";
+import { sendAuthGet, sendAuthPatch, sendAuthPostFormData, sendAuthPutFormData, sendGet } from "../requestSender";
 
 /**
  * @returns {map} { status: int, data: null }
  */
 export async function createServiceRequest(args) {
   return await sendAuthPostFormData("service/create", args);
+}
+
+export async function editServiceRequest(id, args) {
+  return await sendAuthPutFormData("service/update/" + id, args);
 }
 
 /**

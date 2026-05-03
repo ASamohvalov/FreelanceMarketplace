@@ -5,6 +5,7 @@ import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.service.ServiceImageRepository;
 import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,8 +46,23 @@ public class ServiceImageDomainService {
                 })
                 .toList();
 
-        service.setTitleImage(imageEntities.get(1));
+        System.out.println(imageEntities.size());
+
+        service.setTitleImage(imageEntities.get(0));
         return imageEntities;
+    }
+
+    public void deleteImages(ServiceEntity service) {
+        List<ServiceImageEntity> images = repository.findAllByService(service);
+
+        service.setTitleImage(null);
+        service.getImages().clear();
+
+        for (ServiceImageEntity image : images) {
+            imageStorageStrategy.delete(image.getImagePath());
+        }
+
+        repository.deleteAll(images);
     }
 
     public void saveAll(Iterable<ServiceImageEntity> entities) {

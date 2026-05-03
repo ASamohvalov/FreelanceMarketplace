@@ -10,4 +10,5 @@ public interface FileStorageStrategy {
     String save(MultipartFile file);
     Path get(String fileName);
     Optional<Path> getSafely(String fileName);
+    void delete(String filename);
 }

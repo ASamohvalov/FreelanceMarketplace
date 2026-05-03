@@ -63,6 +63,14 @@ public class ServiceController {
         return service.create(request);
     }
 
+    @PutMapping(value = "/update/{serviceId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ROLE_FREELANCER')")
+    public IdentifierDto editService(
+            @ModelAttribute @Valid ServiceRequest request,
+            @PathVariable UUID serviceId) {
+        return service.update(request, serviceId);
+    }
+
     @GetMapping("/payment/info/{serviceId}")
     public PaymentInfoResponse getPaymentInfo(@PathVariable UUID serviceId) {
         return service.getPaymentInfo(serviceId);

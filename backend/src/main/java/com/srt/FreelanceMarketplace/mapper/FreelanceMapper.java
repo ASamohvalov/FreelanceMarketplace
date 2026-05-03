@@ -20,7 +20,9 @@ public interface FreelanceMapper {
     ServiceResponse serviceEntityToResponse(ServiceEntity service);
 
     @Mapping(target = "category", expression = "java(service.getSubcategory().getCategory().getName())")
+    @Mapping(target = "categoryId", expression = "java(service.getSubcategory().getCategory().getId())")
     @Mapping(target = "subcategory", expression = "java(service.getSubcategory().getName())")
+    @Mapping(target = "subcategoryId", expression = "java(service.getSubcategory().getId())")
     @Mapping(target = "freelancer", expression = "java(freelancerEntityToResponse(service.getFreelancer()))")
     ServiceInfoResponse serviceEntityToInfoResponse(ServiceEntity service);
 

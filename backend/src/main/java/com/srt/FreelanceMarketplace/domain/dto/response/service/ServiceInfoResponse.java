@@ -16,6 +16,8 @@ public class ServiceInfoResponse {
     private String description;
     private String category;
     private String subcategory;
+    private UUID categoryId;
+    private UUID subcategoryId;
     private FreelancerResponse freelancer;
     private boolean proposalBeenSent;
     private List<UUID> imageIds;

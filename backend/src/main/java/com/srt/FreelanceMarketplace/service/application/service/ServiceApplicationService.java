@@ -27,6 +27,7 @@ import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.CommissionService;
 import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +94,36 @@ public class ServiceApplicationService {
 
         repository.save(service);
         serviceImageDomainService.saveAll(entityList);
+
+        return new IdentifierDto(service.getId());
+    }
+
+    @Transactional
+    public IdentifierDto update(ServiceRequest request, UUID serviceId) {
+        ServiceEntity service = domainService.getById(serviceId);
+        FreelancerEntity freelancer = freelancerService.getByUserOrElseThrow(authHelperService.getUser());
+
+        if (!service.getFreelancer().getId()
+                .equals(freelancer.getId())) {
+            throw new GlobalBadRequestException("the user does not own this service");
+        }
+
+        ServiceSubcategoryEntity subcategory = subcategoryService.getById(request.getSubcategoryId());
+
+        service.setTitle(request.getTitle());
+        service.setDescription(request.getDescription());
+        service.setSubcategory(subcategory);
+        service.setDeadlineDays(request.getDeadlineDays());
+        service.setRevisionsCount(request.getRevisionsCount());
+        service.setPrice(request.getPrice());
+
+        serviceImageDomainService.deleteImages(service);
+
+        var entityList = serviceImageDomainService
+                .uploadImages(service, request.getTitleImage(), request.getImages());
+
+        serviceImageDomainService.saveAll(entityList);
+        repository.save(service);
 
         return new IdentifierDto(service.getId());
     }

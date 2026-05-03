@@ -49,9 +49,14 @@ export default function App() {
         />
         <Route path="MyOrders" element={<OrdersPage />} />
         <Route path="create-service" element={<CreateServicePage />} />
+        <Route path="update-service" element={<CreateServicePage isEdit={true} />} />
         <Route
           path="create-service/success"
           element={<CreateServiceSuccessPage />}
+        />
+        <Route
+          path="update-service/success"
+          element={<CreateServiceSuccessPage isEdit={true} />}
         />
         <Route path="service/:id" element={<ServicePage />} />
 

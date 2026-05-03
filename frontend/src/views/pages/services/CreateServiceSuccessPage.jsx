@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SuccessInfoComponent from "../../components/SuccessInfoComponent";
 
-export default function CreateServiceSuccessPage() {
+export default function CreateServiceSuccessPage({isEdit=false}) {
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -13,7 +13,7 @@ export default function CreateServiceSuccessPage() {
   }, [navigate, state]);
 
   return (
-    <SuccessInfoComponent title={"Вы успешно создали услугу"}>
+    <SuccessInfoComponent title={isEdit ? "Вы успешно отредактировали услугу" : "Вы успешно создали услугу"}>
       <div className="order-success-page_info mb-4">
         <div className="row">
           <div className="col-md-6 mb-3">

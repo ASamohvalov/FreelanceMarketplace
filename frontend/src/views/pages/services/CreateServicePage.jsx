@@ -1,23 +1,22 @@
 import { useEffect } from "react";
-import HeaderComponent from "../../components/HeaderComponent";
 import { useState } from "react";
 import { useRef } from "react";
 import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getAllCategoryInfo } from "../../../logic/requests/service/categoryRequest";
 import "./css/create_service_page.css";
 import LoadingInput from "../../components/elements/LoadingInput";
 import { IMAGE_UPLOADING_TYPE } from "../../../env";
-import { createServiceRequest } from "../../../logic/requests/service/serviceRequest";
-import FooterComponent from "../../components/FooterComponent";
+import { createServiceRequest, getServiceByIdRequest, editServiceRequest } from "../../../logic/requests/service/serviceRequest";
 import NavLocation from "../../components/elements/NavLocation";
 import ReactMarkdown from "react-markdown";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import FileUploadComponent from "../../components/FileUploadComponent";
 
-export default function CreateServicePage() {
+export default function CreateServicePage({isEdit = false}) {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [searchParams] = useSearchParams();
 
   // response data
   const [categories, setCategories] = useState([]);
@@ -40,22 +39,42 @@ export default function CreateServicePage() {
       navigate(-1);
       return;
     }
-    document.title = "Создать услугу";
+
+    document.title = isEdit ? "Редактировние услуги" : "Создание услуги";
+
+    if (isEdit && !searchParams.get("id")) {
+      navigate(-1);
+      return;
+    }
 
     (async () => {
       const response = await getAllCategoryInfo();
       if (response.status !== 200) {
-        console.log("logic error");
-        navigate("/error");
+        navigate(`/error?code=${response.status}`);
         return;
       }
       setCategories(response.data);
 
-        setSelectedCategory(response.data[0].id);
+      if (isEdit) {
+        const serviceInfoResponse = await getServiceByIdRequest(searchParams.get("id"));
+        if (response.status !== 200) {
+          navigate(`/error?code=${response.status}`);
+          return;
+        }
+        const category = response.data.find(c => c.id === serviceInfoResponse.data.categoryId);
+        const subcategory = category.subcategories.find(sc => sc.id === serviceInfoResponse.data.subcategoryId);
 
+        setTitle(serviceInfoResponse.data.title);
+        setDescription(serviceInfoResponse.data.description);
+        setSelectedCategory(category.id);
+        setSelectedSubcategory(subcategory.id);
+        setPrice(serviceInfoResponse.data.price);
+      } else {
+        setSelectedCategory(response.data[0].id);
         setSelectedSubcategory(response.data[0].subcategories[0].id);
+      }
     })();
-  }, [navigate]);
+  }, [navigate, isEdit, searchParams]);
 
 
   async function handleSubmit(event) {
@@ -76,7 +95,7 @@ export default function CreateServicePage() {
     }
     if (err) return;
 
-    const response = await createServiceRequest({
+    const data = {
       title: title,
       titleImage: titleImage,
       description: description,
@@ -85,14 +104,17 @@ export default function CreateServicePage() {
       revisionsCount: Number(revisionsCount.current.value),
       subcategoryId: selectedSubcategory,
       images: images,
-    });
+    }
+    const response = isEdit
+      ? await editServiceRequest(searchParams.get("id"), data)
+      : await createServiceRequest(data);
     if (response.status !== 200) {
       navigate("/error");
       return;
     }
     const da = categories.filter((category)=>category.id === selectedCategory)[0]
     console.log(da);
-    navigate("/create-service/success", {
+    navigate(`/${isEdit ? "update" : "create"}-service/success`, {
       state: {
         serviceId: response.data.id,
         serviceName: title,
@@ -107,8 +129,8 @@ export default function CreateServicePage() {
     <>
       <main>
         <div className="container my-4">
-          <NavLocation>Услуги / Создание новой</NavLocation>
-          <h2 className="fw-bold mb-2">Создание новой услуги</h2>
+          <NavLocation>Услуги / {isEdit ? "Редактирование" : "Создание новой"}</NavLocation>
+          <h2 className="fw-bold mb-2">{isEdit ? "Редактирование услуги" : "Создание новой услуги"}</h2>
           <p className="text-muted mb-4">
             Заполните приведенную ниже информацию, чтобы клиенты могли легко
             найти и понять суть вашего сервиса.
@@ -296,7 +318,7 @@ export default function CreateServicePage() {
                   className="btn btn-primary btn-lg w-100"
                   onClick={handleSubmit}
                 >
-                  Создать услугу
+                  {isEdit ? "Редактировать услугу" : "Создать услугу"}
                 </button>
               </div>
             </div>

@@ -69,11 +69,17 @@ public class OrderReportService {
                 .customer(customer)
                 .build();
 
-        var entityList = orderReportFileDomainService.uploadFiles(report, request.getFiles());
+        if (request.getFiles() != null) {
+            var entityList = orderReportFileDomainService.uploadFiles(report, request.getFiles());
 
-        repository.save(report);
-        orderDomainService.save(order);
-        orderReportFileDomainService.saveAll(entityList);
+            repository.save(report);
+            orderDomainService.save(order);
+
+            orderReportFileDomainService.saveAll(entityList);
+        } else {
+            repository.save(report);
+            orderDomainService.save(order);
+        }
 
         notificationSenderService.sendNewOrderReport(report, order.getCustomer(), authHelperService.getUser());
     }

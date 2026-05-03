@@ -136,6 +136,19 @@ export async function sendAuthPostFormData(path, data = {}) {
 }
 
 /**
+ * @param {string} path required without / in begin
+ * @param {map} data
+ *
+ * @returns {map} { status: int?, data: map? }
+ * can return data from url "auth/update_tokens"
+ *
+ * @example sendAuthPost('/hello', { message: 'hello world' })
+ */
+export async function sendAuthPutFormData(path, data = {}) {
+  return await sendAuth(path, "PUT", data, "multipart/form-data");
+}
+
+/**
  * @returns {map} { status: int, data: { accessToken: string, refreshToken: string } }
  *          {map} { status: int?, data: string? } - if error
  */
@@ -205,7 +218,10 @@ async function sendAuth(
       });
     } else if (requestType === "PUT") {
       response = await axios.put(BACKEND_URL + path, data, {
-        headers: { Authorization: "Bearer " + token },
+        headers: {
+          "Content-Type": contentType,
+          Authorization: "Bearer " + token,
+        },
       });
     } else if (requestType === "PATCH") {
       response = await axios.patch(BACKEND_URL + path, data, {

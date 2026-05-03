@@ -172,7 +172,18 @@ export default function ServicePage() {
 
           <div className="col-lg-4">
             <div className="card p-4 service-sidebar rounded-4">
-              <div className="price mb-3">{serviceData.price} ₽</div>
+              <div className="price mb-3 d-flex justify-content-between">
+                <span>{serviceData.price} ₽</span>
+
+                {serviceData?.freelancer?.userId === getUserData().id && (
+                  <Link
+                    className="fs-5"
+                    to={`/update-service?id=${serviceData.id}`}
+                  >
+                    <i className="bi bi-pencil-fill border p-2 rounded" />
+                  </Link>
+                )}
+              </div>
 
               <button
                 className="btn btn-primary w-100 mb-3"

@@ -1,0 +1,10 @@
+.table td{
+  vertical-align:middle;
+}
+
+.admin-card{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.05);
+}

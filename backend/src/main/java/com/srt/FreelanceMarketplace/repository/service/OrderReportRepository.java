@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.repository.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
@@ -31,4 +32,6 @@ public interface OrderReportRepository extends JpaRepository<OrderReportEntity, 
     @EntityGraph(attributePaths = {"order", "freelancer", "order.service"})
     @Query("select r from OrderReportEntity r where r.id = :id")
     Optional<OrderReportEntity> findByIdWithOrderAndFreelancerAndService(UUID id);
+
+    boolean existsByOrderAndStatus(OrderEntity order, OrderReportStatusEnum status);
 }

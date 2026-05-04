@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.controller.user;
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.service.application.user.UserService;
 import com.srt.FreelanceMarketplace.util.FileHelperUtil;
@@ -10,13 +11,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,5 +66,11 @@ public class UserController {
     @PutMapping("/profile/edit")
     public void editProfile(@RequestBody @Valid EditUserProfileRequest request) {
         userService.editProfile(request);
+    }
+
+    @GetMapping("/get")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Page<GetUserResponse> getUsers(@PageableDefault(size = 10) Pageable pageable) {
+        return userService.getUsers(pageable);
     }
 }

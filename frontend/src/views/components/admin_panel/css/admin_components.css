@@ -1,0 +1,20 @@
+.admin-panel-aside_sidebar {
+  height: 100vh;
+  background: white;
+  padding: 20px;
+  border-right: 1px solid #eee;
+}
+
+.admin-panel-aside_sidebar a.active,
+.admin-panel-aside_sidebar a:hover {
+  background: #eef1ff;
+}
+
+.admin-panel-aside_sidebar a {
+  display: block;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: black;
+  margin-bottom: 5px;
+}

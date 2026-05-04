@@ -26,3 +26,10 @@ export async function uploadAvatarRequest(file) {
     avatar: file,
   });
 }
+
+export async function getUsersRequest(page=0, size=10) {
+  return await sendAuthGet("user/get", {
+    page: page,
+    size: size,
+  });
+}

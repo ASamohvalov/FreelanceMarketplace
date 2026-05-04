@@ -60,7 +60,7 @@ export default function OrderPage() {
                   Перейти в чат
                 </Link>
 
-                {userExecutor ? (
+                {userExecutor ? (order.order.status !== "COMPLETED") && (
                   <button
                     className="btn btn-success"
                     onClick={() =>
@@ -112,7 +112,7 @@ export default function OrderPage() {
               <Link
                 className="btn btn-outline-primary w-100"
                 to={{pathname:"/order/reports", search: `?orderId=${order?.order?.id}`}}
-                
+
               >
                 Открыть отчёты
               </Link>

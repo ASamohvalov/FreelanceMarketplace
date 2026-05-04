@@ -74,6 +74,7 @@ export default function MessageCardComponent({ message, isAuthor, Opened, setMes
               if (response.status !== 200) {
                 console.log("logic ERROR");
               }
+              setIsOpen(null);
             }}
           >
             Удалить

@@ -54,8 +54,7 @@ export default function MessagesComponent({
 
     messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
   }, [messages]);
-  console.log(messages);
-  
+
   return (
     <div
       className={`${!size ? "col-6" : "col-12"} h-100 d-flex flex-column border-start border-end`}

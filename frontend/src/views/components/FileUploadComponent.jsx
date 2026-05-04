@@ -1,30 +1,34 @@
-const handleFIleTypes = (files, maxFiles, targetFiles) => {
-  if (files.length === maxFiles) return;
-
-  const allowedExtensions = ["pdf", "png", "doc", "docx"];
-  const newFiles = Array.from(targetFiles);
-
-  const validFiles = newFiles.filter((file) => {
-    const extension = file.name.split(".").pop().toLowerCase();
-    return allowedExtensions.includes(extension);
-  });
-
-  if (validFiles.length !== newFiles.length) {
-    alert(
-      `Некоторые файлы не были добавлены. Разрешены только форматы: ${allowedExtensions.join(", ")}`,
-    );
-  }
-
-  const array = [...files, ...validFiles].slice(0, maxFiles);
-  return array;
-};
-
 export default function FileUploadComponent({
   files,
   setFiles,
   title,
   maxFiles,
+  type="all"
 }) {
+
+  const handleFileTypes = (files, maxFiles, targetFiles) => {
+    if (files.length === maxFiles) return;
+
+    const allowedExtensions = type === "all"
+      ? ["pdf", "png", "doc", "docx", "jpg", "jpeg", "webapp"]
+      : ["png", "jpg", "webapp", "jpeg"]
+    const newFiles = Array.from(targetFiles);
+
+    const validFiles = newFiles.filter((file) => {
+      const extension = file.name.split(".").pop().toLowerCase();
+      return allowedExtensions.includes(extension);
+    });
+
+    if (validFiles.length !== newFiles.length) {
+      alert(
+        `Некоторые файлы не были добавлены. Разрешены только форматы: ${allowedExtensions.join(", ")}`,
+      );
+    }
+
+    const array = [...files, ...validFiles].slice(0, maxFiles);
+    return array;
+  };
+
   return (
     <div className="card p-4 form-section rounded-4">
       <h5>{title}</h5>
@@ -34,7 +38,7 @@ export default function FileUploadComponent({
           type="file"
           className="form-control"
           onChange={(e) => {
-            setFiles(handleFIleTypes(files, maxFiles, e.target.files));
+            setFiles(handleFileTypes(files, maxFiles, e.target.files));
           }}
         />
       </div>

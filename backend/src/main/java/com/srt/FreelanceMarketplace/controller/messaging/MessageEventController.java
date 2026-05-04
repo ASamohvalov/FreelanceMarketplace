@@ -25,7 +25,6 @@ public class MessageEventController {
         if (lastEventId == null) {
             lastEventId = 0L;
         }
-        var res = messageEventService.getEvents(conversationId, lastEventId);
-        return res;
+        return messageEventService.getEvents(conversationId, lastEventId);
     }
 }

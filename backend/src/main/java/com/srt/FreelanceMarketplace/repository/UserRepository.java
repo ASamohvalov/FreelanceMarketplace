@@ -1,10 +1,14 @@
 package com.srt.FreelanceMarketplace.repository;
 
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,7 +16,6 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByEmail(String email);
 
-    // todo change this to EntityGraph?
     @Query("""
             select u from UserEntity u
             join fetch u.roles
@@ -26,6 +29,10 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
             where u.id = :id
             """)
     Optional<UserEntity> findByIdWithRoles(UUID id);
+
+    @EntityGraph(attributePaths = {"roles"})
+    @Query("select u from UserEntity u")
+    Page<UserEntity> findAllWithRoles(Pageable pageable);
 
     boolean existsByEmail(String email);
 }

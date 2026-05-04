@@ -13,6 +13,7 @@ import NotificationsPage from "./views/pages/message/NotificationsPage.jsx";
 import PaymentPage from "./views/pages/order/PaymentPage.jsx";
 import OrderSuccessPage from "./views/pages/order/OrderSuccessPage.jsx";
 import Layout from "./views/pages/Layout.jsx";
+import AdminLayout from "./views/pages/AdminLayout.jsx";
 import CreateServiceSuccessPage from "./views/pages/services/CreateServiceSuccessPage.jsx";
 import { ChatOutlet } from "./views/pages/message/ChatOutlet.jsx";
 import {
@@ -25,6 +26,7 @@ import SendOrderReportSuccessPage from "./views/pages/order/SendOrderReportSucce
 import OrderReportPage from "./views/pages/order/OrderReportPage.jsx";
 import SendReviewPage from "./views/pages/review/SendReviewPage.jsx";
 import OrderPage from "./views/pages/order/OrderPage.jsx";
+import AdminPanelUsersPanel from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
 
 // base routing
 export default function App() {
@@ -76,6 +78,10 @@ export default function App() {
         <Route path="order/info/:id" element={<OrderPage />} />
 
         <Route path="review/send" element={<SendReviewPage />} />
+      </Route>
+
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminPanelUsersPanel />} />
       </Route>
     </Routes>
   );

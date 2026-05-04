@@ -50,7 +50,8 @@ public class OrderReportService {
         FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
         OrderEntity order = orderDomainService.getByIdWithFreelancerAndService(request.getOrderId());
 
-        if (order.getStatus() != OrderStatusEnum.IN_PROGRESS) {
+        if (order.getStatus() != OrderStatusEnum.IN_PROGRESS ||
+                repository.existsByOrderAndStatus(order, OrderReportStatusEnum.PENDING)) {
             throw new GlobalBadRequestException("the report has already been sent");
         }
 

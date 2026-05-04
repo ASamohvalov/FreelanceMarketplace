@@ -6,7 +6,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getAllCategoryInfo } from "../../../logic/requests/service/categoryRequest";
 import "./css/create_service_page.css";
 import LoadingInput from "../../components/elements/LoadingInput";
-import { IMAGE_UPLOADING_TYPE } from "../../../env";
 import { createServiceRequest, getServiceByIdRequest, editServiceRequest } from "../../../logic/requests/service/serviceRequest";
 import NavLocation from "../../components/elements/NavLocation";
 import ReactMarkdown from "react-markdown";
@@ -113,7 +112,6 @@ export default function CreateServicePage({isEdit = false}) {
       return;
     }
     const da = categories.filter((category)=>category.id === selectedCategory)[0]
-    console.log(da);
     navigate(`/${isEdit ? "update" : "create"}-service/success`, {
       state: {
         serviceId: response.data.id,
@@ -294,11 +292,6 @@ export default function CreateServicePage({isEdit = false}) {
                     className="form-control"
                     onChange={(e) => {
                       setTitleImage(e.target.files[0]);
-                      /*
-                      if (e.target.files && IMAGE_UPLOADING_TYPE.includes(e.target.files.type)) {
-                        setTitleImage(e.target.files[0]);
-                      }
-                      */
                     }}
                   />
                 </div>
@@ -311,6 +304,7 @@ export default function CreateServicePage({isEdit = false}) {
                 files={images}
                 setFiles={setImages}
                 maxFiles={5}
+                type={"images"}
               />
 
               <div className="card p-4 rounded-4">

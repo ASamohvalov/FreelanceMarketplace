@@ -10,7 +10,6 @@ export default function ServicesListComponent({
 }) {
   const me = getUserData();
   const location = useLocation();
-  console.log(services, orderInfo);
 
   return (
     <div className="col-lg-9">

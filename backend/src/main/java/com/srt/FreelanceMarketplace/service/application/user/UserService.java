@@ -4,6 +4,7 @@ import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
@@ -21,11 +22,12 @@ import com.srt.FreelanceMarketplace.service.domain.user.TokenDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -104,6 +106,11 @@ public class UserService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         repository.save(user);
+    }
+
+    public Page<GetUserResponse> getUsers(Pageable pageable) {
+        return repository.findAllWithRoles(pageable)
+                .map(userMapper::toGetResponse);
     }
 
     private boolean hasRole(UserEntity user, RoleEnum role) {

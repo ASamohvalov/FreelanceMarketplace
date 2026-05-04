@@ -16,7 +16,6 @@ import "./css/order_report_page.css";
 import { StatusSelect } from "../../components/elements/StatusSelect";
 
 
-
 export default function OrderReportPage() {
   const navigate = useNavigate();
 
@@ -135,7 +134,7 @@ export default function OrderReportPage() {
       />
 
       <div className="container mt-5 mb-5">
-        <h3 className="mb-4 fw-semibold">Отчёты по заказам</h3>
+        <h3 className="mb-4 fw-semibold">{orderId ? "Отчёты по заказу" : "Отчёты по заказам"}</h3>
 
         <div className="report-nav mb-4">
           {isFreelancer && (

@@ -20,7 +20,7 @@ CREATE TABLE services (
     price BIGINT NOT NULL,
     deadline_days INT NOT NULL,
     revisions_count INT NOT NULL,
-    is_hide BOOLEAN DEFAULT FALSE NOT NULL,
+    hidden BOOLEAN DEFAULT FALSE NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
     title_image_id UUID

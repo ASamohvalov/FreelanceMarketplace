@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.service.domain.review;
 import com.srt.FreelanceMarketplace.domain.entities.message.ReviewEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class ReviewDomainService {
         return repository.existsByOrder(order);
     }
 
-    public boolean existsByService(ServiceEntity service) {
-        return repository.existsByOrder_service(service);
+    public boolean existsByServiceAndCustomer(ServiceEntity service, UserEntity customer) {
+        return repository.existsByOrder_serviceAndOrder_customer(service, customer);
     }
 
     public ReviewEntity getByIdWithOrderAndCustomerById(UUID id) {

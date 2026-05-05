@@ -60,6 +60,13 @@ export async function getAllPersonalServices(id) {
 /**
  * @returns {map} { status: int, data: map }
  */
-export default async function getPaymentInfoRequest(serviceId) {
+export async function getPaymentInfoRequest(serviceId) {
   return await sendGet(`service/payment/info/${serviceId}`);
+}
+
+
+export async function getPopularServices(size=3) {
+  return await sendGet("service/get/most_popular", {
+    size: size,
+  });
 }

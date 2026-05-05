@@ -17,7 +17,7 @@ import java.util.UUID;
 public interface ReviewRepository extends JpaRepository<ReviewEntity, UUID> {
     boolean existsByOrder(OrderEntity order);
 
-    boolean existsByOrder_service(ServiceEntity service);
+    boolean existsByOrder_serviceAndOrder_customer(ServiceEntity service, UserEntity customer);
 
     @EntityGraph(attributePaths = {"order", "order.service", "order.customer"})
     @Query("select r from ReviewEntity r where r.order.service = :service")

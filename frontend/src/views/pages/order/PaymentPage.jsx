@@ -3,7 +3,7 @@ import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
 import "./css/payment_page.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import getPaymentInfoRequest from "../../../logic/requests/service/serviceRequest";
+import { getPaymentInfoRequest } from "../../../logic/requests/service/serviceRequest";
 import { useState } from "react";
 import { sendOrderRequest } from "../../../logic/requests/order/orderRequest";
 

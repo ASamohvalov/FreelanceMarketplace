@@ -29,6 +29,8 @@ import com.srt.FreelanceMarketplace.service.infrastructure.CommissionService;
 import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -162,7 +164,7 @@ public class ServiceApplicationService {
                 .equals(service.getFreelancer().getUser().getId())) {
             throw new GlobalBadRequestException("the user does not own this service");
         }
-        service.setHide(hide);
+        service.setHidden(hide);
         repository.save(service);
     }
 
@@ -180,9 +182,14 @@ public class ServiceApplicationService {
         if (order.isEmpty() || order.get().getStatus() != OrderStatusEnum.COMPLETED) {
             return new ReviewCheckResponse(false, ReviewCheckActionEnum.NONE, null);
         }
-        ReviewCheckActionEnum action = reviewDomainService.existsByService(service)
+        ReviewCheckActionEnum action = reviewDomainService.existsByServiceAndCustomer(service, authHelperService.getUser())
                 ? ReviewCheckActionEnum.EDIT
                 : ReviewCheckActionEnum.CREATE;
         return new ReviewCheckResponse(true, action, order.get().getId());
+    }
+
+    public Page<ServiceResponse> getMostPopularServices(Pageable pageable) {
+        return repository.findAllMostPopular(pageable)
+                .map(domainService::mapToServiceResponse);
     }
 }

@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import {
   getAllPersonalServices,
@@ -11,7 +11,6 @@ import ReactMarkdown from "react-markdown";
 import "./css/service_page.css";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import OrderModalWindow from "../../components/modal_windows/OrderModalWindow";
-import { userContext } from "../../../logic/store/userContext";
 import { getUserData, isAuth } from "../../../logic/jwt";
 import {
   getReviewsByServiceRequest,
@@ -23,7 +22,6 @@ import { getServiceImageUrl } from "../../../logic/image";
 
 export default function ServicePage() {
   const { id } = useParams();
-  const [user, setUser] = useContext(userContext);
 
   const navigate = useNavigate();
 
@@ -35,6 +33,7 @@ export default function ServicePage() {
 
   const [personalServices, setPersonalServices] = useState([]);
   const [reviewCheckInfo, setReviewCheckInfo] = useState(false);
+  const [serviceReviewRating, setServiceReviewRating] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -62,6 +61,11 @@ export default function ServicePage() {
         return;
       }
       setReviews(reviewResponse.data);
+      const reviews = reviewResponse.data;
+      const average = (reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length) || 0;
+
+      setServiceReviewRating(average);
+
 
       if (isAuth()) {
         const reviewCheckResponse = await sendCanReviewRequest(id);
@@ -75,7 +79,7 @@ export default function ServicePage() {
   }, [navigate, id]);
 
   return (
-    <main>
+    <main style={{ minHeight: "80vh" }}>
       <ProposalModalWindow
         id={id}
         isVisible={isProposalVisible}
@@ -100,8 +104,8 @@ export default function ServicePage() {
         <h2 className="fw-bold mb-2">{serviceData.title}</h2>
 
         <div className="d-flex align-items-center gap-3 mb-4">
-          <span className="text-warning">★★★★★</span>
-          <span>4.9 (128 отзывов)</span>
+          <ReviewStarsComponent rating={serviceReviewRating} />
+          <span>{serviceReviewRating} ({reviews.length} отзывов)</span>
           <span className="badge bg-light text-dark">
             {serviceData.category}
           </span>

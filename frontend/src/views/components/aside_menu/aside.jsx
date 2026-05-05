@@ -1,7 +1,7 @@
 import "./styles/aside.css";
-import { BookText, HandPlatter, House, MessageCircle } from "lucide-react";
+import { BookText, CalendarArrowUp, HandPlatter, House, MessageCircle, UserRound, UserRoundKey } from "lucide-react";
 import { AsideComponent } from "./ui/aside_component";
-import { getUserData, isAuth } from "../../../logic/jwt";
+import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
 
 const links = [
   {
@@ -15,7 +15,7 @@ const links = [
     to: "/services",
   },
   {
-    icon: <HandPlatter size={32}></HandPlatter>,
+    icon: <CalendarArrowUp size={32}></CalendarArrowUp>,
     title: "Заказы",
     to: "/MyOrders",
   },
@@ -34,6 +34,11 @@ const links = [
     title: "Сообщения",
     to: "/messages",
   },
+  {
+    icon: <UserRoundKey size={32}></UserRoundKey>,
+    title: "Административная панель",
+    to: "/admin",
+  },
 ];
 
 export const Aside = ({ state }) => {
@@ -49,6 +54,7 @@ export const Aside = ({ state }) => {
         if (!isAuth() && item.title === "Отчёты") return;
         if (!isAuth() && item.title === "Заказы") return;
         if (!isFreelancer && item.title === "Мои услуги") return;
+        if (!hasRole("ROLE_ADMIN") && item.title === "Административная панель") return;
         return (
           <AsideComponent
             key={id}

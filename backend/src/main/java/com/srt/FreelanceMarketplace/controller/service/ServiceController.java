@@ -13,6 +13,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -97,5 +100,10 @@ public class ServiceController {
     @GetMapping("/{serviceId}/review_check")
     public ReviewCheckResponse reviewCheck(@PathVariable UUID serviceId) {
         return service.reviewCheck(serviceId);
+    }
+
+    @GetMapping("/get/most_popular")
+    public Page<ServiceResponse> getMostPopularServices(@PageableDefault(size = 3) Pageable pageable) {
+        return service.getMostPopularServices(pageable);
     }
 }

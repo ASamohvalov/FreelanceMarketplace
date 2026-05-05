@@ -1,151 +1,130 @@
-import { useContext } from 'react';
-import './css/home_page.css';
-import { userContext } from '../../logic/store/userContext';
-import { useEffect } from 'react';
-import { hasRole, isAuth } from '../../logic/jwt';
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useEffect } from "react";
+import { useState } from "react";
+import { getPopularServices } from "../../logic/requests/service/serviceRequest";
+import "./css/home_page.css";
+import { Link, useNavigate } from "react-router-dom";
+import ServicesListComponent from "../components/service/ServicesListComponent";
+import ServiceCardComponent from "../components/service/ServiceCardComponent";
 
 export default function HomePage() {
-    const [user, setUser] = useContext(userContext);
-    const [search, setSearch] = useState('');
-    useEffect(() => {
-        setUser({ hasRole: hasRole("ROLE_FREELANCER"), isAuth: isAuth() });
-    }, [setUser]);
+  const navigate = useNavigate();
+  const [popularServices, setPopularServices] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getPopularServices();
+      if (response.status !== 200) {
+        navigate(`/error?code=${response.status}`);
+        return;
+      }
+      setPopularServices(response.data);
+    })();
+  }, [navigate]);
+
   return (
-    <div style={{marginLeft: "80px"}}>
-          <section className="hero text-center">
-        <div className="container">
-          <h1 className="display-5 fw-bold">Найди подходящего фрилансера для своего проекта</h1>
-          <p className="lead mt-3">Веб-разработка, дизайн, маркетинг и многое другое — все в одном месте.</p>
+    <div className="container">
+      <section className="hero">
+        <div className="row align-items-center">
+          <div className="col-lg-6">
+            <h1>Найди исполнителя для любой задачи</h1>
+            <p className="mt-3">Быстро, безопасно и с гарантией результата</p>
 
-          <div className="hero-search input-group">
-            <input type="text" className="form-control form-control-lg" placeholder="Найдите услуги..." value={search} onChange={(e) => setSearch(e.target.value)} />
-            <NavLink to={`/services?search=${search}`} className="btn btn-light btn-lg">Поиск</NavLink>
+            <div className="mt-4 d-flex gap-2">
+              <Link className="btn btn-primary" to="/services">Найти услугу</Link>
+              <Link className="btn btn-outline-secondary" to="/become-freelancer">
+                Стать исполнителем
+              </Link>
+            </div>
+          </div>
+
+          <div className="col-lg-6">
+            <div className="home-page_picture" />
           </div>
         </div>
       </section>
 
-      <section className="py-5">
-        <div className="container">
-          <h2 className="text-center mb-5">Популярные категории</h2>
+      <section className="mb-5">
+        <h4 className="mb-3">Категории</h4>
 
-          <div className="row g-4">
+        <div className="row g-3">
+          <div className="col-md-3">
+            <div className="category-card">💻 Web Development</div>
+          </div>
 
-            <div className="col-md-3">
-              <div className="category-card">
-                <h5>Development & IT</h5>
-                <small className="text-muted">Много услуг</small>
-              </div>
-            </div>
+          <div className="col-md-3">
+            <div className="category-card">🎨 Design</div>
+          </div>
 
-            <div className="col-md-3">
-              <div className="category-card">
-                <h5>Design & Creative</h5>
-                <small className="text-muted">Много услуг</small>
-              </div>
-            </div>
+          <div className="col-md-3">
+            <div className="category-card">📱 Mobile Apps</div>
+          </div>
 
-            <div className="col-md-3">
-              <div className="category-card">
-                <h5>Marketing & Sales</h5>
-                <small className="text-muted">Много услуг</small>
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <div className="category-card">
-                <h5>Writing & Content</h5>
-                <small className="text-muted">Много услуг</small>
-              </div>
-            </div>
-
+          <div className="col-md-3">
+            <div className="category-card">✍️ Copywriting</div>
           </div>
         </div>
       </section>
 
-      <section className="py-5 bg-light">
-        <div className="container">
-          <h2 className="text-center mb-5">Особые услуги</h2>
+      <section className="mb-5">
+        <h4 className="mb-3">Популярные услуги</h4>
 
-          <div className="row g-4">
-
-            <div className="col-md-4">
-              <div className="service-card">
-                <div className="service-img"></div>
-                <div className="p-4">
-                  <strong>Я сверстаю ваш сайт на WordPress</strong>
-                  <div className="text-muted small mt-2">Cris James</div>
-                  <div className="mt-3 fw-bold">От 1999 ₽</div>
-                </div>
-              </div>
+        <div className="row g-4">
+          {popularServices?.content?.map((service, idx) => (
+            <div className="col-md-4" key={idx}>
+              <ServiceCardComponent
+                id={service.id}
+                hidden={service.hide}
+                title={service.title}
+                price={service.price}
+                freelancerName={
+                  service?.freelancer?.firstName + " " + service?.freelancer?.lastName
+                }
+                image={service.imageURL || null}
+                from={location.pathname}
+              />
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="col-md-4">
-              <div className="service-card">
-                <div className="service-img"></div>
-                <div className="p-4">
-                  <strong>Я сделаю красивый логотип вашей компании!</strong>
-                  <div className="text-muted small mt-2">Anna Lee</div>
-                  <div className="mt-3 fw-bold">От 999 ₽</div>
-                </div>
-              </div>
-            </div>
+      <section className="mb-5">
+        <h4 className="mb-4">Как это работает</h4>
 
-            <div className="col-md-4">
-              <div className="service-card">
-                <div className="service-img"></div>
-                <div className="p-4">
-                  <strong>Я продумаю стратегию маркетинга</strong>
-                  <div className="text-muted small mt-2">Michael Scott</div>
-                  <div className="mt-3 fw-bold">От 2499 ₽</div>
-                </div>
-              </div>
-            </div>
+        <div className="row">
+          <div className="col-md-4 step">
+            <i className="bi bi-search fs-1"></i>
+            <h6 className="mt-2">Найдите услугу</h6>
+          </div>
 
+          <div className="col-md-4 step">
+            <i className="bi bi-chat fs-1"></i>
+            <h6 className="mt-2">Обсудите детали</h6>
+          </div>
+
+          <div className="col-md-4 step">
+            <i className="bi bi-check-circle fs-1"></i>
+            <h6 className="mt-2">Получите результат</h6>
           </div>
         </div>
       </section>
 
-      <section className="py-5">
-        <div className="container">
-          <h2 className="text-center mb-5">Как это работает</h2>
+      <section className="mb-5">
+        <h4 className="mb-3">Почему мы</h4>
 
-          <div className="row g-4">
+        <div className="row g-3">
+          <div className="col-md-4">
+            <div className="category-card">⚡ Быстрое выполнение</div>
+          </div>
 
-            <div className="col-md-4">
-              <div className="step-card">
-                <h4>1️⃣ Поиск</h4>
-                <p className="text-muted mt-3">Исследуйте тысячи услуг и найдите то, что вам нужно.</p>
-              </div>
-            </div>
+          <div className="col-md-4">
+            <div className="category-card">🔒 Безопасные сделки</div>
+          </div>
 
-            <div className="col-md-4">
-              <div className="step-card">
-                <h4>2️⃣ Нанять</h4>
-                <p className="text-muted mt-3">Выберите лучшего фрилансера и закажите работу.</p>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div className="step-card">
-                <h4>3️⃣ Получить результаты</h4>
-                <p className="text-muted mt-3">Получите высококачественную работу в срок.</p>
-              </div>
-            </div>
-
+          <div className="col-md-4">
+            <div className="category-card">⭐ Проверенные исполнители</div>
           </div>
         </div>
       </section>
-
-      <section className="cta">
-        <div className="container">
-          <h2>Начните продавать свои услуги прямо сейчас</h2>
-          <p className="mt-3">Присоединяйтесь к тысячам фрилансеров, получающих доход онлайн.</p>
-          <a href="#" className="btn btn-light btn-lg mt-3">Стать фрилансером</a>
-        </div>
-      </section>
-
     </div>
   );
 }

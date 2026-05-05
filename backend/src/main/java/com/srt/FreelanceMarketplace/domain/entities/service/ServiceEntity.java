@@ -55,7 +55,7 @@ public class ServiceEntity {
 
     @Column(nullable = false)
     @Builder.Default
-    private boolean isHide = false;
+    private boolean hidden = false;
 
     @Column(nullable = false)
     @Builder.Default

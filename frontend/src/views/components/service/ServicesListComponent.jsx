@@ -6,7 +6,7 @@ import OrderCard from "../order/OrderCard";
 export default function ServicesListComponent({
   services,
   orderInfo,
-  isOrder,
+  isOrder=false,
 }) {
   const me = getUserData();
   const location = useLocation();
@@ -14,7 +14,7 @@ export default function ServicesListComponent({
   return (
     <div className="col-lg-9">
       <div className="row g-4">
-        {services.map((service, item) => {
+        {services?.map((service, item) => {
           return (
             <div className="col-md-6 col-xl-4" key={item}>
               {isOrder ? (

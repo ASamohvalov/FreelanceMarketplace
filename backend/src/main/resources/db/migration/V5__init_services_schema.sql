@@ -1,12 +1,14 @@
 CREATE TABLE service_categories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(50) UNIQUE NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
 CREATE TABLE service_subcategories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(50) UNIQUE NOT NULL,
-    category_id UUID REFERENCES service_categories(id) NOT NULL
+    category_id UUID REFERENCES service_categories(id) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
 CREATE TABLE services (

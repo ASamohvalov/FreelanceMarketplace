@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.domain.entities.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -38,4 +40,8 @@ public class UserEntity {
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private List<RoleEntity> roles;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 }

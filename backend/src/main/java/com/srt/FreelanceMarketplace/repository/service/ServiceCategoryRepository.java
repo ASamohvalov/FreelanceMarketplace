@@ -14,6 +14,6 @@ public interface ServiceCategoryRepository extends JpaRepository<ServiceCategory
     boolean existsByName(String name);
 
     @EntityGraph(attributePaths = {"subcategories"})
-    @Query("select c from ServiceCategoryEntity c")
-    List<ServiceCategoryEntity> findAllWithSubcategory();
+    @Query("select c from ServiceCategoryEntity c order by c.createdAt asc")
+    List<ServiceCategoryEntity> findAllWithSubcategoryOrderByCreatedAtAsc();
 }

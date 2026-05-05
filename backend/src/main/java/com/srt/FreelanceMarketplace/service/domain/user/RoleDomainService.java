@@ -6,6 +6,9 @@ import com.srt.FreelanceMarketplace.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class RoleDomainService {
@@ -17,5 +20,20 @@ public class RoleDomainService {
 
     public RoleEntity getByName(RoleEnum name) {
         return roleRepository.getByName(name.name());
+    }
+
+    public Map<RoleEnum, RoleEntity> getAllRoles() {
+        return roleRepository.findAll().stream()
+                .collect(Collectors.toMap(this::getByEntity, r -> r));
+    }
+
+    private RoleEnum getByEntity(RoleEntity entity) {
+        return switch (entity.getName()) {
+            case "ROLE_USER" -> RoleEnum.ROLE_USER;
+            case "ROLE_FREELANCER" -> RoleEnum.ROLE_FREELANCER;
+            case "ROLE_ADMIN" -> RoleEnum.ROLE_ADMIN;
+            case "ROLE_MODERATOR" -> RoleEnum.ROLE_MODERATOR;
+            default -> throw new IllegalStateException("incorrect role: " + entity.getName());
+        };
     }
 }

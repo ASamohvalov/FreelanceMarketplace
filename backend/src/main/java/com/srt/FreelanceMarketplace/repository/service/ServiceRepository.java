@@ -1,7 +1,9 @@
 package com.srt.FreelanceMarketplace.repository.service;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceCategoryEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +32,8 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
 
     @EntityGraph(attributePaths = {"images", "subcategory.category", "freelancer.user", "freelancer.jobTitle"})
     Optional<ServiceEntity> findWithImagesAndSubcategoryAndFreelancerById(UUID id);
+
+    boolean existsBySubcategory(ServiceSubcategoryEntity subcategory);
+
+    boolean existsBySubcategory_category(ServiceCategoryEntity category);
 }

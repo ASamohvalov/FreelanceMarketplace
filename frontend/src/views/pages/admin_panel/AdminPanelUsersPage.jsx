@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getUsersRequest } from "../../../logic/requests/user/userRequest";
+import { getUsersRequest, setRolesAdminRequest } from "../../../logic/requests/user/userRequest";
 import { getRuRole } from "../../../logic/role";
 import "./css/admin_pages.css";
 
-export default function AdminPanelUsersPanel() {
+export default function AdminPanelUsersPage() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
 
-  const allRoles = ["ROLE_ADMIN", "ROLE_USER", "ROLE_FREELANCER"];
+  const [editedUsers, setEditedUsers] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const allRoles = ["ROLE_ADMIN", "ROLE_USER", "ROLE_FREELANCER", "ROLE_MODERATOR"];
   const paginateStep = 10;
 
   useEffect(() => {
@@ -35,15 +38,39 @@ export default function AdminPanelUsersPanel() {
     setPage(pageNumber);
   }
 
+  const editUsers = async () => {
+    // todo
+    console.log(editedUsers);
+
+    const response = await setRolesAdminRequest(editedUsers);
+    if (response.status !== 200) {
+      navigate(`/error?code=${response.status}`);
+      return;
+    }
+
+    setMessage("Роли успешно обновлены");
+  }
+
   return (
     <main className="col-10 p-4">
       <div className="admin-tab">
+        {message && (
+          <div className="alert alert-success" role="alert">
+            {message}
+          </div>
+        )}
         <div className="admin-card">
           <div className="d-flex justify-content-between mb-3">
             <h5>Пользователи</h5>
             <span>
-              <button className="btn btn-primary mx-2">Сохранить</button>
-              <button className="btn btn-outline-secondary">Вернуть обранто</button>
+              <button
+                className="btn btn-primary mx-2"
+                onClick={editUsers}
+              >Сохранить</button>
+              <button
+                className="btn btn-outline-secondary"
+                onClick={() => setEditedUsers([])}
+              >Вернуть обранто</button>
             </span>
           </div>
 
@@ -57,19 +84,38 @@ export default function AdminPanelUsersPanel() {
             </thead>
 
             <tbody>
-              {users?.content?.map((user, idx) => (
-                <tr key={idx}>
-                  <td>{user.email}</td>
-                  <td>{user.firstName + " " + user.lastName}</td>
-                  <td>
-                    <select className="form-select form-select-sm">
-                      {allRoles.map((role, idx) => (
-                        <option key={idx} defaultValue={role} selected={user.roles.includes(role)}>{getRuRole(role)}</option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-              ))}
+              {users?.content?.map((user) => {
+                const editedUser = editedUsers.find((u) => u.id === user.id);
+
+                const currentRole = editedUser ? editedUser.roles[0] : user.roles[0];
+
+                return (
+                  <tr key={user.id} className={editedUser ? "table-primary" : ""}>
+                    <td>{user.email}</td>
+                    <td>{user.firstName + " " + user.lastName}</td>
+                    <td>
+                      <select
+                        className="form-select form-select-sm"
+                        value={currentRole}
+                        onChange={(e) => {
+                          const newRole = e.target.value;
+                          setEditedUsers((prev) => {
+                            const updatedUser = { ...user, roles: [newRole] };
+                            const filtered = prev.filter((u) => u.id !== user.id);
+                            return [...filtered, updatedUser];
+                          });
+                        }}
+                      >
+                        {allRoles.map((role) => (
+                          <option key={role} value={role}>
+                            {getRuRole(role)}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 

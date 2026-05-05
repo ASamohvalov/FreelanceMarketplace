@@ -1,8 +1,28 @@
-.table td{
-  vertical-align:middle;
+.table td {
+  vertical-align: middle;
 }
 
-.admin-card{
+.admin_main-flex {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+.admin-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.admin_div-scrolling {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.cat-card{
   background:white;
   border-radius:16px;
   padding:20px;

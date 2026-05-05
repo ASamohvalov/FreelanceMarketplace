@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.repository.service;
 
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceCategoryEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import java.util.UUID;
 @Repository
 public interface ServiceSubcategoryRepository extends JpaRepository<ServiceSubcategoryEntity, UUID> {
     boolean existsByName(String name);
+
+    boolean existsByNameAndCategory(String name, ServiceCategoryEntity category);
 }

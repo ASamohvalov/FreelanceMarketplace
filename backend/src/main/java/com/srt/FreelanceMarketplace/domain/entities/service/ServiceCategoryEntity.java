@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,4 +29,8 @@ public class ServiceCategoryEntity {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceSubcategoryEntity> subcategories;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 }

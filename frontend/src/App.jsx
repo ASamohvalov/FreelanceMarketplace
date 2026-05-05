@@ -27,6 +27,9 @@ import OrderReportPage from "./views/pages/order/OrderReportPage.jsx";
 import SendReviewPage from "./views/pages/review/SendReviewPage.jsx";
 import OrderPage from "./views/pages/order/OrderPage.jsx";
 import AdminPanelUsersPanel from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
+import ProtectedRoute from "./logic/ProtectedRoute.jsx";
+import AdminPanelUsersPage from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
+import AdminPanelCategoriesPage from "./views/pages/admin_panel/AdminPanelCategoriesPages.jsx";
 
 // base routing
 export default function App() {
@@ -80,8 +83,11 @@ export default function App() {
         <Route path="review/send" element={<SendReviewPage />} />
       </Route>
 
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminPanelUsersPanel />} />
+      <Route element={<ProtectedRoute roleRequired={"ROLE_ADMIN"} />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminPanelUsersPage />} />
+          <Route path="categories" element={<AdminPanelCategoriesPage />} />
+        </Route>
       </Route>
     </Routes>
   );

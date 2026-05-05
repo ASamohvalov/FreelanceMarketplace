@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -27,4 +28,8 @@ public class ServiceSubcategoryEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ServiceCategoryEntity category;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 }

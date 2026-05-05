@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.controller.user;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserRoleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,5 +74,11 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Page<GetUserResponse> getUsers(@PageableDefault(size = 10) Pageable pageable) {
         return userService.getUsers(pageable);
+    }
+
+    @PatchMapping("/set_roles")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void setNewRole(@RequestBody List<EditUserRoleRequest> request) {
+        userService.setNewRole(request);
     }
 }

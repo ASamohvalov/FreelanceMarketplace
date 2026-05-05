@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +19,20 @@ public class UserDomainService {
 
     public void save(UserEntity entity) {
         repository.save(entity);
+    }
+
+    public UserEntity getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("user not found"));
+    }
+
+    public List<UserEntity> getByIds(List<UUID> id) {
+        return repository.findAllById(id);
+    }
+
+    public UserEntity getByIds(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("user not found"));
     }
 
     public Optional<UserEntity> findByEmail(String email) {

@@ -6,7 +6,8 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(155) NOT NULL,
     last_name VARCHAR(155) NOT NULL,
-    avatar_path VARCHAR(255)
+    avatar_path VARCHAR(255),
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
 CREATE TABLE roles (

@@ -5,7 +5,9 @@ import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceOrderInfo
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserServiceResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceCategoryEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.service.ServiceSubcategoryEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.repository.service.ServiceRepository;
@@ -25,6 +27,14 @@ public class ServiceDomainService {
 
     public ServiceEntity getReferenceById(UUID id) {
         return repository.getReferenceById(id);
+    }
+
+    public boolean existsByCategory(ServiceCategoryEntity category) {
+        return repository.existsBySubcategory_category(category);
+    }
+
+    public boolean existsBySubcategory(ServiceSubcategoryEntity subcategory) {
+        return repository.existsBySubcategory(subcategory);
     }
 
     public ServiceEntity getById(UUID id) {

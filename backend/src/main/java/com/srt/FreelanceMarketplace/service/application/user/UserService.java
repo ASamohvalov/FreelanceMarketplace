@@ -3,6 +3,7 @@ package com.srt.FreelanceMarketplace.service.application.user;
 import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserRoleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
@@ -15,10 +16,7 @@ import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
 import com.srt.FreelanceMarketplace.service.domain.payment.AccountDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
-import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
-import com.srt.FreelanceMarketplace.service.domain.user.JobTitleDomainService;
-import com.srt.FreelanceMarketplace.service.domain.user.RoleDomainService;
-import com.srt.FreelanceMarketplace.service.domain.user.TokenDomainService;
+import com.srt.FreelanceMarketplace.service.domain.user.*;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +27,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
     private final UserMapper userMapper;
+    private final UserDomainService domainService;
 
     private final AuthHelperService authHelperService;
     private final FreelancerDomainService freelancerService;
@@ -109,8 +107,31 @@ public class UserService {
     }
 
     public Page<GetUserResponse> getUsers(Pageable pageable) {
-        return repository.findAllWithRoles(pageable)
+        return repository.findAllWithRolesOrderByCreatedAtAsc(pageable)
                 .map(userMapper::toGetResponse);
+    }
+
+    @Transactional
+    public void setNewRole(List<EditUserRoleRequest> request) {
+        List<UUID> userIds = request.stream()
+                .map(EditUserRoleRequest::getId)
+                .toList();
+
+        Map<UUID, UserEntity> usersMap = domainService.getByIds(userIds).stream()
+                .collect(Collectors.toMap(UserEntity::getId, u -> u));
+
+        Map<RoleEnum, RoleEntity> roles = roleService.getAllRoles();
+
+        request.forEach(u -> {
+            UserEntity user = usersMap.get(u.getId());
+            if (user != null) {
+                List<RoleEntity> reqRoles = u.getRoles().stream()
+                        .map(roles::get)
+                        .filter(Objects::nonNull)
+                        .toList();
+                user.setRoles(reqRoles);
+            }
+        });
     }
 
     private boolean hasRole(UserEntity user, RoleEnum role) {

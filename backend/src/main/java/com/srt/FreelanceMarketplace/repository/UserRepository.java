@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,8 +30,8 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByIdWithRoles(UUID id);
 
     @EntityGraph(attributePaths = {"roles"})
-    @Query("select u from UserEntity u")
-    Page<UserEntity> findAllWithRoles(Pageable pageable);
+    @Query("select u from UserEntity u order by u.createdAt asc")
+    Page<UserEntity> findAllWithRolesOrderByCreatedAtAsc(Pageable pageable);
 
     boolean existsByEmail(String email);
 }

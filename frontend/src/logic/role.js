@@ -8,5 +8,8 @@ export function getRuRole(role) {
 
     case "ROLE_ADMIN":
       return "Администратор";
+
+    case "ROLE_MODERATOR":
+      return "Модератор";
   }
 }

@@ -151,6 +151,10 @@ public class OrderService {
             throw new GlobalBadRequestException("only the customer can reject the order");
         }
 
+        if (order.getStatus() == OrderStatusEnum.CANCELLED || order.getStatus() == OrderStatusEnum.REJECTED) {
+            throw new GlobalBadRequestException("the order already rejected");
+        }
+
         order.setStatus(OrderStatusEnum.REJECTED);
         order.setCompletionDate(Instant.now());
 
@@ -160,7 +164,7 @@ public class OrderService {
     }
 
     public void cancelOrder(UUID id) {
-        OrderEntity order = domainService.getById(id);
+        OrderEntity order = domainService.getByIdWithCustomer(id);
 
         if (order.getStatus() != OrderStatusEnum.PENDING) {
             throw new GlobalBadRequestException("the status already changed");
@@ -174,10 +178,13 @@ public class OrderService {
 
         order.setStatus(OrderStatusEnum.CANCELLED);
         repository.save(order);
+
+        notificationSenderService.sendOrderCancelled(
+                order, order.getCustomer(), authHelperService.getUser());
     }
 
     public void acceptOrder(UUID id) {
-        OrderEntity order = domainService.getByIdWithRequirement(id);
+        OrderEntity order = domainService.getByIdWithRequirementAndCustomer(id);
 
         if (order.getStatus() != OrderStatusEnum.PENDING) {
             throw new GlobalBadRequestException("the status already changed");
@@ -196,6 +203,9 @@ public class OrderService {
 
         order.setStatus(OrderStatusEnum.IN_PROGRESS);
         repository.save(order);
+
+        notificationSenderService.sendOrderAccepted(
+                order, order.getCustomer(), authHelperService.getUser());
     }
 
     public OrderRequirementResponse getOrderRequirementByOrderId(UUID id) {

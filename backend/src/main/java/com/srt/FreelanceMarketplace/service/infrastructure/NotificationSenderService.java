@@ -33,4 +33,8 @@ public interface NotificationSenderService {
     void sendReportRejected(OrderReportEntity report, UserEntity recipient, UserEntity sender);
 
     void sendMoneyTransferred(TransferEntity transfer, UserEntity recipient, UserEntity sender);
+
+    void sendOrderCancelled(OrderEntity order, UserEntity recipient, UserEntity sender);
+
+    void sendOrderAccepted(OrderEntity order, UserEntity recipient, UserEntity sender);
 }

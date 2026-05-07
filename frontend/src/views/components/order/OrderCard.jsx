@@ -64,6 +64,11 @@ export default function OrderCard({
             В ожидании
           </span>
         )}
+        {status === "SUBMITTED" && (
+          <span className="order-report-status order-report-status_approved">
+            Отправлен на проверку
+          </span>
+        )}
       </div>
 
       {customer && (

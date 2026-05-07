@@ -4,7 +4,9 @@ CREATE TYPE notification_type AS ENUM (
     'NEW_REVIEW',
     'NEW_ORDER_REPORT',
     'ORDER_COMPLETED',
-    'MONEY_TRANSFERRED'
+    'MONEY_TRANSFERRED',
+    'ORDER_CANCELLED',
+    'ORDER_ACCEPTED'
 );
 
 CREATE TABLE notifications (

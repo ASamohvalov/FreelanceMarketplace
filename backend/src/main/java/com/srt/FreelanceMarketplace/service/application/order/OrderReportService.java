@@ -46,6 +46,7 @@ public class OrderReportService {
     private final TransferDomainService transferDomainService;
     private final OrderReportFileDomainService orderReportFileDomainService;
 
+    @Transactional
     public void sendReport(SendOrderReportRequest request) {
         FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
         OrderEntity order = orderDomainService.getByIdWithFreelancerAndService(request.getOrderId());
@@ -70,6 +71,9 @@ public class OrderReportService {
                 .customer(customer)
                 .build();
 
+        order.setStatus(OrderStatusEnum.SUBMITTED);
+        orderDomainService.save(order);
+
         if (request.getFiles() != null) {
             var entityList = orderReportFileDomainService.uploadFiles(report, request.getFiles());
 
@@ -82,7 +86,8 @@ public class OrderReportService {
             orderDomainService.save(order);
         }
 
-        notificationSenderService.sendNewOrderReport(report, order.getCustomer(), authHelperService.getUser());
+        notificationSenderService.sendNewOrderReport(
+                report, order.getCustomer(), authHelperService.getUser());
     }
 
     public List<ReceivedOrderReportResponse> getReceivedReportsByOrder(UUID orderId) {

@@ -2,7 +2,6 @@ package com.srt.FreelanceMarketplace.repository.service;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
-import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -46,9 +45,12 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     @EntityGraph(attributePaths = {"customer", "service.titleImage", "service.freelancer.user", "service.freelancer.jobTitle"})
     Optional<OrderEntity> findWithServiceAndCustomerById(UUID id);
 
-    @EntityGraph(attributePaths = {"orderRequirement"})
-    Optional<OrderEntity> findWithOrderRequirementById(UUID id);
+    @EntityGraph(attributePaths = {"orderRequirement", "customer"})
+    Optional<OrderEntity> findWithOrderRequirementAndCustomerById(UUID id);
 
     @EntityGraph(attributePaths = {"orderRequirement.files"})
     Optional<OrderEntity> findWithOrderRequirementAndFilesById(UUID id);
+
+    @EntityGraph(attributePaths = {"customer"})
+    Optional<OrderEntity> findWithCustomerById(UUID id);
 }

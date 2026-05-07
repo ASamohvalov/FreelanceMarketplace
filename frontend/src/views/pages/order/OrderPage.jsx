@@ -65,7 +65,7 @@ export default function OrderPage() {
                   Перейти в чат
                 </Link>
                 {userExecutor ? (
-                  (order.order.status !== "COMPLETED" && order.order.status !== "CANCELED" && order.order.status !== "PENDING") && (
+                  (order.order.status !== "COMPLETED" && order.order.status !== "CANCELED" && order.order.status !== "PENDING" && order.order.status !== "SUBMITTED") && (
                     <button
                       className="btn btn-success"
                       onClick={() =>
@@ -100,7 +100,7 @@ export default function OrderPage() {
                     <i className="bi bi-star me-1" />
                     Оставить отзыв
                   </button>
-                ) : (order?.order?.status !== "REJECTED") && (
+                ) : (order?.order?.status !== "REJECTED" && order?.order?.status !== "CANCELED") && (
                   <button
                     className="btn btn-outline-danger"
                     onClick={async () => {
@@ -193,6 +193,7 @@ export default function OrderPage() {
                 {order?.order?.status === "IN_PROGRESS" && <div>В работе</div>}
                 {order?.order?.status === "PENDING" && <div>В ожидании</div>}
                 {order?.order?.status === "CANCELED" && <div>Отменен</div>}
+                {order?.order?.status === "SUBMITTED" && <div>Отправлен на проверку</div>}
               </div>
 
               <div className="mb-2">

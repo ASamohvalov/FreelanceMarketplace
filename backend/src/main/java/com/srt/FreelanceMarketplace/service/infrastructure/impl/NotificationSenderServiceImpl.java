@@ -107,6 +107,38 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
         repository.save(notification);
     }
 
+    @Override
+    public void sendOrderCancelled(OrderEntity order, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Отмена заказа")
+                .message(String.format(
+                        "%s %s не принял ваш заказ",
+                        sender.getFirstName(),
+                        sender.getLastName()))
+                .type(NotificationTypeEnum.ORDER_CANCELLED)
+                .recipient(recipient)
+                .entityType(getEntityType(order))
+                .entityId(order.getId())
+                .build();
+        repository.save(notification);
+    }
+
+    @Override
+    public void sendOrderAccepted(OrderEntity order, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Принятие заказа")
+                .message(String.format(
+                        "%s %s принял ваш заказ и приступает к работе",
+                        sender.getFirstName(),
+                        sender.getLastName()))
+                .type(NotificationTypeEnum.ORDER_ACCEPTED)
+                .recipient(recipient)
+                .entityType(getEntityType(order))
+                .entityId(order.getId())
+                .build();
+        repository.save(notification);
+    }
+
     private String getEntityType(Object entity) {
         if (entity instanceof OrderEntity) {
             return "orders";

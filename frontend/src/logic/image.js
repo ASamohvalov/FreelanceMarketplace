@@ -8,6 +8,10 @@ export function getReportFileUrl(id) {
   return BACKEND_URL + `file/get/report/file/${id}`;
 }
 
+export function getRequirementFileUrl(id) {
+  return BACKEND_URL + `file/get/requirement/file/${id}`;
+}
+
 export function checkIsImage(url) {
   return new Promise((resolve) => {
     const img = new Image();

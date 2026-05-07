@@ -1,0 +1,26 @@
+.order-requirement-page_brief-container {
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.order-requirement-page_block {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.order-requirement-page_title {
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.order-requirement-page_file-item {
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8f9ff;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}

@@ -7,7 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { getUserData } from "../../../logic/jwt";
-import { checkIsImage, getReportFileUrl } from "../../../logic/image";
+import { getReportFileUrl, getRequirementFileUrl } from "../../../logic/image";
 import FileItemComponent from "../order/FileItemComponent";
 
 export default function OrderReportModalWindow({
@@ -15,7 +15,7 @@ export default function OrderReportModalWindow({
   title,
   user,
   sendDate,
-  status, // todo
+  status,
   report,
   isVisible,
   onClose,
@@ -129,7 +129,7 @@ export default function OrderReportModalWindow({
             }}
           >
             <i className="bi bi-check-lg me-1"></i>
-            Принять
+            Принять и завершить заказ
           </button>
 
           <button
@@ -145,7 +145,7 @@ export default function OrderReportModalWindow({
             }}
           >
             <i className="bi bi-x-lg me-1"></i>
-            Отклонить
+            Отправить на доработку
           </button>
         </div>
       </div>

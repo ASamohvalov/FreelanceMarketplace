@@ -1,8 +1,10 @@
 package com.srt.FreelanceMarketplace.service.application.service;
 
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportFileEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementFileEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceImageEntity;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderReportFileDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderRequirementFileDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceImageDomainService;
 import com.srt.FreelanceMarketplace.util.FileStorageStrategy;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class GetFileService {
     private final OrderReportFileDomainService orderReportFileDomainService;
     private final FileStorageStrategy imageStorageStrategy;
     private final FileStorageStrategy documentStorageStrategy;
+    private final OrderRequirementFileDomainService orderRequirementFileDomainService;
 
     public Path getServiceImageById(UUID imageId) {
         ServiceImageEntity imageEntity = serviceImageDomainService.getById(imageId);
@@ -26,6 +29,12 @@ public class GetFileService {
 
     public Path getReportFileById(UUID fileId) {
         OrderReportFileEntity file = orderReportFileDomainService.getById(fileId);
+        return imageStorageStrategy.getSafely(file.getFilePath())
+                .orElse(documentStorageStrategy.get(file.getFilePath()));
+    }
+
+    public Path getRequirementFileById(UUID fileId) {
+        OrderRequirementFileEntity file = orderRequirementFileDomainService.getById(fileId);
         return imageStorageStrategy.getSafely(file.getFilePath())
                 .orElse(documentStorageStrategy.get(file.getFilePath()));
     }

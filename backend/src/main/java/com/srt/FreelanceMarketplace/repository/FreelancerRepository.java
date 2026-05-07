@@ -14,6 +14,8 @@ import java.util.UUID;
 public interface FreelancerRepository extends JpaRepository<FreelancerEntity, UUID> {
     Optional<FreelancerEntity> findByUser(UserEntity user);
 
+    FreelancerEntity getReferenceByUser(UserEntity user);
+
     @EntityGraph(attributePaths = {"jobTitle", "user"})
     Optional<FreelancerEntity> findWithJobTitleByUser(UserEntity user);
 

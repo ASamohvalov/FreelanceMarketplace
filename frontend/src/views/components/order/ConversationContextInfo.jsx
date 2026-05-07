@@ -51,7 +51,7 @@ export default function ConversationContextInfo({ size, uShown }) {
                 <>
                   <div className="mb-3">
                     <div className="info-label">День дедлайна</div>
-                    <div className="info-value">{ fromIsoDate(info?.order?.deadlineDate) }</div>
+                    <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
                   </div>
 
                   <div className="mb-3">
@@ -131,7 +131,7 @@ export default function ConversationContextInfo({ size, uShown }) {
             <>
               <div className="mb-3">
                 <div className="info-label">День дедлайна</div>
-                <div className="info-value">{ fromIsoDate(info?.order?.deadlineDate) }</div>
+                <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
               </div>
 
               <div className="mb-3">

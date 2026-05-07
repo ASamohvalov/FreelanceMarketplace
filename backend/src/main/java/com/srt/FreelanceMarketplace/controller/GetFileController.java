@@ -39,4 +39,13 @@ public class GetFileController {
                 .contentType(fileHelperUtil.getContentType(path))
                 .body(resource);
     }
+
+    @GetMapping("/requirement/file/{fileId}")
+    public ResponseEntity<Resource> getRequirementFileById(@PathVariable UUID fileId) {
+        Path path = getFileService.getRequirementFileById(fileId);
+        Resource resource = new FileSystemResource(path);
+        return ResponseEntity.ok()
+                .contentType(fileHelperUtil.getContentType(path))
+                .body(resource);
+    }
 }

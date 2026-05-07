@@ -30,6 +30,8 @@ import AdminPanelUsersPanel from "./views/pages/admin_panel/AdminPanelUsersPage.
 import ProtectedRoute from "./logic/ProtectedRoute.jsx";
 import AdminPanelUsersPage from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
 import AdminPanelCategoriesPage from "./views/pages/admin_panel/AdminPanelCategoriesPages.jsx";
+import MakeOrderPage from "./views/pages/order/MakeOrderPage.jsx";
+import OrderRequirementPage from "./views/pages/order/OrderRequirementPage.jsx";
 
 // base routing
 export default function App() {
@@ -70,6 +72,7 @@ export default function App() {
         </Route>
         <Route path="notifications" element={<NotificationsPage />} />
 
+        <Route path="order/make/:serviceId" element={<MakeOrderPage />} />
         <Route path="pay/:serviceId" element={<PaymentPage />} />
         <Route path="order/success" element={<OrderSuccessPage />} />
         <Route path="order/report/send" element={<SendOrderReportPage />} />
@@ -81,6 +84,8 @@ export default function App() {
         <Route path="order/info/:id" element={<OrderPage />} />
 
         <Route path="review/send" element={<SendReviewPage />} />
+
+        <Route path="order/requirement/:orderId" element={<OrderRequirementPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roleRequired={"ROLE_ADMIN"} />}>

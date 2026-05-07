@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import FooterComponent from "../../components/FooterComponent";
-import HeaderComponent from "../../components/HeaderComponent";
 import "./css/payment_page.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getPaymentInfoRequest } from "../../../logic/requests/service/serviceRequest";
 import { useState } from "react";
 import { sendOrderRequest } from "../../../logic/requests/order/orderRequest";
+import { getDayRUString } from "../../../logic/time";
 
 export default function PaymentPage() {
   const { serviceId } = useParams();
+  // description, comment, deadlineDays, files
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -39,7 +40,13 @@ export default function PaymentPage() {
       setError("Все поля должны быть заполнены");
       return;
     }
-    const response = await sendOrderRequest(serviceId, state.deadlineDate);
+    const response = await sendOrderRequest(
+      serviceId,
+      state.deadlineDays,
+      state.description,
+      state.comment,
+      state.files,
+    );
     if (response.status !== 200) {
       navigate(`/error?code=${response.status}`);
       return;
@@ -151,8 +158,8 @@ export default function PaymentPage() {
                 </div>
 
                 <div className="d-flex justify-content-between mb-2">
-                  <span>Крайний срок выполнения заказа</span>
-                  <span>{state.deadlineDate.toLocaleDateString("ru")}</span>
+                  <span>Срок выполнения</span>
+                  <span>{getDayRUString(state.deadlineDays)}</span>
                 </div>
 
                 <div className="d-flex justify-content-between mb-2">

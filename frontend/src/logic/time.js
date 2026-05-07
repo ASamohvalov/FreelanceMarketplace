@@ -130,7 +130,7 @@ export function getDayRUString(count) {
   const suffixes = {
     one: 'ень',
     few: 'ня',
-    many: 'дней'
+    many: 'ней'
   };
 
   return `${count} д${suffixes[pr.select(count)]}`;

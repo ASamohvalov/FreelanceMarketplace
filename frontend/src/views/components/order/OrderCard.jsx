@@ -54,6 +54,16 @@ export default function OrderCard({
             В работе
           </span>
         )}
+        {status === "CANCELLED" && (
+          <span className="order-report-status order-report-status_rejected">
+            Отменён исполнителем
+          </span>
+        )}
+        {status === "PENDING" && (
+          <span className="order-report-status order-report-status_pending">
+            В ожидании
+          </span>
+        )}
       </div>
 
       {customer && (
@@ -70,13 +80,15 @@ export default function OrderCard({
 
       <hr />
 
-      <div className="text-muted small mb-2">
-        Дедлайн: {fromIsoDateToDate(deadline)}
-      </div>
+      {status !== "PENDING" && (
+        <div className="text-muted small mb-2">
+          Дедлайн: {fromIsoDateToDate(deadline)}
+        </div>
+      )}
       <div className="text-muted small mb-2">
         Дата заказа: {fromIsoDateToDate(orderDate)}
       </div>
-      {status !== "IN_PROGRESS" && (
+      {status !== "IN_PROGRESS" && status !== "PENDING" && status !== "CANCELLED" && (
         <div className="text-muted small mb-2">
           Дата завершения: {fromIsoDateToDate(completionDate)}
         </div>

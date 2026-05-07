@@ -19,6 +19,7 @@ import {
 import ReviewStarsComponent from "../../components/reviews/ReviewStarsComponent";
 import ImageCarouselComponent from "../../components/service/image/ImageCarouselComponent";
 import { getServiceImageUrl } from "../../../logic/image";
+import { reviewToRu } from "../../../logic/lang";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -45,6 +46,8 @@ export default function ServicePage() {
       setServiceData(response.data);
       setIsProposalBeenSent(response.data.proposalBeenSent);
 
+      document.title = response.data.title;
+
       // get all personal services
       const getPersonalResponse = await getAllPersonalServices(
         response.data.freelancer.id,
@@ -66,7 +69,6 @@ export default function ServicePage() {
 
       setServiceReviewRating(average);
 
-
       if (isAuth()) {
         const reviewCheckResponse = await sendCanReviewRequest(id);
         if (reviewCheckResponse.status !== 200) {
@@ -87,11 +89,11 @@ export default function ServicePage() {
         onSubmit={() => setIsProposalBeenSent(true)}
       />
 
-      <OrderModalWindow
+      {/* <OrderModalWindow
         id={id}
         isVisible={isOrderVisible}
         onClose={() => setIsOrderVisible(false)}
-      />
+      />*/}
 
       <div className="container my-5">
         <NavLocation>
@@ -105,7 +107,7 @@ export default function ServicePage() {
 
         <div className="d-flex align-items-center gap-3 mb-4">
           <ReviewStarsComponent rating={serviceReviewRating} />
-          <span>{serviceReviewRating} ({reviews.length} отзывов)</span>
+          <span>{serviceReviewRating} • {reviewToRu(reviews.length)} </span>
           <span className="badge bg-light text-dark">
             {serviceData.category}
           </span>
@@ -191,7 +193,8 @@ export default function ServicePage() {
 
               <button
                 className="btn btn-primary w-100 mb-3"
-                onClick={() => setIsOrderVisible(true)}
+                onClick={() => navigate("/order/make/" + serviceData.id)}
+                // onClick={() => setIsOrderVisible(true)}
                 disabled={!getUserData()?.roles || serviceData?.freelancer?.userId === getUserData().id}
               >
                 Оформить заказ

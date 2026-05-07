@@ -3,7 +3,12 @@ import OrderCard from "../../components/order/OrderCard";
 import "./css/order_page.css";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getOrderByIdRequest, sendRejectOrderRequest } from "../../../logic/requests/order/orderRequest";
+import {
+  getOrderByIdRequest,
+  sendAcceptOrderRequest,
+  sendCancelOrderRequest,
+  sendRejectOrderRequest,
+} from "../../../logic/requests/order/orderRequest";
 import {
   calculateDays,
   fromIsoDateToDate,
@@ -19,14 +24,14 @@ export default function OrderPage() {
   const [userExecutor, setUserExecutor] = useState(false);
 
   useEffect(() => {
-    document.title = "заказ";
-
     (async () => {
       const response = await getOrderByIdRequest(id);
       if (response.status !== 200) {
         navigate(`/error?code=${response.status}`);
       }
       setOrder(response.data);
+
+      document.title = response.data.service.title;
 
       setUserExecutor(response.data.freelancer.userId === getUserData().id);
     })();
@@ -59,49 +64,97 @@ export default function OrderPage() {
                   <i className="bi bi-chat-dots me-1"></i>
                   Перейти в чат
                 </Link>
-
-                {userExecutor ? (order.order.status !== "COMPLETED") && (
+                {userExecutor ? (
+                  (order.order.status !== "COMPLETED" && order.order.status !== "CANCELED" && order.order.status !== "PENDING") && (
+                    <button
+                      className="btn btn-success"
+                      onClick={() =>
+                        navigate("/order/report/send", {
+                          state: {
+                            orderId: order.order.id,
+                            serviceTitle: order.service.title,
+                            serviceId: order.service.id,
+                            freelancer: order.freelancer,
+                          },
+                        })
+                      }
+                    >
+                      <i className="bi bi-check-circle me-1" />
+                      Сдать работу
+                    </button>
+                  )
+                ) : order?.order?.status === "COMPLETED" ? (
                   <button
-                    className="btn btn-success"
-                    onClick={() =>
-                      navigate("/order/report/send", {
+                    className="btn btn-outline-secondary"
+                    onClick={() => {
+                      navigate("/review/send", {
                         state: {
                           orderId: order.order.id,
-                          serviceTitle: order.service.title,
                           serviceId: order.service.id,
+                          serviceTitle: order.service.title,
                           freelancer: order.freelancer,
-                        },
+                        }
                       })
-                    }
+                    }}
                   >
-                    <i className="bi bi-check-circle me-1" />
-                    Сдать работу
+                    <i className="bi bi-star me-1" />
+                    Оставить отзыв
                   </button>
-                ) : (
-                  <>
-                    {order?.order?.status === "COMPLETED" && (
-                      <Link
-                        className="btn btn-outline-secondary"
-                        to="/review/send"
-                      >
-                        <i className="bi bi-star me-1" />
-                        Оставить отзыв
-                      </Link>
-                    )}
+                ) : (order?.order?.status !== "REJECTED") && (
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={async () => {
+                      const response = await sendRejectOrderRequest(
+                        order.order.id,
+                      );
+                      if (response.status !== 200) {
+                        navigate(`/error?code=${response.status}`);
+                        return;
+                      }
+                      alert("Заказ отменён, деньги возвращены");
+                    }}
+                  >
+                    <i className="bi bi-x-circle me-1" />
+                    Отменить заказ
+                  </button>
+                )}
 
-                      <button
-                        className="btn btn-outline-danger"
-                        onClick={async () => {
-                          const response = await sendRejectOrderRequest(order.order.id);
-                          if (response.status !== 200) {
-                            navigate(`/error?code=${response.status}`);
-                            return;
-                          }
-                          alert("Заказ отменён, деньги возвращены");
-                        }}
-                      >
-                        <i className="bi bi-x-circle me-1" />
-                      Отменить заказ
+                {userExecutor && order?.order?.status === "PENDING" && (
+                  <>
+                    <button
+                      className="btn btn-outline-success"
+                      onClick={async () => {
+                        if (!confirm("Вы уверены? Заказ нельзя будет отменить, убедитесь что прочитали ТЗ")) {
+                          return;
+                        }
+                        const response = await sendAcceptOrderRequest(order.order.id);
+                        if (response.status !== 200) {
+                          navigate(`/error?code=${response.status}`);
+                          return;
+                        }
+                        alert("Заказ принят, начинайте выполнение заказа");
+                      }}
+                    >
+                      <i className="bi bi-check-circle me-1" />
+                      Начать выполнение
+                    </button>
+
+                    <button
+                      className="btn btn-outline-danger"
+                      onClick={async () => {
+                        if (!confirm("Вы уверены в отмене заказа?")) {
+                          return;
+                        }
+                        const response = await sendCancelOrderRequest(order.order.id);
+                        if (response.status !== 200) {
+                          navigate(`/error?code=${response.status}`);
+                          return;
+                        }
+                        alert("Заказ отменён");
+                      }}
+                    >
+                      <i className="bi bi-x-circle me-1" />
+                      Отклонить выполнение
                     </button>
                   </>
                 )}
@@ -111,10 +164,19 @@ export default function OrderPage() {
             <div className="order-card_box">
               <Link
                 className="btn btn-outline-primary w-100"
-                to={{pathname:"/order/reports", search: `?orderId=${order?.order?.id}`}}
-
+                to={{
+                  pathname: "/order/reports",
+                  search: `?orderId=${order?.order?.id}`,
+                }}
               >
                 Открыть отчёты
+              </Link>
+
+              <Link
+                className="btn btn-outline-secondary w-100 mt-4"
+                to={"/order/requirement/" + order?.order?.id}
+              >
+                Открыть техническое задание
               </Link>
             </div>
           </div>
@@ -129,6 +191,8 @@ export default function OrderPage() {
                 {order?.order?.status === "COMPLETED" && <div>Завершён</div>}
                 {order?.order?.status === "REJECTED" && <div>Отклонен</div>}
                 {order?.order?.status === "IN_PROGRESS" && <div>В работе</div>}
+                {order?.order?.status === "PENDING" && <div>В ожидании</div>}
+                {order?.order?.status === "CANCELED" && <div>Отменен</div>}
               </div>
 
               <div className="mb-2">
@@ -136,17 +200,19 @@ export default function OrderPage() {
                 <div>{fromIsoDateToDate(order?.order?.orderDate)}</div>
               </div>
 
-              <div className="mb-2">
-                <div className="text-muted small">До окончания срока</div>
-                <div>
-                  {getDayRUString(
-                    calculateDays(
-                      order?.order?.orderDate,
-                      order?.order?.deadlineDate,
-                    ),
-                  )}
+              {(order?.order?.status !== "PENDING" && order?.order?.status !== "CANCELED") && (
+                <div className="mb-2">
+                  <div className="text-muted small">До окончания срока</div>
+                  <div>
+                    {getDayRUString(
+                      calculateDays(
+                        order?.order?.orderDate,
+                        order?.order?.deadlineDate,
+                      ),
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="mb-2">
                 <div className="text-muted small">Ревизии</div>

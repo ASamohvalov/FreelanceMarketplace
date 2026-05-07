@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.service.domain.order;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
@@ -20,6 +21,11 @@ public class OrderDomainService {
 
     public OrderEntity getById(UUID id) {
         return repository.findById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such order not found"));
+    }
+
+    public OrderEntity getByIdWithRequirement(UUID id) {
+        return repository.findWithOrderRequirementById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such order not found"));
     }
 
@@ -54,5 +60,10 @@ public class OrderDomainService {
 
     public void save(OrderEntity order) {
         repository.save(order);
+    }
+
+    public OrderEntity getByIdWithRequirementAndFiles(UUID id) {
+        return repository.findWithOrderRequirementAndFilesById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("such order not found"));
     }
 }

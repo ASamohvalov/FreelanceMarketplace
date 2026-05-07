@@ -1,9 +1,12 @@
-import { sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPostFormData } from "../requestSender";
+import { sendAuthGet, sendAuthPatch, sendAuthPostFormData, sendGet } from "../requestSender";
 
-export async function sendOrderRequest(serviceId, deadline) {
-  return await sendAuthPost("order/make", {
+export async function sendOrderRequest(serviceId, deadlineDays, description, comment, files) {
+  return await sendAuthPostFormData("order/make", {
     serviceId: serviceId,
-    deadlineDate: deadline,
+    deadlineDays: deadlineDays,
+    description: description,
+    comment: comment,
+    files,
   });
 }
 
@@ -30,4 +33,16 @@ export async function getOrderByIdRequest(id){
 
 export async function sendRejectOrderRequest(id) {
   return await sendAuthPatch(`order/reject/${id}`);
+}
+
+export async function sendAcceptOrderRequest(id) {
+  return await sendAuthPatch(`order/accept/${id}`);
+}
+
+export async function sendCancelOrderRequest(id) {
+  return await sendAuthPatch(`order/cancel/${id}`);
+}
+
+export async function getOrderRequirementRequest(id) {
+  return await sendAuthGet(`order/requirement/get/${id}`);
 }

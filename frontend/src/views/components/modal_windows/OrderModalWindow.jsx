@@ -3,6 +3,7 @@ import "./css/modal_window.css";
 import { useState } from "react";
 import ModalWindowComponent from "./ModalWindowComponent";
 
+// depricated
 export default function OrderModalWindow({ id, isVisible, onClose }) {
   const navigate = useNavigate();
 

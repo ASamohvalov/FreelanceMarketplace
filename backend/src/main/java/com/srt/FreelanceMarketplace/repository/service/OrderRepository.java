@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.repository.service;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -9,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,11 +25,11 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     boolean existsByServiceAndCustomer(ServiceEntity service, UserEntity customer);
 
     @EntityGraph(attributePaths = {"service", "customer", "service.titleImage"})
-    @Query("select o from OrderEntity o where o.freelancer = :freelancer")
+    @Query("select o from OrderEntity o where o.freelancer = :freelancer order by o.orderDate desc")
     List<OrderEntity> findAllByFreelancerWithServiceAndCustomer(FreelancerEntity freelancer);
 
     @EntityGraph(attributePaths = {"service", "service.titleImage", "freelancer.jobTitle", "freelancer.user"})
-    @Query("select o from OrderEntity o where o.customer = :customer")
+    @Query("select o from OrderEntity o where o.customer = :customer order by o.orderDate desc")
     List<OrderEntity> findAllByCustomerWithServiceAndFreelancerAndJobTitle(UserEntity customer);
 
     @EntityGraph(attributePaths = {"freelancer"})
@@ -45,4 +45,10 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     @EntityGraph(attributePaths = {"customer", "service.titleImage", "service.freelancer.user", "service.freelancer.jobTitle"})
     Optional<OrderEntity> findWithServiceAndCustomerById(UUID id);
+
+    @EntityGraph(attributePaths = {"orderRequirement"})
+    Optional<OrderEntity> findWithOrderRequirementById(UUID id);
+
+    @EntityGraph(attributePaths = {"orderRequirement.files"})
+    Optional<OrderEntity> findWithOrderRequirementAndFilesById(UUID id);
 }

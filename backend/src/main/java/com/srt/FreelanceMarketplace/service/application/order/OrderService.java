@@ -2,21 +2,25 @@ package com.srt.FreelanceMarketplace.service.application.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
-import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderRequirementResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
-import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.mapper.OrderMapper;
+import com.srt.FreelanceMarketplace.mapper.OrderRequirementMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderRequirementDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderRequirementFileDomainService;
 import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
@@ -25,6 +29,7 @@ import com.srt.FreelanceMarketplace.service.infrastructure.MessagingService;
 import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -46,13 +51,14 @@ public class OrderService {
     private final UserMapper userMapper;
     private final TransferDomainService transferDomainService;
     private final FreelanceMapper freelanceMapper;
+    private final OrderRequirementDomainService orderRequirementDomainService;
+    private final OrderRequirementFileDomainService orderRequirementFileDomainService;
+    private final OrderRequirementMapper orderRequirementMapper;
 
+    @Transactional
     public void order(MakeOrderRequest request) {
         ServiceEntity service = serviceDomainService.getByIdWithAuthor(request.getServiceId());
-        long daysBetween = ChronoUnit.DAYS.between(Instant.now(), request.getDeadlineDate());
-        if (daysBetween < 0) {
-            throw new GlobalBadRequestException("the deadline should be at least tomorrow");
-        }
+
         if (service.getFreelancer().getUser().getId()
                 .equals(authHelperService.getUser().getId())) {
             throw new GlobalBadRequestException("the user cannot order his own service");
@@ -62,12 +68,22 @@ public class OrderService {
         }
 
         OrderEntity order = OrderEntity.builder()
-                .deadlineDate(request.getDeadlineDate())
                 .service(service)
                 .customer(authHelperService.getUser())
                 .freelancer(service.getFreelancer())
                 .build();
         repository.save(order);
+
+        OrderRequirementEntity orderRequirement = OrderRequirementEntity.builder()
+                .order(order)
+                .description(request.getDescription())
+                .comment(request.getComment())
+                .deadlineDays(request.getDeadlineDays())
+                .build();
+        orderRequirementDomainService.save(orderRequirement);
+
+        var res = orderRequirementFileDomainService.uploadFiles(orderRequirement, request.getFiles());
+        orderRequirementFileDomainService.saveAll(res);
 
         if (!messagingService.isConversationExists(
                 service.getFreelancer(),
@@ -134,10 +150,62 @@ public class OrderService {
                 .equals(authHelperService.getUser().getId())) {
             throw new GlobalBadRequestException("only the customer can reject the order");
         }
+
         order.setStatus(OrderStatusEnum.REJECTED);
+        order.setCompletionDate(Instant.now());
 
         transferDomainService.canselTransferByOrder(order);
 
         repository.save(order);
+    }
+
+    public void cancelOrder(UUID id) {
+        OrderEntity order = domainService.getById(id);
+
+        if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new GlobalBadRequestException("the status already changed");
+        }
+
+        FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
+        if (!order.getFreelancer().getId()
+                .equals(freelancer.getId())) {
+            throw new GlobalBadRequestException("only the freelancer can cancel the order");
+        }
+
+        order.setStatus(OrderStatusEnum.CANCELLED);
+        repository.save(order);
+    }
+
+    public void acceptOrder(UUID id) {
+        OrderEntity order = domainService.getByIdWithRequirement(id);
+
+        if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new GlobalBadRequestException("the status already changed");
+        }
+
+        FreelancerEntity freelancer = freelancerDomainService.getByUser(authHelperService.getUser());
+        if (!order.getFreelancer().getId()
+                .equals(freelancer.getId())) {
+            throw new GlobalBadRequestException("only the freelancer can accept the order");
+        }
+
+        Instant deadline = Instant.now().plus(
+                order.getOrderRequirement().getDeadlineDays(),
+                ChronoUnit.DAYS);
+        order.setDeadlineDate(deadline);
+
+        order.setStatus(OrderStatusEnum.IN_PROGRESS);
+        repository.save(order);
+    }
+
+    public OrderRequirementResponse getOrderRequirementByOrderId(UUID id) {
+        OrderEntity order = domainService.getByIdWithRequirementAndFiles(id);
+        UserEntity user = authHelperService.getUser();
+        if (!order.getCustomer().getId().equals(user.getId())) {
+            if (!order.getFreelancer().getId().equals(freelancerDomainService.getReferenceByUser(user).getId())) {
+                throw new GlobalBadRequestException("You don't have rights to view the requirements");
+            }
+        }
+        return orderRequirementMapper.toResponse(order.getOrderRequirement());
     }
 }

@@ -42,7 +42,7 @@ public class OrderEntity {
     @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(nullable = false)
     @Builder.Default
-    private OrderStatusEnum status = OrderStatusEnum.IN_PROGRESS;
+    private OrderStatusEnum status = OrderStatusEnum.PENDING;
 
     @Column(nullable = false)
     @Builder.Default
@@ -51,6 +51,9 @@ public class OrderEntity {
     @Column(nullable = true)
     private Instant completionDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Instant deadlineDate;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private OrderRequirementEntity orderRequirement;
 }

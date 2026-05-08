@@ -23,6 +23,15 @@ export default function OrderPage() {
   const [order, setOrder] = useState([]);
   const [userExecutor, setUserExecutor] = useState(false);
 
+  const status = order?.order?.status;
+  const orderId = order?.order?.id;
+
+  const canSubmitWork = userExecutor && !["COMPLETED", "CANCELED", "PENDING", "SUBMITTED", "REJECTED"].includes(status);
+  const canLeaveReview = !userExecutor && status === "COMPLETED";
+  const waitingForRejectShow = status === "WAITING_FOR_REJECT" && (userExecutor ? order?.order?.rejectByCustomer : order?.order?.rejectByFreelancer);
+  const canReject = !["REJECTED", "CANCELED"].includes(status) && (!userExecutor || status !== "PENDING");
+  const canManagePending = userExecutor && status === "PENDING";
+
   useEffect(() => {
     (async () => {
       const response = await getOrderByIdRequest(id);
@@ -64,46 +73,36 @@ export default function OrderPage() {
                   <i className="bi bi-chat-dots me-1"></i>
                   Перейти в чат
                 </Link>
-                {userExecutor ? (
-                  (order.order.status !== "COMPLETED" && order.order.status !== "CANCELED" && order.order.status !== "PENDING" && order.order.status !== "SUBMITTED") && (
-                    <button
-                      className="btn btn-success"
-                      onClick={() =>
-                        navigate("/order/report/send", {
-                          state: {
-                            orderId: order.order.id,
-                            serviceTitle: order.service.title,
-                            serviceId: order.service.id,
-                            freelancer: order.freelancer,
-                          },
-                        })
-                      }
-                    >
-                      <i className="bi bi-check-circle me-1" />
-                      Сдать работу
-                    </button>
-                  )
-                ) : order?.order?.status === "COMPLETED" ? (
+
+                {canSubmitWork && (
+                  <button
+                    className="btn btn-success"
+                    onClick={() => navigate("/order/report/send", {
+                      state: { orderId, serviceTitle: order.service.title, serviceId: order.service.id, freelancer: order.freelancer }
+                    })}
+                  >
+                    <i className="bi bi-check-circle me-1" />
+                    Сдать работу
+                  </button>
+                )}
+
+                {canLeaveReview && (
                   <button
                     className="btn btn-outline-secondary"
-                    onClick={() => {
-                      navigate("/review/send", {
-                        state: {
-                          orderId: order.order.id,
-                          serviceId: order.service.id,
-                          serviceTitle: order.service.title,
-                          freelancer: order.freelancer,
-                        }
-                      })
-                    }}
+                    onClick={() => navigate("/review/send", {
+                      state: { orderId, serviceId: order.service.id, serviceTitle: order.service.title, freelancer: order.freelancer }
+                    })}
                   >
                     <i className="bi bi-star me-1" />
                     Оставить отзыв
                   </button>
-                ) : (order?.order?.status !== "REJECTED" && order?.order?.status !== "CANCELED") && (
+                )}
+
+                {canReject && (
                   <button
                     className="btn btn-outline-danger"
                     onClick={async () => {
+                      if (!confirm("Вы уверены что хотите отменить заказ?")) return;
                       const response = await sendRejectOrderRequest(
                         order.order.id,
                       );
@@ -111,7 +110,14 @@ export default function OrderPage() {
                         navigate(`/error?code=${response.status}`);
                         return;
                       }
-                      alert("Заказ отменён, деньги возвращены");
+
+                      if (userExecutor && !order.order.rejectByCustomer) {
+                        alert("Направлен запрос на отмену заказа, ожидайте ответ от заказчика");
+                      } else if (status !== "PENDING" && !order.order.rejectByFreelancer) {
+                        alert("Направлен запрос на отмену заказа, ожидайте ответ от исполнителя");
+                      } else {
+                        alert("Заказ отменён, деньги возвращены");
+                      }
                     }}
                   >
                     <i className="bi bi-x-circle me-1" />
@@ -119,12 +125,12 @@ export default function OrderPage() {
                   </button>
                 )}
 
-                {userExecutor && order?.order?.status === "PENDING" && (
+                {canManagePending && (
                   <>
                     <button
                       className="btn btn-outline-success"
                       onClick={async () => {
-                        if (!confirm("Вы уверены? Заказ нельзя будет отменить, убедитесь что прочитали ТЗ")) {
+                        if (!confirm("Вы уверены? Заказ нельзя будет отменить без согласия заказчика, убедитесь что прочитали ТЗ")) {
                           return;
                         }
                         const response = await sendAcceptOrderRequest(order.order.id);
@@ -158,7 +164,14 @@ export default function OrderPage() {
                     </button>
                   </>
                 )}
+
               </div>
+
+              {waitingForRejectShow && (
+                <div className="mt-3 text-decoration-underline">
+                  Направлен запрос на отмену заказа, отмените заказ
+                </div>
+              )}
             </div>
 
             <div className="order-card_box">

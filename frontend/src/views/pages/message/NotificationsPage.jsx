@@ -72,6 +72,7 @@ export default function NotificationsPage() {
                 onHide={deleteCardById}
                 hidden={showHidden}
                 idx={idx}
+                entityId={n.entityId}
               />
             ));
           })()}

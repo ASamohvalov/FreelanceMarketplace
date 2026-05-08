@@ -7,6 +7,7 @@ import com.srt.FreelanceMarketplace.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,6 +41,10 @@ public class FreelancerDomainService {
     public FreelancerEntity getByUser(UserEntity user) {
         return repository.findByUser(user)
                 .orElseThrow(() -> new IllegalStateException("freelancer not found"));
+    }
+
+    public Optional<FreelancerEntity> findByUser(UserEntity user) {
+        return repository.findByUser(user);
     }
 
     public FreelancerEntity getReferenceByUser(UserEntity user) {

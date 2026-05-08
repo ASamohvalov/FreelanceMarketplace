@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -82,8 +83,10 @@ public class OrderService {
                 .build();
         orderRequirementDomainService.save(orderRequirement);
 
-        var res = orderRequirementFileDomainService.uploadFiles(orderRequirement, request.getFiles());
-        orderRequirementFileDomainService.saveAll(res);
+        if (request.getFiles() != null) {
+            var res = orderRequirementFileDomainService.uploadFiles(orderRequirement, request.getFiles());
+            orderRequirementFileDomainService.saveAll(res);
+        }
 
         if (!messagingService.isConversationExists(
                 service.getFreelancer(),
@@ -144,23 +147,49 @@ public class OrderService {
         );
     }
 
+    @Transactional
     public void rejectOrder(UUID id) {
         OrderEntity order = domainService.getById(id);
-        if (!order.getCustomer().getId()
-                .equals(authHelperService.getUser().getId())) {
-            throw new GlobalBadRequestException("only the customer can reject the order");
+
+        UserEntity user = authHelperService.getUser();
+
+        if (order.getStatus() == OrderStatusEnum.PENDING) {
+            if (!order.getCustomer().getId().equals(user.getId())) {
+                throw new GlobalBadRequestException("only the customer can reject the pending order");
+            }
+
+            reject(order);
+        } else {
+            Optional<FreelancerEntity> freelancer = freelancerDomainService.findByUser(user);
+
+            if (order.getStatus() == OrderStatusEnum.CANCELLED ||
+                    order.getStatus() == OrderStatusEnum.REJECTED ||
+                    order.getStatus() == OrderStatusEnum.COMPLETED) {
+                throw new GlobalBadRequestException("the order already rejected");
+            }
+
+            if (order.getCustomer().getId().equals(user.getId())) {
+                order.setRejectByCustomer(true);
+                if (order.isRejectByFreelancer()) {
+                    reject(order);
+                    return;
+                }
+            } else if (freelancer.isPresent() &&
+                    order.getFreelancer().getId().equals(freelancer.get().getId())) {
+                order.setRejectByFreelancer(true);
+                if (order.isRejectByCustomer()) {
+                    reject(order);
+                    return;
+                }
+            } else {
+                throw new GlobalBadRequestException("you cannot reject this order");
+            }
+
+            order.setStatus(OrderStatusEnum.WAITING_FOR_REJECT);
+
+            repository.save(order);
         }
 
-        if (order.getStatus() == OrderStatusEnum.CANCELLED || order.getStatus() == OrderStatusEnum.REJECTED) {
-            throw new GlobalBadRequestException("the order already rejected");
-        }
-
-        order.setStatus(OrderStatusEnum.REJECTED);
-        order.setCompletionDate(Instant.now());
-
-        transferDomainService.canselTransferByOrder(order);
-
-        repository.save(order);
     }
 
     public void cancelOrder(UUID id) {
@@ -217,5 +246,14 @@ public class OrderService {
             }
         }
         return orderRequirementMapper.toResponse(order.getOrderRequirement());
+    }
+
+    private void reject(OrderEntity order) {
+        order.setStatus(OrderStatusEnum.REJECTED);
+        order.setCompletionDate(Instant.now());
+
+        transferDomainService.canselTransferByOrder(order);
+
+        repository.save(order);
     }
 }

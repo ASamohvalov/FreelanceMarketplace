@@ -69,6 +69,11 @@ export default function OrderCard({
             Отправлен на проверку
           </span>
         )}
+        {status === "WAITING_FOR_REJECT" && (
+          <span className="order-report-status order-report-status_rejected">
+            Направлен на отмену
+          </span>
+        )}
       </div>
 
       {customer && (

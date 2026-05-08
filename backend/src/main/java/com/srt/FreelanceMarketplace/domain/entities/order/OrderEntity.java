@@ -54,6 +54,12 @@ public class OrderEntity {
     @Column(nullable = true)
     private Instant deadlineDate;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private OrderRequirementEntity orderRequirement;
+
+    @Builder.Default
+    private boolean rejectByCustomer = false;
+
+    @Builder.Default
+    private boolean rejectByFreelancer = false;
 }

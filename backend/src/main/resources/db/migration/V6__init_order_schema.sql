@@ -1,4 +1,12 @@
-CREATE TYPE order_status AS ENUM ('CANCELLED', 'IN_PROGRESS', 'REJECTED', 'COMPLETED', 'PENDING', 'SUBMITTED');
+CREATE TYPE order_status AS ENUM (
+    'CANCELLED',
+    'IN_PROGRESS',
+    'REJECTED',
+    'COMPLETED',
+    'PENDING',
+    'SUBMITTED',
+    'WAITING_FOR_REJECT'
+);
 
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -8,7 +16,9 @@ CREATE TABLE orders (
     status order_status NOT NULL DEFAULT 'IN_PROGRESS',
     order_date TIMESTAMP DEFAULT NOW() NOT NULL,
     completion_date TIMESTAMP,
-    deadline_date TIMESTAMP
+    deadline_date TIMESTAMP,
+    reject_by_customer BOOLEAN DEFAULT FALSE NOT NULL,
+    reject_by_freelancer BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TYPE order_report_status AS ENUM ('ACCEPTED', 'REJECTED', 'PENDING');

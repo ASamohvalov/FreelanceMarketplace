@@ -15,4 +15,6 @@ public class OrderResponse {
     private Instant deadlineDate;
     private Instant completionDate;
     private OrderStatusEnum status;
+    private boolean rejectByCustomer;
+    private boolean rejectByFreelancer;
 }

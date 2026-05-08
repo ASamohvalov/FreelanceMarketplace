@@ -11,7 +11,7 @@ export default function FileUploadComponent({
 
     const allowedExtensions = type === "all"
       ? ["pdf", "png", "doc", "docx", "jpg", "jpeg", "webapp"]
-      : ["png", "jpg", "webapp", "jpeg"]
+      : ["png", "jpg", "webp", "jpeg"]
     const newFiles = Array.from(targetFiles);
 
     const validFiles = newFiles.filter((file) => {

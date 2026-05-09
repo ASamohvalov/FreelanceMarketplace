@@ -65,7 +65,6 @@ export default function PaymentPage() {
 
   return (
     <>
-      <main style={{ height: "90vh" }}>
         <div className="container mt-5">
           <h3 className="fw-semibold">Оплата заказа</h3>
           <p className="mb-4 text-secondary">
@@ -182,7 +181,6 @@ export default function PaymentPage() {
             </div>
           </div>
         </div>
-      </main>
       <FooterComponent />
     </>
   );

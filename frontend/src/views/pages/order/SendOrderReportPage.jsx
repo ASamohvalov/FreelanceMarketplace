@@ -48,7 +48,6 @@ export default function SendOrderReportPage() {
 
 
   return (
-    <main style={{ minHeight: "93vh" }}>
       <div className="container my-4">
         <NavLocation>
           <Link to="/MyOrders">Заказы </Link> / Написание отчёта
@@ -122,6 +121,5 @@ export default function SendOrderReportPage() {
           </button>
         </div>
       </div>
-    </main>
   );
 }

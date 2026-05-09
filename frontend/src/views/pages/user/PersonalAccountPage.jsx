@@ -102,7 +102,6 @@ export default function PersonalAccountPage() {
   }, [navigate, isFreelancer]);
 
   return (
-    <main style={{ minHeight: "90vh" }}>
       <div className="container mt-5 mb-5">
         <div className="row g-4">
           <div className="col-lg-3">
@@ -289,6 +288,5 @@ export default function PersonalAccountPage() {
           </div>
         </div>
       </div>
-    </main>
   );
 }

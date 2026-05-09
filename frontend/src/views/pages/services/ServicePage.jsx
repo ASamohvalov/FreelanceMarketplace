@@ -65,7 +65,9 @@ export default function ServicePage() {
       }
       setReviews(reviewResponse.data);
       const reviews = reviewResponse.data;
-      const average = (reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length) || 0;
+      const average =
+        reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length ||
+        0;
 
       setServiceReviewRating(average);
 
@@ -81,7 +83,7 @@ export default function ServicePage() {
   }, [navigate, id]);
 
   return (
-    <main style={{ minHeight: "80vh" }}>
+    <>
       <ProposalModalWindow
         id={id}
         isVisible={isProposalVisible}
@@ -107,7 +109,9 @@ export default function ServicePage() {
 
         <div className="d-flex align-items-center gap-3 mb-4">
           <ReviewStarsComponent rating={serviceReviewRating} />
-          <span>{serviceReviewRating} • {reviewToRu(reviews.length)} </span>
+          <span>
+            {serviceReviewRating} • {reviewToRu(reviews.length)}{" "}
+          </span>
           <span className="badge bg-light text-dark">
             {serviceData.category}
           </span>
@@ -195,7 +199,10 @@ export default function ServicePage() {
                 className="btn btn-primary w-100 mb-3"
                 onClick={() => navigate("/order/make/" + serviceData.id)}
                 // onClick={() => setIsOrderVisible(true)}
-                disabled={!getUserData()?.roles || serviceData?.freelancer?.userId === getUserData().id}
+                disabled={
+                  !getUserData()?.roles ||
+                  serviceData?.freelancer?.userId === getUserData().id
+                }
               >
                 Оформить заказ
               </button>
@@ -207,7 +214,10 @@ export default function ServicePage() {
               ) : (
                 <button
                   className="btn btn-primary w-100 mb-3"
-                  disabled={!getUserData()?.roles || serviceData?.freelancer?.userId === getUserData().id}
+                  disabled={
+                    !getUserData()?.roles ||
+                    serviceData?.freelancer?.userId === getUserData().id
+                  }
                   onClick={() => setIsProposalVisible(true)}
                 >
                   Оставить отклик на обсуждение
@@ -262,6 +272,6 @@ export default function ServicePage() {
           </>
         )}
       </div>
-    </main>
+    </>
   );
 }

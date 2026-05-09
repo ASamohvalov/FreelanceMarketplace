@@ -37,7 +37,12 @@ export default function NotificationCardComponent({
     const sendAtDate = Date.parse(notification.sendAt);
     const updateInterval = sendAtDateToRUString(sendAtDate, setTime);
     if (updateInterval !== -1) {
-      const intervalId = setInterval(sendAtDateToRUString, updateInterval, sendAtDate, setTime);
+      const intervalId = setInterval(
+        sendAtDateToRUString,
+        updateInterval,
+        sendAtDate,
+        setTime,
+      );
 
       return () => clearInterval(intervalId);
     }
@@ -51,21 +56,35 @@ export default function NotificationCardComponent({
     <Link
       style={{
         textDecoration: "none",
-        pointerEvents: isDisabled ? "none" : "auto",
-        cursor: isDisabled ? "default" : "pointer"
+        // pointerEvents: isDisabled ? "none" : "auto",
+        cursor: isDisabled ? "default" : "pointer",
       }}
       className="text-light"
       to={linkRoute}
     >
       <div className="notification-component-card mb-3 d-flex gap-3 align-items-start border">
         <div className="notification-component-icon flex-shrink-0">
-          {notification.type === "NEW_PROPOSAL" && <i className="bi bi-envelope-fill" />}
-          {notification.type === "NEW_ORDER" && <i className="bi bi-cart-fill" />}
-          {notification.type === "NEW_ORDER_REPORT" && <i className="bi bi-file-earmark-post" />}
-          {notification.type === "ORDER_COMPLETED" && <i className="bi bi-calendar-check" />}
-          {notification.type === "MONEY_TRANSFERRED" && <i className="bi bi-credit-card" />}
-          {notification.type === "ORDER_CANCELLED" && <i className="bi bi-ban" />}
-          {notification.type === "ORDER_ACCEPTED" && <i className="bi bi-check2-circle" />}
+          {notification.type === "NEW_PROPOSAL" && (
+            <i className="bi bi-envelope-fill" />
+          )}
+          {notification.type === "NEW_ORDER" && (
+            <i className="bi bi-cart-fill" />
+          )}
+          {notification.type === "NEW_ORDER_REPORT" && (
+            <i className="bi bi-file-earmark-post" />
+          )}
+          {notification.type === "ORDER_COMPLETED" && (
+            <i className="bi bi-calendar-check" />
+          )}
+          {notification.type === "MONEY_TRANSFERRED" && (
+            <i className="bi bi-credit-card" />
+          )}
+          {notification.type === "ORDER_CANCELLED" && (
+            <i className="bi bi-ban" />
+          )}
+          {notification.type === "ORDER_ACCEPTED" && (
+            <i className="bi bi-check2-circle" />
+          )}
         </div>
 
         <div className="flex-grow-1">
@@ -83,18 +102,21 @@ export default function NotificationCardComponent({
         {!hidden && (
           <div className="d-flex gap-2 flex-shrink-0 align-items-center">
             {notification.type === "NEW_PROPOSAL" && (
-              <i
+              <div
                 className="bi bi-check-square notification-component-icon_right notification-component-icon_right_green"
-                onClick={async () => {
-                  if (window.confirm("Открыть чат?")) {
-                    await sendProposalReplyRequest(notification.entityId).then(
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const conf = window.confirm("Открыть чат?");
+                  
+                  if (conf == true) {
+                    sendProposalReplyRequest(notification.entityId).then(
                       hideNotificaiton(),
                     );
                   }
                 }}
               />
             )}
-            <i
+            <div
               className="bi bi-x-square notification-component-icon_right notification-component-icon_right_red"
               onClick={async () => {
                 if (window.confirm("Скрыть уведомление?")) {

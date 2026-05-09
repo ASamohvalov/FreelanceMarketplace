@@ -2,6 +2,7 @@
     height: calc(100vh - 60px);
     background-color: #3B1D6D;   
     transition: 0.5s linear all;
+    z-index: 9999999;
 }
 .aside-visible {
     width: min(350px, 40%);  

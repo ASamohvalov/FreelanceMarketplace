@@ -39,6 +39,11 @@ const links = [
     title: "Административная панель",
     to: "/admin",
   },
+  {
+    icon: <UserRoundKey size={32}></UserRoundKey>,
+    title: "Личный кабинет",
+    to: "/personal-account",
+  },
 ];
 
 export const Aside = ({ state }) => {
@@ -47,7 +52,7 @@ export const Aside = ({ state }) => {
   const [isHidden] = state;
   return (
     <aside
-      className={`aside overflow-hidden pt-5 z-3 text-white fw-semibold d-flex flex-column gap-4 position-fixed start-0 top-5 bg-orange ${isHidden ? "aside-visible" : "aside-hidden"}`}
+      className={`aside overflow-hidden pt-5 text-white fw-semibold d-flex flex-column gap-4 position-fixed start-0 top-5 bg-orange ${isHidden ? "aside-visible" : "aside-hidden"}`}
     >
       {links.map((item, id) => {
         if (!isAuth() && item.title === "Сообщения") return;

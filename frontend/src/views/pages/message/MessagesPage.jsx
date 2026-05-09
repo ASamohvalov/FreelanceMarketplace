@@ -46,37 +46,33 @@ export default function MessagesPage() {
   }, [handleResize]);
 
   return (
-    <>
-      <main style={{ marginLeft: 80, marginBottom: 80 }}>
-        <div className="container mt-4">
-          <div className="chat-container position-relative d-block d-md-flex">
-            <ChatListComponent
-              conversations={conversations}
-              selectedConversation={selectedConversation}
-              size={shrink}
-              onSelect={async (c) => {
-                setSelectedConversation(c);
+    <div className="container mt-4">
+      <div className="chat-container position-relative d-block d-md-flex">
+        <ChatListComponent
+          conversations={conversations}
+          selectedConversation={selectedConversation}
+          size={shrink}
+          onSelect={async (c) => {
+            setSelectedConversation(c);
 
-                const contextResponse = await getConversationContextInfo(c.id);
-                if (contextResponse.status !== 200) {
-                  navigate("/error");
-                  return;
-                }
-                setContextInfo(contextResponse.data);
-              }}
-            />
-            <Outlet
-              context={{
-                conversation: selectedConversation,
-                setSelectedConversations: setSelectedConversation,
-                contextInfo: contextInfo,
-                size: shrink,
-                uShown: [shown, setShown],
-              }}
-            />
-          </div>
-        </div>
-      </main>
-    </>
+            const contextResponse = await getConversationContextInfo(c.id);
+            if (contextResponse.status !== 200) {
+              navigate("/error");
+              return;
+            }
+            setContextInfo(contextResponse.data);
+          }}
+        />
+        <Outlet
+          context={{
+            conversation: selectedConversation,
+            setSelectedConversations: setSelectedConversation,
+            contextInfo: contextInfo,
+            size: shrink,
+            uShown: [shown, setShown],
+          }}
+        />
+      </div>
+    </div>
   );
 }

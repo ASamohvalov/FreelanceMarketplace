@@ -40,7 +40,6 @@ export default function SendReviewPage() {
   }, [navigate, state, searchParams]);
 
   return (
-    <main style={{ minHeight: "90vh" }}>
       <div className="container mt-5 mb-5">
         <h3 className="mb-4 fw-semibold">
           {searchParams.get("edit") ? "Редактирование отзыва" : "Оставить отзыв"}
@@ -129,6 +128,5 @@ export default function SendReviewPage() {
           )}
         </div>
       </div>
-    </main>
   );
 }

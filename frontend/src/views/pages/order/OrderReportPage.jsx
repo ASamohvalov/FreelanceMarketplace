@@ -119,7 +119,7 @@ export default function OrderReportPage() {
   };
 
   return (
-    <main style={{ minHeight: "90vh" }}>
+    <>
       <OrderReportModalWindow
         isReceived={showReceivedOrderReports}
         isVisible={isOrderReportWindowVisible}
@@ -255,6 +255,6 @@ export default function OrderReportPage() {
                 ))}
         </div>
       </div>
-    </main>
+    </>
   );
 }

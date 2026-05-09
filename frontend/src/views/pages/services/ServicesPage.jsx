@@ -44,7 +44,6 @@ export default function ServicesPage({func}) {
 
     return (
         <>
-            <main style={{ minHeight: "80vh", marginLeft:80 }}>
                 <div className="container mt-4 mb-4">
                     <div className="row align-items-start">
                         <div
@@ -75,7 +74,6 @@ export default function ServicesPage({func}) {
                         )}
                     </div>
                 </div>
-            </main>
         </>
     );
 }

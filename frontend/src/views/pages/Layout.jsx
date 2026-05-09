@@ -14,7 +14,9 @@ export default function Layout() {
       <userContext.Provider value={[user, setUser]}>
         <HeaderComponent state={[isHidden, setIsHidden]} />
         <Aside state={[isHidden, setIsHidden]} />
-        <Outlet/>
+        <main style={{ minHeight: "80vh", marginLeft: "80px", marginBottom: "80px" }}>
+          <Outlet />
+        </main>
         <FooterComponent />
       </userContext.Provider>
     </>

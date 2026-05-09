@@ -86,7 +86,6 @@ export default function OrdersPage({ func, freelancer }) {
   
 
   return (
-    <main style={{ minHeight: "90vh" }}>
       <div className="container mt-5 mb-5">
         <h3 className="mb-4 fw-semibold">Заказы</h3>
 
@@ -160,6 +159,5 @@ export default function OrdersPage({ func, freelancer }) {
                 ))}
         </div>
       </div>
-    </main>
   );
 }

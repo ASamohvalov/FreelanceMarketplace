@@ -125,7 +125,6 @@ export default function CreateServicePage({isEdit = false}) {
 
   return (
     <>
-      <main>
         <div className="container my-4">
           <NavLocation>Услуги / {isEdit ? "Редактирование" : "Создание новой"}</NavLocation>
           <h2 className="fw-bold mb-2">{isEdit ? "Редактирование услуги" : "Создание новой услуги"}</h2>
@@ -343,7 +342,6 @@ export default function CreateServicePage({isEdit = false}) {
             </div>
           </div>
         </div>
-      </main>
     </>
   );
 }

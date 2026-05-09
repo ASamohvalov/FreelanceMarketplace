@@ -32,7 +32,6 @@ export default function NotificationsPage() {
   }
 
   return (
-    <main>
       <div className="container mt-5 mb-5 notification-page-div">
         <div className="mb-3">
           <h3 className="fw-bold">Уведомления</h3>
@@ -78,6 +77,5 @@ export default function NotificationsPage() {
           })()}
         </div>
       </div>
-    </main>
   );
 }

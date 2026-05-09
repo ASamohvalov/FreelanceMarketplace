@@ -3,7 +3,6 @@ import "./css/success_info_component.css"
 export default function SuccessInfoComponent({title, description, children}) {
 
   return (
-    <main style={{ height: "90vh" }}>
       <div className="container mt-5 mb-5">
         <div className="order-success-component_card mx-auto">
           <div className="text-center mb-4">
@@ -19,6 +18,5 @@ export default function SuccessInfoComponent({title, description, children}) {
           {children}
         </div>
       </div>
-    </main>
   );
 }

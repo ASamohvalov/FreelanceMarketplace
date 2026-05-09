@@ -25,7 +25,6 @@ export default function OrderRequirementPage() {
   }, [navigate, orderId]);
 
   return (
-    <main className="container">
       <div className="row g-4 mt-4">
         <div className="order-requirement-page_brief-container">
           <div className="d-flex justify-content-between">
@@ -60,6 +59,5 @@ export default function OrderRequirementPage() {
           </div>
         </div>
       </div>
-    </main>
   );
 }

@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Component
 public class ImageStorageStrategy implements FileStorageStrategy {
-    @Autowired
     @Value("${storage.location.images}")
     private String location;
 

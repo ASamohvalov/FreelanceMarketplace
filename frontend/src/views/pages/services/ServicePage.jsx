@@ -185,7 +185,7 @@ export default function ServicePage() {
               <div className="price mb-3 d-flex justify-content-between">
                 <span>{serviceData.price} ₽</span>
 
-                {serviceData?.freelancer?.userId === getUserData().id && (
+                {serviceData?.freelancer?.userId === getUserData()?.id && (
                   <Link
                     className="fs-5"
                     to={`/update-service?id=${serviceData.id}`}

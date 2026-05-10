@@ -5,6 +5,11 @@ import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
 
 const links = [
   {
+    icon: <UserRound size={32}></UserRound>,
+    title: "Личный кабинет",
+    to: "/personal-account",
+  },
+  {
     icon: <House size={32}></House>,
     title: "Домашняя",
     to: "/",
@@ -39,11 +44,6 @@ const links = [
     title: "Административная панель",
     to: "/admin",
   },
-  {
-    icon: <UserRoundKey size={32}></UserRoundKey>,
-    title: "Личный кабинет",
-    to: "/personal-account",
-  },
 ];
 
 export const Aside = ({ state }) => {
@@ -58,6 +58,7 @@ export const Aside = ({ state }) => {
         if (!isAuth() && item.title === "Сообщения") return;
         if (!isAuth() && item.title === "Отчёты") return;
         if (!isAuth() && item.title === "Заказы") return;
+        if (!isAuth() && item.title === "Личный кабинет") return;
         if (!isFreelancer && item.title === "Мои услуги") return;
         if (!hasRole("ROLE_ADMIN") && item.title === "Административная панель") return;
         return (

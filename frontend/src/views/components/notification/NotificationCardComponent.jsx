@@ -3,7 +3,7 @@ import { sendProposalReplyRequest } from "../../../logic/requests/message/propos
 import { hideNotificationRequest } from "../../../logic/requests/message/notificationRequest";
 import { sendAtDateToRUString } from "../../../logic/time";
 import "./css/notification_component.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function NotificationCardComponent({
   notification,
@@ -12,6 +12,7 @@ export default function NotificationCardComponent({
   hidden,
   entityId,
 }) {
+  const navigate = useNavigate();
   const [time, setTime] = useState("");
 
   const getLinkRoute = () => {
@@ -53,14 +54,18 @@ export default function NotificationCardComponent({
   }
 
   return (
-    <Link
+    <div
       style={{
         textDecoration: "none",
         // pointerEvents: isDisabled ? "none" : "auto",
         cursor: isDisabled ? "default" : "pointer",
       }}
-      className="text-light"
-      to={linkRoute}
+      className="text-dark"
+      onClick={() => {
+        if (!isDisabled) {
+          navigate(linkRoute);
+        }
+      }}
     >
       <div className="notification-component-card mb-3 d-flex gap-3 align-items-start border">
         <div className="notification-component-icon flex-shrink-0">
@@ -107,7 +112,7 @@ export default function NotificationCardComponent({
                 onClick={(e) => {
                   e.stopPropagation();
                   const conf = window.confirm("Открыть чат?");
-                  
+
                   if (conf == true) {
                     sendProposalReplyRequest(notification.entityId).then(
                       hideNotificaiton(),
@@ -127,6 +132,6 @@ export default function NotificationCardComponent({
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }

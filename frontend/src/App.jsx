@@ -32,6 +32,7 @@ import AdminPanelUsersPage from "./views/pages/admin_panel/AdminPanelUsersPage.j
 import AdminPanelCategoriesPage from "./views/pages/admin_panel/AdminPanelCategoriesPages.jsx";
 import MakeOrderPage from "./views/pages/order/MakeOrderPage.jsx";
 import OrderRequirementPage from "./views/pages/order/OrderRequirementPage.jsx";
+import ProfilePage from "./views/pages/user/ProfilePage.jsx";
 
 // base routing
 export default function App() {
@@ -45,6 +46,7 @@ export default function App() {
 
         <Route path="become-freelancer" element={<BecomeFreelancerPage />} />
         <Route path="personal-account" element={<PersonalAccountPage />} />
+        <Route path="profile/:userId" element={<ProfilePage />} />
 
         <Route
           path="services"

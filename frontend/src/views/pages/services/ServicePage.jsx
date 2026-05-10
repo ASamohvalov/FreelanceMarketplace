@@ -20,6 +20,7 @@ import ReviewStarsComponent from "../../components/reviews/ReviewStarsComponent"
 import ImageCarouselComponent from "../../components/service/image/ImageCarouselComponent";
 import { getServiceImageUrl } from "../../../logic/image";
 import { reviewToRu } from "../../../logic/lang";
+import Avatar from "../../components/elements/Avatar";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -225,8 +226,15 @@ export default function ServicePage() {
               )}
               <hr />
 
-              <div className="d-flex align-items-center gap-3">
-                <div className="avatar">CJ</div>
+              <div
+                className="d-flex align-items-center gap-3"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/profile/" + serviceData.freelancer?.userId)}
+              >
+                <Avatar
+                  userId={serviceData.freelancer?.userId}
+                  className="avatar border"
+                />
                 <div>
                   <strong>
                     {serviceData.freelancer?.firstName +

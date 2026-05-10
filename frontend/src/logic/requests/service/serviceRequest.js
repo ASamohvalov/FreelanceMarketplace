@@ -54,7 +54,7 @@ export async function getServiceByIdRequest(id) {
  * @returns {map} { status: int, data: map }
  */
 export async function getAllPersonalServices(id) {
-  return await sendAuthGet(`service/freelancer/${id}`);
+  return await sendGet(`service/freelancer/${id}`);
 }
 
 /**

@@ -5,6 +5,9 @@ import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequ
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserRoleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.freelancer.FreelancerProfileStatisticResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.freelancer.GetFreelancerProfileResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserProfileResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
@@ -12,8 +15,11 @@ import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
+import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
+import com.srt.FreelanceMarketplace.repository.ReviewRepository;
 import com.srt.FreelanceMarketplace.repository.UserRepository;
+import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.payment.AccountDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.*;
@@ -45,6 +51,9 @@ public class UserService {
     private final FileStorageStrategy imageStorageStrategy;
     private final TokenDomainService tokenService;
     private final AccountDomainService accountDomainService;
+    private final FreelanceMapper freelanceMapper;
+    private final OrderRepository orderRepository;
+    private final ReviewRepository reviewRepository;
 
     public void logout(JwtRequest request) {
         tokenService.deleteByToken(request.getRefreshToken());
@@ -132,6 +141,28 @@ public class UserService {
                 user.setRoles(reqRoles);
             }
         });
+    }
+
+    public GetUserProfileResponse getUserById(UUID id) {
+        UserEntity user = domainService.getByIdWithRoles(id);
+
+        GetFreelancerProfileResponse freelancerProfileResponse = null;
+        if (hasRole(user, RoleEnum.ROLE_FREELANCER)) {
+            FreelancerEntity freelancer = freelancerService.getByUser(user);
+            freelancerProfileResponse = freelanceMapper.toFreelancerProfileResponse(freelancer);
+
+            int orderCount = orderRepository.countByFreelancer(freelancer);
+            Double rating = reviewRepository.getAvgRatingByOrder_freelancer(freelancer);
+            FreelancerProfileStatisticResponse statisticResponse = new FreelancerProfileStatisticResponse(
+                orderCount, rating == null ? 0 : rating, user.getCreatedAt());
+
+            freelancerProfileResponse.setStatistic(statisticResponse);
+        }
+
+        var response = userMapper.toGetProfileResponse(user);
+        response.setFreelancer(freelancerProfileResponse);
+
+        return response;
     }
 
     private boolean hasRole(UserEntity user, RoleEnum role) {

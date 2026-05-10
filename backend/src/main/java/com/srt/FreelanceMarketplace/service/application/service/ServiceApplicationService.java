@@ -72,7 +72,7 @@ public class ServiceApplicationService {
 
     public List<ServiceResponse> getAllByFreelancerId(UUID freelancerId) {
         FreelancerEntity freelancer = freelancerService.getByIdWithJobTitle(freelancerId);
-        return repository.findAllByFreelancer(freelancer).stream()
+        return repository.findAllByFreelancerAndHiddenFalse(freelancer).stream()
                 .map(domainService::mapToServiceResponse)
                 .toList();
     }
@@ -169,7 +169,7 @@ public class ServiceApplicationService {
     }
 
     public List<GetOwnServiceResponse> getAllOwnServices() {
-        return repository.findAllByFreelancer(freelancerService.getByUser(authHelperService.getUser())).stream()
+        return repository.findAllByFreelancerAndHiddenFalse(freelancerService.getByUser(authHelperService.getUser())).stream()
                 .map(domainService::mapToGetOwnService)
                 .toList();
     }

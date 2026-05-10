@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
 import { getAllJobTitlesRequest } from "../../../logic/requests/jobTitle";
 import {
@@ -16,6 +16,7 @@ import TransferCardComponent from "../../components/payment/TransferCardComponen
 import { fromIsoDate } from "../../../logic/time";
 import { editProfileRequest, uploadAvatarRequest } from "../../../logic/requests/user/userRequest";
 import { getAvatarUrl } from "../../../logic/image";
+import Avatar from "../../components/elements/Avatar";
 
 export default function PersonalAccountPage() {
   const navigate = useNavigate();
@@ -29,7 +30,6 @@ export default function PersonalAccountPage() {
   const [email, setEmail] = useState("");
   const [balance, setBalance] = useState(0);
   const [uploadAvatar, setUploadAvatar] = useState(null);
-  const [avatarUrl, setAvatarUrl] = useState(getAvatarUrl(getUserData().id));
 
   // data
   const [jobTitles, setJobTitles] = useState([]);
@@ -111,19 +111,7 @@ export default function PersonalAccountPage() {
                 onClick={() => setEditMode(!editMode)}
               ></i>
 
-              {avatarUrl ? (
-                <img
-                  className="personal-account-page_avatar"
-                  src={avatarUrl}
-                  alt="Avatar"
-                  onError={(e) => {
-                    e.target.style.display = 'none'
-                    setAvatarUrl(null);
-                  }}
-                />
-              ) : (
-                <div className="personal-account-page_avatar"></div>
-              )}
+              <Avatar className="personal-account-page_avatar" userId={getUserData().id} />
 
               <div className="text-center">
                 <label
@@ -230,6 +218,25 @@ export default function PersonalAccountPage() {
               >
                 Сохранить
               </button>
+
+              {!editMode && (
+                <>
+                  <button
+                    className="btn btn-outline-primary w-100 mt-3"
+                    onClick={() => {
+                      navigate("/profile/" + getUserData().id);
+                    }}
+                  >Посмотреть профиль</button>
+
+                  {!isFreelancer && (
+                    <Link
+                      className="btn btn-outline-secondary w-100 mt-3"
+                      to="/become-freelancer"
+                    >Стать фрилансером</Link>
+                  )}
+                </>
+              )}
+
               {successMessage && (
                 <div
                   className={`mt-3 alert alert-success ${editMode ? "" : "d-none"}`}

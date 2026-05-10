@@ -2,12 +2,15 @@ package com.srt.FreelanceMarketplace.service.application.user;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.EditFreelancerProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
+import com.srt.FreelanceMarketplace.mapper.ReviewMapper;
 import com.srt.FreelanceMarketplace.repository.FreelancerRepository;
+import com.srt.FreelanceMarketplace.service.domain.review.ReviewDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.JobTitleDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
@@ -28,6 +31,8 @@ public class FreelancerService {
     private final UserDomainService userDomainService;
     private final JobTitleDomainService jobTitleDomainService;
     private final AuthHelperService authHelperService;
+    private final ReviewDomainService reviewDomainService;
+    private final ReviewMapper reviewMapper;
 
     public List<FreelancerResponse> getAll() {
         return repository.findAll().stream()
@@ -61,5 +66,12 @@ public class FreelancerService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         userDomainService.save(user);
+    }
+
+    public List<ReviewResponse> reviewGet(UUID freelancerId) {
+        FreelancerEntity freelancer = domainService.getReferenceById(freelancerId);
+        return reviewDomainService.getByFreelancerWithService(freelancer).stream()
+                .map(reviewMapper::toResponse)
+                .toList();
     }
 }

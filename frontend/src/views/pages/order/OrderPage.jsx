@@ -29,7 +29,7 @@ export default function OrderPage() {
   const canSubmitWork = userExecutor && !["COMPLETED", "CANCELED", "PENDING", "SUBMITTED", "REJECTED"].includes(status);
   const canLeaveReview = !userExecutor && status === "COMPLETED";
   const waitingForRejectShow = status === "WAITING_FOR_REJECT" && (userExecutor ? order?.order?.rejectByCustomer : order?.order?.rejectByFreelancer);
-  const canReject = !["REJECTED", "CANCELED"].includes(status) && (!userExecutor || status !== "PENDING");
+  const canReject = !["REJECTED", "CANCELED", "COMPLETED"].includes(status) && (!userExecutor || status !== "PENDING");
   const canManagePending = userExecutor && status === "PENDING";
 
   useEffect(() => {

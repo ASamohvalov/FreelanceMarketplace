@@ -40,3 +40,35 @@ input.editable,
 textarea.editable {
   display: none;
 }
+
+.profile-page_header {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.profile-page_avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #dfe4ff;
+}
+
+.profile-page_role-badge {
+  background: #eef1ff;
+  color: #4c6ef5;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-page_info-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}

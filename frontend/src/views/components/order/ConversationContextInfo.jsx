@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { getUserData } from "../../../logic/jwt";
 import { fromIsoDate, fromIsoDateToDate } from "../../../logic/time";
+import OrderStatusComponent from "./OrderStatusComponent";
 
 export default function ConversationContextInfo({ size, uShown }) {
   const navigate = useNavigate();
@@ -56,21 +57,7 @@ export default function ConversationContextInfo({ size, uShown }) {
 
                   <div className="mb-3">
                     <div className="info-label">Статус</div>
-                    {info?.order?.status === "IN_PROGRESS" && (
-                      <span className="badge bg-warning text-dark order-badge">
-                        В работе
-                      </span>
-                    )}
-                    {info?.order?.status === "REJECTED" && (
-                      <span className="badge bg-danger text-dark order-badge">
-                        Отклонен
-                      </span>
-                    )}
-                    {info?.order?.status === "COMPLETED" && (
-                      <span className="badge bg-success text-light order-badge">
-                        Завершён
-                      </span>
-                    )}
+                    <OrderStatusComponent status={info?.order?.status} />
                   </div>
                 </>
               )}
@@ -136,21 +123,7 @@ export default function ConversationContextInfo({ size, uShown }) {
 
               <div className="mb-3">
                 <div className="info-label">Статус</div>
-                {info?.order?.status === "IN_PROGRESS" && (
-                  <span className="badge bg-warning text-dark order-badge">
-                    В работе
-                  </span>
-                )}
-                {info?.order?.status === "REJECTED" && (
-                  <span className="badge bg-danger text-dark order-badge">
-                    Отклонен
-                  </span>
-                )}
-                {info?.order?.status === "COMPLETED" && (
-                  <span className="badge bg-success text-light order-badge">
-                    Завершён
-                  </span>
-                )}
+                <OrderStatusComponent status={info?.order?.status} />
               </div>
             </>
           )}

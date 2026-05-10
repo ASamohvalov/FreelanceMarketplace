@@ -11,6 +11,7 @@ import { useRef } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { pool } from "../../../logic/message";
 import { useCallback } from "react";
+import Avatar from "../elements/Avatar";
 
 export default function MessagesComponent({
   conversation = null,
@@ -76,7 +77,7 @@ export default function MessagesComponent({
             </button>
           </>
         )}
-        Чат
+        <span>Чат</span>
       </div>
 
       <div className="chat-messages flex-grow-1" ref={messageChatRef}>

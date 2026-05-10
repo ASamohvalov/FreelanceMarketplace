@@ -1,5 +1,5 @@
 import { login } from "../../jwt";
-import { sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPostFormData, sendAuthPut, sendUpdateTokensRequest } from "../requestSender";
+import { sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPostFormData, sendAuthPut, sendGet, sendUpdateTokensRequest } from "../requestSender";
 
 export async function logoutRequest() {
   const refreshToken = localStorage.getItem("refreshToken");
@@ -36,4 +36,8 @@ export async function getUsersRequest(page=0, size=10) {
 
 export async function setRolesAdminRequest(data) {
   return await sendAuthPatch("user/set_roles", data);
+}
+
+export async function getUserByIdRequest(id) {
+  return await sendGet("user/get/" + id);
 }

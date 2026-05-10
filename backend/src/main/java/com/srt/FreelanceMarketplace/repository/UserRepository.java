@@ -15,6 +15,9 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByEmail(String email);
 
+    @EntityGraph(attributePaths = {"roles"})
+    Optional<UserEntity> findWithRolesById(UUID id);
+
     @Query("""
             select u from UserEntity u
             join fetch u.roles

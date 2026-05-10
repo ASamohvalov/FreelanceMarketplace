@@ -107,6 +107,13 @@ export function fromIsoDateToDate(isoStr) {
   });
 }
 
+export function fromIsoDateToYear(isoStr) {
+  const date = new Date(isoStr);
+  return date.toLocaleString("ru-RU", {
+    year: "numeric",
+  });
+}
+
 export function fromIsoDate(isoStr) {
   const date = new Date(isoStr);
   return date.toLocaleString("ru-RU", {

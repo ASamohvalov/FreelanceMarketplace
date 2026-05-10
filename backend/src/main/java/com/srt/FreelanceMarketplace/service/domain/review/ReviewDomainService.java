@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.domain.review;
 
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ReviewEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
@@ -9,6 +10,7 @@ import com.srt.FreelanceMarketplace.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,5 +34,9 @@ public class ReviewDomainService {
     public ReviewEntity getById(UUID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new GlobalBadRequestException("the review not found"));
+    }
+
+    public List<ReviewEntity> getByFreelancerWithService(FreelancerEntity freelancer)  {
+        return repository.findWithServiceByOrder_freelancer(freelancer);
     }
 }

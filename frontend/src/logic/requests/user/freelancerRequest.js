@@ -33,3 +33,7 @@ export async function editFreelancerProfile(
   login(accessToken, refreshToken);
   return response;
 }
+
+export async function getFreelancerReviewsRequest(id) {
+  return await sendGet(`freelancer/get/${id}/reviews`);
+}

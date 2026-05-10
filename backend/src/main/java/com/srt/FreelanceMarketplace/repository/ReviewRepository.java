@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.repository;
 
+import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ReviewEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
@@ -31,4 +32,15 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, UUID> {
 
     @EntityGraph(attributePaths = {"order", "order.customer"})
     Optional<ReviewEntity> findWithOrderAndCustomerById(UUID id);
+
+    @Query("""
+        select avg(r.rating) from ReviewEntity r
+        join r.order o
+        join o.freelancer f
+        where f = :freelancer
+        """)
+    Double getAvgRatingByOrder_freelancer(FreelancerEntity freelancer);
+
+    @EntityGraph(attributePaths = {"order.service", "order.customer"})
+    List<ReviewEntity> findWithServiceByOrder_freelancer(FreelancerEntity freelancer);
 }

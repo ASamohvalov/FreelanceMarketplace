@@ -34,7 +34,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
     Page<ServiceEntity> findAllMostPopular(Pageable pageable);
 
     @EntityGraph(attributePaths = {"freelancer.user", "freelancer.jobTitle", "titleImage"})
-    List<ServiceEntity> findAllByFreelancer(FreelancerEntity freelancer);
+    List<ServiceEntity> findAllByFreelancerAndHiddenFalse(FreelancerEntity freelancer);
 
     @EntityGraph(attributePaths = {"freelancer", "freelancer.user"})
     @Query("select s from ServiceEntity s where id = :id")

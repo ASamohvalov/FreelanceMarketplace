@@ -6,6 +6,7 @@ import {
 import { useState } from "react";
 import "./css/order_card.css";
 import { fromIsoDateToDate, sendAtDateToRUString } from "../../../logic/time";
+import OrderStatusComponent from "./OrderStatusComponent";
 
 function handleHide(e, id) {
   e.stopPropagation();
@@ -39,41 +40,7 @@ export default function OrderCard({
     <div className="order-card">
       <div className="d-flex justify-content-between mb-2">
         <strong>{title}</strong>
-        {status === "COMPLETED" && (
-          <span className="order-report-status order-report-status_approved">
-            Завершён
-          </span>
-        )}
-        {status === "REJECTED" && (
-          <span className="order-report-status order-report-status_rejected">
-            Отклонен
-          </span>
-        )}
-        {status === "IN_PROGRESS" && (
-          <span className="order-report-status order-report-status_pending">
-            В работе
-          </span>
-        )}
-        {status === "CANCELLED" && (
-          <span className="order-report-status order-report-status_rejected">
-            Отменён исполнителем
-          </span>
-        )}
-        {status === "PENDING" && (
-          <span className="order-report-status order-report-status_pending">
-            В ожидании
-          </span>
-        )}
-        {status === "SUBMITTED" && (
-          <span className="order-report-status order-report-status_approved">
-            Отправлен на проверку
-          </span>
-        )}
-        {status === "WAITING_FOR_REJECT" && (
-          <span className="order-report-status order-report-status_rejected">
-            Направлен на отмену
-          </span>
-        )}
+        <OrderStatusComponent status={status} />
       </div>
 
       {customer && (

@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.response.review;
 
+import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceTitleResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class ReviewResponse {
     private String review;
     private Instant sendAt;
     private UserNameResponse author;
+
+    private ServiceTitleResponse service; // can be null
 }

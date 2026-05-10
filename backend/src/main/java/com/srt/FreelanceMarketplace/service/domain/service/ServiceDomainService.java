@@ -60,7 +60,7 @@ public class ServiceDomainService {
     }
 
     public List<UserServiceResponse> getAllByFreelancer(FreelancerEntity entity) {
-        return repository.findAllByFreelancer(entity).stream()
+        return repository.findAllByFreelancerAndHiddenFalse(entity).stream()
                 .map(mapper::toUserServiceResponse)
                 .toList();
     }

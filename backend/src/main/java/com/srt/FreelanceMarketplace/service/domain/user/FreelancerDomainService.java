@@ -54,6 +54,13 @@ public class FreelancerDomainService {
         return repository.getReferenceByUser(user);
     }
 
+    public FreelancerEntity getReferenceById(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new GlobalBadRequestException("freelancer not found");
+        }
+        return repository.getReferenceById(id);
+    }
+
     public FreelancerEntity getByUserWithJobTitle(UserEntity user) {
         return repository.findWithJobTitleByUser(user)
                 .orElseThrow(() -> new IllegalStateException("freelancer not found"));

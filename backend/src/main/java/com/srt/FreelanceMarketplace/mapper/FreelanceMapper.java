@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.mapper;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.freelancer.GetFreelancerProfileResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
@@ -41,4 +42,9 @@ public interface FreelanceMapper {
     GetOwnServiceResponse toOwnServiceResponse(ServiceEntity entity);
 
     ServiceOrderInfoResponse toServiceOrderInfoResponse(ServiceEntity entity);
+
+    @Mapping(target = "jobTitle", source = "jobTitle.name")
+    @Mapping(target = "jobTitleId", source = "jobTitle.id")
+    @Mapping(target = "freelancerId", source = "id")
+    GetFreelancerProfileResponse toFreelancerProfileResponse(FreelancerEntity entity);
 }

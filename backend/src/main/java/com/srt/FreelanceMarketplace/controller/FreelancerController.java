@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.controller;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.EditFreelancerProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.FreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewResponse;
 import com.srt.FreelanceMarketplace.service.application.user.FreelancerService;
 import com.srt.FreelanceMarketplace.service.domain.user.FreelancerDomainService;
 import jakarta.validation.Valid;
@@ -37,5 +38,10 @@ public class FreelancerController {
     @PutMapping("/profile/edit")
     public void editProfile(@RequestBody @Valid EditFreelancerProfileRequest request) {
         freelancerService.editProfile(request);
+    }
+
+    @GetMapping("/get/{freelancerId}/reviews")
+    public List<ReviewResponse> reviewGet(@PathVariable UUID freelancerId) {
+        return freelancerService.reviewGet(freelancerId);
     }
 }

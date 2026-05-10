@@ -26,6 +26,11 @@ public class UserDomainService {
                 .orElseThrow(() -> new GlobalBadRequestException("user not found"));
     }
 
+    public UserEntity getByIdWithRoles(UUID id) {
+        return repository.findWithRolesById(id)
+                .orElseThrow(() -> new GlobalBadRequestException("user not found"));
+    }
+
     public List<UserEntity> getByIds(List<UUID> id) {
         return repository.findAllById(id);
     }

@@ -4,6 +4,7 @@ import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequ
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserRoleRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.JwtRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserProfileResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.service.application.user.UserService;
@@ -80,5 +81,10 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void setNewRole(@RequestBody List<EditUserRoleRequest> request) {
         userService.setNewRole(request);
+    }
+
+    @GetMapping("/get/{id}")
+    public GetUserProfileResponse getUserById(@PathVariable UUID id) {
+        return userService.getUserById(id);
     }
 }

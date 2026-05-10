@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.mapper;
 
 import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.SignUpRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserProfileResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
@@ -23,26 +24,21 @@ public interface UserMapper {
 
     UserNameResponse entityToUserNameResponse(UserEntity user);
 
-    @Mapping(target = "roles", expression = "java(toRoleEnum(user.getRoles()))")
     GetUserResponse toGetResponse(UserEntity user);
 
-    default List<RoleEnum> toRoleEnum(List<RoleEntity> roles) {
-        List<RoleEnum> result = new ArrayList<>();
-        roles.forEach(role -> {
-            switch (role.getName()) {
-                case "ROLE_FREELANCER":
-                    result.add(RoleEnum.ROLE_FREELANCER);
-                    break;
+    GetUserProfileResponse toGetProfileResponse(UserEntity user);
 
-                case "ROLE_USER":
-                    result.add(RoleEnum.ROLE_USER);
-                    break;
+    default RoleEnum roleEntityToRoleEnum(RoleEntity role) {
+        if (role == null || role.getName() == null) {
+            return null;
+        }
 
-                case "ROLE_ADMIN":
-                    result.add(RoleEnum.ROLE_ADMIN);
-                    break;
-            }
-        });
-        return result;
+        return switch (role.getName()) {
+            case "ROLE_FREELANCER" -> RoleEnum.ROLE_FREELANCER;
+            case "ROLE_USER" -> RoleEnum.ROLE_USER;
+            case "ROLE_ADMIN" -> RoleEnum.ROLE_ADMIN;
+            case "ROLE_MODERATOR" -> RoleEnum.ROLE_MODERATOR;
+            default -> throw new IllegalArgumentException("Unknown role: " + role.getName());
+        };
     }
 }

@@ -1,0 +1,18 @@
+.review-card-component {
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.05);
+  transition:.2s;
+}
+
+.review-card-component:hover{
+  transform:translateY(-3px);
+}
+
+.review-card-component_user{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#e9ecff;
+}

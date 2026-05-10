@@ -90,15 +90,6 @@ export default function HeaderComponent({ state }) {
                     </Link>
                   </li>
                 );
-              } else if (user?.isAuth) {
-                return (
-                  <li className="nav-item d-flex gap-2 text-white align-items-center">
-                    <CirclePlus size={24} />
-                    <Link className="nav-link active" to="/become-freelancer">
-                      {!shrink && "Стать фрилансером"}
-                    </Link>
-                  </li>
-                );
               }
             })()}
             {authLinks()}

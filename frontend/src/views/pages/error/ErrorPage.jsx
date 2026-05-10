@@ -1,11 +1,16 @@
 import { Link, useSearchParams } from "react-router-dom";
 import HeaderComponent from "../../components/HeaderComponent";
 import "./css/error_page.css";
+import { useEffect } from "react";
 
 export default function ErrorPage() {
   const [searchParams] = useSearchParams();
 
   const code = Number(searchParams.get("code")) || 404;
+
+  useEffect(() => {
+    document.title = "Ошибка " + code;
+  }, [code])
 
   return (
     <main id="error-page-main">

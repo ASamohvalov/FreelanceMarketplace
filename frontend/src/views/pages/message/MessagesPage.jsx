@@ -35,7 +35,6 @@ export default function MessagesPage() {
         navigate("/error");
         return;
       }
-      console.log(response.data);
       setConversations(response.data);
     })();
   }, [navigate]);

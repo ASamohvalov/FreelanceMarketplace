@@ -53,3 +53,9 @@ export async function getMessageEventsRequest(conversationId, lastEventId=0) {
     lastEventId: lastEventId,
   });
 }
+
+export async function checkConversationRequest(userId) {
+  return await sendAuthGet("messaging/conversation/exists", {
+    userId: userId,
+  });
+}

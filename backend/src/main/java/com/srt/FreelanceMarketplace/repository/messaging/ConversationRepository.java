@@ -1,6 +1,5 @@
 package com.srt.FreelanceMarketplace.repository.messaging;
 
-import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,4 +35,14 @@ public interface ConversationRepository extends JpaRepository<ConversationEntity
             )
             """)
     Optional<ConversationEntity> findByMemberIds(UUID member1Id, UUID member2Id);
+
+
+    @Query("""
+            select c from ConversationEntity c
+            join c.members m
+            join ConversationMemberEntity m2 on m.conversation = m2.conversation
+            where m.member = :member1
+                and m2.member = :member2
+            """)
+    Optional<ConversationEntity> findByMembers(UserEntity member1, UserEntity member2);
 }

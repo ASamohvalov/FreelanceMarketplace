@@ -7,6 +7,8 @@ import {
   Bell,
   BriefcaseBusiness,
   CirclePlus,
+  LogIn,
+  LogOut,
   Menu,
 } from "lucide-react";
 import { useContext, useLayoutEffect, useRef, useState } from "react";
@@ -41,7 +43,8 @@ export default function HeaderComponent({ state }) {
       var user = getUserData();
       return (
         <>
-          <li className="nav-item">
+          <li className="nav-item d-flex gap-2 text-white align-items-center">
+            <LogOut size={24} />
             <a onClick={onLogoutClick} href="" className="nav-link active">
               Выйти
             </a>
@@ -52,7 +55,8 @@ export default function HeaderComponent({ state }) {
 
     return (
       <>
-        <li className="nav-item">
+        <li className="nav-item d-flex gap-2 text-white align-items-center">
+          <LogIn size={24} />
           <Link className="nav-link active" to="/sign-in">
             Авторизация
           </Link>

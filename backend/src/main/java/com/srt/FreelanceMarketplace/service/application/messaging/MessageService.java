@@ -4,21 +4,25 @@ import com.srt.FreelanceMarketplace.domain.dto.MessageEventTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationExistsResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageListResponse;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEventEntity;
+import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.ConversationMapper;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
 import com.srt.FreelanceMarketplace.mapper.OrderMapper;
+import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;
 import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationMemberDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.MessageDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.MessageEventDomainService;
 import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
+import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingEventService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +49,8 @@ public class MessageService {
     private final ServiceDomainService serviceDomainService;
     private final MessagingEventService messagingEventService;
     private final MessageEventDomainService messageEventDomainService;
+    private final UserDomainService userDomainService;
+    private final ConversationRepository conversationRepository;
 
     public Map<String, UUID> sendMessage(NewMessageRequest request) {
         MessageEntity message = MessageEntity.builder()
@@ -147,5 +153,21 @@ public class MessageService {
                 .message(message)
                 .type(MessageEventTypeEnum.EDIT_MESSAGE)
                 .build());
+    }
+
+    public ConversationExistsResponse checkConversationExists(UUID userId) {
+        UserEntity member = userDomainService.getReferenceIfExistsById(userId);
+        UserEntity currentMember = authHelperService.getUser();
+
+        if (member.getId().equals(currentMember.getId())) {
+            return new ConversationExistsResponse();
+        }
+
+        return conversationRepository.findByMembers(member, currentMember)
+                .map(conversationEntity ->
+                        new ConversationExistsResponse(conversationEntity.getId(), true)
+                )
+                .orElseGet(ConversationExistsResponse::new);
+
     }
 }

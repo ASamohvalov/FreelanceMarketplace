@@ -21,6 +21,7 @@ import ImageCarouselComponent from "../../components/service/image/ImageCarousel
 import { getServiceImageUrl } from "../../../logic/image";
 import { reviewToRu } from "../../../logic/lang";
 import Avatar from "../../components/elements/Avatar";
+import { checkConversationRequest } from "../../../logic/requests/message/messageRequest";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -29,9 +30,10 @@ export default function ServicePage() {
 
   const [serviceData, setServiceData] = useState([]);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
-  const [isOrderVisible, setIsOrderVisible] = useState(false);
+  // const [isOrderVisible, setIsOrderVisible] = useState(false);
   const [isProposalBeenSent, setIsProposalBeenSent] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [checkConversation, setCheckConversation] = useState({});
 
   const [personalServices, setPersonalServices] = useState([]);
   const [reviewCheckInfo, setReviewCheckInfo] = useState(false);
@@ -79,6 +81,15 @@ export default function ServicePage() {
           return;
         }
         setReviewCheckInfo(reviewCheckResponse.data);
+
+        const checkConversationResponse = await checkConversationRequest(
+          response.data.freelancer.userId,
+        );
+        if (checkConversationResponse.status !== 200) {
+          navigate(`/error?code=${checkConversationResponse.status}`);
+          return;
+        }
+        setCheckConversation(checkConversationResponse.data);
       }
     })();
   }, [navigate, id]);
@@ -199,7 +210,6 @@ export default function ServicePage() {
               <button
                 className="btn btn-primary w-100 mb-3"
                 onClick={() => navigate("/order/make/" + serviceData.id)}
-                // onClick={() => setIsOrderVisible(true)}
                 disabled={
                   !getUserData()?.roles ||
                   serviceData?.freelancer?.userId === getUserData().id
@@ -208,28 +218,41 @@ export default function ServicePage() {
                 Оформить заказ
               </button>
 
-              {isProposalBeenSent ? (
-                <button className="btn btn-success w-100 mb-3" disabled>
-                  Отклик успешно отправлен
-                </button>
-              ) : (
+              {checkConversation.exists ? (
                 <button
                   className="btn btn-primary w-100 mb-3"
-                  disabled={
-                    !getUserData()?.roles ||
-                    serviceData?.freelancer?.userId === getUserData().id
-                  }
-                  onClick={() => setIsProposalVisible(true)}
+                  onClick={() => navigate("/messages/" + checkConversation.id) }
                 >
-                  Оставить отклик на обсуждение
+                  Открыть чат
                 </button>
+              ) : (
+                <>
+                  {isProposalBeenSent ? (
+                    <button className="btn btn-success w-100 mb-3" disabled>
+                      Отклик успешно отправлен
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary w-100 mb-3"
+                      disabled={
+                        !getUserData()?.roles ||
+                        serviceData?.freelancer?.userId === getUserData().id
+                      }
+                      onClick={() => setIsProposalVisible(true)}
+                    >
+                      Оставить отклик на обсуждение
+                    </button>
+                  )}
+                </>
               )}
               <hr />
 
               <div
                 className="d-flex align-items-center gap-3"
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate("/profile/" + serviceData.freelancer?.userId)}
+                onClick={() =>
+                  navigate("/profile/" + serviceData.freelancer?.userId)
+                }
               >
                 <Avatar
                   userId={serviceData.freelancer?.userId}

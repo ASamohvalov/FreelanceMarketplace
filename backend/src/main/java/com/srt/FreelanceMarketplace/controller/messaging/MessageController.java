@@ -1,10 +1,7 @@
 package com.srt.FreelanceMarketplace.controller.messaging;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
-import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageListResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.messaging.*;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
 import jakarta.validation.Valid;
@@ -61,5 +58,11 @@ public class MessageController {
     @PutMapping("/message/edit")
     public void editMessage(@RequestBody @Valid EditMessageRequest request) {
         messageService.editMessage(request);
+    }
+
+    @GetMapping("/conversation/exists")
+    public ConversationExistsResponse checkConversationExists(
+            @RequestParam UUID userId) {
+        return messageService.checkConversationExists(userId);
     }
 }

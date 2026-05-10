@@ -8,9 +8,10 @@ import { getAllPersonalServices } from "../../../logic/requests/service/serviceR
 import { getFreelancerReviewsRequest } from "../../../logic/requests/user/freelancerRequest";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import ReviewCardComponent from "../../components/reviews/ReviewCardComponent";
-import { getUserData } from "../../../logic/jwt";
+import { getUserData, isAuth } from "../../../logic/jwt";
 import Avatar from "../../components/elements/Avatar";
 import { reviewToRu } from "../../../logic/lang";
+import { checkConversationRequest } from "../../../logic/requests/message/messageRequest";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState({});
   const [personalServices, setPersonalServices] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [checkConversation, setCheckConversation] = useState({});
 
   const isFreelancer = user?.roles?.find(r => r.name === "ROLE_FREELANCER");
 
@@ -46,6 +48,15 @@ export default function ProfilePage() {
           return;
         }
         setReviews(reviewResponse.data);
+      }
+
+      if (isAuth()) {
+        const checkConversationResponse = await checkConversationRequest(userId);
+        if (checkConversationResponse.status !== 200) {
+          navigate(`/error?code=${checkConversationResponse.status}`);
+          return;
+        }
+        setCheckConversation(checkConversationResponse.data);
       }
     })();
   }, [navigate, userId])
@@ -78,7 +89,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="col-lg-3 text-lg-end mt-4 mt-lg-0">
-            {userId === getUserData().id ? (
+            {userId === getUserData()?.id ? (
               <Link
                 className="btn btn-outline-secondary w-100"
                 to="/personal-account"
@@ -87,14 +98,12 @@ export default function ProfilePage() {
               </Link>
             ): (
               <>
-                <button className="btn btn-primary w-100 mb-2">
-                  <i className="bi bi-chat-dots me-1"></i>
-                  Написать
-                </button>
-
-                <button className="btn btn-outline-secondary w-100">
-                  Предложить заказ
-                </button>
+                {checkConversation?.exists && (
+                  <button className="btn btn-primary w-100 mb-2" onClick={() => navigate("/messages/" + checkConversation.id)}>
+                    <i className="bi bi-chat-dots me-1"></i>
+                    Написать
+                  </button>
+                )}
               </>
             )}
           </div>

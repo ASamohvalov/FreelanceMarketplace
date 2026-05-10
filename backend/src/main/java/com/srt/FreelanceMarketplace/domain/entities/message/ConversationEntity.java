@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -35,4 +36,7 @@ public class ConversationEntity {
     @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(nullable = false)
     private ConversationTypeEnum type;
+
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConversationMemberEntity> members;
 }

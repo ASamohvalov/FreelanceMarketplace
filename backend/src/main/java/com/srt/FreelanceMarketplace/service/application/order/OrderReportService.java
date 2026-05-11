@@ -61,6 +61,10 @@ public class OrderReportService {
             throw new GlobalBadRequestException("the user does not own this service");
         }
 
+        if (!order.getDeadlineDate().isAfter(Instant.now())) {
+            throw new GlobalBadRequestException("the deadline has passed");
+        }
+
         UserEntity customer = userDomainService.getReferenceById(order.getCustomer().getId());
 
         OrderReportEntity report = OrderReportEntity.builder()

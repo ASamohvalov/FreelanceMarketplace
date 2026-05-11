@@ -1,18 +1,21 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import HeaderComponent from "../../../components/HeaderComponent";
 import { signInRequest } from "../../../../logic/requests/user/authRequest";
-import { login } from "../../../../logic/jwt";
+import { hasRole, isAuth, login } from "../../../../logic/jwt";
 import { useRef } from "react";
 import { FormWrapper } from "../../../components/elements/FormWrapper";
 import "./css/sign_page.css";
+import { userContext } from "../../../../logic/store/userContext";
 
 export default function SignInPage() {
   const navigate = useNavigate();
   const email = useRef(null);
   const password = useRef(null);
   const [error, setError] = useState(null);
+
+  const [user, setUser] = useContext(userContext);
 
   useEffect(() => {
     document.title = "Авторизация";
@@ -32,6 +35,11 @@ export default function SignInPage() {
     );
     if (response.status == 200) {
       login(response.data.accessToken, response.data.refreshToken);
+      setUser({
+        isFreelancer: hasRole("ROLE_FREELANCER"),
+        isAuth: isAuth(),
+        isAdmin: hasRole("ROLE_ADMIN"),
+      });
       navigate("/");
       return;
     } else if (response.status == 400) {

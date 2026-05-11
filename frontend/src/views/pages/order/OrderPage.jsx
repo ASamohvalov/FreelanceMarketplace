@@ -14,6 +14,7 @@ import {
   calculateDays,
   fromIsoDateToDate,
   getDayRUString,
+  isDeadlineHasPassed,
 } from "../../../logic/time";
 import { getUserData } from "../../../logic/jwt";
 
@@ -26,6 +27,7 @@ export default function OrderPage() {
   const [extendDeadlineMode, setExtendDeadlineMode] = useState(false);
   const [extendDaysAdded, setExtendDaysAdded] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [warnMessage, setWarnMessage] = useState("");
 
   const status = order?.order?.status;
   const orderId = order?.order?.id;
@@ -48,6 +50,11 @@ export default function OrderPage() {
       document.title = response.data.service.title;
 
       setUserExecutor(response.data.freelancer.userId === getUserData().id);
+
+      if (isDeadlineHasPassed(response.data.order.deadlineDate) &&
+        !["COMPLETED", "CANCELED", "PENDING", "REJECTED"].includes(response.data.order.status)) {
+        setWarnMessage("Закончился срок выполнения задачи");
+      }
     })();
   }, [id, navigate]);
 
@@ -81,6 +88,7 @@ export default function OrderPage() {
                 {canSubmitWork && (
                   <button
                     className="btn btn-success"
+                    disabled={isDeadlineHasPassed(order?.order?.deadlineDate)}
                     onClick={() => navigate("/order/report/send", {
                       state: { orderId, serviceTitle: order.service.title, serviceId: order.service.id, freelancer: order.freelancer }
                     })}
@@ -218,6 +226,12 @@ export default function OrderPage() {
               {successMessage && (
                 <div className="mt-3 alert alert-success">
                   {successMessage}
+                </div>
+              )}
+
+              {warnMessage && (
+                <div className="mt-3 alert alert-warning">
+                  {warnMessage}
                 </div>
               )}
             </div>

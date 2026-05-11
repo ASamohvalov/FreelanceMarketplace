@@ -35,6 +35,7 @@ export default function HeaderComponent({ state }) {
     event.preventDefault();
     await logoutRequest();
     logout();
+    setUser(null);
     navigate("/");
   }
 

@@ -2,6 +2,10 @@ import "./styles/aside.css";
 import { BookText, CalendarArrowUp, HandPlatter, House, MessageCircle, UserRound, UserRoundKey } from "lucide-react";
 import { AsideComponent } from "./ui/aside_component";
 import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
+import { useState } from "react";
+import { useContext } from "react";
+import { userContext } from "../../../logic/store/userContext";
+import { useEffect } from "react";
 
 const links = [
   {
@@ -49,18 +53,28 @@ const links = [
 export const Aside = ({ state }) => {
   const isFreelancer = getUserData()?.roles.includes("ROLE_FREELANCER");
 
+  const [user, setUser] = useContext(userContext);
+
+  useEffect(() => {
+    setUser({
+      isFreelancer: hasRole("ROLE_FREELANCER"),
+      isAuth: isAuth(),
+      isAdmin: hasRole("ROLE_ADMIN"),
+    });
+  }, [setUser]);
+
   const [isHidden] = state;
   return (
     <aside
       className={`aside overflow-hidden pt-5 text-white fw-semibold d-flex flex-column gap-4 position-fixed start-0 top-5 bg-orange ${isHidden ? "aside-visible" : "aside-hidden"}`}
     >
       {links.map((item, id) => {
-        if (!isAuth() && item.title === "Сообщения") return;
-        if (!isAuth() && item.title === "Отчёты") return;
-        if (!isAuth() && item.title === "Заказы") return;
-        if (!isAuth() && item.title === "Личный кабинет") return;
-        if (!isFreelancer && item.title === "Мои услуги") return;
-        if (!hasRole("ROLE_ADMIN") && item.title === "Административная панель") return;
+        if (!user?.isAuth && item.title === "Сообщения") return;
+        if (!user?.isAuth && item.title === "Отчёты") return;
+        if (!user?.isAuth && item.title === "Заказы") return;
+        if (!user?.isAuth && item.title === "Личный кабинет") return;
+        if (!user?.isFreelancer && item.title === "Мои услуги") return;
+        if (!user?.isAdmin && item.title === "Административная панель") return;
         return (
           <AsideComponent
             key={id}

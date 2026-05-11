@@ -5,9 +5,11 @@ import {
   signInRequest,
   signUpRequest,
 } from "../../../../logic/requests/user/authRequest";
-import { login } from "../../../../logic/jwt";
+import { hasRole, isAuth, login } from "../../../../logic/jwt";
 import { FormWrapper } from "../../../components/elements/FormWrapper";
 import "./css/sign_page.css";
+import { useContext } from "react";
+import { userContext } from "../../../../logic/store/userContext";
 
 export default function SignUpPage() {
   useEffect(() => {
@@ -19,6 +21,8 @@ export default function SignUpPage() {
   const password = useRef(null);
   const firstName = useRef(null);
   const lastName = useRef(null);
+
+  const [user, setUser] = useContext(userContext);
 
   const [isFreelancer, setIsFreelancer] = useState(false);
   const [error, setError] = useState(null);
@@ -53,6 +57,12 @@ export default function SignUpPage() {
         return;
       }
       login(loginResponse.data.accessToken, loginResponse.data.refreshToken);
+
+      setUser({
+        isFreelancer: hasRole("ROLE_FREELANCER"),
+        isAuth: isAuth(),
+        isAdmin: hasRole("ROLE_ADMIN"),
+      });
 
       if (isFreelancer) {
         navigate("/become-freelancer");

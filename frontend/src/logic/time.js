@@ -142,3 +142,10 @@ export function getDayRUString(count) {
 
   return `${count} д${suffixes[pr.select(count)]}`;
 }
+
+export function isDeadlineHasPassed(deadline) {
+  const deadlineDate = new Date(deadline);
+  const now = new Date(Date.now());
+
+  return deadlineDate < now;
+}

@@ -4,6 +4,7 @@ import "./css/order_page.css";
 import { useEffect } from "react";
 import { useState } from "react";
 import {
+  extendOrderDeadlineRequest,
   getOrderByIdRequest,
   sendAcceptOrderRequest,
   sendCancelOrderRequest,
@@ -22,6 +23,9 @@ export default function OrderPage() {
 
   const [order, setOrder] = useState([]);
   const [userExecutor, setUserExecutor] = useState(false);
+  const [extendDeadlineMode, setExtendDeadlineMode] = useState(false);
+  const [extendDaysAdded, setExtendDaysAdded] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const status = order?.order?.status;
   const orderId = order?.order?.id;
@@ -31,6 +35,7 @@ export default function OrderPage() {
   const waitingForRejectShow = status === "WAITING_FOR_REJECT" && (userExecutor ? order?.order?.rejectByCustomer : order?.order?.rejectByFreelancer);
   const canReject = !["REJECTED", "CANCELED", "COMPLETED"].includes(status) && (!userExecutor || status !== "PENDING");
   const canManagePending = userExecutor && status === "PENDING";
+  const canExtendDeadline = userExecutor && !["COMPLETED", "CANCELED", "PENDING", "REJECTED"].includes(status);
 
   useEffect(() => {
     (async () => {
@@ -88,7 +93,7 @@ export default function OrderPage() {
                 {canLeaveReview && (
                   <button
                     className="btn btn-outline-secondary"
-                    onClick={() => navigate("/review/send", {
+                    onClick={() => navigate("/review/send?edit=1", {
                       state: { orderId, serviceId: order.service.id, serviceTitle: order.service.title, freelancer: order.freelancer }
                     })}
                   >
@@ -164,11 +169,55 @@ export default function OrderPage() {
                   </>
                 )}
 
+                {canExtendDeadline && (
+                  <button
+                    className="btn btn-outline-secondary"
+                    onClick={() => setExtendDeadlineMode(!extendDeadlineMode)}
+                  >
+                    <i className="bi bi-x-circle me-1" />
+                    Продлить дедлайн
+                  </button>
+                )}
+
               </div>
 
               {waitingForRejectShow && (
                 <div className="mt-3 text-decoration-underline">
                   Направлен запрос на отмену заказа, отмените заказ
+                </div>
+              )}
+
+              {extendDeadlineMode && (
+                <div className="d-flex justify-content-between mt-4">
+                  <input
+                    className="form-control"
+                    type="number"
+                    placeholder="Укажите колчество дней для добавления"
+                    max="100"
+                    min="1"
+                    value={extendDaysAdded}
+                    onChange={(e) => setExtendDaysAdded(e.target.value)}
+                  />
+                  <button
+                    className="btn btn-primary mx-1"
+                    onClick={async () => {
+                      const response = await extendOrderDeadlineRequest(order.order.id, extendDaysAdded);
+                      if (response.status !== 200) {
+                        navigate(`/error?code=${response.status}`);
+                        return;
+                      }
+                      setSuccessMessage("Запрос отпрвлен, ожидайте ответ от заказчика");
+                      setExtendDeadlineMode(false);
+                    }}
+                  >
+                    Отправить
+                  </button>
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="mt-3 alert alert-success">
+                  {successMessage}
                 </div>
               )}
             </div>

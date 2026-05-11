@@ -4,6 +4,7 @@ import com.srt.FreelanceMarketplace.domain.dto.NotificationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.message.NotificationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderExtensionEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
@@ -139,6 +140,58 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
         repository.save(notification);
     }
 
+    @Override
+    public void sendOrderExtendDeadlineRequest(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Запрос на продление дедлайна")
+                .message(String.format(
+                        "%s %s запросил у вас увеличить скрок завершения заказа: \"%s\" на %d дней",
+                        sender.getFirstName(),
+                        sender.getLastName(),
+                        orderExtension.getOrder().getService().getTitle(),
+                        orderExtension.getDaysAdded()))
+                .type(NotificationTypeEnum.EXTEND_ORDER_DEADLINE_REQUEST)
+                .recipient(recipient)
+                .entityType(getEntityType(orderExtension))
+                .entityId(orderExtension.getId())
+                .build();
+        repository.save(notification);
+    }
+
+    @Override
+    public void sendOrderExtensionAccepted(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Ответ на запрос о продлении дедлайна")
+                .message(String.format(
+                        "%s %s продлил дедлайн на заказ \"%s\"",
+                        sender.getFirstName(),
+                        sender.getLastName(),
+                        orderExtension.getOrder().getService().getTitle()))
+                .type(NotificationTypeEnum.ORDER_EXTENSION_ACCEPTED)
+                .recipient(recipient)
+                .entityType(getEntityType(orderExtension))
+                .entityId(orderExtension.getOrder().getId())
+                .build();
+        repository.save(notification);
+    }
+
+    @Override
+    public void sendOrderExtensionRejected(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Ответ на запрос о продлении дедлайна")
+                .message(String.format(
+                        "%s %s отказался продлить дедлайн на заказ \"%s\"",
+                        sender.getFirstName(),
+                        sender.getLastName(),
+                        orderExtension.getOrder().getService().getTitle()))
+                .type(NotificationTypeEnum.ORDER_EXTENSION_REJECTED)
+                .recipient(recipient)
+                .entityType(getEntityType(orderExtension))
+                .entityId(orderExtension.getOrder().getId())
+                .build();
+        repository.save(notification);
+    }
+
     private String getEntityType(Object entity) {
         if (entity instanceof OrderEntity) {
             return "orders";
@@ -150,7 +203,10 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
             return "order_reports";
         }
         if (entity instanceof TransferEntity) {
-            return "order_reports";
+            return "transfers";
+        }
+        if (entity instanceof OrderExtensionEntity) {
+            return "order_extensions";
         }
         throw new IllegalStateException("no such entity type");
     }

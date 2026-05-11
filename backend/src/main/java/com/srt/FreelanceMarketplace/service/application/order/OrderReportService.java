@@ -134,26 +134,7 @@ public class OrderReportService {
 
         validateResponseOnOrderRequest(report);
 
-        report.setStatus(OrderReportStatusEnum.ACCEPTED);
-        report.getOrder().setStatus(OrderStatusEnum.COMPLETED);
-        report.getOrder().setCompletionDate(Instant.now());
-        report.setCustomerComment(response.getComment());
-        repository.save(report);
-
-        TransferEntity transfer = transferDomainService.getTransferByOrder(report.getOrder());
-        transferDomainService.completeTransfer(transfer);
-
-        notificationSenderService.sendOrderCompleted(
-                report.getOrder(),
-                report.getFreelancer().getUser(),
-                authHelperService.getUser()
-        );
-
-        notificationSenderService.sendMoneyTransferred(
-                transfer,
-                report.getFreelancer().getUser(),
-                authHelperService.getUser()
-        );
+        domainService.acceptOrderReport(report, response.getComment());
     }
 
     @Transactional

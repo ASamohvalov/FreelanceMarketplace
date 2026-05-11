@@ -10,7 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    how-sql: true
+    show-sql: true
     open-in-view: false
 
   flyway:
@@ -47,9 +47,3 @@ storage:
 message:
   polling:
     timeout-sec: 30
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG

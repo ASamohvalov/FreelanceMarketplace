@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.order;
 
+import com.srt.FreelanceMarketplace.domain.dto.request.order.ExtendDeadlineRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
@@ -62,5 +63,22 @@ public class OrderController {
     @GetMapping("/requirement/get/{orderId}")
     public OrderRequirementResponse getOrderRequirementByOrderId(@PathVariable UUID orderId) {
         return orderService.getOrderRequirementByOrderId(orderId);
+    }
+
+    // продлить может только
+    @PreAuthorize("hasRole('ROLE_FREELANCER')")
+    @PostMapping("/extend/deadline")
+    public void extendDeadline(@RequestBody @Valid ExtendDeadlineRequest request) {
+        orderService.extendDeadline(request);
+    }
+
+    @PatchMapping("/extend/deadline/{orderExtendId}/accept")
+    public void acceptExtendDeadline(@PathVariable UUID orderExtendId) {
+        orderService.acceptExtendDeadline(orderExtendId);
+    }
+
+    @PatchMapping("/extend/deadline/{orderExtendId}/reject")
+    public void rejectExtendDeadline(@PathVariable UUID orderExtendId) {
+        orderService.rejectExtendDeadline(orderExtendId);
     }
 }

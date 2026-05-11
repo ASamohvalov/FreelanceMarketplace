@@ -19,6 +19,8 @@ export default function SendReviewPage() {
 
   const [message, setMessage] = useState(null);
 
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
     if (!state) {
       navigate("/error");
@@ -32,17 +34,21 @@ export default function SendReviewPage() {
           navigate(`/error?code=${response.status}`);
           return;
         }
-        setRating(response.data.rating);
-        setReview(response.data.review);
-        setReviewId(response.data.id);
+
+        if (response.data.exists) {
+          setRating(response.data.rating);
+          setReview(response.data.review);
+          setReviewId(response.data.id);
+          setEditMode(true);
+        }
       })();
     }
-  }, [navigate, state, searchParams]);
+  }, [navigate, state, searchParams, editMode]);
 
   return (
       <div className="container mt-5 mb-5">
         <h3 className="mb-4 fw-semibold">
-          {searchParams.get("edit") ? "Редактирование отзыва" : "Оставить отзыв"}
+          {editMode ? "Редактирование отзыва" : "Оставить отзыв"}
         </h3>
 
         <div
@@ -85,7 +91,7 @@ export default function SendReviewPage() {
             <button
               className="btn btn-primary"
               onClick={async () => {
-                if (searchParams.get("edit")) {
+                if (editMode) {
                   const response = await sendEditReviewRequest(
                     reviewId,
                     rating,

@@ -55,4 +55,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     Optional<OrderEntity> findWithCustomerById(UUID id);
 
     int countByFreelancer(FreelancerEntity freelancer);
+
+    @EntityGraph(attributePaths = {"customer", "freelancer.user", "service"})
+    Optional<OrderEntity> findWithFreelancerAndCustomerById(UUID id);
 }

@@ -19,5 +19,7 @@ public class ReviewResponse {
     private Instant sendAt;
     private UserNameResponse author;
 
+    private boolean exists = false;
+
     private ServiceTitleResponse service; // can be null
 }

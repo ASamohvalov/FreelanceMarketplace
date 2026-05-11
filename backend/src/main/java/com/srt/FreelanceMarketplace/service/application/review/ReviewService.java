@@ -98,6 +98,7 @@ public class ReviewService {
     private ReviewResponse mapToResponse(ReviewEntity review) {
         ReviewResponse response = mapper.toResponse(review);
         response.setAuthor(userMapper.entityToUserNameResponse(review.getOrder().getCustomer()));
+        response.setExists(true);
         return response;
     }
 }

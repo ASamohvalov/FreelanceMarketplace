@@ -72,6 +72,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+		<dependency>
+			<groupId>io.github.xuanyangyang</groupId>
+			<artifactId>spring-boot-starter-scheduling</artifactId>
+			<version>0.1.0</version>
+			<scope>compile</scope>
+		</dependency>
 
         <!-- db drivers -->
         <dependency>

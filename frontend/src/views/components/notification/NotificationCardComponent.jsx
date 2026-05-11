@@ -4,6 +4,7 @@ import { hideNotificationRequest } from "../../../logic/requests/message/notific
 import { sendAtDateToRUString } from "../../../logic/time";
 import "./css/notification_component.css";
 import { Link, useNavigate } from "react-router-dom";
+import { acceptExtendDeadline } from "../../../logic/requests/order/orderRequest";
 
 export default function NotificationCardComponent({
   notification,
@@ -106,17 +107,26 @@ export default function NotificationCardComponent({
 
         {!hidden && (
           <div className="d-flex gap-2 flex-shrink-0 align-items-center">
-            {notification.type === "NEW_PROPOSAL" && (
+            {notification.type === "NEW_PROPOSAL" || notification.type === "EXTEND_ORDER_DEADLINE_REQUEST" && (
               <div
                 className="bi bi-check-square notification-component-icon_right notification-component-icon_right_green"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const conf = window.confirm("Открыть чат?");
 
-                  if (conf == true) {
-                    sendProposalReplyRequest(notification.entityId).then(
-                      hideNotificaiton(),
-                    );
+                  if (notification.type === "NEW_PROPOSAL") {
+                    const conf = window.confirm("Открыть чат?");
+
+                    if (conf == true) {
+                      sendProposalReplyRequest(notification.entityId).then(
+                        hideNotificaiton(),
+                      );
+                    }
+                  } else {
+                    const conf = window.confirm("Продлить дедлайн?");
+
+                    if (conf == true) {
+                      acceptExtendDeadline(notification.entityId).then(hideNotificaiton());
+                    }
                   }
                 }}
               />

@@ -2,6 +2,7 @@ package com.srt.FreelanceMarketplace.service.infrastructure;
 
 import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderExtensionEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
@@ -37,4 +38,19 @@ public interface NotificationSenderService {
     void sendOrderCancelled(OrderEntity order, UserEntity recipient, UserEntity sender);
 
     void sendOrderAccepted(OrderEntity order, UserEntity recipient, UserEntity sender);
+
+    /**
+     * @param orderExtension order.serviceEntity NOT NULL!
+     */
+    void sendOrderExtendDeadlineRequest(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender);
+
+    /**
+     * @param orderExtension order.serviceEntity NOT NULL!
+     */
+    void sendOrderExtensionAccepted(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender);
+
+    /**
+     * @param orderExtension order.serviceEntity NOT NULL!
+     */
+    void sendOrderExtensionRejected(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender);
 }

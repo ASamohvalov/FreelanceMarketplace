@@ -1,7 +1,9 @@
 package com.srt.FreelanceMarketplace.service.application.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.OrderExtensionStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.request.order.ExtendDeadlineRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
@@ -9,6 +11,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerRes
 import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderRequirementResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
+import com.srt.FreelanceMarketplace.domain.entities.order.OrderExtensionEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
@@ -19,6 +22,7 @@ import com.srt.FreelanceMarketplace.mapper.OrderRequirementMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
+import com.srt.FreelanceMarketplace.service.domain.order.OrderExtensionDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderRequirementDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderRequirementFileDomainService;
 import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
@@ -55,6 +59,7 @@ public class OrderService {
     private final OrderRequirementDomainService orderRequirementDomainService;
     private final OrderRequirementFileDomainService orderRequirementFileDomainService;
     private final OrderRequirementMapper orderRequirementMapper;
+    private final OrderExtensionDomainService orderExtensionDomainService;
 
     @Transactional
     public void order(MakeOrderRequest request) {
@@ -242,10 +247,76 @@ public class OrderService {
         UserEntity user = authHelperService.getUser();
         if (!order.getCustomer().getId().equals(user.getId())) {
             if (!order.getFreelancer().getId().equals(freelancerDomainService.getReferenceByUser(user).getId())) {
-                throw new GlobalBadRequestException("You don't have rights to view the requirements");
+                throw new GlobalBadRequestException("you don't have rights to view the requirements");
             }
         }
         return orderRequirementMapper.toResponse(order.getOrderRequirement());
+    }
+
+    public void extendDeadline(ExtendDeadlineRequest request) {
+        OrderEntity order = domainService.getByIdWithFreelancerAndCustomer(request.getOrderId());
+        UserEntity user = authHelperService.getUser();
+
+        // if not freelancer
+        if (!order.getFreelancer().getUser().getId().equals(user.getId())) {
+            throw new GlobalBadRequestException("you don't have rights to extend the deadline");
+        }
+
+        if (endStatus(order.getStatus())) {
+            throw new GlobalBadRequestException("order closed");
+        }
+
+        OrderExtensionEntity orderExtension = OrderExtensionEntity.builder()
+                .daysAdded(request.getDaysAdded())
+                .order(order)
+                .build();
+
+        orderExtensionDomainService.save(orderExtension);
+
+        notificationSenderService.sendOrderExtendDeadlineRequest(
+                orderExtension,
+                order.getCustomer(),
+                user
+        );
+    }
+
+    public void acceptExtendDeadline(UUID orderExtensionId) {
+        changeOrderExtensionStatus(orderExtensionId, OrderExtensionStatusEnum.ACCEPTED);
+    }
+
+    public void rejectExtendDeadline(UUID orderExtensionId) {
+        changeOrderExtensionStatus(orderExtensionId, OrderExtensionStatusEnum.REJECTED);
+    }
+
+    private void changeOrderExtensionStatus(UUID orderExtensionId, OrderExtensionStatusEnum status) {
+        OrderExtensionEntity orderExtension = orderExtensionDomainService
+                .getByIdWithOrderAndFreelancer(orderExtensionId);
+        UserEntity user = authHelperService.getUser();
+        OrderEntity order = orderExtension.getOrder();
+
+        if (!order.getCustomer().getId().equals(user.getId())) {
+            throw new GlobalBadRequestException("you don't have rights to extend the deadline");
+        }
+
+        orderExtension.setStatus(status);
+
+        if (status == OrderExtensionStatusEnum.ACCEPTED) {
+            Instant newDeadline = order.getDeadlineDate().plus(orderExtension.getDaysAdded(), ChronoUnit.DAYS);
+            order.setDeadlineDate(newDeadline);
+            repository.save(order);
+
+            notificationSenderService.sendOrderExtensionAccepted(
+                    orderExtension,
+                    order.getFreelancer().getUser(),
+                    user
+            );
+        } else if (status == OrderExtensionStatusEnum.REJECTED) {
+            notificationSenderService.sendOrderExtensionRejected(
+                    orderExtension,
+                    order.getFreelancer().getUser(),
+                    user
+            );
+        }
     }
 
     private void reject(OrderEntity order) {
@@ -255,5 +326,11 @@ public class OrderService {
         transferDomainService.canselTransferByOrder(order);
 
         repository.save(order);
+    }
+
+    private boolean endStatus(OrderStatusEnum status) {
+        return status == OrderStatusEnum.CANCELLED ||
+                status == OrderStatusEnum.COMPLETED ||
+                status == OrderStatusEnum.REJECTED;
     }
 }

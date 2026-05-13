@@ -1,6 +1,8 @@
 package com.srt.FreelanceMarketplace.service.infrastructure.impl;
 
 import com.srt.FreelanceMarketplace.domain.dto.typeEnum.NotificationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.entities.feedback.FeedbackConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.NotificationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
@@ -192,6 +194,23 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
         repository.save(notification);
     }
 
+    @Override
+    public void sendFeedbackConversationOpened(FeedbackConversationEntity feedbackConversation, UserEntity recipient, UserEntity sender) {
+        NotificationEntity notification = NotificationEntity.builder()
+                .title("Ответ на обратную связь")
+                .message(String.format(
+                        "%s %s открыл с вами чат по вопросу: \"%s\"",
+                        sender.getFirstName(),
+                        sender.getLastName(),
+                        feedbackConversation.getFeedback().getTitle()))
+                .type(NotificationTypeEnum.FEEDBACK_CONVERSATION_CREATED)
+                .recipient(recipient)
+                .entityType(getEntityType(feedbackConversation.getConversation()))
+                .entityId(feedbackConversation.getConversation().getId())
+                .build();
+        repository.save(notification);
+    }
+
     private String getEntityType(Object entity) {
         if (entity instanceof OrderEntity) {
             return "orders";
@@ -207,6 +226,9 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
         }
         if (entity instanceof OrderExtensionEntity) {
             return "order_extensions";
+        }
+        if (entity instanceof ConversationEntity) {
+            return "conversations";
         }
         throw new IllegalStateException("no such entity type");
     }

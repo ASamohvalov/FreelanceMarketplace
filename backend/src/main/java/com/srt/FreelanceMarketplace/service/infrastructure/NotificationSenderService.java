@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.service.infrastructure;
 
+import com.srt.FreelanceMarketplace.domain.entities.feedback.FeedbackConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ProposalEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderExtensionEntity;
@@ -53,4 +54,6 @@ public interface NotificationSenderService {
      * @param orderExtension order.serviceEntity NOT NULL!
      */
     void sendOrderExtensionRejected(OrderExtensionEntity orderExtension, UserEntity recipient, UserEntity sender);
+
+    void sendFeedbackConversationOpened(FeedbackConversationEntity feedbackConversation, UserEntity recipient, UserEntity sender);
 }

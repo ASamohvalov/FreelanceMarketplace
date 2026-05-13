@@ -35,6 +35,7 @@ import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingEventService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingService;
+import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,7 @@ public class MessageService {
     private final MessagingService messagingService;
     private final FeedbackConversationRepository feedbackConversationRepository;
     private final FeedbackMapper feedbackMapper;
+    private final NotificationSenderService notificationSenderService;
 
     public Map<String, UUID> sendMessage(NewMessageRequest request) {
         MessageEntity message = MessageEntity.builder()
@@ -209,6 +211,12 @@ public class MessageService {
                 .feedback(feedback)
                 .build();
         feedbackConversationRepository.save(feedbackConversation);
+
+        notificationSenderService.sendFeedbackConversationOpened(
+                feedbackConversation,
+                member,
+                currentMember
+        );
 
         return new IdentifierDto(conversation.getId());
     }

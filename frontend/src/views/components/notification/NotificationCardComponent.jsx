@@ -27,6 +27,8 @@ export default function NotificationCardComponent({
         return "/order/reports";
       case "MONEY_TRANSFERRED":
         return "/personal-account";
+      case "FEEDBACK_CONVERSATION_CREATED":
+        return `/messages/${entityId}`;
       default:
         return "#";
     }
@@ -90,6 +92,9 @@ export default function NotificationCardComponent({
           )}
           {notification.type === "ORDER_ACCEPTED" && (
             <i className="bi bi-check2-circle" />
+          )}
+          {notification.type === "FEEDBACK_CONVERSATION_CREATED" && (
+            <i className="bi bi-chat" />
           )}
         </div>
 

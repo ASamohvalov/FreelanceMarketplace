@@ -8,12 +8,13 @@ import AdminFeedbackInfoComponent from "../../components/admin_panel/AdminFeedba
 
 export default function AdminPanelFeedbackPage() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [selectedFeedbackType, setSelectedFeedbackType] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("notAccepted");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [feedbackShowMode, setFeedbackShowMode] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -23,6 +24,7 @@ export default function AdminPanelFeedbackPage() {
         return;
       }
       setFeedbacks(response.data);
+      setFilteredFeedbacks(response.data);
 
       const id = searchParams.get("id");
       if (id) {
@@ -33,17 +35,32 @@ export default function AdminPanelFeedbackPage() {
 
   const handleCardClick = (id) => {
     if (feedbackShowMode) {
-      setSearchParams({});
       setFeedbackShowMode(null);
     } else {
-      setSearchParams({ id: id });
       setFeedbackShowMode(feedbacks.find(f => f.id === id));
     }
   };
 
   const handleFeedbackInfoClose = () => {
-    setSearchParams({});
     setFeedbackShowMode(null);
+  };
+
+  const filter = (type, status) => {
+    if (type === null) type = selectedFeedbackType;
+    if (status === null) status = selectedStatus;
+
+    let result = [...feedbacks];
+    if (type !== "all") {
+      result = result.filter(feedback => feedback.type === type);
+    }
+
+    if (status === "accepted") {
+      result = result.filter(feedback => feedback.accepted);
+    } else if (status === "notAccepted") {
+      result = result.filter(feedback => !feedback.accepted);
+    }
+
+    setFilteredFeedbacks(result);
   };
 
   return (
@@ -54,8 +71,11 @@ export default function AdminPanelFeedbackPage() {
         <div className="d-flex justify-content-between">
           <select
             className="form-select mx-1"
-            value={ selectedFeedbackType }
-            onChange={ (e) => setSelectedFeedbackType(e.target.value) }
+            value={selectedFeedbackType}
+            onChange={(e) => {
+              setSelectedFeedbackType(e.target.value)
+              filter(e.target.value, null);
+            }}
           >
             <option value={"all"}>Все виды обращений</option>
             {
@@ -67,8 +87,11 @@ export default function AdminPanelFeedbackPage() {
 
           <select
             className="form-select mx-1"
-            value={ selectedStatus }
-            onChange={ (e) => setSelectedStatus(e.target.value) }
+            value={selectedStatus}
+            onChange={(e) => {
+              setSelectedStatus(e.target.value)
+              filter(null, e.target.value);
+            }}
           >
             <option value={"notAccepted"}>Непринятые</option>
             <option value={"all"}>Все</option>
@@ -100,7 +123,7 @@ export default function AdminPanelFeedbackPage() {
         </h5>
 
         <div className="row g-4 mt-3">
-          {feedbacks.map(feedback => (
+          {filteredFeedbacks.map(feedback => (
             <div className="col-md-4" key={feedback.id}>
               <AdminFeedbackCard
                 title={feedback.title}

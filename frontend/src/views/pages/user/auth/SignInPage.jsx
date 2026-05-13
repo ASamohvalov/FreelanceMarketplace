@@ -39,6 +39,7 @@ export default function SignInPage() {
         isFreelancer: hasRole("ROLE_FREELANCER"),
         isAuth: isAuth(),
         isAdmin: hasRole("ROLE_ADMIN"),
+        isModerator: hasRole("ROLE_MODERATOR"),
       });
       navigate("/");
       return;

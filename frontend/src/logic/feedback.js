@@ -1,7 +1,7 @@
 const feedbackTypes = {
   CONFLICT: "Конфликт между пользователями",
+  BUG: "Баг (проблема с работоспособностью сайта)",
   IDEAS_FOR_IMPROVEMENT: "Идеи для улучшения продукта",
-  FINANCIAL_PROBLEM: "Проблема с финансами",
   ANOTHER_PROBLEM: "Другое"
 }
 

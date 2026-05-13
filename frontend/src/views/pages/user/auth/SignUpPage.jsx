@@ -62,6 +62,7 @@ export default function SignUpPage() {
         isFreelancer: hasRole("ROLE_FREELANCER"),
         isAuth: isAuth(),
         isAdmin: hasRole("ROLE_ADMIN"),
+        isModerator: hasRole("ROLE_MODERATOR"),
       });
 
       if (isFreelancer) {

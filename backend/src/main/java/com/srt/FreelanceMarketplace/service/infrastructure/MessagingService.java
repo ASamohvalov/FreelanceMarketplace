@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.infrastructure;
 
-import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
@@ -19,6 +19,11 @@ public interface MessagingService {
             UserEntity user,
             ServiceEntity service,
             OrderEntity order
+    );
+
+    ConversationEntity createConversation(
+            UserEntity moderator,
+            UserEntity user
     );
 
     boolean isConversationExists(FreelancerEntity freelancer, UserEntity user);

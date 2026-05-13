@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application.messaging;
 
-import com.srt.FreelanceMarketplace.domain.dto.NotificationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.NotificationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.NotificationResponse;
 import com.srt.FreelanceMarketplace.domain.entities.message.NotificationEntity;
 import com.srt.FreelanceMarketplace.mapper.NotificationMapper;

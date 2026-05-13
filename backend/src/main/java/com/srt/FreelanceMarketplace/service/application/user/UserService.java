@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application.user;
 
-import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.freelancer.FreelancerRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserProfileRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.EditUserRoleRequest;

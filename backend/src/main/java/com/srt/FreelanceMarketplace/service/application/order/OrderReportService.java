@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.application.order;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderReportStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.SendOrderReportRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.SendRejectOrderReportResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.report.ReceivedOrderReportResponse;
@@ -10,7 +10,6 @@ import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportFileEntity;
-import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.OrderReportMapper;

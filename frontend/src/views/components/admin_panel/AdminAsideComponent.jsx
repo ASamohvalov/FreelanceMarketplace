@@ -6,7 +6,7 @@ export default function AdminAsideComponent() {
 
   return (
     <aside className="col-2 admin-panel-aside_sidebar">
-      <h5 className="mb-4">Admin</h5>
+      <h5 className="mb-4">Admin panel</h5>
       <button className="btn btn-dark w-100 mb-3" onClick={() => navigate("/")}>Выйти</button>
 
       <NavLink
@@ -29,6 +29,20 @@ export default function AdminAsideComponent() {
         className={({ isActive }) => (isActive ? "active" : "")}
       >
         <i className="bi bi-folder-fill" /> Категории
+      </NavLink>
+
+      <NavLink
+        to="/admin/jobTitles"
+        className={({ isActive }) => (isActive ? "active" : "")}
+      >
+        <i className="bi bi-person-workspace" /> Должности
+      </NavLink>
+
+      <NavLink
+        to="/admin/feedback"
+        className={({ isActive }) => (isActive ? "active" : "")}
+      >
+        <i className="bi bi-megaphone-fill" /> Обратная связь
       </NavLink>
     </aside>
   );

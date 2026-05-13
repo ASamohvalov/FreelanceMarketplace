@@ -1,14 +1,13 @@
 package com.srt.FreelanceMarketplace.service.domain.order;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderReportStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.service.OrderReportRepository;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
-import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

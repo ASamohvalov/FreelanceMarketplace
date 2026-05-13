@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.response.order.report;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;

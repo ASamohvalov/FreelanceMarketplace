@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.repository;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
+import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,6 @@ public interface FreelancerRepository extends JpaRepository<FreelancerEntity, UU
     @EntityGraph(attributePaths = {"jobTitle"})
     @Query("select f from FreelancerEntity f where f.id = :id")
     Optional<FreelancerEntity> findByIdWithJobTitle(UUID id);
+
+    boolean existsByJobTitle(JobTitleEntity jobTitle);
 }

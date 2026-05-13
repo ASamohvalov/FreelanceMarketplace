@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.request.user;
 
-import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.RoleEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

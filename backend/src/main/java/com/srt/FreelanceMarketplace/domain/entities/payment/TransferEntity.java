@@ -1,9 +1,8 @@
 package com.srt.FreelanceMarketplace.domain.entities.payment;
 
 
-import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
-import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;

@@ -6,12 +6,12 @@ CREATE TABLE proposals (
     is_accepted BOOLEAN DEFAULT false NOT NULL
 );
 
-CREATE TYPE conversation_type AS ENUM ('ORDER', 'DISCUSSION');
+CREATE TYPE conversation_type AS ENUM ('ORDER', 'DISCUSSION', 'FEEDBACK');
 
 CREATE TABLE conversations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     order_id UUID REFERENCES orders(id),
-    service_id UUID REFERENCES services(id) NOT NULL,
+    service_id UUID REFERENCES services(id),
     type conversation_type DEFAULT 'DISCUSSION' NOT NULL
 );
 

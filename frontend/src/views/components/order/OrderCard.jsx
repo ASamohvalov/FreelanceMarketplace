@@ -65,7 +65,7 @@ export default function OrderCard({
       <div className="text-muted small mb-2">
         Дата заказа: {fromIsoDateToDate(orderDate)}
       </div>
-      {status !== "IN_PROGRESS" && status !== "PENDING" && status !== "CANCELLED" && (
+      {["COMPLETED", "CANCELED", "REJECTED"].includes(status) && (
         <div className="text-muted small mb-2">
           Дата завершения: {fromIsoDateToDate(completionDate)}
         </div>

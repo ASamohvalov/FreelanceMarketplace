@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.entities.message;
 
-import com.srt.FreelanceMarketplace.domain.dto.MessageEventTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.MessageEventTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;

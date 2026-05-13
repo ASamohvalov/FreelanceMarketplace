@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.entities.message;
 
-import com.srt.FreelanceMarketplace.domain.dto.NotificationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.NotificationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

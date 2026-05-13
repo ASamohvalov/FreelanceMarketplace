@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.dto;
+package com.srt.FreelanceMarketplace.domain.dto.typeEnum;
 
 public enum NotificationTypeEnum {
     NEW_ORDER,

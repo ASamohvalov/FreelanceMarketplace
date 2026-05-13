@@ -1,6 +1,8 @@
 package com.srt.FreelanceMarketplace.controller.messaging;
 
+import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
+import com.srt.FreelanceMarketplace.domain.dto.request.messaging.OpenFeedbackConversationRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.*;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.service.application.messaging.MessageService;
@@ -8,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -64,5 +67,12 @@ public class MessageController {
     public ConversationExistsResponse checkConversationExists(
             @RequestParam UUID userId) {
         return messageService.checkConversationExists(userId);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PostMapping("/conversation/feedback/open")
+    public IdentifierDto openFeedbackConversation(
+            @RequestBody @Valid OpenFeedbackConversationRequest request) {
+        return messageService.openConversation(request);
     }
 }

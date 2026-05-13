@@ -5,6 +5,7 @@ import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderRejectResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderRequirementResponse;
 import com.srt.FreelanceMarketplace.service.application.order.OrderService;
 import jakarta.validation.Valid;
@@ -44,8 +45,8 @@ public class OrderController {
     }
 
     @PatchMapping("/reject/{id}")
-    public void rejectOrder(@PathVariable UUID id) {
-        orderService.rejectOrder(id);
+    public OrderRejectResponse rejectOrder(@PathVariable UUID id) {
+        return orderService.rejectOrder(id);
     }
 
     @PatchMapping("/cancel/{id}")

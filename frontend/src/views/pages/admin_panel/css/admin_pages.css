@@ -22,9 +22,20 @@
   min-height: 0;
 }
 
-.cat-card{
-  background:white;
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.05);
+.cat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.admin-panel_avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #dee2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }

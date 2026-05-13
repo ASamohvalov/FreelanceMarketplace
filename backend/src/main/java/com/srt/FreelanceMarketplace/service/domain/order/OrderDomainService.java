@@ -1,23 +1,14 @@
 package com.srt.FreelanceMarketplace.service.domain.order;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
-import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
-import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
-import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
-import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
-import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

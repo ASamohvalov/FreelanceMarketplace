@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.domain.payment;
 
-import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.AccountEntity;
 import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;

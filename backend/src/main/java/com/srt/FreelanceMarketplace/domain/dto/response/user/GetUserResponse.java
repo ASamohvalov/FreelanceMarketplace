@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.response.user;
 
-import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

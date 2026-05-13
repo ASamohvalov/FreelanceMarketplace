@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.entities.order;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import jakarta.persistence.*;

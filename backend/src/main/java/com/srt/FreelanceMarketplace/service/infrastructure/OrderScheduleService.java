@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.infrastructure;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.repository.service.OrderReportRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderReportDomainService;
 import lombok.RequiredArgsConstructor;

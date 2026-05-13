@@ -1,7 +1,7 @@
 package com.srt.FreelanceMarketplace.service.application.service;
 
 import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.service.ServiceRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewCheckActionEnum;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewCheckResponse;

@@ -1,4 +1,4 @@
-package com.srt.FreelanceMarketplace.domain.dto;
+package com.srt.FreelanceMarketplace.domain.dto.statusEnum;
 
 public enum OrderStatusEnum {
     IN_PROGRESS,

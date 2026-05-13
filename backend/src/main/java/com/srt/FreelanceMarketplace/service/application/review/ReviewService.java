@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.application.review;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.review.EditReviewRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.review.SendReviewRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.review.ReviewResponse;

@@ -107,7 +107,7 @@ export default function NotificationCardComponent({
 
         {!hidden && (
           <div className="d-flex gap-2 flex-shrink-0 align-items-center">
-            {notification.type === "NEW_PROPOSAL" || notification.type === "EXTEND_ORDER_DEADLINE_REQUEST" && (
+            {(notification.type === "NEW_PROPOSAL" || notification.type === "EXTEND_ORDER_DEADLINE_REQUEST") && (
               <div
                 className="bi bi-check-square notification-component-icon_right notification-component-icon_right_green"
                 onClick={(e) => {

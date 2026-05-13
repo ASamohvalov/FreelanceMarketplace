@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.mapper;
 
-import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.user.SignUpRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserProfileResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.GetUserResponse;
@@ -9,12 +9,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
 import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {

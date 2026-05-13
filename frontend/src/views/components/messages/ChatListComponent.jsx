@@ -22,9 +22,9 @@ export default function ChatListComponent({
                 {c.member.firstName + " " + c.member.lastName}
               </div>
               <small className="text-muted">
-                {conversations.type === "ORDER"
-                  ? "Название услуги..."
-                  : "Обсуждение усулги"}
+                {c.type === "ORDER" && "Обсуждение заказа"}
+                {c.type === "DISCUSSION" && "Обсуждение услуги"}
+                {c.type === "FEEDBACK" && "Обратная связь"}
               </small>
             </div>
           </Link>
@@ -48,9 +48,9 @@ export default function ChatListComponent({
                     {c.member.firstName + " " + c.member.lastName}
                   </div>
                   <small className="text-muted">
-                    {conversations.type === "ORDER"
-                      ? "Название услуги..."
-                      : "Обсуждение усулги"}
+                    {c.type === "ORDER" && "Обсуждение заказа"}
+                    {c.type === "DISCUSSION" && "Обсуждение услуги"}
+                    {c.type === "FEEDBACK" && "Обратная связь с модератором"}
                   </small>
                 </div>
               </Link>

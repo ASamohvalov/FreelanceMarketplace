@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.infrastructure.impl;
 
-import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationMemberEntity;
@@ -48,6 +48,18 @@ public class MessagingServiceImpl implements MessagingService {
         conversationDomainService.save(conversation);
 
         conversationMemberDomainService.save(new ConversationMemberEntity(freelancer.getUser(), conversation));
+        conversationMemberDomainService.save(new ConversationMemberEntity(user, conversation));
+
+        return conversation;
+    }
+
+    @Override
+    public ConversationEntity createConversation(UserEntity moderator, UserEntity user) {
+        ConversationEntity conversation = new ConversationEntity();
+        conversation.setType(ConversationTypeEnum.FEEDBACK);
+        conversationDomainService.save(conversation);
+
+        conversationMemberDomainService.save(new ConversationMemberEntity(moderator, conversation));
         conversationMemberDomainService.save(new ConversationMemberEntity(user, conversation));
 
         return conversation;

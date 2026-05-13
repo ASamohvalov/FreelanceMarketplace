@@ -1,22 +1,31 @@
 package com.srt.FreelanceMarketplace.service.application.messaging;
 
-import com.srt.FreelanceMarketplace.domain.dto.MessageEventTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.IdentifierDto;
+import com.srt.FreelanceMarketplace.domain.dto.request.messaging.OpenFeedbackConversationRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.feedback.FeedbackResponse;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.MessageEventTypeEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.EditMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.messaging.NewMessageRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationContextResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationExistsResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.ConversationResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageListResponse;
+import com.srt.FreelanceMarketplace.domain.entities.feedback.FeedbackConversationEntity;
+import com.srt.FreelanceMarketplace.domain.entities.feedback.FeedbackEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.ConversationEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEntity;
 import com.srt.FreelanceMarketplace.domain.entities.message.MessageEventEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.mapper.ConversationMapper;
+import com.srt.FreelanceMarketplace.mapper.FeedbackMapper;
 import com.srt.FreelanceMarketplace.mapper.MessageMapper;
 import com.srt.FreelanceMarketplace.mapper.OrderMapper;
 import com.srt.FreelanceMarketplace.repository.messaging.ConversationRepository;
+import com.srt.FreelanceMarketplace.repository.messaging.FeedbackConversationRepository;
 import com.srt.FreelanceMarketplace.repository.messaging.MessageRepository;
+import com.srt.FreelanceMarketplace.service.domain.feedback.FeedbackDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.ConversationMemberDomainService;
 import com.srt.FreelanceMarketplace.service.domain.messaging.MessageDomainService;
@@ -25,14 +34,13 @@ import com.srt.FreelanceMarketplace.service.domain.service.ServiceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.user.UserDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingEventService;
+import com.srt.FreelanceMarketplace.service.infrastructure.MessagingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +59,10 @@ public class MessageService {
     private final MessageEventDomainService messageEventDomainService;
     private final UserDomainService userDomainService;
     private final ConversationRepository conversationRepository;
+    private final FeedbackDomainService feedbackDomainService;
+    private final MessagingService messagingService;
+    private final FeedbackConversationRepository feedbackConversationRepository;
+    private final FeedbackMapper feedbackMapper;
 
     public Map<String, UUID> sendMessage(NewMessageRequest request) {
         MessageEntity message = MessageEntity.builder()
@@ -115,9 +127,17 @@ public class MessageService {
 
     public ConversationContextResponse getServiceByConversationId(UUID conversationId) {
         ConversationEntity conversation = conversationDomainService.getByIdWithOrderAndServiceAndFreelancer(conversationId);
+
+        FeedbackResponse feedbackResponse = feedbackConversationRepository.findByConversation(conversation)
+                .map(entity -> feedbackMapper.toResponse(entity.getFeedback()))
+                .orElse(null);
+
         return new ConversationContextResponse(
                 orderMapper.toResponse(conversation.getOrder()),
-                serviceDomainService.mapToServiceResponse(conversation.getService()),
+                conversation.getService() == null
+                        ? null
+                        : serviceDomainService.mapToServiceResponse(conversation.getService()),
+                feedbackResponse,
                 conversation.getType()
         );
     }
@@ -169,5 +189,27 @@ public class MessageService {
                 )
                 .orElseGet(ConversationExistsResponse::new);
 
+    }
+
+    @Transactional
+    public IdentifierDto openConversation(OpenFeedbackConversationRequest request) {
+        UserEntity member = userDomainService.getReferenceIfExistsById(request.getUserId());
+        UserEntity currentMember = authHelperService.getUser();
+        FeedbackEntity feedback = feedbackDomainService.getReferenceIfExistsById(request.getFeedbackId());
+
+        Optional<ConversationEntity> conversationOptional = conversationRepository.findByMembers(member, currentMember);
+        if (conversationOptional.isPresent()) {
+            return new IdentifierDto(conversationOptional.get().getId());
+        }
+
+        ConversationEntity conversation = messagingService.createConversation(currentMember, member);
+
+        FeedbackConversationEntity feedbackConversation = FeedbackConversationEntity.builder()
+                .conversation(conversation)
+                .feedback(feedback)
+                .build();
+        feedbackConversationRepository.save(feedbackConversation);
+
+        return new IdentifierDto(conversation.getId());
     }
 }

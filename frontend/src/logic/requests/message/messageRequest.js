@@ -59,3 +59,10 @@ export async function checkConversationRequest(userId) {
     userId: userId,
   });
 }
+
+export async function openFeedbackConversationRequest(userId, feedbackId) {
+  return await sendAuthPost("messaging/conversation/feedback/open", {
+    userId: userId,
+    feedbackId: feedbackId,
+  });
+}

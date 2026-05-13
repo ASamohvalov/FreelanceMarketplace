@@ -1,8 +1,7 @@
 import "./styles/aside.css";
-import { BookText, CalendarArrowUp, HandPlatter, House, MessageCircle, UserRound, UserRoundKey } from "lucide-react";
+import { BookText, CalendarArrowUp, HandPlatter, House, Megaphone, MessageCircle, UserRound, UserRoundKey } from "lucide-react";
 import { AsideComponent } from "./ui/aside_component";
 import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
-import { useState } from "react";
 import { useContext } from "react";
 import { userContext } from "../../../logic/store/userContext";
 import { useEffect } from "react";
@@ -44,6 +43,11 @@ const links = [
     to: "/messages",
   },
   {
+    icon: <Megaphone size={32}></Megaphone>,
+    title: "Обратная связь",
+    to: "/feedback/send",
+  },
+  {
     icon: <UserRoundKey size={32}></UserRoundKey>,
     title: "Административная панель",
     to: "/admin",
@@ -51,8 +55,6 @@ const links = [
 ];
 
 export const Aside = ({ state }) => {
-  const isFreelancer = getUserData()?.roles.includes("ROLE_FREELANCER");
-
   const [user, setUser] = useContext(userContext);
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export const Aside = ({ state }) => {
         if (!user?.isAuth && item.title === "Отчёты") return;
         if (!user?.isAuth && item.title === "Заказы") return;
         if (!user?.isAuth && item.title === "Личный кабинет") return;
+        if (item.title === "Обратная связь" && (user?.isAdmin || !user?.isAuth)) return;
         if (!user?.isFreelancer && item.title === "Мои услуги") return;
         if (!user?.isAdmin && item.title === "Административная панель") return;
         return (

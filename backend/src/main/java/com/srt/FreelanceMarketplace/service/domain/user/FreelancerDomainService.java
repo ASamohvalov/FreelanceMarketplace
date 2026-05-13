@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.service.domain.user;
 
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
+import com.srt.FreelanceMarketplace.domain.entities.JobTitleEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
 import com.srt.FreelanceMarketplace.repository.FreelancerRepository;
@@ -64,5 +65,9 @@ public class FreelancerDomainService {
     public FreelancerEntity getByUserWithJobTitle(UserEntity user) {
         return repository.findWithJobTitleByUser(user)
                 .orElseThrow(() -> new IllegalStateException("freelancer not found"));
+    }
+
+    public boolean existsByJobTitle(JobTitleEntity jobTitle) {
+        return repository.existsByJobTitle(jobTitle);
     }
 }

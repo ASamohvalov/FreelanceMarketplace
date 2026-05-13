@@ -44,3 +44,21 @@ body {
 .order-report-status_rejected {
   background: #f8d7da;
 }
+
+.brief-container {
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.information-block {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.information-block_title {
+  font-weight: 600;
+  margin-bottom: 15px;
+}

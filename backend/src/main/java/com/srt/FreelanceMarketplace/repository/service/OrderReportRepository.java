@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.repository.service;
 
-import com.srt.FreelanceMarketplace.domain.dto.OrderReportStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderReportStatusEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderReportEntity;
@@ -39,4 +39,6 @@ public interface OrderReportRepository extends JpaRepository<OrderReportEntity, 
     @EntityGraph(attributePaths = {"freelancer", "order.service", "customer"})
     List<OrderReportEntity> findWithOrderAndServiceAndCustomerAllByCreatedAtLessThanAndStatus(
             Instant createdAt, OrderReportStatusEnum status);
+
+    boolean existsByOrder(OrderEntity order);
 }

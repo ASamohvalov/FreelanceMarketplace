@@ -29,10 +29,13 @@ import OrderPage from "./views/pages/order/OrderPage.jsx";
 import AdminPanelUsersPanel from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
 import ProtectedRoute from "./logic/ProtectedRoute.jsx";
 import AdminPanelUsersPage from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
-import AdminPanelCategoriesPage from "./views/pages/admin_panel/AdminPanelCategoriesPages.jsx";
+import AdminPanelCategoriesPage from "./views/pages/admin_panel/AdminPanelCategoriesPage.jsx";
 import MakeOrderPage from "./views/pages/order/MakeOrderPage.jsx";
 import OrderRequirementPage from "./views/pages/order/OrderRequirementPage.jsx";
 import ProfilePage from "./views/pages/user/ProfilePage.jsx";
+import SendFeedbackPage from "./views/pages/feedback/SendFeedbackPage.jsx";
+import AdminPanelJobTitlePage from "./views/pages/admin_panel/AdminPanelJobTitlesPage.jsx";
+import AdminPanelFeedbackPage from "./views/pages/admin_panel/AdminPanelFeedbackPage.jsx";
 
 // base routing
 export default function App() {
@@ -88,12 +91,16 @@ export default function App() {
         <Route path="review/send" element={<SendReviewPage />} />
 
         <Route path="order/requirement/:orderId" element={<OrderRequirementPage />} />
+
+        <Route path="feedback/send" element={<SendFeedbackPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roleRequired={"ROLE_ADMIN"} />}>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminPanelUsersPage />} />
           <Route path="categories" element={<AdminPanelCategoriesPage />} />
+          <Route path="jobTitles" element={<AdminPanelJobTitlePage />} />
+          <Route path="feedback" element={<AdminPanelFeedbackPage />} />
         </Route>
       </Route>
     </Routes>

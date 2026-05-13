@@ -123,7 +123,9 @@ export default function OrderPage() {
                         return;
                       }
 
-                      if (userExecutor && !order.order.rejectByCustomer) {
+                      if (response.data.rejected) {
+                        alert("Заказ отменён, деньги возвращены");
+                      } else if (userExecutor && !order.order.rejectByCustomer) {
                         alert("Направлен запрос на отмену заказа, ожидайте ответ от заказчика");
                       } else if (status !== "PENDING" && !order.order.rejectByFreelancer) {
                         alert("Направлен запрос на отмену заказа, ожидайте ответ от исполнителя");

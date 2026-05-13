@@ -15,8 +15,8 @@ public interface ConversationRepository extends JpaRepository<ConversationEntity
 
     @Query("""
         select c from ConversationEntity c
-        join fetch c.service s
-        join fetch s.freelancer
+        left join fetch c.service s
+        left join fetch s.freelancer
         left join fetch c.order
         where c.id = :id
         """)

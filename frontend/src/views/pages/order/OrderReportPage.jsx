@@ -15,7 +15,6 @@ import OrderReportCardComponent from "../../components/order/OrderReportCardComp
 import "./css/order_report_page.css";
 import { StatusSelect } from "../../components/elements/StatusSelect";
 
-
 export default function OrderReportPage() {
   const navigate = useNavigate();
 
@@ -136,39 +135,40 @@ export default function OrderReportPage() {
       <div className="container mt-5 mb-5">
         <h3 className="mb-4 fw-semibold">{orderId ? "Отчёты по заказу" : "Отчёты по заказам"}</h3>
 
-        <div className="report-nav mb-4">
-          {isFreelancer && (
-            <>
-              <button
-                className={showReceivedOrderReports ? "active" : ""}
-                onClick={() => {
-                  setShowReceivedOrderReports(true);
-                }}
-              >
-                Полученные
-              </button>
-              <button
-                className={!showReceivedOrderReports ? "active" : ""}
-                onClick={() => {
-                  setShowReceivedOrderReports(false);
-                }}
-              >
-                Отправленные
-              </button>
-            </>
-          )}
-          {!orderId && (
-            <>
-              <select
-                className="form-select"
-                style={{ width: "35%" }}
-                onChange={handleOrderSelect}
-              >
-                <option defaultValue={true} value={"all"}>
-                  Все заказы
-                </option>
-                {showReceivedOrderReports
-                  ? customerOrders.map((order, idx) => (
+        {(isFreelancer || !orderId) && (
+          <div className="report-nav mb-4">
+            {isFreelancer && (
+              <>
+                <button
+                  className={showReceivedOrderReports ? "active" : ""}
+                  onClick={() => {
+                    setShowReceivedOrderReports(true);
+                  }}
+                >
+                  Полученные
+                </button>
+                <button
+                  className={!showReceivedOrderReports ? "active" : ""}
+                  onClick={() => {
+                    setShowReceivedOrderReports(false);
+                  }}
+                >
+                  Отправленные
+                </button>
+              </>
+            )}
+            {!orderId && (
+              <>
+                <select
+                  className="form-select"
+                  style={{ width: "35%" }}
+                  onChange={handleOrderSelect}
+                >
+                  <option defaultValue={true} value={"all"}>
+                    Все заказы
+                  </option>
+                  {showReceivedOrderReports
+                    ? customerOrders.map((order, idx) => (
                       <option value={order.order.id} key={idx}>
                         {order.service.freelancer.firstName +
                           " " +
@@ -177,7 +177,7 @@ export default function OrderReportPage() {
                           order.service.title}
                       </option>
                     ))
-                  : freelancerOrders
+                    : freelancerOrders
                       .filter((item) => {
                         if (orderId) {
                           return item.order.id === orderId;
@@ -192,11 +192,12 @@ export default function OrderReportPage() {
                             order.service.title}
                         </option>
                       ))}
-              </select>
-              <StatusSelect handleStatusesSelect={handleStatusesSelect} />
-            </>
-          )}
-        </div>
+                </select>
+                <StatusSelect handleStatusesSelect={handleStatusesSelect} />
+              </>
+            )}
+          </div>
+        )}
 
         <div className="row g-4">
           {showReceivedOrderReports

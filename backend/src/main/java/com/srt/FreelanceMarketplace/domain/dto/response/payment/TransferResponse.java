@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.response.payment;
 
-import com.srt.FreelanceMarketplace.domain.dto.TransferStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.TransferStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.response.user.UserNameResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -25,39 +25,44 @@ export default function OrderRequirementPage() {
   }, [navigate, orderId]);
 
   return (
-      <div className="row g-4 mt-4">
-        <div className="order-requirement-page_brief-container">
-          <div className="d-flex justify-content-between">
-            <h4 className="mb-4">Техническое задание</h4>
+    <div className="row g-4 mt-4">
+      <div className="order-requirement-page_brief-container">
+        <div className="d-flex justify-content-between">
+          <h4 className="mb-4">Техническое задание</h4>
 
-            <Link className="btn btn-primary mb-3" to={`/order/info/${orderRequirement?.orderId}`}>Назад к заказу</Link>
-          </div>
+          <Link
+            className="btn btn-primary mb-3"
+            to={`/order/info/${orderRequirement?.orderId}`}
+          >
+            Назад к заказу
+          </Link>
+        </div>
 
-          <div className="order-requirement-page_block">
-            <div className="title">Описание задачи</div>
+        <div className="order-requirement-page_block">
+          <div className="order-requirement-page_title">Описание задачи</div>
 
-            <p>{orderRequirement?.description}</p>
-          </div>
+          <p>{orderRequirement?.description}</p>
+        </div>
 
-          <div className="order-requirement-page_block">
-            <div className="title">Файлы</div>
+        <div className="order-requirement-page_block">
+          <div className="order-requirement-page_title">Файлы</div>
 
-            {orderRequirement?.orderRequirementFileIds?.map((fileId, idx) => (
-              <FileItemComponent
-                key={idx}
-                fileId={fileId}
-                idx={idx}
-                getReportFileUrl={getRequirementFileUrl}
-              />
-            ))}
-          </div>
+          {orderRequirement?.orderRequirementFileIds?.map((fileId, idx) => (
+            <FileItemComponent
+              key={idx}
+              fileId={fileId}
+              idx={idx}
+              getReportFileUrl={getRequirementFileUrl}
+            />
+          ))}
+        </div>
 
-          <div className="order-requirement-page_block">
-            <div className="order-requirement-page_title">Комментарий</div>
+        <div className="order-requirement-page_block">
+          <div className="order-requirement-page_title">Комментарий</div>
 
-            <p>{orderRequirement?.comment || "Комментарий отсутствует"}</p>
-          </div>
+          <p>{orderRequirement?.comment || "Комментарий отсутствует"}</p>
         </div>
       </div>
+    </div>
   );
 }

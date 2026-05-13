@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.service.domain.user;
 
-import com.srt.FreelanceMarketplace.domain.dto.RoleEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.RoleEnum;
 import com.srt.FreelanceMarketplace.domain.entities.user.RoleEntity;
 import com.srt.FreelanceMarketplace.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;

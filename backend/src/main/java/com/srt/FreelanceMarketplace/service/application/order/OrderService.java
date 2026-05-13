@@ -1,13 +1,14 @@
 package com.srt.FreelanceMarketplace.service.application.order;
 
-import com.srt.FreelanceMarketplace.domain.dto.ConversationTypeEnum;
-import com.srt.FreelanceMarketplace.domain.dto.OrderExtensionStatusEnum;
-import com.srt.FreelanceMarketplace.domain.dto.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderExtensionStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.ExtendDeadlineRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderRejectResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderRequirementResponse;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
@@ -20,6 +21,7 @@ import com.srt.FreelanceMarketplace.mapper.FreelanceMapper;
 import com.srt.FreelanceMarketplace.mapper.OrderMapper;
 import com.srt.FreelanceMarketplace.mapper.OrderRequirementMapper;
 import com.srt.FreelanceMarketplace.mapper.UserMapper;
+import com.srt.FreelanceMarketplace.repository.service.OrderReportRepository;
 import com.srt.FreelanceMarketplace.repository.service.OrderRepository;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderDomainService;
 import com.srt.FreelanceMarketplace.service.domain.order.OrderExtensionDomainService;
@@ -60,6 +62,7 @@ public class OrderService {
     private final OrderRequirementFileDomainService orderRequirementFileDomainService;
     private final OrderRequirementMapper orderRequirementMapper;
     private final OrderExtensionDomainService orderExtensionDomainService;
+    private final OrderReportRepository orderReportRepository;
 
     @Transactional
     public void order(MakeOrderRequest request) {
@@ -153,7 +156,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void rejectOrder(UUID id) {
+    public OrderRejectResponse rejectOrder(UUID id) {
         OrderEntity order = domainService.getById(id);
 
         UserEntity user = authHelperService.getUser();
@@ -164,6 +167,13 @@ public class OrderService {
             }
 
             reject(order);
+            return new OrderRejectResponse(true);
+        } else if (!order.getDeadlineDate().isAfter(Instant.now()) &&
+                !orderReportRepository.existsByOrder(order) &&
+                order.getCustomer().getId().equals(user.getId())) {
+            // if deadline ended & no order report & you are customer
+            reject(order);
+            return new OrderRejectResponse(true);
         } else {
             Optional<FreelancerEntity> freelancer = freelancerDomainService.findByUser(user);
 
@@ -177,14 +187,14 @@ public class OrderService {
                 order.setRejectByCustomer(true);
                 if (order.isRejectByFreelancer()) {
                     reject(order);
-                    return;
+                    return new OrderRejectResponse(true);
                 }
             } else if (freelancer.isPresent() &&
                     order.getFreelancer().getId().equals(freelancer.get().getId())) {
                 order.setRejectByFreelancer(true);
                 if (order.isRejectByCustomer()) {
                     reject(order);
-                    return;
+                    return new OrderRejectResponse(true);
                 }
             } else {
                 throw new GlobalBadRequestException("you cannot reject this order");
@@ -195,6 +205,7 @@ public class OrderService {
             repository.save(order);
         }
 
+        return new OrderRejectResponse(false);
     }
 
     public void cancelOrder(UUID id) {

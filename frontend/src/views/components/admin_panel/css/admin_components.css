@@ -18,3 +18,52 @@
   color: black;
   margin-bottom: 5px;
 }
+
+.admin-panel_feedback-item {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #eef1f5;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.admin-panel_feedback-item:hover {
+  border-color: #cfd8ff;
+  transform: translateY(-2px);
+}
+
+.admin-panel_feedback-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.admin-panel_feedback-bug {
+  background: #ffe3e3;
+  color: #c92a2a;
+}
+
+.admin-panel_feedback-review {
+  background: #d3f9d8;
+  color: #2b8a3e;
+}
+
+.admin-panel_feedback-support {
+  background: #e7f5ff;
+  color: #1971c2;
+}
+
+.admin-panel_feedback-text {
+  background: #f8f9ff;
+  border-radius: 16px;
+  padding: 18px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.admin-panel_info-box {
+  background: #f8f9ff;
+  border-radius: 14px;
+  padding: 14px;
+}

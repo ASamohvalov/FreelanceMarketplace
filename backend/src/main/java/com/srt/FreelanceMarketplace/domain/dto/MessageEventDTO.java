@@ -1,6 +1,7 @@
 package com.srt.FreelanceMarketplace.domain.dto;
 
 import com.srt.FreelanceMarketplace.domain.dto.response.messaging.MessageResponse;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.MessageEventTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -10,7 +10,6 @@ import com.srt.FreelanceMarketplace.service.domain.feedback.FeedbackDomainServic
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class FeedbackService {
     }
 
     public List<GetFeedbackResponse> getAll() {
-        return repository.findAll().stream()
+        return repository.findAllByDeletedFalse().stream()
                 .map(mapper::toGetResponse)
                 .toList();
     }
@@ -45,10 +44,15 @@ public class FeedbackService {
         return mapper.toGetResponse(domainService.getById(id));
     }
 
-    @Transactional
     public void acceptFeedback(UUID id) {
         FeedbackEntity feedback = domainService.getById(id);
         feedback.setAccepted(true);
+        repository.save(feedback);
+    }
+
+    public void deleteFeedback(UUID id) {
+        FeedbackEntity feedback = domainService.getById(id);
+        feedback.setDeleted(true);
         repository.save(feedback);
     }
 }

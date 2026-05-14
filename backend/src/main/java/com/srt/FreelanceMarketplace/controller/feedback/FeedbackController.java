@@ -22,21 +22,27 @@ public class FeedbackController {
         feedbackService.sendFeedback(request);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     @GetMapping("/get")
     public List<GetFeedbackResponse> getAll() {
         return feedbackService.getAll();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     @GetMapping("/get/{id}")
     public GetFeedbackResponse getById(@PathVariable UUID id) {
         return feedbackService.getById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     @PatchMapping("/accept/{id}")
     public void acceptFeedback(@PathVariable UUID id) {
         feedbackService.acceptFeedback(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @DeleteMapping("/delete/{id}")
+    public void deleteFeedback(@PathVariable UUID id) {
+        feedbackService.deleteFeedback(id);
     }
 }

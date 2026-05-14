@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { fromIsoDate, fromIsoDateToDate } from "../../../logic/time";
 import FeedbackTypeComponent from "./FeedbackTypeComponent";
 import { useState } from "react";
-import { acceptFeedbackRequest } from "../../../logic/requests/feedbackRequest";
+import { acceptFeedbackRequest, deleteFeedbackRequest } from "../../../logic/requests/feedbackRequest";
 import { openFeedbackConversationRequest } from "../../../logic/requests/message/messageRequest";
 
 export default function AdminFeedbackInfoComponent({
@@ -31,6 +31,18 @@ export default function AdminFeedbackInfoComponent({
 
       const conversationId = response.data.id;
       navigate(`/messages/${conversationId}`);
+    }
+  };
+
+  const handleDeleted = async () => {
+    if (window.confirm("Подтвердите удаление обращения")) {
+      const response = await deleteFeedbackRequest(id);
+      if (response.status !== 200) {
+        setMessage({message: `Ошибка ${response.status}, попробуйте позже`, type: "danger"})
+        return;
+      }
+
+      onClose();
     }
   };
 
@@ -86,6 +98,11 @@ export default function AdminFeedbackInfoComponent({
       </div>
 
       <div className="text-end">
+        <button
+          className="btn btn-danger mx-1"
+          onClick={handleDeleted}
+        >Удалить</button>
+
         <button
           className="btn btn-primary mx-1"
           onClick={handleOpenConversation}

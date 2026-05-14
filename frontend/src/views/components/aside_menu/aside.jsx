@@ -52,6 +52,11 @@ const links = [
     title: "Административная панель",
     to: "/admin",
   },
+  {
+    icon: <UserRoundKey size={32}></UserRoundKey>,
+    title: "Модеративная панель",
+    to: "/moderator",
+  },
 ];
 
 export const Aside = ({ state }) => {
@@ -62,6 +67,7 @@ export const Aside = ({ state }) => {
       isFreelancer: hasRole("ROLE_FREELANCER"),
       isAuth: isAuth(),
       isAdmin: hasRole("ROLE_ADMIN"),
+      isModerator: hasRole("ROLE_MODERATOR"),
     });
   }, [setUser]);
 
@@ -75,9 +81,10 @@ export const Aside = ({ state }) => {
         if (!user?.isAuth && item.title === "Отчёты") return;
         if (!user?.isAuth && item.title === "Заказы") return;
         if (!user?.isAuth && item.title === "Личный кабинет") return;
-        if (item.title === "Обратная связь" && (user?.isAdmin || !user?.isAuth)) return;
+        if (item.title === "Обратная связь" && (user?.isModerator || user?.isAdmin || !user?.isAuth)) return;
         if (!user?.isFreelancer && item.title === "Мои услуги") return;
         if (!user?.isAdmin && item.title === "Административная панель") return;
+        if (!user?.isModerator && item.title === "Модеративная панель") return;
         return (
           <AsideComponent
             key={id}

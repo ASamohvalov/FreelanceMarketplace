@@ -16,7 +16,7 @@ export default function SendFeedbackPage() {
   const handleSubmit = async () => {
     if (title.length < 1 || title.length > 50) {
       setMessage({
-        message: "Текст заголовка не должен быть пустым и менее 50 символов",
+        message: "Текст заголовка не должен быть пустым и более 50 символов",
         type: "danger",
       });
       return;

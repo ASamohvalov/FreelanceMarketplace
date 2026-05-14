@@ -1,4 +1,4 @@
-import { sendAuthGet, sendAuthPatch, sendAuthPost } from "./requestSender";
+import { sendAuthDelete, sendAuthGet, sendAuthPatch, sendAuthPost } from "./requestSender";
 
 export async function sendFeedbackRequest(text, type, title) {
   return await sendAuthPost("feedback/send", {
@@ -18,4 +18,8 @@ export async function getFeedbackByIdRequest(id) {
 
 export async function acceptFeedbackRequest(id) {
   return await sendAuthPatch("feedback/accept/" + id);
+}
+
+export async function deleteFeedbackRequest(feedbackId) {
+  return await sendAuthDelete("feedback/delete/" + feedbackId);
 }

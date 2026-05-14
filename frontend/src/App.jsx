@@ -36,6 +36,8 @@ import ProfilePage from "./views/pages/user/ProfilePage.jsx";
 import SendFeedbackPage from "./views/pages/feedback/SendFeedbackPage.jsx";
 import AdminPanelJobTitlePage from "./views/pages/admin_panel/AdminPanelJobTitlesPage.jsx";
 import AdminPanelFeedbackPage from "./views/pages/admin_panel/AdminPanelFeedbackPage.jsx";
+import ModeratorAsideComponent from "./views/components/admin_panel/moderator/ModeratorAsideComponent.jsx";
+import ModeratorLayout from "./views/pages/ModeratorLayout.jsx";
 
 // base routing
 export default function App() {
@@ -61,7 +63,10 @@ export default function App() {
         />
         <Route path="MyOrders" element={<OrdersPage />} />
         <Route path="create-service" element={<CreateServicePage />} />
-        <Route path="update-service" element={<CreateServicePage isEdit={true} />} />
+        <Route
+          path="update-service"
+          element={<CreateServicePage isEdit={true} />}
+        />
         <Route
           path="create-service/success"
           element={<CreateServiceSuccessPage />}
@@ -90,7 +95,10 @@ export default function App() {
 
         <Route path="review/send" element={<SendReviewPage />} />
 
-        <Route path="order/requirement/:orderId" element={<OrderRequirementPage />} />
+        <Route
+          path="order/requirement/:orderId"
+          element={<OrderRequirementPage />}
+        />
 
         <Route path="feedback/send" element={<SendFeedbackPage />} />
       </Route>
@@ -98,8 +106,16 @@ export default function App() {
       <Route element={<ProtectedRoute roleRequired={"ROLE_ADMIN"} />}>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminPanelUsersPage />} />
+          <Route path="users" element={<AdminPanelUsersPage />} />
           <Route path="categories" element={<AdminPanelCategoriesPage />} />
           <Route path="jobTitles" element={<AdminPanelJobTitlePage />} />
+          <Route path="feedback" element={<AdminPanelFeedbackPage />} />
+        </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute roleRequired={"ROLE_MODERATOR"} />}>
+        <Route path="/moderator" element={<ModeratorLayout />}>
+          <Route index element={<AdminPanelFeedbackPage />} />
           <Route path="feedback" element={<AdminPanelFeedbackPage />} />
         </Route>
       </Route>

@@ -10,7 +10,7 @@ export default function AdminAsideComponent() {
       <button className="btn btn-dark w-100 mb-3" onClick={() => navigate("/")}>Выйти</button>
 
       <NavLink
-        to="/admin"
+        to="/admin/users"
         end
         className={({ isActive }) => (isActive ? "active" : "")}
       >

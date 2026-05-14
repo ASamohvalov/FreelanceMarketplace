@@ -42,5 +42,9 @@ public class FeedbackEntity {
 
     @Column(nullable = false)
     @Builder.Default
+    private boolean deleted = false;
+
+    @Column(nullable = false)
+    @Builder.Default
     private Instant createdAt = Instant.now();
 }

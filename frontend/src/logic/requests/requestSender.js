@@ -225,11 +225,17 @@ async function sendAuth(
       });
     } else if (requestType === "PATCH") {
       response = await axios.patch(BACKEND_URL + path, data, {
-        headers: { Authorization: "Bearer " + token },
+        headers: {
+          "Content-Type": contentType,
+          Authorization: "Bearer " + token,
+        },
       });
     } else if (requestType === "DELETE") {
       response = await axios.delete(BACKEND_URL + path, {
-        headers: { Authorization: "Bearer " + token },
+        headers: {
+          "Content-Type": contentType,
+          Authorization: "Bearer " + token,
+        },
         data: data
       });
     } else {

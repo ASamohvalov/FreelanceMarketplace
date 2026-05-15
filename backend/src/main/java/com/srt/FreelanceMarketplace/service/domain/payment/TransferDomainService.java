@@ -64,7 +64,7 @@ public class TransferDomainService {
     public void canselTransferByOrder(OrderEntity order) {
         TransferEntity transfer = getTransferByOrder(order);
         if (transfer.getStatus() != TransferStatusEnum.HELD) {
-            throw new IllegalStateException("you cannot cansel an already released transfer");
+            throw new IllegalStateException("you cannot cancel an already released transfer");
         }
         transfer.setStatus(TransferStatusEnum.CANCELLED);
         repository.save(transfer);

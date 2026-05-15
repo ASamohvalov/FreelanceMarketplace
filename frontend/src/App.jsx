@@ -36,6 +36,7 @@ import SendFeedbackPage from "./views/pages/feedback/SendFeedbackPage.jsx";
 import AdminPanelJobTitlePage from "./views/pages/admin_panel/AdminPanelJobTitlesPage.jsx";
 import AdminPanelFeedbackPage from "./views/pages/admin_panel/AdminPanelFeedbackPage.jsx";
 import ModeratorLayout from "./views/pages/ModeratorLayout.jsx";
+import AdminPanelOrdersPage from "./views/pages/admin_panel/AdminPanelOrdersPage.jsx";
 
 // base routing
 export default function App() {
@@ -110,6 +111,7 @@ export default function App() {
           <Route path="categories" element={<AdminPanelCategoriesPage />} />
           <Route path="jobTitles" element={<AdminPanelJobTitlePage />} />
           <Route path="feedback" element={<AdminPanelFeedbackPage />} />
+          <Route path="orders" element={<AdminPanelOrdersPage />} />
         </Route>
       </Route>
 
@@ -117,6 +119,7 @@ export default function App() {
         <Route path="/moderator" element={<ModeratorLayout />}>
           <Route index element={<AdminPanelFeedbackPage />} />
           <Route path="feedback" element={<AdminPanelFeedbackPage />} />
+          <Route path="orders" element={<AdminPanelOrdersPage />} />
         </Route>
       </Route>
     </Routes>

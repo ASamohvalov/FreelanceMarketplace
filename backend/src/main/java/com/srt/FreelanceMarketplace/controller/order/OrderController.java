@@ -2,14 +2,14 @@ package com.srt.FreelanceMarketplace.controller.order;
 
 import com.srt.FreelanceMarketplace.domain.dto.request.order.ExtendDeadlineRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderRejectResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.*;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderRequirementResponse;
 import com.srt.FreelanceMarketplace.service.application.order.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +66,6 @@ public class OrderController {
         return orderService.getOrderRequirementByOrderId(orderId);
     }
 
-    // продлить может только
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
     @PostMapping("/extend/deadline")
     public void extendDeadline(@RequestBody @Valid ExtendDeadlineRequest request) {
@@ -81,5 +80,23 @@ public class OrderController {
     @PatchMapping("/extend/deadline/{orderExtendId}/reject")
     public void rejectExtendDeadline(@PathVariable UUID orderExtendId) {
         orderService.rejectExtendDeadline(orderExtendId);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FREELANCER')")
+    @GetMapping("/get")
+    public Page<GetOrderResponse> getOrders(@PageableDefault(size = 10) Pageable pageable) {
+        return orderService.getOrders(pageable);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FREELANCER')")
+    @PatchMapping("/complete/{id}/by_moderator")
+    public void completeOrder(@PathVariable UUID id) {
+        orderService.completeOrder(id);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FREELANCER')")
+    @PatchMapping("/reject/{id}/by_moderator")
+    public void rejectOrderByModerator(@PathVariable UUID id) {
+        orderService.rejectOrderByModerator(id);
     }
 }

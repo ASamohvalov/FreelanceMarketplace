@@ -57,3 +57,18 @@ export async function extendOrderDeadlineRequest(orderId, daysAdded) {
 export async function acceptExtendDeadline(id) {
   return await sendAuthPatch(`order/extend/deadline/${id}/accept`);
 }
+
+export async function getAllOrdersRequest(page=0, size=5) {
+  return await sendAuthGet("order/get", {
+    page: page,
+    size: size,
+  });
+}
+
+export async function completeOrderByModeratorRequest(id) {
+  return await sendAuthPatch(`order/complete/${id}/by_moderator`);
+}
+
+export async function rejectOrderByModeratorRequest(id) {
+  return await sendAuthPatch(`order/reject/${id}/by_moderator`);
+}

@@ -40,7 +40,7 @@ export default function HomePage() {
             <h1>Найди исполнителя для любой задачи</h1>
             <p className="mt-3">Быстро, безопасно и с гарантией результата</p>
 
-            <div className="mt-4 d-flex gap-2">
+            <div className="mt-4 d-flex gap-2 mb-2">
               <Link className="btn btn-primary" to="/services">Найти услугу</Link>
               {user?.isAuth && !user?.isFreelancer && (
                 <Link className="btn btn-outline-secondary" to="/become-freelancer">

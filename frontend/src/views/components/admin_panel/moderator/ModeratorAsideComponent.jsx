@@ -16,6 +16,12 @@ export default function ModeratorAsideComponent() {
         <i className="bi bi-megaphone-fill" /> Обратная связь
       </NavLink>
 
+      <NavLink
+        to="/admin/orders"
+        className={({ isActive }) => (isActive ? "active" : "")}
+      >
+        <i className="bi bi-journal-text" /> Заказы
+      </NavLink>
     </aside>
   );
 }

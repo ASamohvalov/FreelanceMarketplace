@@ -1,19 +1,17 @@
 package com.srt.FreelanceMarketplace.service.application.order;
 
-import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
-import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderExtensionStatusEnum;
-import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.ExtendDeadlineRequest;
 import com.srt.FreelanceMarketplace.domain.dto.request.order.MakeOrderRequest;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.GetOrderDataResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderCustomerResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderFreelancerResponse;
-import com.srt.FreelanceMarketplace.domain.dto.response.order.OrderRejectResponse;
+import com.srt.FreelanceMarketplace.domain.dto.response.order.*;
 import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderRequirementResponse;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderExtensionStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderExtensionEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
+import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
@@ -34,6 +32,8 @@ import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import com.srt.FreelanceMarketplace.service.infrastructure.MessagingService;
 import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -297,6 +297,47 @@ public class OrderService {
 
     public void rejectExtendDeadline(UUID orderExtensionId) {
         changeOrderExtensionStatus(orderExtensionId, OrderExtensionStatusEnum.REJECTED);
+    }
+
+    public Page<GetOrderResponse> getOrders(Pageable pageable) {
+        return repository.findAllByOrderByOrderDateDesc(pageable)
+                .map(mapper::toGetResponse);
+    }
+
+    @Transactional
+    public void completeOrder(UUID id) {
+        OrderEntity order = domainService.getByIdWithFreelancerAndCustomer(id);
+
+        if (endStatus(order.getStatus())) {
+            throw new GlobalBadRequestException("this order already completed");
+        }
+
+        order.setStatus(OrderStatusEnum.COMPLETED);
+        order.setCompletionDate(Instant.now());
+        repository.save(order);
+
+        TransferEntity transfer = transferDomainService.getTransferByOrder(order);
+        transferDomainService.completeTransfer(transfer);
+
+        notificationSenderService.sendOrderCompleted(
+                order,
+                order.getFreelancer().getUser(),
+                order.getCustomer()
+        );
+
+        notificationSenderService.sendMoneyTransferred(
+                transfer,
+                order.getFreelancer().getUser(),
+                order.getCustomer()
+        );
+    }
+
+    public void rejectOrderByModerator(UUID id) {
+        OrderEntity order = domainService.getById(id);
+        if (endStatus(order.getStatus())) {
+            throw new GlobalBadRequestException("this order already completed");
+        }
+        reject(order);
     }
 
     private void changeOrderExtensionStatus(UUID orderExtensionId, OrderExtensionStatusEnum status) {

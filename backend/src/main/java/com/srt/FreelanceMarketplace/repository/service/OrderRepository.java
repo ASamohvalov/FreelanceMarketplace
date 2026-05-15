@@ -4,6 +4,8 @@ import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -58,4 +60,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     @EntityGraph(attributePaths = {"customer", "freelancer.user", "service"})
     Optional<OrderEntity> findWithFreelancerAndCustomerById(UUID id);
+
+    Page<OrderEntity> findAllByOrderByOrderDateDesc(Pageable pageable);
 }

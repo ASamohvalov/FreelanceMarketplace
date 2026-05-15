@@ -59,6 +59,10 @@ public class ServiceEntity {
 
     @Column(nullable = false)
     @Builder.Default
+    private boolean deleted = false;
+
+    @Column(nullable = false)
+    @Builder.Default
     private Instant createdAt = Instant.now();
 
     @Column(nullable = false)

@@ -106,4 +106,10 @@ public class ServiceController {
     public Page<ServiceResponse> getMostPopularServices(@PageableDefault(size = 3) Pageable pageable) {
         return service.getMostPopularServices(pageable);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @DeleteMapping("/delete/{id}")
+    public void deleteService(@PathVariable UUID id) {
+        service.deleteService(id);
+    }
 }

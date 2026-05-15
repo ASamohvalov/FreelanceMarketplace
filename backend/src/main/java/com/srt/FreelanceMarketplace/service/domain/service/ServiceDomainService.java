@@ -48,7 +48,7 @@ public class ServiceDomainService {
     }
 
     public ServiceEntity getByIdWithAuthor(UUID id) {
-        return repository.findByIdWithFreelancer(id)
+        return repository.findWithFreelancerByIdAndHiddenFalseAndDeletedFalse(id)
                 .orElseThrow(() -> new GlobalBadRequestException("such service id not found"));
     }
 

@@ -1,5 +1,5 @@
 import { isAuth } from "../../jwt";
-import { sendAuthGet, sendAuthPatch, sendAuthPostFormData, sendAuthPutFormData, sendGet } from "../requestSender";
+import { sendAuthDelete, sendAuthGet, sendAuthPatch, sendAuthPost, sendAuthPostFormData, sendAuthPutFormData, sendGet } from "../requestSender";
 
 /**
  * @returns {map} { status: int, data: null }
@@ -64,9 +64,12 @@ export async function getPaymentInfoRequest(serviceId) {
   return await sendGet(`service/payment/info/${serviceId}`);
 }
 
-
 export async function getPopularServices(size=3) {
   return await sendGet("service/get/most_popular", {
     size: size,
   });
+}
+
+export async function deleteServiceRequest(id) {
+  return await sendAuthDelete("service/delete/" + id);
 }

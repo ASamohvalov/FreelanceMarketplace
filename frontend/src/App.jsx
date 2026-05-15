@@ -26,7 +26,6 @@ import SendOrderReportSuccessPage from "./views/pages/order/SendOrderReportSucce
 import OrderReportPage from "./views/pages/order/OrderReportPage.jsx";
 import SendReviewPage from "./views/pages/review/SendReviewPage.jsx";
 import OrderPage from "./views/pages/order/OrderPage.jsx";
-import AdminPanelUsersPanel from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
 import ProtectedRoute from "./logic/ProtectedRoute.jsx";
 import AdminPanelUsersPage from "./views/pages/admin_panel/AdminPanelUsersPage.jsx";
 import AdminPanelCategoriesPage from "./views/pages/admin_panel/AdminPanelCategoriesPage.jsx";
@@ -36,7 +35,6 @@ import ProfilePage from "./views/pages/user/ProfilePage.jsx";
 import SendFeedbackPage from "./views/pages/feedback/SendFeedbackPage.jsx";
 import AdminPanelJobTitlePage from "./views/pages/admin_panel/AdminPanelJobTitlesPage.jsx";
 import AdminPanelFeedbackPage from "./views/pages/admin_panel/AdminPanelFeedbackPage.jsx";
-import ModeratorAsideComponent from "./views/components/admin_panel/moderator/ModeratorAsideComponent.jsx";
 import ModeratorLayout from "./views/pages/ModeratorLayout.jsx";
 
 // base routing
@@ -49,7 +47,9 @@ export default function App() {
         <Route path="sign-in" element={<SignInPage />} />
         <Route path="sign-up" element={<SignUpPage />} />
 
-        <Route path="become-freelancer" element={<BecomeFreelancerPage />} />
+        <Route element={<ProtectedRoute exitRole={"ROLE_FREELANCER"} />}>
+          <Route path="become-freelancer" element={<BecomeFreelancerPage />} />
+        </Route>
         <Route path="personal-account" element={<PersonalAccountPage />} />
         <Route path="profile/:userId" element={<ProfilePage />} />
 

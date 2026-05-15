@@ -18,13 +18,6 @@ export default function AdminAsideComponent() {
       </NavLink>
 
       <NavLink
-        to="/admin/services"
-        className={({ isActive }) => (isActive ? "active" : "")}
-      >
-        <i className="bi bi-briefcase-fill" /> Услуги
-      </NavLink>
-
-      <NavLink
         to="/admin/categories"
         className={({ isActive }) => (isActive ? "active" : "")}
       >

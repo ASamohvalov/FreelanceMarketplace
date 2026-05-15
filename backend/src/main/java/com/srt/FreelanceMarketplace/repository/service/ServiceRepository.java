@@ -21,6 +21,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
             select s from ServiceEntity s
             join fetch s.freelancer
             where s.hidden = false
+            and s.deleted = false
             order by s.updatedAt desc
             """)
     List<ServiceEntity> findAllNotHideWithFreelancer();
@@ -29,6 +30,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
     @Query("""
             select s from ServiceEntity s
             where s.hidden = false
+            and s.deleted = false
             order by (select count(o) from OrderEntity o where o.service = s) desc
             """)
     Page<ServiceEntity> findAllMostPopular(Pageable pageable);
@@ -37,8 +39,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
     List<ServiceEntity> findAllByFreelancerAndHiddenFalse(FreelancerEntity freelancer);
 
     @EntityGraph(attributePaths = {"freelancer", "freelancer.user"})
-    @Query("select s from ServiceEntity s where id = :id")
-    Optional<ServiceEntity> findByIdWithFreelancer(UUID id);
+    Optional<ServiceEntity> findWithFreelancerByIdAndHiddenFalseAndDeletedFalse(UUID id);
 
     @EntityGraph(attributePaths = {"images", "subcategory.category", "freelancer.user", "freelancer.jobTitle"})
     Optional<ServiceEntity> findWithImagesAndSubcategoryAndFreelancerById(UUID id);

@@ -7,6 +7,10 @@ export async function getAllCategoryInfo() {
   return await sendGet("category/get_all_info");
 }
 
+export async function getAllCategories() {
+  return await sendGet("category/get_all");
+}
+
 export async function createCategoryRequest(name) {
   return await sendAuthPost("category/create", {
     name: name,

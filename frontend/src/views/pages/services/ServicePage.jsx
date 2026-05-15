@@ -1,7 +1,8 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import {
+  deleteServiceRequest,
   getAllPersonalServices,
   getServiceByIdRequest,
 } from "../../../logic/requests/service/serviceRequest";
@@ -22,11 +23,14 @@ import { getServiceImageUrl } from "../../../logic/image";
 import { reviewToRu } from "../../../logic/lang";
 import Avatar from "../../components/elements/Avatar";
 import { checkConversationRequest } from "../../../logic/requests/message/messageRequest";
+import { userContext } from "../../../logic/store/userContext";
 
 export default function ServicePage() {
   const { id } = useParams();
 
   const navigate = useNavigate();
+  const [user, _] = useContext(userContext);
+  const [message, setMessage] = useState({});
 
   const [serviceData, setServiceData] = useState([]);
   const [isProposalVisible, setIsProposalVisible] = useState(false);
@@ -94,6 +98,18 @@ export default function ServicePage() {
     })();
   }, [navigate, id]);
 
+  const deleteService = async () => {
+    if (window.confirm("Вы уверены что хотите удалить услугу?")) {
+      const response = await deleteServiceRequest(id);
+      if (response.status !== 200) {
+        navigate(`/error?code=${response.status}`);
+        return;
+      }
+
+      setMessage({ message: "Услуга успешно удалена", type: "success" });
+    }
+  };
+
   return (
     <>
       <ProposalModalWindow
@@ -131,6 +147,10 @@ export default function ServicePage() {
             {serviceData.subcategory}
           </span>
         </div>
+
+        {message?.message && (
+          <div className={`alert alert-${message.type}`}>{message.message}</div>
+        )}
 
         <div className="row">
           <div className="col-lg-8">
@@ -203,6 +223,15 @@ export default function ServicePage() {
                     to={`/update-service?id=${serviceData.id}`}
                   >
                     <i className="bi bi-pencil-fill border p-2 rounded" />
+                  </Link>
+                )}
+
+                {(user?.isAdmin || user?.isModerator) && (
+                  <Link
+                    className="fs-5"
+                    onClick={deleteService}
+                  >
+                    <i className="bi bi-trash3-fill"></i>
                   </Link>
                 )}
               </div>

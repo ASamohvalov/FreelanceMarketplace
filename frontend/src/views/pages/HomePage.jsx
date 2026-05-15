@@ -1,14 +1,18 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { getPopularServices } from "../../logic/requests/service/serviceRequest";
 import "./css/home_page.css";
 import { Link, useNavigate } from "react-router-dom";
-import ServicesListComponent from "../components/service/ServicesListComponent";
 import ServiceCardComponent from "../components/service/ServiceCardComponent";
+import { userContext } from "../../logic/store/userContext";
+import { getAllCategories } from "../../logic/requests/service/categoryRequest";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [popularServices, setPopularServices] = useState([]);
+  const [user, _] = useContext(userContext);
+
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -18,6 +22,13 @@ export default function HomePage() {
         return;
       }
       setPopularServices(response.data);
+
+      const categoryResponse = await getAllCategories();
+      if (categoryResponse.status !== 200) {
+        navigate(`/error?code=${categoryResponse.status}`);
+        return;
+      }
+      setCategories(categoryResponse.data);
     })();
   }, [navigate]);
 
@@ -31,9 +42,11 @@ export default function HomePage() {
 
             <div className="mt-4 d-flex gap-2">
               <Link className="btn btn-primary" to="/services">Найти услугу</Link>
-              <Link className="btn btn-outline-secondary" to="/become-freelancer">
-                Стать исполнителем
-              </Link>
+              {user?.isAuth && !user?.isFreelancer && (
+                <Link className="btn btn-outline-secondary" to="/become-freelancer">
+                  Стать исполнителем
+                </Link>
+              )}
             </div>
           </div>
 
@@ -47,21 +60,11 @@ export default function HomePage() {
         <h4 className="mb-3">Категории</h4>
 
         <div className="row g-3">
-          <div className="col-md-3">
-            <div className="category-card">💻 Web Development</div>
-          </div>
-
-          <div className="col-md-3">
-            <div className="category-card">🎨 Design</div>
-          </div>
-
-          <div className="col-md-3">
-            <div className="category-card">📱 Mobile Apps</div>
-          </div>
-
-          <div className="col-md-3">
-            <div className="category-card">✍️ Copywriting</div>
-          </div>
+          {categories.map(category => (
+            <div className="col-md-3 mx-auto" key={category.id}>
+              <div className="category-card">{category.name}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -113,15 +116,24 @@ export default function HomePage() {
 
         <div className="row g-3">
           <div className="col-md-4">
-            <div className="category-card">⚡ Быстрое выполнение</div>
+            <div className="category-card">
+              <i className="bi bi-lightning-charge-fill" />
+              {" "}Быстрое выполнение
+            </div>
           </div>
 
           <div className="col-md-4">
-            <div className="category-card">🔒 Безопасные сделки</div>
+            <div className="category-card">
+              <i className="bi bi-shield-fill" />
+              {" "}Безопасные сделки
+            </div>
           </div>
 
           <div className="col-md-4">
-            <div className="category-card">⭐ Проверенные исполнители</div>
+            <div className="category-card">
+              <i className="bi bi-star-fill"></i>
+              {" "}Проверенные исполнители
+            </div>
           </div>
         </div>
       </section>

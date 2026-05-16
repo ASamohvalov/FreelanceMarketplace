@@ -26,7 +26,7 @@ export default function ServiceCardComponent({
   hidden,
   orderInfo
 }) {
-  const [hiddenState, setHidden] = useState(hidden);  
+  const [hiddenState, setHidden] = useState(hidden);
   const orderDate = orderInfo && new Date(Date.parse(orderInfo[0].order?.orderDate))
   const deadline = orderInfo && new Date(Date.parse(orderInfo[0].order?.deadlineDate) - now()).getDate();
 
@@ -58,7 +58,7 @@ export default function ServiceCardComponent({
         {orderInfo && <h6>Дата заказа: {"0"+orderDate.getMonth()+".0"+orderDate.getDate()}</h6>}
         {orderInfo && <h6>Осталось до конца: {deadline.toString()} д.</h6>}
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <span className="service-price">{price}₽</span>
+          <span className={`service-price ${price === 0 ? "text-success" : "" }`}>{price}₽</span>
           <button className="btn btn-sm btn-outline-primary">Подробнее</button>
           {from == "/OwnServices" &&
             (!hiddenState ? (

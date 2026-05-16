@@ -293,15 +293,9 @@ export default function ServicePage() {
                       " " +
                       serviceData.freelancer?.lastName}
                   </strong>
-                  <div className="text-muted small">Веб-разработчик</div>
+                  <div className="text-muted small">{ serviceData.freelancer?.jobTitle }</div>
                 </div>
               </div>
-
-              <ul className="list-unstyled mt-3 small">
-                <li>✔ Время ответа: 1 час</li>
-                <li>✔ Доставка: 3 дня</li>
-                <li>✔ Редактирование: 2</li>
-              </ul>
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import com.srt.FreelanceMarketplace.domain.dto.response.service.GetOwnServiceRes
 import com.srt.FreelanceMarketplace.domain.dto.response.service.PaymentInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceInfoResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.service.ServiceResponse;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ServiceTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
@@ -87,9 +88,8 @@ public class ServiceApplicationService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .subcategory(subcategory)
-                .deadlineDays(request.getDeadlineDays())
-                .revisionsCount(request.getRevisionsCount())
-                .price(request.getPrice())
+                .price(request.getType() == ServiceTypeEnum.FREE ? 0 : request.getPrice())
+                .type(request.getType())
                 .build();
 
         var entityList = serviceImageDomainService
@@ -116,9 +116,8 @@ public class ServiceApplicationService {
         service.setTitle(request.getTitle());
         service.setDescription(request.getDescription());
         service.setSubcategory(subcategory);
-        service.setDeadlineDays(request.getDeadlineDays());
-        service.setRevisionsCount(request.getRevisionsCount());
-        service.setPrice(request.getPrice());
+        service.setPrice(request.getType() == ServiceTypeEnum.FREE ? 0 : request.getPrice());
+        service.setType(request.getType());
 
         serviceImageDomainService.deleteImages(service);
 

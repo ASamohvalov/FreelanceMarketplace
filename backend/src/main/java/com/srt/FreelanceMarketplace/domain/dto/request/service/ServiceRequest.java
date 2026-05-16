@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.request.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ServiceTypeEnum;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,15 +31,12 @@ public class ServiceRequest {
     private String description;
 
     @NotNull
-    @Min(20)
+    @Min(0)
     private long price;
 
     @NotNull
-    private int deadlineDays;
-
-    @NotNull
-    private int revisionsCount;
-
-    @NotNull
     private UUID subcategoryId;
+
+    @NotNull
+    private ServiceTypeEnum type;
 }

@@ -1,9 +1,12 @@
 package com.srt.FreelanceMarketplace.domain.entities.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ServiceTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -40,12 +43,6 @@ public class ServiceEntity {
     @Column(nullable = false)
     private long price;
 
-    @Column(nullable = false)
-    private int deadlineDays;
-
-    @Column(nullable = false)
-    private int revisionsCount;
-
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceImageEntity> images;
 
@@ -68,6 +65,12 @@ public class ServiceEntity {
     @Column(nullable = false)
     @Builder.Default
     private Instant updatedAt = Instant.now();
+
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(nullable = false)
+    @Builder.Default
+    private ServiceTypeEnum type = ServiceTypeEnum.USUAL;
 
     // this is crutch
     // null ptr ex - service.getImages().add(some);

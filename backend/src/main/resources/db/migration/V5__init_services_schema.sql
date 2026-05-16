@@ -11,6 +11,8 @@ CREATE TABLE service_subcategories (
     created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
+CREATE TYPE service_type AS ENUM ('FREE', 'USUAL');
+
 CREATE TABLE services (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     freelancer_id UUID NOT NULL REFERENCES freelancers(id),
@@ -18,12 +20,11 @@ CREATE TABLE services (
     title VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
     price BIGINT NOT NULL,
-    deadline_days INT NOT NULL,
-    revisions_count INT NOT NULL,
     hidden BOOLEAN DEFAULT FALSE NOT NULL,
     deleted BOOLEAN DEFAULT FALSE NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    type service_type DEFAULT 'USUAL' NOT NULL,
     title_image_id UUID
 );
 

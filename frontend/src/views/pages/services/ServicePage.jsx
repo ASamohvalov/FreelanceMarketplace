@@ -11,7 +11,6 @@ import NavLocation from "../../components/elements/NavLocation";
 import ReactMarkdown from "react-markdown";
 import "./css/service_page.css";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
-import OrderModalWindow from "../../components/modal_windows/OrderModalWindow";
 import { getUserData, isAuth } from "../../../logic/jwt";
 import {
   getReviewsByServiceRequest,
@@ -154,6 +153,11 @@ export default function ServicePage() {
 
         <div className="row">
           <div className="col-lg-8">
+            {serviceData?.type === "FREE" && (
+              <div className="alert alert-primary">
+                Это бесплатная услуга; пользователь выложил её для получения опыта разработки коммерческого продукта и заработка баллов системы.
+              </div>
+            )}
             <div className="mb-3">
               <ImageCarouselComponent
                 imageUrls={serviceData?.imageIds?.map((i) =>

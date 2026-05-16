@@ -22,9 +22,11 @@ public class AccountEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    // in kopeck (rubles * 100)
     @Column(nullable = false)
     private long balance = 0;
+
+    @Column(nullable = false)
+    private long numberOfPoints = 0;
 
     public AccountEntity(UserEntity user) {
         this.user = user;

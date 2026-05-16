@@ -238,9 +238,9 @@ export default function OrderPage() {
               )}
             </div>
 
-            <div className="order-card_box">
+            <div className="order-card_box d-flex justify-content-between">
               <Link
-                className="btn btn-outline-primary w-100"
+                className="btn btn-outline-primary w-100 mx-1"
                 to={{
                   pathname: "/order/reports",
                   search: `?orderId=${order?.order?.id}`,
@@ -250,10 +250,17 @@ export default function OrderPage() {
               </Link>
 
               <Link
-                className="btn btn-outline-secondary w-100 mt-4"
+                className="btn btn-outline-secondary w-100 mx-1"
                 to={"/order/requirement/" + order?.order?.id}
               >
-                Открыть техническое задание
+                Открыть ТЗ
+              </Link>
+
+              <Link
+                className="btn btn-outline-primary w-100 mx-1"
+                to={"/feedback/send"}
+              >
+                Обратная связь
               </Link>
             </div>
           </div>

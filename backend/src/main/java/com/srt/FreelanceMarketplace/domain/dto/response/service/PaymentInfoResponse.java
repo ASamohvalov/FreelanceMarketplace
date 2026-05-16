@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.domain.dto.response.service;
 
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ServiceTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class PaymentInfoResponse {
     private String freelancerLastName;
     private long price;
     private long commission;
+    private ServiceTypeEnum type;
 }

@@ -1,7 +1,8 @@
 CREATE TABLE accounts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) NOT NULL,
-    balance BIGINT DEFAULT 0 NOT NULL
+    balance BIGINT DEFAULT 0 NOT NULL,
+    number_of_points BIGINT DEFAULT 0 NOT NULL
 );
 
 CREATE TYPE transfer_status AS ENUM ('HELD', 'RELEASED', 'CANCELLED');

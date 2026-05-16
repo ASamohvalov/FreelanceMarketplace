@@ -21,9 +21,7 @@ import java.util.UUID;
 public class OrderReportDomainService {
     private final OrderReportRepository repository;
 
-    private final TransferDomainService transferDomainService;
-    private final NotificationSenderService notificationSenderService;
-    private final OrderRepository orderRepository;
+    private final OrderDomainService orderDomainService;
 
     /**
      * @param report required with order, freelancer and customer
@@ -32,26 +30,8 @@ public class OrderReportDomainService {
     public void acceptOrderReport(OrderReportEntity report, String customerComment) {
         report.setStatus(OrderReportStatusEnum.ACCEPTED);
         report.setCustomerComment(customerComment);
-        report.getOrder().setStatus(OrderStatusEnum.COMPLETED);
-        report.getOrder().setCompletionDate(Instant.now());
 
-        repository.save(report);
-        orderRepository.save(report.getOrder());
-
-        TransferEntity transfer = transferDomainService.getTransferByOrder(report.getOrder());
-        transferDomainService.completeTransfer(transfer);
-
-        notificationSenderService.sendOrderCompleted(
-                report.getOrder(),
-                report.getFreelancer().getUser(),
-                report.getCustomer()
-        );
-
-        notificationSenderService.sendMoneyTransferred(
-                transfer,
-                report.getFreelancer().getUser(),
-                report.getCustomer()
-        );
+        orderDomainService.completeOrder(report.getOrder());
     }
 
     public OrderReportEntity getById(UUID id) {

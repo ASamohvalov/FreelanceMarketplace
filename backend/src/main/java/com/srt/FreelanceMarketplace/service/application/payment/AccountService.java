@@ -25,7 +25,7 @@ public class AccountService {
 
     public BalanceRequest getBalance() {
         AccountEntity account = domainService.getByUser(authHelperService.getUser());
-        return new BalanceRequest(account.getBalance());
+        return new BalanceRequest(account.getBalance(), account.getNumberOfPoints());
     }
 
     public List<TransferResponse> getIncomingTransfers() {

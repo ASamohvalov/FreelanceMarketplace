@@ -29,6 +29,7 @@ export default function PersonalAccountPage() {
   const [aboutYourself, setAboutYourself] = useState("");
   const [email, setEmail] = useState("");
   const [balance, setBalance] = useState(0);
+  const [numberOfPoints, setNumberOfPoints] = useState(0);
   const [uploadAvatar, setUploadAvatar] = useState(null);
 
   // data
@@ -86,6 +87,7 @@ export default function PersonalAccountPage() {
           return;
         }
         setBalance(balanceResponse.data.balance);
+        setNumberOfPoints(balanceResponse.data.numberOfPoints);
 
         const incomeTransfersResponse = await getIncomeTransfersRequest();
         if (incomeTransfersResponse.status !== 200) {
@@ -250,13 +252,24 @@ export default function PersonalAccountPage() {
 
           <div className="col-lg-9">
             {isFreelancer && (
-              <div className="personal-account-page_balance-card mb-4 freelancer-only">
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <div className="small">Баланс</div>
-                    <div className="fs-4 fw-semibold">{balance} ₽</div>
+              <div className="row">
+                <div className="col-7 mx-1 personal-account-page_balance-card mb-4">
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <div className="small">Баланс</div>
+                      <div className="fs-4 fw-semibold">{balance} ₽</div>
+                    </div>
+                    <i className="bi bi-wallet2 fs-1"></i>
                   </div>
-                  <i className="bi bi-wallet2 fs-1"></i>
+                </div>
+                <div className="col-3 mx-1 personal-account-page_point-card mb-4">
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <div className="small">Баллы</div>
+                      <div className="fs-4 fw-semibold">{numberOfPoints}</div>
+                    </div>
+                    <i className="bi bi-p-circle-fill" style={{ fontSize: 40 }}></i>
+                  </div>
                 </div>
               </div>
             )}

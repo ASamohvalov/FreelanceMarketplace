@@ -4,7 +4,7 @@ export default function ImageCarouselComponent({ imageUrls }) {
       id="carouselExampleIndicators"
       className="carousel slide collage-main rounded-4"
       data-bs-ride="carousel"
-      data-bs-interval="5000"
+      data-bs-interval="10000"
     >
       {imageUrls && (
         <>

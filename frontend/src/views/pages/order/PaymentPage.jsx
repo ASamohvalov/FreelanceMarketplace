@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import FooterComponent from "../../components/FooterComponent";
 import "./css/payment_page.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getPaymentInfoRequest } from "../../../logic/requests/service/serviceRequest";
@@ -20,6 +19,8 @@ export default function PaymentPage() {
   const [cardCVV, setCardCVV] = useState("");
   const [error, setError] = useState("");
 
+  const isFreeService = paymentInfo?.type === "FREE";
+
   useEffect(() => {
     if (!state) {
       navigate("/error?code=403");
@@ -36,7 +37,7 @@ export default function PaymentPage() {
   }, [state, serviceId, navigate]);
 
   async function onSubmit() {
-    if (cardNumber === "" || validityPeriod === "" || cardCVV === "") {
+    if (!isFreeService && (cardNumber === "" || validityPeriod === "" || cardCVV === "")) {
       setError("Все поля должны быть заполнены");
       return;
     }
@@ -64,120 +65,126 @@ export default function PaymentPage() {
   }
 
   return (
-    <>
-      <div className="container mt-5">
-        <h3 className="fw-semibold">Оплата заказа</h3>
-        <p className="mb-4 text-secondary">
+    <div className="container mt-5">
+      <h3 className="fw-semibold">
+        {isFreeService ? "Оформление заказа" : "Оплата заказа"}
+      </h3>
+      {!isFreeService && (
+        <p className="text-secondary">
           Исполнитель получит деньги только после окончяния работы
         </p>
+      )}
 
-        <div className="row g-4">
-          <div className="col-lg-7">
-            <div className="payment-card">
-              <h5 className="mb-4">Данные карты</h5>
+      <div className="row g-4 mt-4">
+        <div className="col-lg-7">
+          <div className="payment-card">
+            {!isFreeService && (
+              <div className="mb-2">
+                <h5 className="mb-4">Данные карты</h5>
 
-              <div className="mb-3">
-                <label className="form-label">Номер карты</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="1234 5678 9012 3456"
-                  value={cardNumber}
-                  onChange={(e) => {
-                    if (e.target.value.length !== 16) {
-                      setCardNumber(e.target.value);
-                    }
-                    setError("");
-                  }}
-                />
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Срок действия</label>
+                <div className="mb-3">
+                  <label className="form-label">Номер карты</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="MM / YY"
-                    value={validityPeriod}
+                    placeholder="1234 5678 9012 3456"
+                    value={cardNumber}
                     onChange={(e) => {
-                      if (e.target.value.length !== 5) {
-                        setValidityPeriod(e.target.value);
+                      if (e.target.value.length !== 16) {
+                        setCardNumber(e.target.value);
                       }
                       setError("");
                     }}
                   />
                 </div>
 
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">CVV</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="123"
-                    value={cardCVV}
-                    onChange={(e) => {
-                      if (e.target.value.length !== 4) {
-                        setCardCVV(e.target.value);
-                      }
-                      setError("");
-                    }}
-                  />
+                <div className="row">
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">Срок действия</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="MM / YY"
+                      value={validityPeriod}
+                      onChange={(e) => {
+                        if (e.target.value.length !== 5) {
+                          setValidityPeriod(e.target.value);
+                        }
+                        setError("");
+                      }}
+                    />
+                  </div>
+
+                  <div className="col-md-6 mb-3">
+                    <label className="form-label">CVV</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="123"
+                      value={cardCVV}
+                      onChange={(e) => {
+                        if (e.target.value.length !== 4) {
+                          setCardCVV(e.target.value);
+                        }
+                        setError("");
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
+            )}
 
-              <div className="text-danger">
-                <p>{error}</p>
-              </div>
-              <button onClick={onSubmit} className="btn btn-primary w-100 mt-2">
-                Оплатить
-              </button>
+            <div className="text-danger">
+              <p>{error}</p>
             </div>
+            <button onClick={onSubmit} className="btn btn-primary w-100">
+              {isFreeService ? "Оформить" : "Оплатить"}
+            </button>
           </div>
+        </div>
 
-          <div className="col-lg-5">
-            <div className="order-summary">
-              <h5 className="mb-4">Детали заказа</h5>
+        <div className="col-lg-5">
+          <div className="order-summary">
+            <h5 className="mb-4">Детали заказа</h5>
 
-              <div className="d-flex justify-content-between mb-2">
-                <span>Услуга</span>
-                <span>{paymentInfo?.serviceName}</span>
-              </div>
+            <div className="d-flex justify-content-between mb-2">
+              <span>Услуга</span>
+              <span>{paymentInfo?.serviceName}</span>
+            </div>
 
-              <div className="d-flex justify-content-between mb-2">
-                <span>Исполнитель</span>
-                <span>
-                  {paymentInfo?.freelancerFirstName +
-                    " " +
-                    paymentInfo.freelancerLastName}
-                </span>
-              </div>
+            <div className="d-flex justify-content-between mb-2">
+              <span>Исполнитель</span>
+              <span>
+                {paymentInfo?.freelancerFirstName +
+                  " " +
+                  paymentInfo.freelancerLastName}
+              </span>
+            </div>
 
-              <div className="d-flex justify-content-between mb-2">
-                <span>Срок выполнения</span>
-                <span>{getDayRUString(state.deadlineDays)}</span>
-              </div>
+            <div className="d-flex justify-content-between mb-2">
+              <span>Срок выполнения</span>
+              <span>{getDayRUString(state.deadlineDays)}</span>
+            </div>
 
-              <div className="d-flex justify-content-between mb-2">
-                <span>Стоимость</span>
-                <span>{paymentInfo?.price} ₽</span>
-              </div>
+            <div className="d-flex justify-content-between mb-2">
+              <span>Стоимость</span>
+              <span>{paymentInfo?.price} ₽</span>
+            </div>
 
-              <div className="d-flex justify-content-between mb-2">
-                <span>Комиссия сервиса</span>
-                <span>{paymentInfo?.commission} ₽</span>
-              </div>
+            <div className="d-flex justify-content-between mb-2">
+              <span>Комиссия сервиса</span>
+              <span>{paymentInfo?.commission} ₽</span>
+            </div>
 
-              <hr />
+            <hr />
 
-              <div className="d-flex justify-content-between total">
-                <span>Итого</span>
-                <span>{paymentInfo?.price + paymentInfo?.commission} ₽</span>
-              </div>
+            <div className="d-flex justify-content-between total">
+              <span>Итого</span>
+              <span>{paymentInfo?.price + paymentInfo?.commission} ₽</span>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

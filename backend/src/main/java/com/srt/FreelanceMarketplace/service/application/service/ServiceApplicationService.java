@@ -139,6 +139,7 @@ public class ServiceApplicationService {
                 .commission(commissionService.getCommission(service.getPrice()))
                 .freelancerFirstName(service.getFreelancer().getUser().getFirstName())
                 .freelancerLastName(service.getFreelancer().getUser().getLastName())
+                .type(service.getType())
                 .build();
     }
 

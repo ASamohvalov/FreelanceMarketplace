@@ -21,6 +21,11 @@ public class AccountDomainService {
         repository.save(account);
     }
 
+    public void incrementPointsCount(AccountEntity account) {
+        account.setNumberOfPoints(account.getNumberOfPoints() + 1);
+        repository.save(account);
+    }
+
     public AccountEntity getByUser(UserEntity user) {
         return repository.findByUser(user)
                 .orElseThrow(() -> new IllegalStateException("user doesn't have an account"));

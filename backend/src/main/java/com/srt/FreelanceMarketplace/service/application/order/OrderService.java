@@ -7,11 +7,11 @@ import com.srt.FreelanceMarketplace.domain.dto.response.order.requirement.OrderR
 import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderExtensionStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.statusEnum.OrderStatusEnum;
 import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ConversationTypeEnum;
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.ServiceTypeEnum;
 import com.srt.FreelanceMarketplace.domain.entities.FreelancerEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderExtensionEntity;
 import com.srt.FreelanceMarketplace.domain.entities.order.OrderRequirementEntity;
-import com.srt.FreelanceMarketplace.domain.entities.payment.TransferEntity;
 import com.srt.FreelanceMarketplace.domain.entities.service.ServiceEntity;
 import com.srt.FreelanceMarketplace.domain.entities.user.UserEntity;
 import com.srt.FreelanceMarketplace.error.exceptions.GlobalBadRequestException;
@@ -115,7 +115,9 @@ public class OrderService {
             );
         }
 
-        transferDomainService.generateHeldTransfer(order);
+        if (service.getType() == ServiceTypeEnum.USUAL) {
+            transferDomainService.generateHeldTransfer(order);
+        }
 
         notificationSenderService.sendNewOrder(
                 order,
@@ -265,7 +267,7 @@ public class OrderService {
     }
 
     public void extendDeadline(ExtendDeadlineRequest request) {
-        OrderEntity order = domainService.getByIdWithFreelancerAndCustomer(request.getOrderId());
+        OrderEntity order = domainService.getByIdWithFreelancerAndCustomerAndService(request.getOrderId());
         UserEntity user = authHelperService.getUser();
 
         // if not freelancer
@@ -273,7 +275,7 @@ public class OrderService {
             throw new GlobalBadRequestException("you don't have rights to extend the deadline");
         }
 
-        if (endStatus(order.getStatus())) {
+        if (domainService.endStatus(order.getStatus())) {
             throw new GlobalBadRequestException("order closed");
         }
 
@@ -306,35 +308,13 @@ public class OrderService {
 
     @Transactional
     public void completeOrder(UUID id) {
-        OrderEntity order = domainService.getByIdWithFreelancerAndCustomer(id);
-
-        if (endStatus(order.getStatus())) {
-            throw new GlobalBadRequestException("this order already completed");
-        }
-
-        order.setStatus(OrderStatusEnum.COMPLETED);
-        order.setCompletionDate(Instant.now());
-        repository.save(order);
-
-        TransferEntity transfer = transferDomainService.getTransferByOrder(order);
-        transferDomainService.completeTransfer(transfer);
-
-        notificationSenderService.sendOrderCompleted(
-                order,
-                order.getFreelancer().getUser(),
-                order.getCustomer()
-        );
-
-        notificationSenderService.sendMoneyTransferred(
-                transfer,
-                order.getFreelancer().getUser(),
-                order.getCustomer()
-        );
+        OrderEntity order = domainService.getByIdWithFreelancerAndCustomerAndService(id);
+        domainService.completeOrder(order);
     }
 
     public void rejectOrderByModerator(UUID id) {
         OrderEntity order = domainService.getById(id);
-        if (endStatus(order.getStatus())) {
+        if (domainService.endStatus(order.getStatus())) {
             throw new GlobalBadRequestException("this order already completed");
         }
         reject(order);
@@ -378,11 +358,5 @@ public class OrderService {
         transferDomainService.canselTransferByOrder(order);
 
         repository.save(order);
-    }
-
-    private boolean endStatus(OrderStatusEnum status) {
-        return status == OrderStatusEnum.CANCELLED ||
-                status == OrderStatusEnum.COMPLETED ||
-                status == OrderStatusEnum.REJECTED;
     }
 }

@@ -32,6 +32,13 @@
   padding: 25px;
 }
 
+.personal-account-page_point-card {
+  background: linear-gradient(90deg, #F29861, #FAEB7D);
+  color: white;
+  border-radius: 20px;
+  padding: 25px;
+}
+
 .personal-account-page_cabinet-user .personal-account-page_freelancer-only {
   display: none;
 }

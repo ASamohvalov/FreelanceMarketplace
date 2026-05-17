@@ -28,6 +28,9 @@ public interface MessagingService {
 
     boolean isConversationExists(FreelancerEntity freelancer, UserEntity user);
 
+    /**
+     * @param order required with service
+     */
     void changeConversationType(
             FreelancerEntity freelancer,
             UserEntity user,

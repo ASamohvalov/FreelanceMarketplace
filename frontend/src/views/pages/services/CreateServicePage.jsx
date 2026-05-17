@@ -1,20 +1,21 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { useRef } from "react";
-import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { getUserData, hasRole, isAuth } from "../../../logic/jwt";
+import {
+  getCurrentPointRateRequest
+} from "../../../logic/requests/payment/accountRequest";
 import { getAllCategoryInfo } from "../../../logic/requests/service/categoryRequest";
-import "./css/create_service_page.css";
-import LoadingInput from "../../components/elements/LoadingInput";
 import {
   createServiceRequest,
-  getServiceByIdRequest,
   editServiceRequest,
+  getServiceByIdRequest,
 } from "../../../logic/requests/service/serviceRequest";
+import LoadingInput from "../../components/elements/LoadingInput";
 import NavLocation from "../../components/elements/NavLocation";
-import ReactMarkdown from "react-markdown";
-import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import FileUploadComponent from "../../components/FileUploadComponent";
+import ServiceCardComponent from "../../components/service/ServiceCardComponent";
+import "./css/create_service_page.css";
 
 export default function CreateServicePage({ isEdit = false }) {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function CreateServicePage({ isEdit = false }) {
   const [images, setImages] = useState([]);
 
   const [freeServiceMode, setFreeServiceMode] = useState(false);
+  const [currentPointRate, setCurrentPointRate] = useState(null);
 
   useEffect(() => {
     if (!isAuth() || !hasRole("ROLE_FREELANCER")) {
@@ -142,6 +144,14 @@ export default function CreateServicePage({ isEdit = false }) {
 
   const changeServiceMode = async () => {
     if (!freeServiceMode) {
+      if (currentPointRate === null) {
+        const response = await getCurrentPointRateRequest();
+        if (response.status !== 200) {
+          navigate("/error");
+          return;
+        }
+        setCurrentPointRate(response.data.rate)
+      }
       setPrice(0);
       setFreeServiceMode(true);
     } else {
@@ -179,7 +189,7 @@ export default function CreateServicePage({ isEdit = false }) {
       </div>
 
       <div className="row">
-        <div className="col-lg-8">
+        <div className="col-lg-8 mb-4">
           <div className="card p-4 form-section rounded-4">
             <h5>Основная информация</h5>
 
@@ -341,7 +351,7 @@ export default function CreateServicePage({ isEdit = false }) {
                 <h6>Информация о бесплатной услуге</h6>
                 <ul className="small mt-2">
                   <li>
-                    За выполнение услуги вам начислится 1 балл (20₽ по текущему
+                    За выполнение услуги вам начислится 1 балл ({currentPointRate}₽ по текущему
                     курсу)
                   </li>
                   <li>За бесплатную услугу заказчик ничего не платит</li>

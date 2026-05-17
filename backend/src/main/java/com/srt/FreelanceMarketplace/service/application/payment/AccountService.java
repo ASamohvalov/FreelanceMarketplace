@@ -1,17 +1,19 @@
 package com.srt.FreelanceMarketplace.service.application.payment;
 
-import com.srt.FreelanceMarketplace.domain.dto.response.payment.BalanceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.payment.BalanceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.payment.TransferResponse;
 import com.srt.FreelanceMarketplace.domain.entities.payment.AccountEntity;
 import com.srt.FreelanceMarketplace.mapper.TransferMapper;
 import com.srt.FreelanceMarketplace.repository.payment.AccountRepository;
 import com.srt.FreelanceMarketplace.service.domain.payment.AccountDomainService;
+import com.srt.FreelanceMarketplace.service.domain.payment.SystemFinanceDomainService;
 import com.srt.FreelanceMarketplace.service.domain.payment.TransferDomainService;
 import com.srt.FreelanceMarketplace.service.infrastructure.AuthHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +24,11 @@ public class AccountService {
     private final AuthHelperService authHelperService;
     private final TransferDomainService transferDomainService;
     private final TransferMapper transferMapper;
+    private final SystemFinanceDomainService systemFinanceDomainService;
 
-    public BalanceRequest getBalance() {
+    public BalanceResponse getBalance() {
         AccountEntity account = domainService.getByUser(authHelperService.getUser());
-        return new BalanceRequest(account.getBalance(), account.getNumberOfPoints());
+        return new BalanceResponse(account.getBalance(), account.getNumberOfPoints());
     }
 
     public List<TransferResponse> getIncomingTransfers() {
@@ -39,5 +42,9 @@ public class AccountService {
         return transferDomainService.getWithServiceAndCustomerAllBySender(authHelperService.getUser()).stream()
                 .map(transferMapper::toResponse)
                 .toList();
+    }
+
+    public Map<String, Long> getCurrentPointRate() {
+        return Map.of("rate", systemFinanceDomainService.getPointRate());
     }
 }

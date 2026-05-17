@@ -11,3 +11,7 @@ export async function getIncomeTransfersRequest() {
 export async function getExpenseTransfersRequest() {
   return await sendAuthGet("account/get/transfer/expense");
 }
+
+export async function getCurrentPointRateRequest() {
+  return await sendAuthGet("account/get/current_point_rate");
+}

@@ -1,6 +1,6 @@
 package com.srt.FreelanceMarketplace.controller.payment;
 
-import com.srt.FreelanceMarketplace.domain.dto.response.payment.BalanceRequest;
+import com.srt.FreelanceMarketplace.domain.dto.response.payment.BalanceResponse;
 import com.srt.FreelanceMarketplace.domain.dto.response.payment.TransferResponse;
 import com.srt.FreelanceMarketplace.service.application.payment.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class AccountController {
 
     @PreAuthorize("hasRole('ROLE_FREELANCER')")
     @GetMapping("/get/balance")
-    public BalanceRequest getBalance() {
+    public BalanceResponse getBalance() {
         return accountService.getBalance();
     }
 
@@ -33,5 +34,10 @@ public class AccountController {
     @GetMapping("/get/transfer/expense")
     public List<TransferResponse> getExpenseTransfers() {
         return accountService.getExpenseTransfers();
+    }
+
+    @GetMapping("/get/current_point_rate")
+    public Map<String, Long> getCurrentPointRate() {
+        return accountService.getCurrentPointRate();
     }
 }

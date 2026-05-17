@@ -19,6 +19,7 @@ public class TransferDomainService {
 
     private final AccountDomainService accountDomainService;
     private final CommissionService commissionService;
+    private final SystemFinanceDomainService systemFinanceDomainService;
 
     /**
      * @param order required with freelancer.user and service
@@ -45,6 +46,9 @@ public class TransferDomainService {
         accountDomainService.add(transfer.getRecipientAccount(), amount);
         transfer.setStatus(TransferStatusEnum.RELEASED);
         repository.save(transfer);
+
+        long commission = transfer.getAmount() - amount;
+        systemFinanceDomainService.incrementEarnings(commission);
     }
 
     public TransferEntity getTransferByOrder(OrderEntity order) {

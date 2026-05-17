@@ -37,6 +37,7 @@ import AdminPanelJobTitlePage from "./views/pages/admin_panel/AdminPanelJobTitle
 import AdminPanelFeedbackPage from "./views/pages/admin_panel/AdminPanelFeedbackPage.jsx";
 import ModeratorLayout from "./views/pages/ModeratorLayout.jsx";
 import AdminPanelOrdersPage from "./views/pages/admin_panel/AdminPanelOrdersPage.jsx";
+import AdminPanelFinancePage from "./views/pages/admin_panel/AdminPanelFinancePage.jsx";
 
 // base routing
 export default function App() {
@@ -112,6 +113,7 @@ export default function App() {
           <Route path="jobTitles" element={<AdminPanelJobTitlePage />} />
           <Route path="feedback" element={<AdminPanelFeedbackPage />} />
           <Route path="orders" element={<AdminPanelOrdersPage />} />
+          <Route path="finance" element={<AdminPanelFinancePage />} />
         </Route>
       </Route>
 

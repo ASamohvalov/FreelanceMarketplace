@@ -82,6 +82,7 @@ public class MessagingServiceImpl implements MessagingService {
         );
         conversation.setType(type);
         conversation.setOrder(order);
+        conversation.setService(order.getService());
         conversationDomainService.save(conversation);
     }
 }

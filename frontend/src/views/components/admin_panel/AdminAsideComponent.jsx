@@ -44,6 +44,13 @@ export default function AdminAsideComponent() {
       >
         <i className="bi bi-journal-text" /> Заказы
       </NavLink>
+
+      <NavLink
+        to="/admin/finance"
+        className={({ isActive }) => (isActive ? "active" : "")}
+      >
+        <i className="bi bi-cash-stack" /> Финансы
+      </NavLink>
     </aside>
   );
 }

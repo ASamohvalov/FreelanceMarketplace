@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BalanceRequest {
+public class BalanceResponse {
     private long balance;
     private long numberOfPoints;
 }

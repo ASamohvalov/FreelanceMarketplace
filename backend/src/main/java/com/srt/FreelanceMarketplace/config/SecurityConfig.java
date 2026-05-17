@@ -1,5 +1,6 @@
 package com.srt.FreelanceMarketplace.config;
 
+import com.srt.FreelanceMarketplace.domain.dto.typeEnum.RoleEnum;
 import com.srt.FreelanceMarketplace.filter.AuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/get/{id}").permitAll()
                         .requestMatchers("/review/get/**").permitAll()
                         .requestMatchers("/file/get/**").permitAll()
+                        .requestMatchers("/system_finance/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager

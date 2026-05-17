@@ -63,10 +63,12 @@ export default function ConversationContextInfo({ size, uShown }) {
 
               {info?.type === "ORDER" && (
                 <>
-                  <div className="mb-3">
-                    <div className="info-label">День дедлайна</div>
-                    <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
-                  </div>
+                  {info?.order?.status !== "PENDING" && (
+                    <div className="mb-3">
+                      <div className="info-label">День дедлайна</div>
+                      <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
+                    </div>
+                  )}
 
                   <div className="mb-3">
                     <div className="info-label">Статус</div>
@@ -164,10 +166,12 @@ export default function ConversationContextInfo({ size, uShown }) {
 
           {info?.type === "ORDER" && (
             <>
-              <div className="mb-3">
-                <div className="info-label">День дедлайна</div>
-                <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
-              </div>
+              {info?.order?.status !== "PENDING" && (
+                <div className="mb-3">
+                  <div className="info-label">День дедлайна</div>
+                  <div className="info-value">{ fromIsoDateToDate(info?.order?.deadlineDate) }</div>
+                </div>
+              )}
 
               <div className="mb-3">
                 <div className="info-label">Статус</div>

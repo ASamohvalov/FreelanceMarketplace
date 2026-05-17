@@ -168,19 +168,19 @@ export default function PaymentPage() {
 
             <div className="d-flex justify-content-between mb-2">
               <span>Стоимость</span>
-              <span>{paymentInfo?.price} ₽</span>
+              <span>{paymentInfo?.price / 100} ₽</span>
             </div>
 
             <div className="d-flex justify-content-between mb-2">
               <span>Комиссия сервиса</span>
-              <span>{paymentInfo?.commission} ₽</span>
+              <span>{paymentInfo?.commission / 100} ₽</span>
             </div>
 
             <hr />
 
             <div className="d-flex justify-content-between total">
               <span>Итого</span>
-              <span>{paymentInfo?.price + paymentInfo?.commission} ₽</span>
+              <span>{(paymentInfo?.price / 100) + (paymentInfo?.commission / 100)} ₽</span>
             </div>
           </div>
         </div>

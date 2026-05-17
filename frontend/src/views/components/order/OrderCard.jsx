@@ -70,7 +70,7 @@ export default function OrderCard({
           Дата завершения: {fromIsoDateToDate(completionDate)}
         </div>
       )}
-      <div className="fw-semibold mb-3">{price} ₽</div>
+      <div className="fw-semibold mb-3">{price / 100} ₽</div>
 
       {!hideButtons && (
         <div className="d-flex gap-2 flex-wrap">

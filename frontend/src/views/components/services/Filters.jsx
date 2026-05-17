@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { fromKopeck } from "../../../logic/lang";
 
 export const Filters = ({ filters, variant = "заказы", setFilters }) => {
   const [temp, setTemp] = useState({
@@ -43,7 +44,7 @@ export const Filters = ({ filters, variant = "заказы", setFilters }) => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Цена до: {temp.price}</label>
+          <label className="form-label">Цена до: {fromKopeck(temp.price)}</label>
           <input
             type="range"
             min={0}

@@ -27,6 +27,7 @@ public class TransferEntity {
     @JoinColumn(name = "recipient_account_id")
     private AccountEntity recipientAccount;
 
+    // in kopeck => rubles * 100
     @Column(nullable = false)
     private long amount;
 
@@ -43,4 +44,8 @@ public class TransferEntity {
     @Builder.Default
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
+
+    public long getRubleAmount() {
+        return amount / 100;
+    }
 }

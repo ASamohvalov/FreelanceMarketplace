@@ -58,7 +58,7 @@ export default function ServiceCardComponent({
         {orderInfo && <h6>Дата заказа: {"0"+orderDate.getMonth()+".0"+orderDate.getDate()}</h6>}
         {orderInfo && <h6>Осталось до конца: {deadline.toString()} д.</h6>}
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <span className={`service-price ${price === 0 ? "text-success" : "" }`}>{price}₽</span>
+          <span className={`service-price ${price === 0 ? "text-success" : "" }`}>{price / 100}₽</span>
           <button className="btn btn-sm btn-outline-primary">Подробнее</button>
           {from == "/OwnServices" &&
             (!hiddenState ? (

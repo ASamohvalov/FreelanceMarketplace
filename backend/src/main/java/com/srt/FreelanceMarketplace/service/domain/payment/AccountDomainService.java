@@ -16,8 +16,8 @@ public class AccountDomainService {
         repository.save(account);
     }
 
-    public void add(AccountEntity account, long amount) {
-        account.setBalance(account.getBalance() + amount);
+    public void add(AccountEntity account, long kopeck) {
+        account.setBalance(account.getBalance() + kopeck);
         repository.save(account);
     }
 

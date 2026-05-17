@@ -56,7 +56,7 @@ export default function ConversationContextInfo({ size, uShown }) {
 
                   <div className="mb-3">
                     <div className="info-label">Стоимость</div>
-                    <div className="info-value">{info?.service?.price} ₽</div>
+                    <div className="info-value">{info?.service?.price / 100} ₽</div>
                   </div>
                 </>
               )}
@@ -159,7 +159,7 @@ export default function ConversationContextInfo({ size, uShown }) {
 
               <div className="mb-3">
                 <div className="info-label">Стоимость</div>
-                <div className="info-value">{info?.service?.price} ₽</div>
+                <div className="info-value">{info?.service?.price / 100} ₽</div>
               </div>
             </>
           )}

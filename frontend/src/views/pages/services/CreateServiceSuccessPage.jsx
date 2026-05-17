@@ -30,7 +30,7 @@ export default function CreateServiceSuccessPage({isEdit=false}) {
 
           <div className="col-md-6">
             <div className="text-muted small">Стоимость</div>
-            <div className="fw-semibold">{state.price} ₽</div>
+            <div className="fw-semibold">{state.price / 100} ₽</div>
           </div>
         </div>
       </div>

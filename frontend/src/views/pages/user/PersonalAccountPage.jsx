@@ -17,6 +17,7 @@ import { fromIsoDate } from "../../../logic/time";
 import { editProfileRequest, uploadAvatarRequest } from "../../../logic/requests/user/userRequest";
 import { getAvatarUrl } from "../../../logic/image";
 import Avatar from "../../components/elements/Avatar";
+import { fromKopeck } from "../../../logic/lang";
 
 export default function PersonalAccountPage() {
   const navigate = useNavigate();
@@ -257,7 +258,7 @@ export default function PersonalAccountPage() {
                   <div className="d-flex justify-content-between">
                     <div>
                       <div className="small">Баланс</div>
-                      <div className="fs-4 fw-semibold">{balance} ₽</div>
+                      <div className="fs-4 fw-semibold">{fromKopeck(balance)}</div>
                     </div>
                     <i className="bi bi-wallet2 fs-1"></i>
                   </div>

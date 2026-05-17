@@ -1,3 +1,4 @@
+import { fromKopeck } from "../../../logic/lang";
 import "./css/transfer_card_component.css";
 
 export default function TransferCardComponent({
@@ -22,7 +23,7 @@ export default function TransferCardComponent({
             ) : (
               "-"
             )}
-            {price} ₽
+            {fromKopeck(price)}
           </span>
         </div>
         <small className="text-muted">{date}</small>

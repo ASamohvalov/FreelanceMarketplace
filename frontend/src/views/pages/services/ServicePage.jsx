@@ -219,7 +219,7 @@ export default function ServicePage() {
           <div className="col-lg-4">
             <div className="card p-4 service-sidebar rounded-4">
               <div className="price mb-3 d-flex justify-content-between">
-                <span>{serviceData.price} ₽</span>
+                <span>{serviceData.price / 100} ₽</span>
 
                 {serviceData?.freelancer?.userId === getUserData()?.id && (
                   <Link

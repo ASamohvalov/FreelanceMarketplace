@@ -16,9 +16,11 @@ public class SystemFinanceEntity {
     @Id
     private Long id = 1L;
 
+    // in kopeck
     @Column(nullable = false)
     private Long currencyRate = 0L;
 
+    // in kopeck
     @Column(nullable = false)
     private Long totalServiceEarnings = 0L;
 

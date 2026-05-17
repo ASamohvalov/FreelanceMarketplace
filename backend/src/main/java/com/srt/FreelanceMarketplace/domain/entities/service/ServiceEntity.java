@@ -40,6 +40,7 @@ public class ServiceEntity {
     @Size(min = 100)
     private String description;
 
+    // in kopeck!!!
     @Column(nullable = false)
     private long price;
 

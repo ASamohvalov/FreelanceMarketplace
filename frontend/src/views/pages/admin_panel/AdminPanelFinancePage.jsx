@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { getSystemFinanceStatisticRequest, setPointRateRequest } from "../../../logic/requests/payment/systemFinanceRequest";
 import "./css/admin_pages.css";
+import { fromKopeck } from "../../../logic/lang";
 
 export default function AdminPanelFinancePage() {
   const [message, setMessage] = useState({});
@@ -9,6 +10,8 @@ export default function AdminPanelFinancePage() {
   const [currencyRate, setCurrencyRate] = useState(0);
   const [totalServiceEarnings, setTotalServiceEarnings] = useState(0);
   const [totalPoints, setTotalPoints] = useState(0);
+
+  const [inputCurrencyRate, setInputCurrencyRate] = useState(0);
 
   const maxPossibleRate = totalPoints === 0 ? 0 : (totalServiceEarnings / totalPoints);
 
@@ -38,7 +41,7 @@ export default function AdminPanelFinancePage() {
     }
     if (currencyRate > maxPossibleRate) {
       setMessage({
-        message: `Превышена максимально доступная стоимость балла: ${maxPossibleRate}₽`,
+        message: `Превышена максимально доступная стоимость балла: ${fromKopeck(maxPossibleRate)}`,
         type: "danger",
       });
       return;
@@ -81,13 +84,12 @@ export default function AdminPanelFinancePage() {
 
             <tbody>
               <tr>
-                <td>{currencyRate} ₽</td>
-                <td>{totalServiceEarnings} ₽</td>
+                <td>{fromKopeck(currencyRate)}</td>
+                <td>{fromKopeck(totalServiceEarnings)}</td>
                 <td>
                   {(totalPoints === 0 || currencyRate === 0)
-                    ? totalServiceEarnings
-                    : (totalServiceEarnings - (totalPoints * currencyRate)).toFixed(2)}{" "}
-                  ₽
+                    ? fromKopeck(totalServiceEarnings)
+                    : fromKopeck(totalServiceEarnings - (totalPoints * currencyRate))}
                 </td>
                 <td>{totalPoints}</td>
               </tr>
@@ -107,15 +109,15 @@ export default function AdminPanelFinancePage() {
             </li>
             <li>
               Рекомендуемое значение — 30% от общего заработка, т. е. 30% общего
-              заработка: {(totalServiceEarnings * 30) / 100}₽, следовательно,
+              заработка: {fromKopeck((totalServiceEarnings * 30) / 100)}, следовательно,
               для уплаты всех баллов курс должен составлять:{" "}
               {totalPoints === 0
                 ? 0
-                : ((totalServiceEarnings * 30) / 100 / totalPoints).toFixed(2)}
-              ₽ за балл.
+                : fromKopeck((totalServiceEarnings * 30) / 100 / totalPoints)}{" "}
+              за балл.
             </li>
             <li>
-              Максимально возможная стоимость балла: {maxPossibleRate.toFixed(2)}₽.
+              Максимально возможная стоимость балла: {fromKopeck(maxPossibleRate)}.
             </li>
             <li>
               Пользователь может снять заработанные баллы со счета компании в
@@ -129,8 +131,11 @@ export default function AdminPanelFinancePage() {
           className="form-control"
           type="number"
           id="currentRateInput"
-          value={currencyRate}
-          onChange={(e) => setCurrencyRate(e.target.value)}
+          value={inputCurrencyRate}
+          onChange={(e) => {
+            setInputCurrencyRate(e.target.value)
+            setCurrencyRate(e.target.value * 100)
+          }}
         />
         <button
           className="btn btn-primary mt-3"

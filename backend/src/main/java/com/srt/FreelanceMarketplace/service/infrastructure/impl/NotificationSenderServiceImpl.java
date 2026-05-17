@@ -16,6 +16,9 @@ import com.srt.FreelanceMarketplace.service.infrastructure.NotificationSenderSer
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationSenderServiceImpl implements NotificationSenderService {
@@ -101,7 +104,7 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
                         "Получен перевод от %s %s, сумма: %s р",
                         sender.getFirstName(),
                         sender.getLastName(),
-                        commissionService.getPriceWithoutCommission(transfer.getAmount())))
+                        getPrice(commissionService.getPriceWithoutCommission(transfer.getAmount()))))
                 .type(NotificationTypeEnum.MONEY_TRANSFERRED)
                 .recipient(recipient)
                 .entityType(getEntityType(transfer))
@@ -232,4 +235,11 @@ public class NotificationSenderServiceImpl implements NotificationSenderService 
         }
         throw new IllegalStateException("no such entity type");
     }
+
+    private String getPrice(long kopecks) {
+        return BigDecimal.valueOf(kopecks)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                .toPlainString();
+    }
+
 }

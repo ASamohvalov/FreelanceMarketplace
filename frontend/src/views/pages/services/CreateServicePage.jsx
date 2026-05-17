@@ -16,6 +16,7 @@ import NavLocation from "../../components/elements/NavLocation";
 import FileUploadComponent from "../../components/FileUploadComponent";
 import ServiceCardComponent from "../../components/service/ServiceCardComponent";
 import "./css/create_service_page.css";
+import { fromKopeck } from "../../../logic/lang";
 
 export default function CreateServicePage({ isEdit = false }) {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ export default function CreateServicePage({ isEdit = false }) {
         setDescription(serviceInfoResponse.data.description);
         setSelectedCategory(category.id);
         setSelectedSubcategory(subcategory.id);
-        setPrice(serviceInfoResponse.data.price);
+        setPrice(Math.floor(serviceInfoResponse.data.price / 100));
         setFreeServiceMode(serviceInfoResponse.data.type === "FREE");
       } else {
         setSelectedCategory(response.data[0].id);
@@ -114,7 +115,7 @@ export default function CreateServicePage({ isEdit = false }) {
       title: title,
       titleImage: titleImage,
       description: description,
-      price: price,
+      price: price * 100,
       subcategoryId: selectedSubcategory,
       images: images,
       type: freeServiceMode ? "FREE" : "USUAL",
@@ -351,7 +352,7 @@ export default function CreateServicePage({ isEdit = false }) {
                 <h6>Информация о бесплатной услуге</h6>
                 <ul className="small mt-2">
                   <li>
-                    За выполнение услуги вам начислится 1 балл ({currentPointRate}₽ по текущему
+                    За выполнение услуги вам начислится 1 балл ({fromKopeck(currentPointRate)} по текущему
                     курсу)
                   </li>
                   <li>За бесплатную услугу заказчик ничего не платит</li>

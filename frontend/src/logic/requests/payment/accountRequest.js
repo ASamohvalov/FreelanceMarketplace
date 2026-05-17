@@ -1,4 +1,4 @@
-import { sendAuthGet } from "../requestSender";
+import { sendAuthGet, sendAuthPatch } from "../requestSender";
 
 export async function getBalanceRequest() {
   return await sendAuthGet("account/get/balance");
@@ -14,4 +14,10 @@ export async function getExpenseTransfersRequest() {
 
 export async function getCurrentPointRateRequest() {
   return await sendAuthGet("account/get/current_point_rate");
+}
+
+export async function convertPointsRequest(numberOfPoints) {
+  return await sendAuthPatch("account/convert/points", {
+    numberOfPoints: numberOfPoints,
+  });
 }

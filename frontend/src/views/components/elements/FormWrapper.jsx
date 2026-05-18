@@ -5,7 +5,7 @@ export function FormWrapper({ children, Title, error }) {
     >
       <div
         className="mx-auto position-relative"
-        style={{ width: "min(500px, 50%)" }}
+        style={{ width: "min(500px)" }}
       >
         <div className="shadow w-100 bg-white p-4 text-light sign-form_wrapper">
           <div

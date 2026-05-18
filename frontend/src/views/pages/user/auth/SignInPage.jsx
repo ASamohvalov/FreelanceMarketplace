@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import HeaderComponent from "../../../components/HeaderComponent";
 import { signInRequest } from "../../../../logic/requests/user/authRequest";
 import { hasRole, isAuth, login } from "../../../../logic/jwt";
 import { useRef } from "react";
@@ -52,25 +51,25 @@ export default function SignInPage() {
     <>
       <FormWrapper Title="Авторизация" error={error}>
         <form onSubmit={handleSubmit} className="mb-4 sign-form">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Почта</label>
           <input
             className="form-control mb-3"
             id="email"
             type="email"
             ref={email}
           />
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Пароль</label>
           <input
-            className="form-control mb-3"
+            className="form-control mb-4"
             id="password"
             type="password"
             ref={password}
           />
           <div className="d-flex gap-3 justify-content-center">
-            <button className="btn btn-main sign-form_submit" type="submit">
+            <button className="w-100 btn btn-main sign-form_submit" type="submit">
               Войти
             </button>
-            <NavLink to="/sign-up" className="btn btn-outline-secondary">
+            <NavLink to="/sign-up" className="w-100 btn btn-outline-secondary">
               Зарегистрироваться
             </NavLink>
           </div>

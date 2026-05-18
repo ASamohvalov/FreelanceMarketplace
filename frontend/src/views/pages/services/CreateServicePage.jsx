@@ -31,7 +31,7 @@ export default function CreateServicePage({ isEdit = false }) {
   const [description, setDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
-  const [price, setPrice] = useState(599);
+  const [price, setPrice] = useState(59900);
   const [titleImage, setTitleImage] = useState(null);
   const [images, setImages] = useState([]);
 
@@ -156,7 +156,7 @@ export default function CreateServicePage({ isEdit = false }) {
       setPrice(0);
       setFreeServiceMode(true);
     } else {
-      setPrice(599);
+      setPrice(59900);
       setFreeServiceMode(false);
     }
   };

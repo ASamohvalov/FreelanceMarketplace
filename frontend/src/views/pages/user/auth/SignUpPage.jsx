@@ -80,7 +80,7 @@ export default function SignUpPage() {
     <>
       <FormWrapper Title="Регистрация" error={error}>
         <form onSubmit={handleSubmit} className="mb-4 sign-form">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Почта</label>
           <input
             className="form-control mb-3"
             id="email"
@@ -88,7 +88,7 @@ export default function SignUpPage() {
             ref={email}
           />
 
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Пароль</label>
           <input
             className="form-control mb-3"
             id="password"
@@ -96,7 +96,7 @@ export default function SignUpPage() {
             ref={password}
           />
 
-          <label htmlFor="firstName">First name</label>
+          <label htmlFor="firstName">Имя</label>
           <input
             className="form-control mb-3"
             id="firstName"
@@ -104,15 +104,15 @@ export default function SignUpPage() {
             ref={firstName}
           />
 
-          <label htmlFor="firstName ">Last name</label>
+          <label htmlFor="firstName ">Фамилия</label>
           <input
-            className="form-control mb-3"
+            className="form-control mb-4"
             id="lastName"
             type="text"
             ref={lastName}
           />
 
-          <div className="mb-3 w-100 px-3 flex gap-3">
+          <div className="mb-3 w-100 flex gap-3">
             <input
               type="radio"
               className="btn-check"
@@ -134,16 +134,19 @@ export default function SignUpPage() {
               onChange={() => setIsFreelancer(true)}
             />
             <label className="btn text-dark w-100" htmlFor="freelancer-input">
-                Фрилансер
+              Фрилансер
             </label>
           </div>
 
           <div className="d-flex gap-3 justify-content-center">
-            <button className="btn btn-main sign-form_submit" type="submit">
-              Подтвердить
+            <button
+              className="btn btn-main sign-form_submit w-100"
+              type="submit"
+            >
+              Отправить
             </button>
-            <NavLink to="/sign-in" className="btn btn-outline-secondary">
-                Вход
+            <NavLink to="/sign-in" className="btn btn-outline-secondary w-100">
+              Авторизоваться
             </NavLink>
           </div>
         </form>

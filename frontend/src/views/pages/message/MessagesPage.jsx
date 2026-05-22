@@ -29,6 +29,7 @@ export default function MessagesPage() {
   }, []);
 
   useEffect(() => {
+    document.title = "Сообщения";
     (async () => {
       const response = await getAllConversationsRequest();
       if (response.status !== 200) {

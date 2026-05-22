@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ServiceCardComponent from "../components/service/ServiceCardComponent";
 import { userContext } from "../../logic/store/userContext";
 import { getAllCategories } from "../../logic/requests/service/categoryRequest";
+import homePhoto from '/images/home_page_photo.jpg';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export default function HomePage() {
           </div>
 
           <div className="col-lg-6">
-            <div className="home-page_picture" />
+            <div className="home-page_picture" style={{ backgroundImage: `url(${homePhoto})` }} />
           </div>
         </div>
       </section>

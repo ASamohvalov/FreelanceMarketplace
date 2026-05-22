@@ -26,6 +26,7 @@ export default function SignUpPage() {
 
   const [isFreelancer, setIsFreelancer] = useState(false);
   const [error, setError] = useState(null);
+  const [submitBtnDisabled, setSubmitBtnDisabled] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -39,6 +40,8 @@ export default function SignUpPage() {
       setError("Все поля обязательны");
       return;
     }
+
+    setSubmitBtnDisabled(true);
 
     const regResponse = await signUpRequest(
       email.current.value,
@@ -74,6 +77,8 @@ export default function SignUpPage() {
       return;
     }
     setError("Этот email уже занят");
+
+    setSubmitBtnDisabled(false);
   }
 
   return (
@@ -142,6 +147,7 @@ export default function SignUpPage() {
             <button
               className="btn btn-main sign-form_submit w-100"
               type="submit"
+              disabled={submitBtnDisabled}
             >
               Отправить
             </button>

@@ -14,7 +14,8 @@ export default function SignInPage() {
   const password = useRef(null);
   const [error, setError] = useState(null);
 
-  const [user, setUser] = useContext(userContext);
+  const [_, setUser] = useContext(userContext);
+  const [submitBtnDisabled, setSubmitBtnDisabled] = useState(false);
 
   useEffect(() => {
     document.title = "Авторизация";
@@ -27,6 +28,8 @@ export default function SignInPage() {
       setError("Все поля обязательны");
       return;
     }
+
+    setSubmitBtnDisabled(true);
 
     var response = await signInRequest(
       email.current.value,
@@ -45,6 +48,7 @@ export default function SignInPage() {
     } else if (response.status == 400) {
       setError("Неверный email или пароль");
     }
+    setSubmitBtnDisabled(false);
   }
 
   return (
@@ -66,7 +70,11 @@ export default function SignInPage() {
             ref={password}
           />
           <div className="d-flex gap-3 justify-content-center">
-            <button className="w-100 btn btn-main sign-form_submit" type="submit">
+            <button
+              className="w-100 btn btn-main sign-form_submit"
+              type="submit"
+              disabled={submitBtnDisabled}
+            >
               Войти
             </button>
             <NavLink to="/sign-up" className="w-100 btn btn-outline-secondary">

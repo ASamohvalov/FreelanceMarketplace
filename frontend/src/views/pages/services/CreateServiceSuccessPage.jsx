@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SuccessInfoComponent from "../../components/SuccessInfoComponent";
+import { fromKopeck } from "../../../logic/lang";
 
 export default function CreateServiceSuccessPage({isEdit=false}) {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function CreateServiceSuccessPage({isEdit=false}) {
 
           <div className="col-md-6">
             <div className="text-muted small">Стоимость</div>
-            <div className="fw-semibold">{state.price / 100} ₽</div>
+            <div className="fw-semibold">{fromKopeck(state.price)}</div>
           </div>
         </div>
       </div>

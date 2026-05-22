@@ -31,7 +31,9 @@ public class OrderReportDomainService {
         report.setStatus(OrderReportStatusEnum.ACCEPTED);
         report.setCustomerComment(customerComment);
 
-        orderDomainService.completeOrder(report.getOrder());
+        if (!orderDomainService.endStatus(report.getOrder().getStatus())) {
+            orderDomainService.completeOrder(report.getOrder());
+        }
     }
 
     public OrderReportEntity getById(UUID id) {

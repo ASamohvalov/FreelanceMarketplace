@@ -22,7 +22,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
             join fetch s.freelancer
             where s.hidden = false
             and s.deleted = false
-            order by s.updatedAt desc
+            order by s.updatedAt asc
             """)
     List<ServiceEntity> findAllNotHideWithFreelancer();
 

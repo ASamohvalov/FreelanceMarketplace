@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,11 @@ public class ServiceImageDomainService {
     public Optional<String> getUrl(ServiceImageEntity entity) {
         return entity == null
                 ? Optional.empty()
-                : Optional.of("localhost:8080/api/service/image/title/" + entity.getService().getId());
+                : Optional.of(
+                ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/service/image/title/{id}")
+                .buildAndExpand(entity.getService().getId())
+                .toUriString());
     }
 
     public List<ServiceImageEntity> uploadImages(ServiceEntity service, MultipartFile titleImage, List<MultipartFile> images) {

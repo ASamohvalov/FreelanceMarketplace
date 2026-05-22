@@ -31,9 +31,10 @@ export default function CreateServicePage({ isEdit = false }) {
   const [description, setDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
-  const [price, setPrice] = useState(59900);
+  const [price, setPrice] = useState(599);
   const [titleImage, setTitleImage] = useState(null);
   const [images, setImages] = useState([]);
+  const [submitDisable, setSubmitDisable] = useState(false);
 
   const [freeServiceMode, setFreeServiceMode] = useState(false);
   const [currentPointRate, setCurrentPointRate] = useState(null);
@@ -111,6 +112,7 @@ export default function CreateServicePage({ isEdit = false }) {
       return;
     }
 
+    setSubmitDisable(true);
     const data = {
       title: title,
       titleImage: titleImage,
@@ -138,7 +140,7 @@ export default function CreateServicePage({ isEdit = false }) {
         selectedSubcategory: da.subcategories.filter(
           (item) => item.id === selectedSubcategory,
         )[0], //todo
-        price: price,
+        price: price * 100,
       },
     });
   }
@@ -156,7 +158,7 @@ export default function CreateServicePage({ isEdit = false }) {
       setPrice(0);
       setFreeServiceMode(true);
     } else {
-      setPrice(59900);
+      setPrice(599);
       setFreeServiceMode(false);
     }
   };
@@ -339,6 +341,7 @@ export default function CreateServicePage({ isEdit = false }) {
             <button
               className="btn btn-primary btn-lg w-100"
               onClick={handleSubmit}
+              disabled={submitDisable}
             >
               {isEdit ? "Редактировать услугу" : "Создать услугу"}
             </button>
@@ -379,7 +382,7 @@ export default function CreateServicePage({ isEdit = false }) {
                 freelancerName={
                   getUserData()?.firstName + " " + getUserData()?.lastName
                 }
-                price={price}
+                price={price * 100}
                 image={titleImage}
                 isPreview={true}
               />

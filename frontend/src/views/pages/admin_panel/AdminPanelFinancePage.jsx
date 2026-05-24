@@ -13,7 +13,7 @@ export default function AdminPanelFinancePage() {
 
   const [inputCurrencyRate, setInputCurrencyRate] = useState(0);
 
-  const maxPossibleRate = totalPoints === 0 ? 0 : (totalServiceEarnings / totalPoints);
+  const maxPossibleRate = totalPoints === 0 ? totalServiceEarnings : (totalServiceEarnings / totalPoints);
 
   useEffect(() => {
     (async () => {

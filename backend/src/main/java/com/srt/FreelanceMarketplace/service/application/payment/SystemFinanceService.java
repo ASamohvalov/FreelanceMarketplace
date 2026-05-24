@@ -40,6 +40,6 @@ public class SystemFinanceService {
     public long maxPossibleRate() {
         SystemFinanceStatisticResponse response = getStatistic();
         return response.getTotalPoints() == 0L
-                ? 0L : (response.getTotalServiceEarnings() / response.getTotalPoints());
+                ? response.getTotalServiceEarnings() : (response.getTotalServiceEarnings() / response.getTotalPoints());
     }
 }

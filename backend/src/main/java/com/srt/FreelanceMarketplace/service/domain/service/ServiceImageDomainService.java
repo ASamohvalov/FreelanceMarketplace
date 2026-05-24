@@ -29,6 +29,7 @@ public class ServiceImageDomainService {
                 ? Optional.empty()
                 : Optional.of(
                 ServletUriComponentsBuilder.fromCurrentContextPath()
+                .scheme("https")
                 .path("/service/image/title/{id}")
                 .buildAndExpand(entity.getService().getId())
                 .toUriString());
